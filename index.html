@@ -26,6 +26,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 
 <body class="bg-gray-950 text-white overflow-auto">
@@ -47,7 +48,20 @@
         <a href="#testimonials" class="hover:text-indigo-400 transition">Testimonials</a>
         <a href="signup.html" class="bg-indigo-600 hover:bg-indigo-700 px-5 py-2.5 rounded-full font-medium transition">Get Started</a>
       </div>
-      <button class="md:hidden text-3xl">Menu</button>
+      <button id="mobileMenuButton" class="md:hidden p-2 rounded-lg text-3xl text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200 ease-in-out" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden md:hidden bg-gray-900/95 backdrop-blur-lg border-t border-gray-800">
+      <div class="px-6 py-4 space-y-4">
+        <a href="#features" class="block py-3 px-4 rounded-lg hover:bg-gray-800 hover:text-indigo-400 transition" onclick="toggleMobileMenu()">Features</a>
+        <a href="#how" class="block py-3 px-4 rounded-lg hover:bg-gray-800 hover:text-indigo-400 transition" onclick="toggleMobileMenu()">How it Works</a>
+        <a href="#testimonials" class="block py-3 px-4 rounded-lg hover:bg-gray-800 hover:text-indigo-400 transition" onclick="toggleMobileMenu()">Testimonials</a>
+        <a href="signup.html" class="block bg-indigo-600 hover:bg-indigo-700 px-5 py-3 rounded-full font-medium transition text-center" onclick="toggleMobileMenu()">Get Started</a>
+        <a href="login.html" class="block text-center py-3 px-4 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition" onclick="toggleMobileMenu()">Log In</a>
+      </div>
     </div>
   </nav>
 
@@ -232,6 +246,20 @@
 
   <script>
     AOS.init({ duration: 800, once: true });
+    
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const button = document.getElementById('mobileMenuButton');
+      
+      menu.classList.toggle('hidden');
+      
+      // Change icon based on state
+      if (menu.classList.contains('hidden')) {
+        button.innerHTML = '<i class="fas fa-bars"></i>';
+      } else {
+        button.innerHTML = '<i class="fas fa-times"></i>';
+      }
+    }
   </script>
 </body>
 </html>
