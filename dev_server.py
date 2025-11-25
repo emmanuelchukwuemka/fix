@@ -8,13 +8,11 @@ import sys
 from backend.app import create_app, db
 from backend.seed import seed_database
 
-def main():
-    print("Starting MyFigPoint Development Server...")
-    
-    # Create the Flask app
-    app = create_app()
-    
-    # Initialize database if it doesn't exist
+# Create the Flask app
+app = create_app()
+
+def initialize_database():
+    """Initialize database and seed if needed"""
     with app.app_context():
         print("Initializing database...")
         db.create_all()
@@ -25,6 +23,12 @@ def main():
         if user_count == 0:
             print("Seeding database with sample data...")
             seed_database()
+
+def main():
+    print("Starting MyFigPoint Development Server...")
+    
+    # Initialize database if it doesn't exist
+    initialize_database()
     
     print("\n" + "="*50)
     print("MyFigPoint Development Server")
@@ -36,6 +40,13 @@ def main():
     
     # Run the development server
     app.run(debug=True, host='0.0.0.0', port=5000)
+
+# Vercel handler function
+def handler(event, context):
+    """Vercel serverless function handler"""
+    # Initialize database on cold start
+    initialize_database()
+    return app
 
 if __name__ == '__main__':
     main()

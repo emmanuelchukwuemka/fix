@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "wsgi.py",
+      "use": "@vercel/python",
+      "config": {
+        "runtime": "python3.9",
+        "maxLambdaSize": "100mb"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "wsgi.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "wsgi.py"
+    }
+  ],
+  "env": {
+    "SECRET_KEY": "@secret-key",
+    "JWT_SECRET_KEY": "@jwt-secret-key",
+    "DATABASE_URL": "@database-url"
+  },
+  "build": {
+    "env": {
+      "PIP_REQUIREMENTS_FILE": "requirements-vercel.txt"
+    }
+  }
+}

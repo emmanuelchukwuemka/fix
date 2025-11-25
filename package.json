@@ -1,0 +1,15 @@
+{
+  "name": "myfigpoint",
+  "version": "1.0.0",
+  "description": "MyFigPoint - Earn, Track & Redeem Reward Points",
+  "scripts": {
+    "build": "echo 'No build step required'",
+    "vercel-build": "pip install -r requirements-vercel.txt"
+  },
+  "dependencies": {
+    "vercel": "^30.0.0"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}

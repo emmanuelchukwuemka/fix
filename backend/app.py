@@ -30,6 +30,10 @@ def create_app():
     def index():
         return send_from_directory('../', 'index.html')
     
+    @app.route('/health')
+    def health_check():
+        return {'status': 'ok', 'message': 'MyFigPoint is running!'}
+    
     @app.route('/<path:filename>')
     def serve_static(filename):
         if filename.endswith('.html') or filename.endswith('.css') or filename.endswith('.js'):
