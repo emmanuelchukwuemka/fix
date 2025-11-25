@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyFigPoint - Transaction History</title>
+
+  <!-- Tailwind + Inter Font -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          animation: {
+            'float': 'float 20s infinite linear',
+            'pulse-glow': 'pulseGlow 2s infinite',
+            'slide-in': 'slideIn 0.6s ease-out'
+          },
+          keyframes: {
+            float: { '0%': { transform: 'translateY(0)' }, '100%': { transform: 'translateY(-100vh)' } },
+            pulseGlow: { '0%,100%': { boxShadow: '0 0 20px rgba(139, 92, 246, 0.5)' }, '50%': { boxShadow: '0 0 50px rgba(139, 92, 246, 0.9)' } },
+            slideIn: { '0%': { opacity: 0, transform: 'translateY(20px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+</head>
+
+<body class="bg-gray-950 text-white min-h-screen flex relative overflow-auto">
+
+  <!-- Animated Background -->
+  <div class="absolute inset-0 -z-10">
+    <div class="absolute top-10 left-10 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply blur-3xl opacity-50 animate-pulse"></div>
+    <div class="absolute bottom-10 right-10 w-96 h-96 bg-indigo-600 rounded-full mix-blend-multiply blur-3xl opacity-50 animate-pulse delay-1000"></div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900/90 backdrop-blur-xl border-r border-gray-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+    <div class="flex items-center justify-between p-6 border-b border-gray-800">
+      <div class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+        MyFigPoint
+      </div>
+      <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white">
+        <i class="fas fa-times text-xl"></i>
+      </button>
+    </div>
+
+    <nav class="p-4 space-y-2">
+      <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-tasks"></i>
+        <span>Earn Points</span>
+      </a>
+      <a href="referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-users"></i>
+        <span>Refer & Earn</span>
+      </a>
+      <a href="wallet.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-wallet"></i>
+        <span>Wallet</span>
+      </a>
+      <a href="transactions.html" class="flex items-center space-x-3 px-4 py-3 bg-gradient-to-r from-indigo-600/30 to-purple-600/30 border border-indigo-500/50 rounded-xl text-indigo-300 font-bold">
+        <i class="fas fa-history"></i>
+        <span>Transaction History</span>
+      </a>
+      <a href="redeem.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-gift"></i>
+        <span>Redeem Points</span>
+      </a>
+      <a href="profile.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-user-cog"></i>
+        <span>Profile & Settings</span>
+      </a>
+    </nav>
+
+    <div class="absolute bottom-0 w-full p-6 border-t border-gray-800">
+      <div class="flex items-center space-x-3">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-indigo-500">
+        <div>
+          <p class="font-semibold">John Doe</p>
+          <p class="text-sm text-gray-400">$2,850.75 Total</p>
+        </div>
+      </div>
+      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+        Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 lg:ml-64">
+    <header class="bg-gray-900/70 backdrop-blur-xl border-b border-gray-800 sticky top-0 z-40">
+      <div class="flex items-center justify-between px-6 py-6">
+        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+        <div>
+          <h1 class="text-4xl font-black bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+            Transaction History
+          </h1>
+          <p class="text-gray-400 mt-2">Track every dollar earned & withdrawn</p>
+        </div>
+        <div class="text-right">
+          <p class="text-2xl font-bold">Total Balance</p>
+          <p class="text-5xl font-bold text-green-400">$2,850.<span class="text-3xl">75</span></p>
+        </div>
+      </div>
+    </header>
+
+    <main class="p-6 lg:p-10 max-w-7xl mx-auto">
+
+      <!-- Filters -->
+      <div class="bg-gray-800/70 backdrop-blur-xl border border-gray-700 rounded-3xl p-8 mb-10 shadow-2xl">
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+          <i class="fas fa-filter text-indigo-400"></i> Filter Transactions
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <input type="date" id="filterDate" class="bg-gray-700/50 border border-gray-600 rounded-2xl px-6 py-4 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/30 transition" />
+          <select id="filterType" class="bg-gray-700/50 border border-gray-600 rounded-2xl px-6 py-4 focus:outline-none focus:border-indigo-500">
+            <option value="">All Types</option>
+            <option value="earning">Earnings</option>
+            <option value="withdrawal">Withdrawals</option>
+            <option value="bonus">Bonuses</option>
+          </select>
+          <select id="filterStatus" class="bg-gray-700/50 border border-gray-600 rounded-2xl px-6 py-4 focus:outline-none focus:border-indigo-500">
+            <option value="">All Status</option>
+            <option value="completed">Completed</option>
+            <option value="pending">Pending</option>
+            <option value="failed">Failed</option>
+          </select>
+          <button onclick="applyFilters()" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 px-8 py-4 rounded-2xl font-bold transition shadow-xl">
+            <i class="fas fa-search mr-2"></i> Apply Filter
+          </button>
+        </div>
+      </div>
+
+      <!-- Export Buttons -->
+      <div class="flex justify-end gap-4 mb-8">
+        <button onclick="exportCSV()" class="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 px-8 py-4 rounded-2xl font-bold shadow-xl flex items-center gap-3">
+          <i class="fas fa-file-csv text-2xl"></i> Export CSV
+        </button>
+        <button onclick="exportPDF()" class="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 px-8 py-4 rounded-2xl font-bold shadow-xl flex items-center gap-3">
+          <i class="fas fa-file-pdf text-2xl"></i> Export PDF
+        </button>
+      </div>
+
+      <!-- Transactions List -->
+      <div id="transactionsContainer" class="space-y-6">
+        <!-- Sample Transaction -->
+        <div class="transaction-card bg-gray-800/70 backdrop-blur-xl border border-gray-700 rounded-3xl p-8 hover:border-indigo-500 transition-all slide-in">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-6">
+              <div class="w-16 h-16 bg-green-600/20 rounded-2xl flex items-center justify-center">
+                <i class="fas fa-arrow-down text-green-400 text-3xl"></i>
+              </div>
+              <div>
+                <h3 class="text-2xl font-bold">Task Completed</h3>
+                <p class="text-gray-400">Health & Wellness Survey</p>
+                <p class="text-sm text-gray-500 mt-2">Jun 15, 2025 • 02:34 PM</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-4xl font-bold text-green-400">+$50.00</p>
+              <span class="bg-green-600/20 text-green-400 px-4 py-2 rounded-full text-sm font-bold">Completed</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="transaction-card bg-gray-800/70 backdrop-blur-xl border border-gray-700 rounded-3xl p-8 hover:border-yellow-500 transition-all">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-6">
+              <div class="w-16 h-16 bg-yellow-600/20 rounded-2xl flex items-center justify-center">
+                <i class="fas fa-gift text-yellow-400 text-3xl"></i>
+              </div>
+              <div>
+                <h3 class="text-2xl font-bold">Referral Bonus</h3>
+                <p class="text-gray-400">Jane Doe joined via your link</p>
+                <p class="text-sm text-gray-500 mt-2">Jun 14, 2025 • 11:20 AM</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-4xl font-bold text-yellow-400">+$25.00</p>
+              <span class="bg-yellow-600/20 text-yellow-400 px-4 py-2 rounded-full text-sm font-bold">Instant</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="transaction-card bg-gray-800/70 backdrop-blur-xl border border-gray-700 rounded-3xl p-8 hover:border-red-500 transition-all">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-6">
+              <div class="w-16 h-16 bg-red-600/20 rounded-2xl flex items-center justify-center">
+                <i class="fas fa-arrow-up text-red-400 text-3xl"></i>
+              </div>
+              <div>
+                <h3 class="text-2xl font-bold">Withdrawal Request</h3>
+                <p class="text-gray-400">Bank Transfer • Account ending **4321</p>
+                <p class="text-sm text-gray-500 mt-2">Jun 10, 2025 • 09:15 AM</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-4xl font-bold text-red-400">-$100.00</p>
+              <span class="bg-orange-600/20 text-orange-400 px-4 py-2 rounded-full text-sm font-bold">Pending</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-12">
+        <button class="bg-gray-800 hover:bg-gray-700 px-12 py-6 rounded-2xl font-bold text-xl transition">
+          Load More Transactions
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Overlay -->
+  <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/70 z-40 hidden lg:hidden"></div>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('-translate-x-full');
+      document.getElementById('overlay').classList.toggle('hidden');
+    }
+
+    // Sample data
+    const transactions = [
+      { date: "2025-06-15", type: "earning", desc: "Health & Wellness Survey", amount: 50.00, status: "completed" },
+      { date: "2025-06-14", type: "bonus", desc: "Referral: Jane Doe", amount: 25.00, status: "instant" },
+      { date: "2025-06-10", type: "withdrawal", desc: "Bank Transfer", amount: -100.00, status: "pending" }
+    ];
+
+    // Filter function
+    function applyFilters() {
+      const date = document.getElementById('filterDate').value;
+      const type = document.getElementById('filterType').value;
+      const status = document.getElementById('filterStatus').value;
+
+      document.querySelectorAll('.transaction-card').forEach(card => {
+        card.style.display = 'block';
+        // Real filtering logic would go here
+      });
+
+      confetti({ particleCount: 50, spread: 70, origin: { y: 0.6 } });
+    }
+
+    // Export to CSV
+    function exportCSV() {
+      let csv = "Date,Type,Description,Amount,Status\n";
+      transactions.forEach(t => {
+        csv += `${t.date},${t.type},${t.desc},${t.amount},${t.status}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'MyFigPoint_Transactions.csv';
+      a.click();
+      confetti({ particleCount: 100, spread: 70 });
+    }
+
+    // Export to PDF
+    function exportPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFontSize(20);
+      doc.text('MyFigPoint - Transaction History', 105, 20, null, null, 'center');
+      doc.setFontSize(12);
+      doc.text(`Generated on ${new Date().toLocaleDateString()}`, 105, 30, null, null, 'center');
+
+      const rows = transactions.map(t => [
+        t.date,
+        t.type.charAt(0).toUpperCase() + t.type.slice(1),
+        t.desc,
+        `$${Math.abs(t.amount).toFixed(2)}`,
+        t.status
+      ]);
+
+      doc.autoTable({
+        head: [['Date', 'Type', 'Description', 'Amount', 'Status']],
+        body: rows,
+        startY: 40,
+        theme: 'dark'
+      });
+
+      doc.save('MyFigPoint_Transactions.pdf');
+      confetti({ particleCount: 150, spread: 90 });
+    }
+    
+    // Fetch transactions when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      fetch('/api/transactions/', {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.transactions && data.transactions.length > 0) {
+          // Clear existing transactions
+          const container = document.getElementById('transactionsContainer');
+          container.innerHTML = '';
+          
+          // Add transactions
+          data.transactions.forEach(transaction => {
+            const card = document.createElement('div');
+            card.className = 'transaction-card bg-gray-800/70 backdrop-blur-xl border border-gray-700 rounded-3xl p-8 hover:border-indigo-500 transition-all slide-in';
+            
+            let iconClass = 'fa-arrow-down text-green-400';
+            let bgColor = 'bg-green-600/20';
+            let amountClass = 'text-green-400';
+            let amountPrefix = '+';
+            
+            if (transaction.amount < 0) {
+              iconClass = 'fa-arrow-up text-red-400';
+              bgColor = 'bg-red-600/20';
+              amountClass = 'text-red-400';
+              amountPrefix = '';
+            } else if (transaction.type === 'referral_bonus') {
+              iconClass = 'fa-gift text-yellow-400';
+              bgColor = 'bg-yellow-600/20';
+              amountClass = 'text-yellow-400';
+            }
+            
+            const date = new Date(transaction.created_at);
+            
+            card.innerHTML = `
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-6">
+                  <div class="w-16 h-16 ${bgColor} rounded-2xl flex items-center justify-center">
+                    <i class="fas ${iconClass} text-3xl"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-2xl font-bold">${transaction.description || transaction.type}</h3>
+                    <p class="text-gray-400">${transaction.type}</p>
+                    <p class="text-sm text-gray-500 mt-2">${date.toLocaleDateString()} • ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <p class="text-4xl font-bold ${amountClass}">${amountPrefix}$${Math.abs(transaction.amount).toFixed(2)}</p>
+                  <span class="bg-green-600/20 text-green-400 px-4 py-2 rounded-full text-sm font-bold">${transaction.status}</span>
+                </div>
+              </div>
+            `;
+            container.appendChild(card);
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching transactions:', error);
+        if (error.message && error.message.includes('401')) {
+          localStorage.removeItem('access_token');
+          window.location.href = 'login.html';
+        }
+      });
+    });
+    
+    // Logout function
+    function logout() {
+      localStorage.removeItem('access_token');
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

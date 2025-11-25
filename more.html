@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyFigPoint - Help Center & More</title>
+
+  <!-- Tailwind + Inter Font -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+
+<body class="bg-gray-950 text-white min-h-screen flex">
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900/90 backdrop-blur-xl border-r border-gray-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+    <div class="flex items-center justify-between p-6 border-b border-gray-800">
+      <div class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+        MyFigPoint
+      </div>
+      <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white">
+        <i class="fas fa-times text-xl"></i>
+      </button>
+    </div>
+
+    <nav class="p-4 space-y-2">
+      <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-tasks"></i>
+        <span>Earn Points</span>
+      </a>
+      <a href="referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-users"></i>
+        <span>Refer & Earn</span>
+      </a>
+      <a href="wallet.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-wallet"></i>
+        <span>Wallet</span>
+      </a>
+      <a href="transactions.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-history"></i>
+        <span>Transaction History</span>
+      </a>
+      <a href="redeem.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-gift"></i>
+        <span>Redeem Points</span>
+      </a>
+      <a href="more.html" class="flex items-center space-x-3 px-4 py-3 bg-indigo-600/20 border border-indigo-500/50 rounded-xl text-indigo-300 font-medium">
+        <i class="fas fa-info-circle"></i>
+        <span>Help Center</span>
+      </a>
+      <a href="support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-headset"></i>
+        <span>Support Center</span>
+      </a>
+      <a href="profile.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-user-cog"></i>
+        <span>Profile & Settings</span>
+      </a>
+    </nav>
+
+    <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-800">
+      <div class="flex items-center space-x-3">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-indigo-500">
+        <div>
+          <p class="font-semibold">John Doe</p>
+          <p class="text-sm text-gray-400">Need Help?</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 lg:ml-64">
+    <!-- Top Bar -->
+    <header class="bg-gray-900/70 backdrop-blur-xl border-b border-gray-800 sticky top-0 z-40">
+      <div class="flex items-center justify-between px-6 py-5">
+        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+        <h1 class="text-2xl font-bold">Help Center & Information</h1>
+        <div class="flex items-center gap-4">
+          <div class="relative">
+            <input type="text" placeholder="Search help..." class="bg-gray-800 border border-gray-700 rounded-xl px-4 py-2 pl-10 focus:outline-none focus:border-indigo-500 transition w-64">
+            <i class="fas fa-search absolute left-3 top-3 text-gray-500"></i>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="p-6 lg:p-10 max-w-6xl mx-auto">
+
+      <!-- Quick Actions -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <a href="support.html" class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl p-8 text-center hover:shadow-2xl transition transform hover:scale-105">
+          <i class="fas fa-headset text-5xl mb-4"></i>
+          <h3 class="text-xl font-bold">Live Support</h3>
+          <p class="text-indigo-100 mt-2">Chat with us 24/7</p>
+        </a>
+        <a href="#" class="bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl p-8 text-center hover:shadow-2xl transition transform hover:scale-105">
+          <i class="fas fa-video text-5xl mb-4"></i>
+          <h3 class="text-xl font-bold">Video Guides</h3>
+          <p class="text-green-100 mt-2">Watch tutorials</p>
+        </a>
+        <a href="#" class="bg-gradient-to-br from-pink-600 to-rose-600 rounded-2xl p-8 text-center hover:shadow-2xl transition transform hover:scale-105">
+          <i class="fas fa-book text-5xl mb-4"></i>
+          <h3 class="text-xl font-bold">FAQ</h3>
+          <p class="text-pink-100 mt-2">Common questions</p>
+        </a>
+      </div>
+
+      <!-- Help Categories -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+        <!-- Getting Started -->
+        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-6">
+          <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+            <i class="fas fa-rocket text-indigo-400"></i> Getting Started
+          </h2>
+          <ul class="space-y-4">
+            <li><a href="#" class="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-indigo-600/30 transition group">
+              <span class="flex items-center gap-3">
+                <i class="fas fa-play-circle text-indigo-400"></i>
+                How to Earn Your First Points
+              </span>
+              <i class="fas fa-chevron-right group-hover:translate-x-2 transition"></i>
+            </a></li>
+            <li><a href="#" class="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-indigo-600/30 transition group">
+              <span class="flex items-center gap-3">
+                <i class="fas fa-tasks text-purple-400"></i>
+                Understanding Daily Tasks
+              </span>
+              <i class="fas fa-chevron-right group-hover:translate-x-2 transition"></i>
+            </a></li>
+            <li><a href="#" class="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-indigo-600/30 transition group">
+              <span class="flex items-center gap-3">
+                <i class="fas fa-users text-pink-400"></i>
+                How Referrals Work
+              </span>
+              <i class="fas fa-chevron-right group-hover:translate-x-2 transition"></i>
+            </a></li>
+          </ul>
+        </div>
+
+        <!-- Earnings & Withdrawals -->
+        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-6">
+          <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+            <i class="fas fa-dollar-sign text-green-400"></i> Earnings & Withdrawals
+          </h2>
+          <ul class="space-y-4">
+            <li><a href="#" class="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-green-600/30 transition group">
+              <span class="flex items-center gap-3">
+                <i class="fas fa-credit-card text-green-400"></i>
+                How to Withdraw Money
+              </span>
+              <i class="fas fa-chevron-right group-hover:translate-x-2 transition"></i>
+            </a></li>
+            <li><a href="#" class="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-green-600/30 transition group">
+              <span class="flex items-center gap-3">
+                <i class="fas fa-gift text-yellow-400"></i>
+                Redeem Gift Cards
+              </span>
+              <i class="fas fa-chevron-right group-hover:translate-x-2 transition"></i>
+            </a></li>
+            <li><a href="#" class="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-green-600/30 transition group">
+              <span class="flex items-center gap-3">
+                <i class="fas fa-clock text-orange-400"></i>
+                Withdrawal Processing Time
+              </span>
+              <i class="fas fa-chevron-right group-hover:translate-x-2 transition"></i>
+            </a></li>
+          </ul>
+        </div>
+
+        <!-- Account & Security -->
+        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-6">
+          <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+            <i class="fas fa-shield-alt text-blue-400"></i> Account & Security
+          </h2>
+          <ul class="space-y-4">
+            <li><a href="profile.html" class="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-blue-600/30 transition group">
+              <span class="flex items-center gap-3">
+                <i class="fas fa-user-cog text-blue-400"></i>
+                Profile Settings
+              </span>
+              <i class="fas fa-chevron-right group-hover:translate-x-2 transition"></i>
+            </a></li>
+            <li><a href="#" class="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-blue-600/30 transition group">
+              <span class="flex items-center gap-3">
+                <i class="fas fa-lock text-cyan-400"></i>
+                Change Password
+              </span>
+              <i class="fas fa-chevron-right group-hover:translate-x-2 transition"></i>
+            </a></li>
+            <li><a href="#" class="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-blue-600/30 transition group">
+              <span class="flex items-center gap-3">
+                <i class="fas fa-bell text-purple-400"></i>
+                Notification Settings
+              </span>
+              <i class="fas fa-chevron-right group-hover:translate-x-2 transition"></i>
+            </a></li>
+          </ul>
+        </div>
+
+        <!-- Legal & Policies -->
+        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-6">
+          <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+            <i class="fas fa-scale-balanced text-red-400"></i> Legal
+          </h2>
+          <ul class="space-y-4">
+            <li><a href="#" class="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-red-600/30 transition group">
+              <span class="flex items-center gap-3">
+                <i class="fas fa-file-contract text-red-400"></i>
+                Terms of Service
+              </span>
+              <i class="fas fa-chevron-right group-hover:translate-x-2 transition"></i>
+            </a></li>
+            <li><a href="#" class="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-red-600/30 transition group">
+              <span class="flex items-center gap-3">
+                <i class="fas fa-shield-halved text-orange-400"></i>
+                Privacy Policy
+              </span>
+              <i class="fas fa-chevron-right group-hover:translate-x-2 transition"></i>
+            </a></li>
+            <li><a href="#" class="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-red-600/30 transition group">
+              <span class="flex items-center gap-3">
+                <i class="fas fa-circle-info text-gray-400"></i>
+                About MyFigPoint
+              </span>
+              <i class="fas fa-chevron-right group-hover:translate-x-2 transition"></i>
+            </a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Contact Card -->
+      <div class="mt-12 text-center bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-500/30 rounded-2xl p-10">
+        <i class="fas fa-comment-dots text-6xl text-indigo-400 mb-6"></i>
+        <h3 class="text-2xl font-bold mb-4">Still Need Help?</h3>
+        <p class="text-gray-300 mb-8 max-w-2xl mx-auto">
+          Our support team is available 24/7 via live chat, WhatsApp, and email.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="support.html" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 px-8 py-4 rounded-xl font-bold transition transform hover:scale-105">
+            Open Live Chat
+          </a>
+          <a href="https://wa.me/1234567890" class="bg-green-600 hover:bg-green-700 px-8 py-4 rounded-xl font-bold transition flex items-center justify-center gap-3">
+            <i class="fab fa-whatsapp"></i> WhatsApp Support
+          </a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Mobile Overlay -->
+  <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden"></div>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('-translate-x-full');
+      document.getElementById('overlay').classList.toggle('hidden');
+    }
+  </script>
+</body>
+</html>

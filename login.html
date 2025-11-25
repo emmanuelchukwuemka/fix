@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyFigPoint - Login</title>
+
+  <!-- Tailwind CSS v3 + Inter Font -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+            'fade-in': 'fadeIn 1s ease-out forwards'
+          },
+          keyframes: {
+            float: {
+              '0%,100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-20px)' }
+            },
+            fadeInUp: {
+              '0%': { opacity: '0', transform: 'translateY(40px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+
+<body class="bg-gray-950 min-h-screen relative overflow-auto">
+
+  <!-- Animated Background Orbs -->
+  <div class="absolute inset-0 -z-10">
+    <div class="absolute top-0 -left-4 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-pulse"></div>
+    <div class="absolute top-0 -right-4 w-96 h-96 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-pulse delay-700"></div>
+    <div class="absolute -bottom-8 left-20 w-96 h-96 bg-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-pulse delay-1000"></div>
+  </div>
+
+  <!-- Login Card -->
+  <div class="w-full max-w-md mx-auto my-8 px-4 py-12 animate-fade-in">
+    <div class="backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl shadow-2xl p-8 md:p-10">
+      
+      <!-- Logo + Title -->
+      <div class="text-center mb-10 animate-fade-in-up animation-delay-200">
+        <div class="text-5xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
+          MyFigPoint
+        </div>
+        <h1 class="text-3xl font-bold text-white">Welcome Back!</h1>
+        <p class="text-gray-300 mt-2">Log in to continue earning rewards</p>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" class="space-y-6">
+        <div class="relative animate-fade-in-up animation-delay-400">
+          <input 
+            type="email" 
+            id="email" 
+            name="email"
+            required 
+            class="peer w-full px-5 py-4 bg-white/10 border border-white/30 rounded-xl text-white placeholder-transparent focus:outline-none focus:border-indigo-400 focus:ring-4 focus:ring-indigo-400/20 transition"
+            placeholder="Email"
+          />
+          <label for="email" class="absolute left-5 -top-2.5 bg-gray-950 px-2 text-sm text-gray-300 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-focus:-top-2.5 peer-focus:text-indigo-300">
+            Email Address
+          </label>
+        </div>
+
+        <div class="relative animate-fade-in-up animation-delay-600">
+          <input 
+            type="password" 
+            id="password" 
+            name="password"
+            required 
+            class="peer w-full px-5 py-4 bg-white/10 border border-white/30 rounded-xl text-white placeholder-transparent focus:outline-none focus:border-indigo-400 focus:ring-4 focus:ring-indigo-400/20 transition pr-12"
+            placeholder="Password"
+          />
+          <label for="password" class="absolute left-5 -top-2.5 bg-gray-950 px-2 text-sm text-gray-300 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-focus:-top-2.5 peer-focus:text-indigo-300">
+            Password
+          </label>
+          <button type="button" onclick="togglePassword()" class="absolute right-4 top-4 text-gray-400 hover:text-white">
+            <i class="fas fa-eye" id="eyeIcon"></i>
+          </button>
+        </div>
+
+        <div class="flex justify-between items-center animate-fade-in-up animation-delay-800">
+          <label class="flex items-center text-gray-300">
+            <input type="checkbox" class="mr-2 rounded text-indigo-500 focus:ring-indigo-400" />
+            <span class="text-sm">Remember me</span>
+          </label>
+          <a href="#" class="text-sm text-indigo-400 hover:text-white transition">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-4 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 animate-fade-in-up animation-delay-1000">
+          Sign In
+        </button>
+      </form>
+
+      <!-- Divider -->
+      <div class="flex items-center my-8 animate-fade-in-up animation-delay-1200">
+        <div class="flex-1 border-t border-white/20"></div>
+        <span class="px-4 text-gray-400 text-sm">or continue with</span>
+        <div class="flex-1 border-t border-white/20"></div>
+      </div>
+
+      <!-- Social Login -->
+      <div class="grid grid-cols-2 gap-4 animate-fade-in-up animation-delay-1400">
+        <button class="flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 border border-white/30 py-3 rounded-xl transition backdrop-blur">
+          <img src="https://www.google.com/favicon.ico" alt="Google" class="w-5 h-5" />
+          <span class="text-white font-medium">Google</span>
+        </button>
+        <button class="flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 border border-white/30 py-3 rounded-xl transition backdrop-blur">
+          <i class="fab fa-apple text-xl"></i>
+          <span class="text-white font-medium">Apple</span>
+        </button>
+      </div>
+
+      <!-- Sign Up Link -->
+      <p class="text-center mt-8 text-gray-300 animate-fade-in-up animation-delay-1600">
+        Don't have an account? 
+        <a href="signup.html" class="text-indigo-400 hover:text-white font-bold transition">
+          Sign Up Free
+        </a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Password toggle
+    function togglePassword() {
+      const password = document.getElementById('password');
+      const eyeIcon = document.getElementById('eyeIcon');
+      if (password.type === 'password') {
+        password.type = 'text';
+        eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        password.type = 'password';
+        eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    }
+
+    // Optional: Add loading state on submit
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const button = this.querySelector('button[type="submit"]');
+      const originalText = button.innerHTML;
+      button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Signing In...';
+      button.disabled = true;
+      
+      const formData = new FormData(this);
+      const email = formData.get('email');
+      const password = formData.get('password');
+      
+      fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.access_token) {
+          localStorage.setItem('access_token', data.access_token);
+          window.location.href = 'dashboard.html';
+        } else {
+          alert('Login failed: ' + (data.message || 'Invalid credentials'));
+          button.innerHTML = originalText;
+          button.disabled = false;
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Login failed. Please try again.');
+        button.innerHTML = originalText;
+        button.disabled = false;
+      });
+    });
+  </script>
+
+  <style>
+    .animation-delay-200 { animation-delay: 0.2s; }
+    .animation-delay-400 { animation-delay: 0.4s; }
+    .animation-delay-600 { animation-delay: 0.6s; }
+    .animation-delay-800 { animation-delay: 0.8s; }
+    .animation-delay-1000 { animation-delay: 1s; }
+    .animation-delay-1200 { animation-delay: 1.2s; }
+    .animation-delay-1400 { animation-delay: 1.4s; }
+    .animation-delay-1600 { animation-delay: 1.6s; }
+  </style>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyFigPoint - My Earnings & Wallet</title>
+
+  <!-- Tailwind + Inter Font -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+
+<body class="bg-gray-950 text-white min-h-screen flex">
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900/90 backdrop-blur-xl border-r border-gray-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+    <div class="flex items-center justify-between p-6 border-b border-gray-800">
+      <div class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+        MyFigPoint
+      </div>
+      <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white">
+        <i class="fas fa-times text-xl"></i>
+      </button>
+    </div>
+
+    <nav class="p-4 space-y-2">
+      <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-tasks"></i>
+        <span>Earn Points</span>
+      </a>
+      <a href="referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-users"></i>
+        <span>Refer & Earn</span>
+      </a>
+      <a href="wallet.html" class="flex items-center space-x-3 px-4 py-3 bg-indigo-600/20 border border-indigo-500/50 rounded-xl text-indigo-300 font-medium">
+        <i class="fas fa-wallet"></i>
+        <span>Wallet</span>
+      </a>
+      <a href="transactions.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-history"></i>
+        <span>Transaction History</span>
+      </a>
+      <a href="redeem.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-gift"></i>
+        <span>Redeem Points</span>
+      </a>
+      <a href="support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-headset"></i>
+        <span>Support Center</span>
+      </a>
+      <a href="profile.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-user-cog"></i>
+        <span>Profile & Settings</span>
+      </a>
+    </nav>
+
+    <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-800">
+      <div class="flex items-center space-x-3">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-indigo-500">
+        <div>
+          <p class="font-semibold">John Doe</p>
+          <p class="text-sm text-gray-400">Silver Member</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 lg:ml-64">
+    <!-- Top Bar -->
+    <header class="bg-gray-900/70 backdrop-blur-xl border-b border-gray-800 sticky top-0 z-40">
+      <div class="flex items-center justify-between px-6 py-5">
+        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+        <h1 class="text-2xl font-bold">My Earnings & Wallet</h1>
+        <div class="text-right">
+          <p class="text-sm text-gray-400">Total Lifetime Earnings</p>
+          <p class="text-3xl font-bold text-green-400">$1,250.75</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="p-6 lg:p-10">
+
+      <!-- Balance Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl p-8 shadow-2xl">
+          <p class="text-indigo-100 text-sm uppercase tracking-wider">Available Balance</p>
+          <p class="text-4xl font-bold mt-3">$930.75</p>
+          <p class="text-indigo-200 text-sm mt-4">Ready to withdraw</p>
+        </div>
+
+        <div class="bg-gradient-to-br from-yellow-600 to-orange-600 rounded-2xl p-8 shadow-2xl">
+          <p class="text-yellow-100 text-sm uppercase tracking-wider">Pending Clearance</p>
+          <p class="text-4xl font-bold mt-3">$320.00</p>
+          <p class="text-yellow-200 text-sm mt-4">Will be available in 3 days</p>
+        </div>
+
+        <div class="bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl p-8 shadow-2xl">
+          <p class="text-green-100 text-sm uppercase tracking-wider">Total Withdrawn</p>
+          <p class="text-4xl font-bold mt-3">$2,890.50</p>
+          <p class="text-green-200 text-sm mt-4">All-time payouts</p>
+        </div>
+      </div>
+
+      <!-- Earnings Breakdown Chart -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-6">
+          <h3 class="text-xl font-bold mb-6">Earnings This Month</h3>
+          <canvas id="earningsChart" height="300"></canvas>
+        </div>
+
+        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-6">
+          <h3 class="text-xl font-bold mb-6">Earnings by Source</h3>
+          <div class="space-y-6">
+            <div>
+              <div class="flex justify-between mb-2">
+                <span>Daily Tasks & Surveys</span>
+                <span class="font-bold">$485.50</span>
+              </div>
+              <div class="w-full bg-gray-700 rounded-full h-4">
+                <div class="bg-indigo-600 h-4 rounded-full" style="width: 68%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-2">
+                <span>Referrals</span>
+                <span class="font-bold">$380.00</span>
+              </div>
+              <div class="w-full bg-gray-700 rounded-full h-4">
+                <div class="bg-purple-600 h-4 rounded-full" style="width: 53%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-2">
+                <span>Bonuses & Offers</span>
+                <span class="font-bold">$145.25</span>
+              </div>
+              <div class="w-full bg-gray-700 rounded-full h-4">
+                <div class="bg-pink-600 h-4 rounded-full" style="width: 20%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Withdraw Options -->
+      <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-8 mb-10">
+        <h3 class="text-2xl font-bold mb-8 text-center">Withdraw Your Earnings Instantly</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <button class="bg-gray-700 hover:bg-gray-600 rounded-xl p-6 transition transform hover:scale-105">
+            <i class="fab fa-paypal text-4xl text-blue-500 mb-3"></i>
+            <p class="font-semibold">PayPal</p>
+            <p class="text-sm text-gray-400">Min: $5.00</p>
+          </button>
+          <button class="bg-gray-700 hover:bg-gray-600 rounded-xl p-6 transition transform hover:scale-105">
+            <i class="fab fa-bitcoin text-4xl text-orange-500 mb-3"></i>
+            <p class="font-semibold">Bitcoin</p>
+            <p class="text-sm text-gray-400">Min: $10.00</p>
+          </button>
+          <button class="bg-gray-700 hover:bg-gray-600 rounded-xl p-6 transition transform hover:scale-105">
+            <i class="fas fa-university text-4xl text-green-500 mb-3"></i>
+            <p class="font-semibold">Bank Transfer</p>
+            <p class="text-sm text-gray-400">Min: $50.00</p>
+          </button>
+          <button class="bg-gray-700 hover:bg-gray-600 rounded-xl p-6 transition transform hover:scale-105">
+            <i class="fas fa-gift text-4xl text-pink-500 mb-3"></i>
+            <p class="font-semibold">Gift Cards</p>
+            <p class="text-sm text-gray-400">Amazon, Steam + more</p>
+          </button>
+        </div>
+      </div>
+
+      <!-- Recent Withdrawals -->
+      <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-6">
+        <h3 class="text-xl font-bold mb-6">Recent Withdrawals</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="border-b border-gray-700">
+                <th class="pb-3">Date</th>
+                <th class="pb-3">Method</th>
+                <th class="pb-3">Amount</th>
+                <th class="pb-3">Status</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-300">
+              <tr class="border-b border-gray-800">
+                <td>Nov 20, 2025</td>
+                <td>PayPal</td>
+                <td class="font-bold text-green-400">$150.00</td>
+                <td><span class="bg-green-600/20 text-green-400 px-3 py-1 rounded-full text-sm">Completed</span></td>
+              </tr>
+              <tr class="border-b border-gray-800">
+                <td>Nov 15, 2025</td>
+                <td>Bitcoin</td>
+                <td class="font-bold">$95.50</td>
+                <td><span class="bg-green-600/20 text-green-400 px-3 py-1 rounded-full text-sm">Completed</span></td>
+              </tr>
+              <tr class="border-b border-gray-800">
+                <td>Nov 10, 2025</td>
+                <td>Amazon Gift Card</td>
+                <td class="font-bold">$100.00</td>
+                <td><span class="bg-yellow-600/20 text-yellow-400 px-3 py-1 rounded-full text-sm">Processing</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Overlay -->
+  <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden"></div>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('-translate-x-full');
+      document.getElementById('overlay').classList.toggle('hidden');
+    }
+
+    // Earnings Chart
+    const ctx = document.getElementById('earningsChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        datasets: [{
+          label: 'Earnings ($)',
+          data: [280, 420, 580, 720],
+          borderColor: '#8b5cf6',
+          backgroundColor: 'rgba(139, 92, 246, 0.2)',
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

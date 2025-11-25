@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyFigPoint - Partner Hub</title>
+
+  <!-- Tailwind + Inter Font -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-gray-950 text-white min-h-screen flex">
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900/90 backdrop-blur-xl border-r border-gray-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+    <div class="flex items-center justify-between p-6 border-b border-gray-800">
+      <div class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+        MyFigPoint
+      </div>
+      <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white">
+        <i class="fas fa-times text-xl"></i>
+      </button>
+    </div>
+
+    <nav class="p-4 space-y-2">
+      <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-tasks"></i>
+        <span>Earn Points</span>
+      </a>
+      <a href="referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-users"></i>
+        <span>Refer & Earn</span>
+      </a>
+      <a href="wallet.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-wallet"></i>
+        <span>Wallet</span>
+      </a>
+      <a href="transactions.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-history"></i>
+        <span>Transaction History</span>
+      </a>
+      <a href="redeem.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-gift"></i>
+        <span>Redeem Points</span>
+      </a>
+      <a href="partner.html" class="flex items-center space-x-3 px-4 py-3 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-500/50 rounded-xl text-indigo-300 font-bold">
+        <i class="fas fa-handshake"></i>
+        <span>Partner Hub</span>
+      </a>
+      <a href="support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-headset"></i>
+        <span>Support Center</span>
+      </a>
+      <a href="profile.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-user-cog"></i>
+        <span>Profile & Settings</span>
+      </a>
+    </nav>
+
+    <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-800">
+      <div class="flex items-center space-x-3">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Partner" alt="Partner" class="w-12 h-12 rounded-full ring-2 ring-green-500">
+        <div>
+          <p class="font-semibold">Partner Pro</p>
+          <p class="text-sm text-gray-400">Elite Tier</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 lg:ml-64">
+    <!-- Top Bar -->
+    <header class="bg-gray-900/70 backdrop-blur-xl border-b border-gray-800 sticky top-0 z-40">
+      <div class="flex items-center justify-between px-6 py-5">
+        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+        <div>
+          <h1 class="text-2xl font-bold">Partner Hub</h1>
+          <p class="text-gray-400 text-sm">Welcome back, John from Partner Co.</p>
+        </div>
+        <div class="text-right">
+          <p class="text-sm text-gray-400">Total Partner Earnings</p>
+          <p class="text-3xl font-bold text-green-400">$4,750.00</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="p-6 lg:p-10">
+
+      <!-- Partner Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+        <div class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl p-6 shadow-xl">
+          <i class="fas fa-users text-4xl mb-3 opacity-80"></i>
+          <p class="text-indigo-100 text-sm">Active Referrals</p>
+          <p class="text-3xl font-bold">842</p>
+        </div>
+        <div class="bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl p-6 shadow-xl">
+          <i class="fas fa-dollar-sign text-4xl mb-3 opacity-80"></i>
+          <p class="text-green-100 text-sm">This Month</p>
+          <p class="text-3xl font-bold">$1,280</p>
+        </div>
+        <div class="bg-gradient-to-br from-yellow-600 to-orange-600 rounded-2xl p-6 shadow-xl">
+          <i class="fas fa-trophy text-4xl mb-3 opacity-80"></i>
+          <p class="text-yellow-100 text-sm">Rank</p>
+          <p class="text-3xl font-bold">#12</p>
+          <p class="text-sm">Top 5%</p>
+        </div>
+        <div class="bg-gradient-to-br from-pink-600 to-rose-600 rounded-2xl p-6 shadow-xl">
+          <i class="fas fa-percentage text-4xl mb-3 opacity-80"></i>
+          <p class="text-pink-100 text-sm">Commission Rate</p>
+          <p class="text-3xl font-bold">25%</p>
+        </div>
+      </div>
+
+      <!-- Earnings Chart -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-6">
+          <h3 class="text-xl font-bold mb-6">Earnings Over Time</h3>
+          <canvas id="earningsChart" height="300"></canvas>
+        </div>
+
+        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-6">
+          <h3 class="text-xl font-bold mb-6">Top Referral Sources</h3>
+          <div class="space-y-5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center text-sm font-bold">1</div>
+                <div>
+                  <p class="font-medium">YouTube Review</p>
+                  <p class="text-sm text-gray-400">johnpartner.co/review</p>
+                </div>
+              </div>
+              <span class="text-green-400 font-bold">428 users</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-sm font-bold">2</div>
+                <div>
+                  <p class="font-medium">Instagram Bio Link</p>
+                  <p class="text-sm text-gray-400">@johnpartner</p>
+                </div>
+              </div>
+              <span class="text-green-400 font-bold">312 users</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center text-sm font-bold">3</div>
+                <div>
+                  <p class="font-medium">TikTok Videos</p>
+                  <p class="text-sm text-gray-400">12 videos</p>
+                </div>
+              </div>
+              <span class="text-green-400 font-bold">102 users</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resources & Downloads -->
+      <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-8 mb-10">
+        <h3 class="text-2xl font-bold mb-8 flex items-center gap-3">
+          <i class="fas fa-download text-indigo-400"></i> Partner Resources
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <a href="#" class="bg-gray-700/50 hover:bg-indigo-600/30 border border-gray-600 hover:border-indigo-500 rounded-xl p-6 transition transform hover:scale-105">
+            <i class="fas fa-file-contract text-4xl text-indigo-400 mb-4"></i>
+            <h4 class="font-bold">Partner Agreement</h4>
+            <p class="text-sm text-gray-400 mt-2">Official contract PDF</p>
+          </a>
+          <a href="#" class="bg-gray-700/50 hover:bg-purple-600/30 border border-gray-600 hover:border-purple-500 rounded-xl p-6 transition transform hover:scale-105">
+            <i class="fas fa-images text-4xl text-purple-400 mb-4"></i>
+            <h4 class="font-bold">Marketing Banners</h4>
+            <p class="text-sm text-gray-400 mt-2">Ready-to-use graphics</p>
+          </a>
+          <a href="#" class="bg-gray-700/50 hover:bg-green-600/30 border border-gray-600 hover:border-green-500 rounded-xl p-6 transition transform hover:scale-105">
+            <i class="fas fa-chart-line text-4xl text-green-400 mb-4"></i>
+            <h4 class="font-bold">Monthly Report</h4>
+            <p class="text-sm text-gray-400 mt-2">November 2025 Analytics</p>
+          </a>
+        </div>
+      </div>
+
+      <!-- Payout History -->
+      <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-6">
+        <h3 class="text-xl font-bold mb-6">Recent Payouts</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead class="border-b border-gray-700">
+              <tr>
+                <th class="pb-3">Date</th>
+                <th class="pb-3">Amount</th>
+                <th class="pb-3">Method</th>
+                <th class="pb-3">Status</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-300">
+              <tr class="border-b border-gray-800">
+                <td>Nov 1, 2025</td>
+                <td class="font-bold text-green-400">$1,280.00</td>
+                <td>PayPal</td>
+                <td><span class="bg-green-600/20 text-green-400 px-3 py-1 rounded-full text-sm">Paid</span></td>
+              </tr>
+              <tr class="border-b border-gray-800">
+                <td>Oct 1, 2025</td>
+                <td class="font-bold text-green-400">$980.00</td>
+                <td>Bank Transfer</td>
+                <td><span class="bg-green-600/20 text-green-400 px-3 py-1 rounded-full text-sm">Paid</span></td>
+              </tr>
+              <tr>
+                <td>Sep 1, 2025</td>
+                <td class="font-bold text-green-400">$1,050.00</td>
+                <td>PayPal</td>
+                <td><span class="bg-green-600/20 text-green-400 px-3 py-1 rounded-full text-sm">Paid</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Overlay -->
+  <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden"></div>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('-translate-x-full');
+      document.getElementById('overlay').classList.toggle('hidden');
+    }
+
+    // Partner Earnings Chart
+    const ctx = document.getElementById('earningsChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
+        datasets: [{
+          label: 'Monthly Earnings ($)',
+          data: [620, 780, 1050, 980, 1280],
+          borderColor: '#8b5cf6',
+          backgroundColor: 'rgba(139, 92, 246, 0.2)',
+          tension: 0.4,
+          fill: true,
+          pointBackgroundColor: '#8b5cf6',
+          pointRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyFigPoint - Notifications</title>
+
+  <!-- Tailwind + Inter Font -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+
+<body class="bg-gray-950 text-white min-h-screen flex">
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900/90 backdrop-blur-xl border-r border-gray-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+    <div class="flex items-center justify-between p-6 border-b border-gray-800">
+      <div class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+        MyFigPoint
+      </div>
+      <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white">
+        <i class="fas fa-times text-xl"></i>
+      </button>
+    </div>
+
+    <nav class="p-4 space-y-2">
+      <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-tasks"></i>
+        <span>Earn Points</span>
+      </a>
+      <a href="referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-users"></i>
+        <span>Refer & Earn</span>
+      </a>
+      <a href="wallet.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-wallet"></i>
+        <span>Wallet</span>
+      </a>
+      <a href="transactions.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-history"></i>
+        <span>Transaction History</span>
+      </a>
+      <a href="redeem.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-gift"></i>
+        <span>Redeem Points</span>
+      </a>
+      <a href="notifications.html" class="flex items-center space-x-3 px-4 py-3 bg-indigo-600/20 border border-indigo-500/50 rounded-xl text-indigo-300 font-medium relative">
+        <i class="fas fa-bell"></i>
+        <span>Notifications</span>
+        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center">8</span>
+      </a>
+      <a href="support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-headset"></i>
+        <span>Support Center</span>
+      </a>
+      <a href="profile.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+        <i class="fas fa-user-cog"></i>
+        <span>Profile & Settings</span>
+      </a>
+    </nav>
+
+    <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-800">
+      <div class="flex items-center space-x-3">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-indigo-500">
+        <div>
+          <p class="font-semibold">John Doe</p>
+          <p class="text-sm text-gray-400">8 unread</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 lg:ml-64">
+    <!-- Top Bar -->
+    <header class="bg-gray-900/70 backdrop-blur-xl border-b border-gray-800 sticky top-0 z-40">
+      <div class="flex items-center justify-between px-6 py-5">
+        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+        <div>
+          <h1 class="text-2xl font-bold">Notifications</h1>
+          <p class="text-gray-400 text-sm">Stay updated with your earnings & activities</p>
+        </div>
+        <button onclick="markAllRead()" class="bg-indigo-600 hover:bg-indigo-700 px-5 py-2 rounded-xl text-sm font-medium transition">
+          Mark All as Read
+        </button>
+      </div>
+    </header>
+
+    <main class="p-6 lg:p-10 max-w-5xl mx-auto">
+
+      <!-- Notification Tabs -->
+      <div class="flex flex-wrap gap-4 mb-8 border-b border-gray-800">
+        <button class="px-6 py-3 font-medium transition rounded-t-xl bg-indigo-600 text-white">
+          All <span class="ml-2 bg-red-500 text-xs px-2 py-1 rounded-full">8</span>
+        </button>
+        <button class="px-6 py-3 font-medium transition rounded-t-xl bg-gray-800 hover:bg-gray-700">
+          Earnings
+        </button>
+        <button class="px-6 py-3 font-medium transition rounded-t-xl bg-gray-800 hover:bg-gray-700">
+          Withdrawals
+        </button>
+        <button class="px-6 py-3 font-medium transition rounded-t-xl bg-gray-800 hover:bg-gray-700">
+          Tasks
+        </button>
+        <button class="px-6 py-3 font-medium transition rounded-t-xl bg-gray-800 hover:bg-gray-700">
+          Announcements
+        </button>
+      </div>
+
+      <!-- Notifications List -->
+      <div class="space-y-4">
+
+        <!-- Earnings -->
+        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-5 hover:border-indigo-500 transition-all group">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-dollar-sign text-xl"></i>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-lg">You earned $50.00!</h3>
+                <span class="text-xs text-gray-500">2 hours ago</span>
+              </div>
+              <p class="text-gray-300 mt-1">Great job completing the daily survey task!</p>
+              <div class="flex items-center gap-4 mt-3">
+                <span class="text-green-400 font-medium">+500 pts</span>
+                <button class="text-indigo-400 hover:text-white text-sm">View Details</button>
+              </div>
+            </div>
+            <button onclick="this.parentElement.parentElement.parentElement.remove()" class="opacity-0 group-hover:opacity-100 transition text-gray-500 hover:text-red-400">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Referral -->
+        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-5 hover:border-purple-500 transition-all group">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-users text-xl"></i>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-lg">Referral Bonus Unlocked!</h3>
+                <span class="text-xs text-gray-500">5 hours ago</span>
+              </div>
+              <p class="text-gray-300 mt-1">Your friend Sarah just signed up and completed their first task!</p>
+              <div class="flex items-center gap-4 mt-3">
+                <span class="text-purple-400 font-medium">+$25.00 + 250 pts</span>
+              </div>
+            </div>
+            <button onclick="this.parentElement.parentElement.parentElement.remove()" class="opacity-0 group-hover:opacity-100 transition text-gray-500 hover:text-red-400">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Withdrawal -->
+        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-5 hover:border-green-500 transition-all group">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-green-600 to-cyan-600 rounded-full flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-check-circle text-xl"></i>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-lg">Withdrawal Approved!</h3>
+                <span class="text-xs text-gray-500">Yesterday</span>
+              </div>
+              <p class="text-gray-300 mt-1">Your $100.00 PayPal withdrawal has been processed successfully.</p>
+              <div class="mt-3">
+                <span class="bg-green-600/20 text-green-400 px-3 py-1 rounded-full text-sm">Completed</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task Reminder -->
+        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-5 hover:border-yellow-500 transition-all group">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-clock text-xl"></i>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-lg">Task Deadline Approaching</h3>
+                <span class="text-xs text-gray-500">2 days ago</span>
+              </div>
+              <p class="text-gray-300 mt-1">Don't miss out! Complete "Watch Video Ad" before it expires.</p>
+              <button class="mt-3 bg-yellow-600 hover:bg-yellow-700 px-5 py-2 rounded-xl text-sm font-medium transition">
+                Complete Now
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Update -->
+        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-5 hover:border-blue-500 transition-all group">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-bullhorn text-xl"></i>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-lg">New Feature Released!</h3>
+                <span class="text-xs text-gray-500">Nov 20, 2025</span>
+              </div>
+              <p class="text-gray-300 mt-1">Instant Crypto Withdrawals are now live! Withdraw to BTC, ETH, USDT and more.</p>
+              <button class="mt-3 text-blue-400 hover:text-white text-sm font-medium">
+                Learn More
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Empty State (if all read) -->
+      <div class="hidden text-center py-20" id="emptyState">
+        <i class="fas fa-bell-slash text-6xl text-gray-600 mb-6"></i>
+        <h3 class="text-2xl font-bold text-gray-500">You're all caught up!</h3>
+        <p class="text-gray-400 mt-2">Check back later for new notifications.</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- Overlay -->
+  <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden"></div>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('-translate-x-full');
+      document.getElementById('overlay').classList.toggle('hidden');
+    }
+
+    function markAllRead() {
+      document.querySelectorAll('.bg-gray-800\\/70').forEach(card => {
+        card.style.opacity = '0.6';
+      });
+      alert('All notifications marked as read!');
+    }
+  </script>
+</body>
+</html>
