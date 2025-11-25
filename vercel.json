@@ -20,11 +20,6 @@
       "dest": "wsgi.py"
     }
   ],
-  "env": {
-    "SECRET_KEY": "@secret-key",
-    "JWT_SECRET_KEY": "@jwt-secret-key",
-    "DATABASE_URL": "@database-url"
-  },
   "build": {
     "env": {
       "PIP_REQUIREMENTS_FILE": "requirements-vercel.txt"
