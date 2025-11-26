@@ -13,64 +13,71 @@
       theme: {
         extend: {
           fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
-          colors: { primary: '#6366f1', accent: '#8b5cf6' }
+          colors: {
+            primary: '#FD6606',
+            secondary: '#012E03'
+          }
         }
       }
     }
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="assets/css/app.css" />
 </head>
 
-<body class="bg-gray-950 text-white min-h-screen flex relative overflow-auto">
+<body class="bg-background text-text min-h-screen flex relative overflow-auto">
+  <!-- Theme Toggle Button -->
+  <button id="themeToggle" class="theme-toggle">
+    <i class="fas fa-moon"></i>
+  </button>
+
 
   <!-- Sidebar (Same as Dashboard) -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900/90 backdrop-blur-xl border-r border-gray-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
-    <div class="flex items-center justify-between p-6 border-b border-gray-800">
-      <div class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-        MyFigPoint
-      </div>
-      <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white">
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
+    <div class="flex items-center justify-between p-6 border-b border-border">
+      <img src="assets/logo-circular.png" alt="MyFigPoint Logo" class="h-20 w-20 rounded-full object-contain mx-auto mb-4">
+      <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
         <i class="fas fa-times text-xl"></i>
       </button>
     </div>
 
-    <nav class="p-4 space-y-2">
-      <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+    <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+      <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-tachometer-alt"></i>
         <span>Dashboard</span>
       </a>
-      <a href="tasks.html" class="flex items-center space-x-3 px-4 py-3 bg-indigo-600/20 border border-indigo-500/50 rounded-xl text-indigo-300 font-medium">
+      <a href="tasks.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-tasks"></i>
         <span>Earn Points</span>
       </a>
-      <a href="referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+      <a href="referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-users"></i>
         <span>Refer & Earn</span>
       </a>
-      <a href="wallet.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+      <a href="wallet.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-wallet"></i>
         <span>Wallet</span>
       </a>
-      <a href="transactions.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+      <a href="transactions.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-history"></i>
         <span>Transaction History</span>
       </a>
-      <a href="redeem.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+      <a href="redeem.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-gift"></i>
         <span>Redeem Points</span>
       </a>
-      <a href="profile.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+      <a href="profile.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-user-cog"></i>
         <span>Profile & Settings</span>
       </a>
     </nav>
 
-    <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-800">
+    <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-indigo-500">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
           <p class="font-semibold">John Doe</p>
-          <p class="text-sm text-gray-400">Silver Member</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">john@example.com</p>
         </div>
       </div>
       <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
@@ -82,18 +89,18 @@
   <!-- Main Content -->
   <div class="flex-1 lg:ml-64">
     <!-- Top Bar -->
-    <header class="bg-gray-900/70 backdrop-blur-xl border-b border-gray-800 sticky top-0 z-40">
+    <header class="bg-card backdrop-blur-xl border-b border-border sticky top-0 z-40">
       <div class="flex items-center justify-between px-6 py-5">
-        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white">
+        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
           <i class="fas fa-bars text-xl"></i>
         </button>
         <div>
           <h1 class="text-2xl font-bold">Earn Points</h1>
-          <p class="text-gray-400 text-sm">Complete tasks below and watch your balance grow!</p>
+          <p class="text-gray-600 dark:text-gray-400 text-sm">Complete tasks below and watch your balance grow!</p>
         </div>
         <div class="text-right">
-          <p class="text-3xl font-bold text-indigo-400">3,450.75 pts</p>
-          <p class="text-sm text-gray-400">$1,250.50 earned</p>
+          <p class="text-3xl font-bold text-primary">3,450.75 pts</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">$1,250.50 earned</p>
         </div>
       </div>
     </header>
@@ -101,42 +108,42 @@
     <main class="p-6 lg:p-10">
       <!-- Stats Bar -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div class="bg-gray-800/60 backdrop-blur rounded-xl p-4 text-center border border-gray-700">
-          <p class="text-gray-400 text-sm">Daily Streak</p>
-          <p class="text-2xl font-bold text-orange-400">7 Days</p>
+        <div class="card rounded-xl p-4 text-center">
+          <p class="text-gray-600 dark:text-gray-400 text-sm">Daily Streak</p>
+          <p class="text-2xl font-bold text-primary">7 Days</p>
         </div>
-        <div class="bg-gray-800/60 backdrop-blur rounded-xl p-4 text-center border border-gray-700">
-          <p class="text-gray-400 text-sm">Tasks Today</p>
+        <div class="card rounded-xl p-4 text-center">
+          <p class="text-gray-600 dark:text-gray-400 text-sm">Tasks Today</p>
           <p class="text-2xl font-bold text-green-400">5 / 10</p>
         </div>
-        <div class="bg-gray-800/60 backdrop-blur rounded-xl p-4 text-center border border-gray-700">
-          <p class="text-gray-400 text-sm">Est. Earnings</p>
+        <div class="card rounded-xl p-4 text-center">
+          <p class="text-gray-600 dark:text-gray-400 text-sm">Est. Earnings</p>
           <p class="text-2xl font-bold text-yellow-400">$18.50</p>
         </div>
-        <div class="bg-gray-800/60 backdrop-blur rounded-xl p-4 text-center border border-gray-700">
-          <p class="text-gray-400 text-sm">Bonus Multiplier</p>
-          <p class="text-2xl font-bold text-purple-400">1.5x</p>
+        <div class="card rounded-xl p-4 text-center">
+          <p class="text-gray-600 dark:text-gray-400 text-sm">Bonus Multiplier</p>
+          <p class="text-2xl font-bold text-primary">1.5x</p>
         </div>
       </div>
 
       <!-- Task Categories Tabs -->
-      <div class="flex flex-wrap gap-3 mb-8 border-b border-gray-800">
-        <button class="px-6 py-3 rounded-t-xl font-medium transition bg-indigo-600 text-white">
+      <div class="flex flex-wrap gap-3 mb-8 border-b border-border">
+        <button class="px-6 py-3 rounded-t-xl font-medium transition bg-primary text-white">
           All Tasks
         </button>
-        <button class="px-6 py-3 rounded-t-xl font-medium transition bg-gray-800 hover:bg-gray-700">
+        <button class="px-6 py-3 rounded-t-xl font-medium transition bg-card hover:bg-card/80">
           Daily
         </button>
-        <button class="px-6 py-3 rounded-t-xl font-medium transition bg-gray-800 hover:bg-gray-700">
+        <button class="px-6 py-3 rounded-t-xl font-medium transition bg-card hover:bg-card/80">
           Surveys
         </button>
-        <button class="px-6 py-3 rounded-t-xl font-medium transition bg-gray-800 hover:bg-gray-700">
+        <button class="px-6 py-3 rounded-t-xl font-medium transition bg-card hover:bg-card/80">
           Offers
         </button>
-        <button class="px-6 py-3 rounded-t-xl font-medium transition bg-gray-800 hover:bg-gray-700">
+        <button class="px-6 py-3 rounded-t-xl font-medium transition bg-card hover:bg-card/80">
           Videos
         </button>
-        <button class="px-6 py-3 rounded-t-xl font-medium transition bg-gray-800 hover:bg-gray-700">
+        <button class="px-6 py-3 rounded-t-xl font-medium transition bg-card hover:bg-card/80">
           Limited Time <span class="ml-2 bg-red-500 text-xs px-2 py-1 rounded-full">Hot</span>
         </button>
       </div>
@@ -145,33 +152,33 @@
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
         <!-- Task Card 1 -->
-        <div class="group bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-6 hover:border-indigo-500 hover:shadow-2xl transition-all">
+        <div class="group card rounded-2xl p-6 hover:border-primary hover:shadow-2xl transition-all">
           <div class="flex justify-between items-start mb-4">
-            <div class="bg-indigo-600/20 px-3 py-1 rounded-full text-indigo-300 text-xs font-medium">Survey</div>
+            <div class="bg-primary/20 px-3 py-1 rounded-full text-primary text-xs font-medium">Survey</div>
             <span class="text-2xl">High Reward</span>
           </div>
           <h3 class="text-xl font-bold mb-2">Complete Health Survey</h3>
-          <p class="text-gray-400 text-sm mb-4">Share your opinion on wellness products (10-15 min)</p>
+          <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">Share your opinion on wellness products (10-15 min)</p>
           <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-3">
               <span class="text-2xl font-bold text-green-400">$8.00</span>
               <span class="text-yellow-400">+80 pts</span>
             </div>
             <div class="text-right">
-              <p class="text-xs text-gray-500">Time</p>
+              <p class="text-xs text-gray-600 dark:text-gray-400">Time</p>
               <p class="font-medium">12 min</p>
             </div>
           </div>
           <div class="flex justify-between items-center">
-            <span class="text-xs text-gray-500">3,241 completed today</span>
-            <button class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 px-6 py-3 rounded-xl font-semibold transition transform hover:scale-105">
+            <span class="text-xs text-gray-600 dark:text-gray-400">3,241 completed today</span>
+            <button class="bg-primary hover:bg-orange-700 px-6 py-3 rounded-xl font-semibold transition transform hover:scale-105">
               Start Now
             </button>
           </div>
         </div>
 
         <!-- Task Card 2 - Completed -->
-        <div class="group bg-gray-880/70 backdrop-blur border border-gray-700 rounded-2xl p-6 opacity-75">
+        <div class="group card rounded-2xl p-6 opacity-75">
           <div class="flex justify-between items-start mb-4">
             <div class="bg-green-600/20 px-3 py-1 rounded-full text-green-300 text-xs font-medium">Completed</div>
           </div>
@@ -181,7 +188,7 @@
             <span class="text-xl font-bold text-gray-500">+$2.00</span>
             <span class="text-gray-500">+20 pts</span>
           </div>
-          <button disabled class="w-full bg-gray-700 text-gray-500 py-3 rounded-xl cursor-not-allowed">
+          <button disabled class="w-full bg-card text-gray-500 py-3 rounded-xl cursor-not-allowed">
             Completed Today
           </button>
         </div>
@@ -198,18 +205,18 @@
             <span class="text-3xl font-bold text-red-400">$25.00</span>
             <span class="text-yellow-400 text-xl">+250 pts</span>
           </div>
-          <button class="w-full bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-600 py-3 rounded-xl font-bold transition transform hover:scale-105">
+          <button class="w-full bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 py-3 rounded-xl font-bold transition transform hover:scale-105">
             Claim Offer →
           </button>
         </div>
 
         <!-- More Tasks... -->
-        <div class="group bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-6 hover:border-green-500 transition-all">
+        <div class="group card rounded-2xl p-6 hover:border-green-500 transition-all">
           <div class="flex justify-between items-start mb-4">
             <div class="bg-green-600/20 px-3 py-1 rounded-full text-green-300 text-xs font-medium">Easy</div>
           </div>
           <h3 class="text-xl font-bold mb-2">Watch Video Ads (5x)</h3>
-          <p class="text-gray-400 text-sm mb-4">Watch short ads and earn instantly</p>
+          <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">Watch short ads and earn instantly</p>
           <div class="flex items-center gap-3 mb-4">
             <span class="text-2xl font-bold text-green-400">$3.50</span>
             <span class="text-yellow-400">+35 pts</span>
@@ -289,6 +296,10 @@
       localStorage.removeItem('access_token');
       window.location.href = 'login.html';
     }
+  
+    
+
   </script>
+  <script src="assets/js/theme.js"></script>
 </body>
 </html>

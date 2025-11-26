@@ -13,7 +13,10 @@
       theme: {
         extend: {
           fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
-          colors: { primary: '#6366f1', secondary: '#8b5cf6' }
+          colors: {
+            primary: '#FD6606',
+            secondary: '#012E03'
+          }
         }
       }
     }
@@ -22,58 +25,61 @@
   <!-- Heroicons -->
   <script src="https://unpkg.com/heroicons@2.1.1/dist/heroicons.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="assets/css/app.css" />
 </head>
 
-<body class="bg-gray-950 text-white min-h-screen flex">
+<body class="bg-background text-text min-h-screen flex">
+  <!-- Theme Toggle Button -->
+  <button id="themeToggle" class="theme-toggle">
+    <i class="fas fa-moon"></i>
+  </button>
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900/90 backdrop-blur-xl border-r border-gray-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
-    <div class="flex items-center justify-between p-6 border-b border-gray-800">
-      <div class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-        MyFigPoint
-      </div>
-      <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white">
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col">
+    <div class="flex items-center justify-between p-6 border-b border-border">
+      <img src="assets/logo-circular.png" alt="MyFigPoint Logo" class="h-20 w-20 rounded-full object-contain mx-auto mb-4">
+      <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
         <i class="fas fa-times text-xl"></i>
       </button>
     </div>
 
-    <nav class="p-4 space-y-2">
-      <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 bg-indigo-600/20 border border-indigo-500/50 rounded-xl text-indigo-300 font-medium">
+    <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+      <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-tachometer-alt"></i>
         <span>Dashboard</span>
       </a>
-      <a href="tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+      <a href="tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-tasks"></i>
         <span>Earn Points</span>
       </a>
-      <a href="referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+      <a href="referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-users"></i>
         <span>Refer & Earn</span>
       </a>
-      <a href="wallet.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+      <a href="wallet.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-wallet"></i>
         <span>Wallet</span>
       </a>
-      <a href="transactions.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+      <a href="transactions.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-history"></i>
         <span>Transaction History</span>
       </a>
-      <a href="redeem.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+      <a href="redeem.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-gift"></i>
         <span>Redeem Points</span>
       </a>
-      <a href="profile.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+      <a href="profile.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-user-cog"></i>
         <span>Profile & Settings</span>
       </a>
     </nav>
 
-    <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-800">
+    <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-indigo-500">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
           <p class="font-semibold">John Doe</p>
-          <p class="text-sm text-gray-400">john@example.com</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">john@example.com</p>
         </div>
       </div>
       <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
@@ -85,14 +91,14 @@
   <!-- Main Content -->
   <div class="flex-1 lg:ml-64">
     <!-- Top Bar -->
-    <header class="bg-gray-900/70 backdrop-blur-xl border-b border-gray-800 sticky top-0 z-40">
+    <header class="bg-card backdrop-blur-xl border-b border-border sticky top-0 z-40">
       <div class="flex items-center justify-between px-6 py-4">
-        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white">
+        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
           <i class="fas fa-bars text-xl"></i>
         </button>
-        <h1 class="text-2xl font-bold">Welcome back, <span class="text-indigo-400">John!</span></h1>
+        <h1 class="text-2xl font-bold">Welcome back, <span class="text-primary">John!</span></h1>
         <div class="flex items-center space-x-4">
-          <button class="relative p-2 hover:bg-gray-800 rounded-lg" onclick="window.location.href='notifications.html'">
+          <button class="relative p-2 hover:bg-card rounded-lg" onclick="window.location.href='notifications.html'">
             <i class="fas fa-bell"></i>
             <span class="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
           </button>
@@ -103,21 +109,21 @@
     <main class="p-6 lg:p-10">
       <!-- Stats Cards -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        <div class="group bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all">
+        <div class="group bg-primary rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-indigo-200 text-sm uppercase tracking-wider">Wallet Balance</p>
+              <p class="text-orange-100 text-sm uppercase tracking-wider">Wallet Balance</p>
               <p class="text-3xl font-bold mt-2">$1,250.50</p>
             </div>
             <i class="fas fa-dollar-sign text-4xl opacity-50"></i>
           </div>
-          <p class="text-indigo-100 text-sm mt-3">+12.5% from last month</p>
+          <p class="text-orange-100 text-sm mt-3">+12.5% from last month</p>
         </div>
 
-        <div class="group bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-6 hover:border-indigo-500 transition-all">
+        <div class="group card rounded-2xl p-6 hover:border-primary transition-all">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-gray-400 text-sm uppercase tracking-wider">Points Balance</p>
+              <p class="text-gray-600 dark:text-gray-400 text-sm uppercase tracking-wider">Points Balance</p>
               <p class="text-3xl font-bold mt-2">3,450.75 pts</p>
             </div>
             <i class="fas fa-coins text-4xl text-yellow-500 opacity-70"></i>
@@ -129,14 +135,14 @@
           <p class="text-2xl font-bold mt-3">Instant Cashout →</p>
         </div>
 
-        <div class="group bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-6 hover:border-purple-500 transition-all">
+        <div class="group card rounded-2xl p-6 hover:border-primary transition-all">
           <div>
-            <p class="text-gray-400 text-sm uppercase tracking-wider">Member Level</p>
-            <p class="text-2xl font-bold mt-2 text-purple-400">Silver Tier</p>
+            <p class="text-gray-600 dark:text-gray-400 text-sm uppercase tracking-wider">Member Level</p>
+            <p class="text-2xl font-bold mt-2 text-primary">Silver Tier</p>
             <div class="mt-3 bg-gray-700 rounded-full h-3">
-              <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-3 rounded-full w-3/4"></div>
+              <div class="bg-gradient-to-r from-primary to-orange-600 h-3 rounded-full w-3/4"></div>
             </div>
-            <p class="text-xs text-gray-400 mt-2">750 pts to Gold</p>
+            <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">750 pts to Gold</p>
           </div>
         </div>
       </div>
@@ -144,150 +150,119 @@
       <!-- Content Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Today's Tasks -->
-        <div class="bg-gray-800/60 backdrop-blur border border-gray-700 rounded-2xl p-6">
+        <div class="card rounded-2xl p-6">
           <h3 class="text-xl font-bold mb-5 flex items-center justify-between">
             Today's Tasks
-            <span class="text-sm text-gray-400">3 / 8 Completed</span>
+            <span class="text-sm text-gray-600 dark:text-gray-400">3 / 8 Completed</span>
           </h3>
           <ul class="space-y-4">
-            <li class="flex items-center justify-between p-4 bg-gray-700/50 rounded-lg hover:bg-indigo-600/30 transition cursor-pointer">
+            <li class="flex items-center justify-between p-4 bg-card rounded-lg hover:bg-primary/10 transition cursor-pointer">
               <div class="flex items-center space-x-3">
-                <input type="checkbox" class="w-5 h-5 text-indigo-600 rounded" />
+                <input type="checkbox" class="w-5 h-5 text-primary rounded" />
                 <span>Complete daily survey</span>
               </div>
-              <span class="text-indigo-400 font-bold">+50 pts</span>
+              <span class="text-primary font-bold">+50 pts</span>
             </li>
-            <li class="flex items-center justify-between p-4 bg-gray-700/50 rounded-lg hover:bg-indigo-600/30 transition cursor-pointer">
+            <li class="flex items-center justify-between p-4 bg-card rounded-lg hover:bg-primary/10 transition cursor-pointer">
               <div class="flex items-center space-x-3">
-                <input type="checkbox" checked class="w-5 h-5 text-indigo-600 rounded" />
+                <input type="checkbox" checked class="w-5 h-5 text-primary rounded" />
                 <span class="line-through text-gray-500">Watch video ad</span>
               </div>
               <span class="text-green-400 font-bold">+20 pts</span>
             </li>
-            <li class="flex items-center justify-between p-4 bg-gray-700/50 rounded-lg hover:bg-indigo-600/30 transition cursor-pointer">
+            <li class="flex items-center justify-between p-4 bg-card rounded-lg hover:bg-primary/10 transition cursor-pointer">
               <div class="flex items-center space-x-3">
-                <input type="checkbox" class="w-5 h-5 text-indigo-600 rounded" />
+                <input type="checkbox" class="w-5 h-5 text-primary rounded" />
                 <span>Share referral link</span>
               </div>
-              <span class="text-indigo-400 font-bold">+30 pts</span>
+              <span class="text-primary font-bold">+30 pts</span>
             </li>
           </ul>
         </div>
 
         <!-- Earnings Summary -->
-        <div class="bg-gray-800/60 backdrop-blur border border-gray-700 rounded-2xl p-6">
+        <div class="card rounded-2xl p-6">
           <h3 class="text-xl font-bold mb-5">Earnings Overview</h3>
           <div class="space-y-5">
             <div>
               <div class="flex justify-between mb-2">
-                <span class="text-gray-400">Total Earned</span>
+                <span class="text-gray-600 dark:text-gray-400">Total Earned</span>
                 <span class="font-bold">$560.75</span>
               </div>
               <div class="flex justify-between mb-2">
-                <span class="text-gray-400">This Month</span>
+                <span class="text-gray-600 dark:text-gray-400">This Month</span>
                 <span class="text-green-400 font-bold">+$248.90</span>
               </div>
               <div class="flex justify-between mb-2">
-                <span class="text-gray-400">Pending</span>
+                <span class="text-gray-600 dark:text-gray-400">Pending</span>
                 <span class="text-yellow-400 font-bold">$120.00</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-gray-400">Withdrawn</span>
+                <span class="text-gray-600 dark:text-gray-400">Withdrawn</span>
                 <span class="font-bold">$320.85</span>
               </div>
             </div>
-            <button class="w-full mt-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 py-3 rounded-xl font-semibold transition">
+            <button class="w-full mt-6 bg-primary hover:bg-orange-700 py-3 rounded-xl font-semibold transition">
               View Full History
             </button>
           </div>
         </div>
 
         <!-- Recent Activity -->
-        <div class="bg-gray-800/60 backdrop-blur border border-gray-700 rounded-2xl p-6">
+        <div class="card rounded-2xl p-6">
           <h3 class="text-xl font-bold mb-5">Recent Activity</h3>
-          <div class="space-y-4 text-sm">
-            <div class="flex justify-between items-center pb-3 border-b border-gray-700">
-              <div>
-                <p class="font-medium">Redeemed Gift Code</p>
-                <p class="text-gray-500 text-xs">2 hours ago</p>
+          <ul class="space-y-4">
+            <li class="flex items-start space-x-3">
+              <div class="mt-1 w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
+                <i class="fas fa-plus text-green-500"></i>
               </div>
-              <span class="text-green-400 font-bold">+150 pts</span>
-            </div>
-            <div class="flex justify-between items-center pb-3 border-b border-gray-700">
               <div>
-                <p class="font-medium">PayPal Withdrawal</p>
-                <p class="text-gray-500 text-xs">Yesterday</p>
+                <p class="font-medium">Points Earned</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">+150 points from daily tasks</p>
+                <p class="text-xs text-gray-500">2 hours ago</p>
               </div>
-              <span class="text-red-400">-$75.00</span>
-            </div>
-            <div class="flex justify-between items-center">
+            </li>
+            <li class="flex items-start space-x-3">
+              <div class="mt-1 w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center">
+                <i class="fas fa-user-plus text-blue-500"></i>
+              </div>
               <div>
-                <p class="font-medium">Task Completed</p>
-                <p class="text-gray-500 text-xs">3 hours ago</p>
+                <p class="font-medium">Referral Bonus</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">+$25 from friend signup</p>
+                <p class="text-xs text-gray-500">5 hours ago</p>
               </div>
-              <span class="text-green-400 font-bold">+60 pts</span>
-            </div>
-          </div>
+            </li>
+            <li class="flex items-start space-x-3">
+              <div class="mt-1 w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center">
+                <i class="fas fa-gift text-purple-500"></i>
+              </div>
+              <div>
+                <p class="font-medium">Reward Redeemed</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Amazon Gift Card - $25</p>
+                <p class="text-xs text-gray-500">1 day ago</p>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
     </main>
   </div>
 
-  <!-- Mobile Overlay -->
-  <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden"></div>
-
   <script>
+    
+    
     function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('-translate-x-full');
-      document.getElementById('overlay').classList.toggle('hidden');
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('-translate-x-full');
     }
     
-    // Fetch user data when page loads
-    document.addEventListener('DOMContentLoaded', function() {
-      const token = localStorage.getItem('access_token');
-      if (!token) {
-        window.location.href = 'login.html';
-        return;
-      }
-      
-      fetch('/api/users/profile', {
-        headers: {
-          'Authorization': 'Bearer ' + token
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.user) {
-          // Update user info
-          document.querySelector('header h1').innerHTML = 'Welcome back, <span class="text-indigo-400">' + data.user.full_name + '!</span>';
-          
-          // Update sidebar user info
-          const userInfo = document.querySelector('#sidebar .bottom-0 .flex.items-center');
-          if (userInfo) {
-            userInfo.querySelector('p.font-semibold').textContent = data.user.full_name;
-            userInfo.querySelector('p.text-sm').textContent = data.user.email;
-          }
-          
-          // Update points and earnings
-          document.querySelector('.grid .bg-gradient-to-br.from-indigo-600.to-purple-700 p-6 .text-3xl').textContent = '$' + (data.user.total_earnings || 0).toFixed(2);
-          document.querySelector('.grid .bg-gray-800\\/70.backdrop-blur.border.border-gray-700 p-6 .text-3xl').textContent = (data.user.points_balance || 0).toFixed(2) + ' pts';
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching user data:', error);
-        // If token is invalid, redirect to login
-        if (error.message && error.message.includes('401')) {
-          localStorage.removeItem('access_token');
-          window.location.href = 'login.html';
-        }
-      });
-    });
-    
-    // Logout function
     function logout() {
-      localStorage.removeItem('access_token');
-      window.location.href = 'login.html';
+      if (confirm('Are you sure you want to logout?')) {
+        // Add actual logout logic here
+        window.location.href = 'login.html';
+      }
     }
   </script>
+  <script src="assets/js/theme.js"></script>
 </body>
 </html>

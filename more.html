@@ -12,28 +12,36 @@
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            primary: '#FD6606',
+            secondary: '#012E03'
+          }
         }
       }
     }
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="assets/css/app.css" />
 </head>
 
-<body class="bg-gray-950 text-white min-h-screen flex">
+<body class="bg-background text-text min-h-screen flex">
+  <!-- Theme Toggle Button -->
+  <button id="themeToggle" class="theme-toggle">
+    <i class="fas fa-moon"></i>
+  </button>
+
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900/90 backdrop-blur-xl border-r border-gray-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900/90 backdrop-blur-xl border-r border-gray-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
     <div class="flex items-center justify-between p-6 border-b border-gray-800">
-      <div class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-        MyFigPoint
-      </div>
-      <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white">
+      <img src="assets/logo-circular.png" alt="MyFigPoint Logo" class="h-20 w-20 rounded-full object-contain mx-auto mb-4">
+      <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
         <i class="fas fa-times text-xl"></i>
       </button>
     </div>
 
-    <nav class="p-4 space-y-2">
+    <nav class="flex-1 overflow-y-auto p-4 space-y-2">
       <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
         <i class="fas fa-tachometer-alt"></i>
         <span>Dashboard</span>
@@ -58,13 +66,9 @@
         <i class="fas fa-gift"></i>
         <span>Redeem Points</span>
       </a>
-      <a href="more.html" class="flex items-center space-x-3 px-4 py-3 bg-indigo-600/20 border border-indigo-500/50 rounded-xl text-indigo-300 font-medium">
-        <i class="fas fa-info-circle"></i>
-        <span>Help Center</span>
-      </a>
-      <a href="support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
-        <i class="fas fa-headset"></i>
-        <span>Support Center</span>
+      <a href="more.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+        <i class="fas fa-ellipsis-h"></i>
+        <span>More Options</span>
       </a>
       <a href="profile.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
         <i class="fas fa-user-cog"></i>
@@ -72,14 +76,17 @@
       </a>
     </nav>
 
-    <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-800">
+    <div class="p-6 border-t border-gray-800">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-indigo-500">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
           <p class="font-semibold">John Doe</p>
-          <p class="text-sm text-gray-400">Need Help?</p>
+          <p class="text-sm text-gray-400">john@example.com</p>
         </div>
       </div>
+      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+        Logout
+      </a>
     </div>
   </aside>
 
@@ -273,6 +280,10 @@
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('overlay').classList.toggle('hidden');
     }
+  
+    
+
   </script>
+  <script src="assets/js/theme.js"></script>
 </body>
 </html>

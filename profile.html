@@ -13,88 +13,89 @@
       theme: {
         extend: {
           fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
-          animation: {
-            'fade-in-up': 'fadeInUp 0.7s ease-out forwards',
-            'success-pulse': 'pulse 0.8s ease-out'
-          },
-          keyframes: {
-            fadeInUp: {
-              '0%': { opacity: '0', transform: 'translateY(30px)' },
-              '100%': { opacity: '1', transform: 'translateY(0)' }
-            }
+          colors: {
+            primary: '#FD6606',
+            secondary: '#012E03'
           }
         }
       }
     }
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="assets/css/app.css" />
 </head>
 
-<body class="bg-gray-950 text-white min-h-screen flex relative overflow-auto">
+<body class="bg-background text-text min-h-screen flex relative overflow-auto">
+  <!-- Theme Toggle Button -->
+  <button id="themeToggle" class="theme-toggle">
+    <i class="fas fa-moon"></i>
+  </button>
+
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900/90 backdrop-blur-xl border-r border-gray-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
-    <div class="flex items-center justify-between p-6 border-b border-gray-800">
-      <div class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-        MyFigPoint
-      </div>
-      <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white">
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
+    <div class="flex items-center justify-between p-6 border-b border-border">
+      <img src="assets/logo-circular.png" alt="MyFigPoint Logo" class="h-20 w-20 rounded-full object-contain mx-auto mb-4">
+      <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
         <i class="fas fa-times text-xl"></i>
       </button>
     </div>
 
-    <nav class="p-4 space-y-2">
-      <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+    <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+      <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-tachometer-alt"></i>
         <span>Dashboard</span>
       </a>
-      <a href="tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+      <a href="tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-tasks"></i>
         <span>Earn Points</span>
       </a>
-      <a href="referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+      <a href="referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-users"></i>
         <span>Refer & Earn</span>
       </a>
-      <a href="wallet.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+      <a href="wallet.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-wallet"></i>
         <span>Wallet</span>
       </a>
-      <a href="transactions.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+      <a href="transactions.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-history"></i>
         <span>Transaction History</span>
       </a>
-      <a href="redeem.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl transition">
+      <a href="redeem.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-gift"></i>
         <span>Redeem Points</span>
       </a>
-      <a href="profile.html" class="flex items-center space-x-3 px-4 py-3 bg-indigo-600/20 border border-indigo-500/50 rounded-xl text-indigo-300 font-medium">
+      <a href="profile.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-user-cog"></i>
         <span>Profile & Settings</span>
       </a>
     </nav>
 
-    <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-800">
+    <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-indigo-500">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
           <p class="font-semibold">John Doe</p>
-          <p class="text-sm text-gray-400">Silver Member</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">john@example.com</p>
         </div>
       </div>
+      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+        Logout
+      </a>
     </div>
   </aside>
 
   <!-- Main Content -->
   <div class="flex-1 lg:ml-64">
     <!-- Top Bar -->
-    <header class="bg-gray-900/70 backdrop-blur-xl border-b border-gray-800 sticky top-0 z-40">
+    <header class="bg-card backdrop-blur-xl border-b border-border sticky top-0 z-40">
       <div class="flex items-center justify-between px-6 py-5">
-        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white">
+        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
           <i class="fas fa-bars text-xl"></i>
         </button>
         <h1 class="text-2xl font-bold">Profile & Settings</h1>
-        <button onclick="saveProfile()" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 px-8 py-3 rounded-xl font-bold transition transform hover:scale-105 shadow-lg">
+        <button onclick="saveProfile()" class="bg-primary hover:bg-orange-700 px-8 py-3 rounded-xl font-bold transition transform hover:scale-105 shadow-lg">
           Save Changes
         </button>
       </div>
@@ -103,24 +104,24 @@
     <main class="p-6 lg:p-10 max-w-6xl mx-auto">
 
       <!-- Profile Hero -->
-      <div class="bg-gradient-to-br from-indigo-600/20 to-purple-600/20 border border-indigo-500/30 backdrop-blur-xl rounded-3xl p-10 text-center mb-10">
+      <div class="bg-gradient-to-br from-primary/20 to-secondary/20 border border-primary/30 backdrop-blur-xl rounded-3xl p-10 text-center mb-10">
         <div class="relative inline-block">
-          <img id="avatarPreview" src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="Profile" class="w-40 h-40 rounded-full ring-8 ring-indigo-500/50 shadow-2xl">
-          <label for="avatarUpload" class="absolute bottom-4 right-4 bg-indigo-600 hover:bg-indigo-700 w-14 h-14 rounded-full flex items-center justify-center cursor-pointer shadow-2xl transition transform hover:scale-110">
+          <img id="avatarPreview" src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="Profile" class="w-40 h-40 rounded-full ring-8 ring-primary/50 shadow-2xl">
+          <label for="avatarUpload" class="absolute bottom-4 right-4 bg-primary hover:bg-orange-700 w-14 h-14 rounded-full flex items-center justify-center cursor-pointer shadow-2xl transition transform hover:scale-110">
             <i class="fas fa-camera text-xl"></i>
           </label>
           <input type="file" id="avatarUpload" accept="image/*" class="hidden" onchange="previewAvatar(event)">
         </div>
-        <h2 class="text-4xl font-bold mt-6 bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">John Doe</h2>
-        <p class="text-xl text-gray-300 mt-2">john.doe@example.com</p>
+        <h2 class="text-4xl font-bold mt-6 text-primary">John Doe</h2>
+        <p class="text-xl text-gray-600 dark:text-gray-400 mt-2">john.doe@example.com</p>
         <div class="flex justify-center gap-8 mt-6">
           <div class="text-center">
             <p class="text-3xl font-bold text-green-400">Silver Tier</p>
-            <p class="text-sm text-gray-400">Withdrawal Level</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">Withdrawal Level</p>
           </div>
           <div class="text-center">
             <p class="text-3xl font-bold text-yellow-400">Security: 94%</p>
-            <p class="text-sm text-gray-400">Very Strong</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">Very Strong</p>
           </div>
         </div>
       </div>
@@ -128,32 +129,32 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
         <!-- Personal Info -->
-        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-8">
-          <h3 class="text-xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-id-card text-indigo-400"></i> Personal Information</h3>
+        <div class="card rounded-2xl p-8">
+          <h3 class="text-xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-id-card text-primary"></i> Personal Information</h3>
           <div class="space-y-6">
             <div class="relative">
-              <input type="text" value="John Doe" class="peer w-full px-5 py-4 bg-gray-700/50 border border-gray-600 rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition">
-              <label class="absolute left-5 -top-2.5 bg-gray-800 px-2 text-sm text-gray-400 transition-all peer-focus:text-indigo-400">Full Name</label>
+              <input type="text" value="John Doe" class="peer w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
+              <label class="absolute left-5 -top-2.5 bg-card px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-focus:text-primary">Full Name</label>
             </div>
             <div class="relative">
-              <input type="email" value="john.doe@example.com" class="peer w-full px-5 py-4 bg-gray-700/50 border border-gray-600 rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition">
-              <label class="absolute left-5 -top-2.5 bg-gray-800 px-2 text-sm text-gray-400 transition-all peer-focus:text-indigo-400">Email Address</label>
+              <input type="email" value="john.doe@example.com" class="peer w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
+              <label class="absolute left-5 -top-2.5 bg-card px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-focus:text-primary">Email Address</label>
             </div>
             <div class="relative">
-              <input type="tel" value="+1234567890" class="peer w-full px-5 py-4 bg-gray-700/50 border border-gray-600 rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition">
-              <label class="absolute left-5 -top-2.5 bg-gray-800 px-2 text-sm text-gray-400 transition-all peer-focus:text-indigo-400">Phone Number</label>
+              <input type="tel" value="+1234567890" class="peer w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
+              <label class="absolute left-5 -top-2.5 bg-card px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-focus:text-primary">Phone Number</label>
             </div>
           </div>
         </div>
 
         <!-- Security -->
-        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-8">
+        <div class="card rounded-2xl p-8">
           <h3 class="text-xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-shield-alt text-green-400"></i> Security</h3>
           <div class="space-y-6">
             <div class="relative">
-              <input type="password" id="password" placeholder="••••••••" class="peer w-full px-5 py-4 pr-12 bg-gray-700/50 border border-gray-600 rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition">
-              <label class="absolute left-5 -top-2.5 bg-gray-800 px-2 text-sm text-gray-400 transition-all peer-focus:text-indigo-400">New Password</label>
-              <button type="button" onclick="togglePass()" class="absolute right-4 top-4 text-gray-400 hover:text-white">
+              <input type="password" id="password" placeholder="••••••••" class="peer w-full px-5 py-4 pr-12 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
+              <label class="absolute left-5 -top-2.5 bg-card px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-focus:text-primary">New Password</label>
+              <button type="button" onclick="togglePass()" class="absolute right-4 top-4 text-gray-600 dark:text-gray-400 hover:text-text">
                 <i class="fas fa-eye" id="eyeIcon"></i>
               </button>
             </div>
@@ -162,14 +163,14 @@
                 <span>Two-Factor Authentication</span>
                 <label class="relative inline-flex items-center cursor-pointer">
                   <input type="checkbox" checked class="sr-only peer">
-                  <div class="w-14 h-7 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-600"></div>
+                  <div class="w-14 h-7 bg-card border border-border peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-primary after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
                 </label>
               </div>
               <div class="flex items-center justify-between">
                 <span>Login Alerts</span>
                 <label class="relative inline-flex items-center cursor-pointer">
                   <input type="checkbox" checked class="sr-only peer">
-                  <div class="w-14 h-7 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-600"></div>
+                  <div class="w-14 h-7 bg-card border border-border peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-primary after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
                 </label>
               </div>
             </div>
@@ -177,10 +178,10 @@
         </div>
 
         <!-- Withdrawal Settings -->
-        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-8">
+        <div class="card rounded-2xl p-8">
           <h3 class="text-xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-university text-yellow-400"></i> Withdrawal Methods</h3>
           <div class="space-y-4">
-            <select class="w-full px-5 py-4 bg-gray-700/50 border border-gray-600 rounded-xl focus:outline-none focus:border-yellow-500">
+            <select class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-yellow-500">
               <option>PayPal - john.doe@paypal.com</option>
               <option>Bitcoin - bc1qxy2kgdy...</option>
               <option>Bank Transfer - ****5678</option>
@@ -193,19 +194,19 @@
         </div>
 
         <!-- Preferences -->
-        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-8">
-          <h3 class="text-xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-cog text-purple-400"></i> Preferences</h3>
+        <div class="card rounded-2xl p-8">
+          <h3 class="text-xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-cog text-primary"></i> Preferences</h3>
           <div class="space-y-6">
             <div class="flex items-center justify-between">
               <span>Dark Mode</span>
               <label class="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" checked class="sr-only peer">
-                <div class="w-14 h-7 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-purple-600"></div>
+                <div class="w-14 h-7 bg-card border border-border peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-primary after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
               </label>
             </div>
             <div>
               <label class="block text-sm mb-3">Notification Preferences</label>
-              <select class="w-full px-5 py-4 bg-gray-700/50 border border-gray-600 rounded-xl focus:outline-none focus:border-purple-500">
+              <select class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-purple-500">
                 <option>All Notifications</option>
                 <option>Important Only</option>
                 <option>Email Only</option>
@@ -272,6 +273,10 @@
         }, 4000);
       }, 1500);
     }
+  
+    
+
   </script>
+  <script src="assets/js/theme.js"></script>
 </body>
 </html>
