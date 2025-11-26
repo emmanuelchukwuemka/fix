@@ -6,7 +6,7 @@
       "use": "@vercel/python",
       "config": {
         "runtime": "python3.9",
-        "maxLambdaSize": "15mb"
+        "maxLambdaSize": "25mb"
       }
     }
   ],
@@ -17,8 +17,9 @@
     }
   ],
   "env": {
-    "SECRET_KEY": "vercel-secret-key-change-in-dashboard",
-    "JWT_SECRET_KEY": "vercel-jwt-secret-change-in-dashboard",
-    "DATABASE_URL": "sqlite:///myfigpoint.db"
+    "SECRET_KEY": "@secret-key",
+    "JWT_SECRET_KEY": "@jwt-secret-key",
+    "DATABASE_URL": "sqlite:///myfigpoint.db",
+    "VERCEL": "1"
   }
 }

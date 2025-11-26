@@ -11,11 +11,20 @@ bcrypt = Bcrypt()
 jwt = JWTManager()
 
 def create_app():
-    app = Flask(__name__, static_folder='../assets')
+    # Use appropriate directory for Vercel deployments since it's writable
+    static_folder = '../assets'
+    database_url = os.environ.get('DATABASE_URL') or 'sqlite:///myfigpoint.db'
+    
+    if os.environ.get('VERCEL') == '1':
+        static_folder = os.path.abspath('../assets')
+        # Use /tmp directory for database in Vercel
+        database_url = 'sqlite:////tmp/myfigpoint.db'
+    
+    app = Flask(__name__, static_folder=static_folder)
     
     # Configuration
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or 'dev-secret-key-change-in-production'
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or 'sqlite:///myfigpoint.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY') or 'jwt-secret-string-change-in-production'
     
@@ -36,9 +45,15 @@ def create_app():
     
     @app.route('/<path:filename>')
     def serve_static(filename):
-        if filename.endswith('.html') or filename.endswith('.css') or filename.endswith('.js'):
-            return send_from_directory('../', filename)
-        return send_from_directory('../assets', filename)
+        # Handle Vercel deployment differently for static files
+        if os.environ.get('VERCEL') == '1':
+            if filename.endswith('.html') or filename.endswith('.css') or filename.endswith('.js'):
+                return send_from_directory('../', filename)
+            return send_from_directory('../assets', filename)
+        else:
+            if filename.endswith('.html') or filename.endswith('.css') or filename.endswith('.js'):
+                return send_from_directory('../', filename)
+            return send_from_directory('../assets', filename)
     
     # Register blueprints
     from backend.routes.auth import auth_bp
