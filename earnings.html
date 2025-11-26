@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MyFigPoint - My Earnings & Wallet</title>
+  <title>MyFigPoint Earnings</title>
+  <meta name="description" content="Track your earnings, view transaction history, and manage your rewards in your personalized dashboard." />
 
-  <!-- Tailwind + Inter Font -->
+  <!-- Tailwind CSS v3 -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -22,18 +22,17 @@
     }
   </script>
 
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="assets/css/app.css" />
 </head>
 
 <body class="bg-background text-text min-h-screen flex">
   <!-- Theme Toggle Button -->
-  <button id="themeToggle" class="theme-toggle">
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
     <i class="fas fa-moon"></i>
   </button>
-
 
   <!-- Sidebar -->
   <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900/90 backdrop-blur-xl border-r border-gray-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
@@ -101,142 +100,137 @@
         <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white">
           <i class="fas fa-bars text-xl"></i>
         </button>
-        <h1 class="text-2xl font-bold">My Earnings & Wallet</h1>
-        <div class="text-right">
-          <p class="text-sm text-gray-400">Total Lifetime Earnings</p>
-          <p class="text-3xl font-bold text-green-400">$1,250.75</p>
+        <h1 class="text-2xl font-bold">Earnings Report</h1>
+        <div class="flex items-center gap-4">
+          <select class="bg-gray-800 border border-gray-700 rounded-xl px-4 py-2 focus:outline-none focus:border-indigo-500">
+            <option>Last 30 days</option>
+            <option>Last 90 days</option>
+            <option>Year to date</option>
+            <option>All time</option>
+          </select>
         </div>
       </div>
     </header>
 
-    <main class="p-6 lg:p-10">
+    <main class="p-6 lg:p-10 max-w-7xl mx-auto">
 
-      <!-- Balance Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <div class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl p-8 shadow-2xl">
-          <p class="text-indigo-100 text-sm uppercase tracking-wider">Available Balance</p>
-          <p class="text-4xl font-bold mt-3">$930.75</p>
-          <p class="text-indigo-200 text-sm mt-4">Ready to withdraw</p>
+      <!-- Summary Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+        <div class="bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl p-6 shadow-2xl">
+          <i class="fas fa-wallet text-4xl mb-4 opacity-80"></i>
+          <p class="text-green-100 text-sm uppercase tracking-wider">Total Earnings</p>
+          <p class="text-3xl font-bold mt-2">$1,250.50</p>
         </div>
 
-        <div class="bg-gradient-to-br from-yellow-600 to-orange-600 rounded-2xl p-8 shadow-2xl">
-          <p class="text-yellow-100 text-sm uppercase tracking-wider">Pending Clearance</p>
-          <p class="text-4xl font-bold mt-3">$320.00</p>
-          <p class="text-yellow-200 text-sm mt-4">Will be available in 3 days</p>
+        <div class="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl p-6 shadow-2xl">
+          <i class="fas fa-coins text-4xl mb-4 opacity-80"></i>
+          <p class="text-indigo-100 text-sm uppercase tracking-wider">Points Earned</p>
+          <p class="text-3xl font-bold mt-2">3,450.75 pts</p>
         </div>
 
-        <div class="bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl p-8 shadow-2xl">
-          <p class="text-green-100 text-sm uppercase tracking-wider">Total Withdrawn</p>
-          <p class="text-4xl font-bold mt-3">$2,890.50</p>
-          <p class="text-green-200 text-sm mt-4">All-time payouts</p>
+        <div class="bg-gradient-to-br from-pink-600 to-rose-600 rounded-2xl p-6 shadow-2xl">
+          <i class="fas fa-tasks text-4xl mb-4 opacity-80"></i>
+          <p class="text-pink-100 text-sm uppercase tracking-wider">Tasks Completed</p>
+          <p class="text-3xl font-bold mt-2">142</p>
+        </div>
+
+        <div class="bg-gradient-to-br from-yellow-600 to-amber-600 rounded-2xl p-6 shadow-2xl">
+          <i class="fas fa-users text-4xl mb-4 opacity-80"></i>
+          <p class="text-yellow-100 text-sm uppercase tracking-wider">Referrals</p>
+          <p class="text-3xl font-bold mt-2">24</p>
         </div>
       </div>
 
-      <!-- Earnings Breakdown Chart -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-6">
-          <h3 class="text-xl font-bold mb-6">Earnings This Month</h3>
-          <canvas id="earningsChart" height="300"></canvas>
+      <!-- Earnings Chart -->
+      <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-6 mb-10">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-bold">Earnings Overview</h3>
+          <div class="flex gap-2">
+            <button class="px-4 py-2 bg-indigo-600 rounded-lg text-sm">Points</button>
+            <button class="px-4 py-2 bg-gray-700 rounded-lg text-sm">USD</button>
+          </div>
         </div>
-
-        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-6">
-          <h3 class="text-xl font-bold mb-6">Earnings by Source</h3>
-          <div class="space-y-6">
-            <div>
-              <div class="flex justify-between mb-2">
-                <span>Daily Tasks & Surveys</span>
-                <span class="font-bold">$485.50</span>
-              </div>
-              <div class="w-full bg-gray-700 rounded-full h-4">
-                <div class="bg-indigo-600 h-4 rounded-full" style="width: 68%"></div>
-              </div>
-            </div>
-            <div>
-              <div class="flex justify-between mb-2">
-                <span>Referrals</span>
-                <span class="font-bold">$380.00</span>
-              </div>
-              <div class="w-full bg-gray-700 rounded-full h-4">
-                <div class="bg-purple-600 h-4 rounded-full" style="width: 53%"></div>
-              </div>
-            </div>
-            <div>
-              <div class="flex justify-between mb-2">
-                <span>Bonuses & Offers</span>
-                <span class="font-bold">$145.25</span>
-              </div>
-              <div class="w-full bg-gray-700 rounded-full h-4">
-                <div class="bg-pink-600 h-4 rounded-full" style="width: 20%"></div>
-              </div>
-            </div>
+        <div class="h-80 flex items-end justify-between gap-2">
+          <div class="flex-1 flex flex-col items-center">
+            <div class="w-full bg-gradient-to-t from-indigo-600 to-indigo-400 rounded-t-lg" style="height: 80%"></div>
+            <p class="mt-2 text-sm text-gray-400">Jan</p>
+          </div>
+          <div class="flex-1 flex flex-col items-center">
+            <div class="w-full bg-gradient-to-t from-indigo-600 to-indigo-400 rounded-t-lg" style="height: 60%"></div>
+            <p class="mt-2 text-sm text-gray-400">Feb</p>
+          </div>
+          <div class="flex-1 flex flex-col items-center">
+            <div class="w-full bg-gradient-to-t from-indigo-600 to-indigo-400 rounded-t-lg" style="height: 90%"></div>
+            <p class="mt-2 text-sm text-gray-400">Mar</p>
+          </div>
+          <div class="flex-1 flex flex-col items-center">
+            <div class="w-full bg-gradient-to-t from-indigo-600 to-indigo-400 rounded-t-lg" style="height: 70%"></div>
+            <p class="mt-2 text-sm text-gray-400">Apr</p>
+          </div>
+          <div class="flex-1 flex flex-col items-center">
+            <div class="w-full bg-gradient-to-t from-indigo-600 to-indigo-400 rounded-t-lg" style="height: 85%"></div>
+            <p class="mt-2 text-sm text-gray-400">May</p>
+          </div>
+          <div class="flex-1 flex flex-col items-center">
+            <div class="w-full bg-gradient-to-t from-indigo-600 to-indigo-400 rounded-t-lg" style="height: 75%"></div>
+            <p class="mt-2 text-sm text-gray-400">Jun</p>
           </div>
         </div>
       </div>
 
-      <!-- Withdraw Options -->
-      <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-8 mb-10">
-        <h3 class="text-2xl font-bold mb-8 text-center">Withdraw Your Earnings Instantly</h3>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <button class="bg-gray-700 hover:bg-gray-600 rounded-xl p-6 transition transform hover:scale-105">
-            <i class="fab fa-paypal text-4xl text-blue-500 mb-3"></i>
-            <p class="font-semibold">PayPal</p>
-            <p class="text-sm text-gray-400">Min: $5.00</p>
-          </button>
-          <button class="bg-gray-700 hover:bg-gray-600 rounded-xl p-6 transition transform hover:scale-105">
-            <i class="fab fa-bitcoin text-4xl text-orange-500 mb-3"></i>
-            <p class="font-semibold">Bitcoin</p>
-            <p class="text-sm text-gray-400">Min: $10.00</p>
-          </button>
-          <button class="bg-gray-700 hover:bg-gray-600 rounded-xl p-6 transition transform hover:scale-105">
-            <i class="fas fa-university text-4xl text-green-500 mb-3"></i>
-            <p class="font-semibold">Bank Transfer</p>
-            <p class="text-sm text-gray-400">Min: $50.00</p>
-          </button>
-          <button class="bg-gray-700 hover:bg-gray-600 rounded-xl p-6 transition transform hover:scale-105">
-            <i class="fas fa-gift text-4xl text-pink-500 mb-3"></i>
-            <p class="font-semibold">Gift Cards</p>
-            <p class="text-sm text-gray-400">Amazon, Steam + more</p>
-          </button>
-        </div>
-      </div>
-
-      <!-- Recent Withdrawals -->
+      <!-- Recent Transactions -->
       <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-6">
-        <h3 class="text-xl font-bold mb-6">Recent Withdrawals</h3>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left">
-            <thead>
-              <tr class="border-b border-gray-700">
-                <th class="pb-3">Date</th>
-                <th class="pb-3">Method</th>
-                <th class="pb-3">Amount</th>
-                <th class="pb-3">Status</th>
-              </tr>
-            </thead>
-            <tbody class="text-gray-300">
-              <tr class="border-b border-gray-800">
-                <td>Nov 20, 2025</td>
-                <td>PayPal</td>
-                <td class="font-bold text-green-400">$150.00</td>
-                <td><span class="bg-green-600/20 text-green-400 px-3 py-1 rounded-full text-sm">Completed</span></td>
-              </tr>
-              <tr class="border-b border-gray-800">
-                <td>Nov 15, 2025</td>
-                <td>Bitcoin</td>
-                <td class="font-bold">$95.50</td>
-                <td><span class="bg-green-600/20 text-green-400 px-3 py-1 rounded-full text-sm">Completed</span></td>
-              </tr>
-              <tr class="border-b border-gray-800">
-                <td>Nov 10, 2025</td>
-                <td>Amazon Gift Card</td>
-                <td class="font-bold">$100.00</td>
-                <td><span class="bg-yellow-600/20 text-yellow-400 px-3 py-1 rounded-full text-sm">Processing</span></td>
-              </tr>
-            </tbody>
-          </table>
+        <h3 class="text-xl font-bold mb-6">Recent Earnings</h3>
+        <div class="space-y-4">
+          <div class="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-indigo-600/20 transition">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-green-600/20 rounded-full flex items-center justify-center">
+                <i class="fas fa-plus text-green-400"></i>
+              </div>
+              <div>
+                <p class="font-medium">Daily Task Completion</p>
+                <p class="text-sm text-gray-400">Completed "Survey #123"</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-green-400 font-bold">+50 pts</p>
+              <p class="text-xs text-gray-500">Today, 2:30 PM</p>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-indigo-600/20 transition">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-purple-600/20 rounded-full flex items-center justify-center">
+                <i class="fas fa-user-plus text-purple-400"></i>
+              </div>
+              <div>
+                <p class="font-medium">Referral Bonus</p>
+                <p class="text-sm text-gray-400">Friend signup bonus</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-green-400 font-bold">+250 pts</p>
+              <p class="text-xs text-gray-500">Yesterday, 4:15 PM</p>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-indigo-600/20 transition">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-blue-600/20 rounded-full flex items-center justify-center">
+                <i class="fas fa-trophy text-blue-400"></i>
+              </div>
+              <div>
+                <p class="font-medium">Tier Upgrade Bonus</p>
+                <p class="text-sm text-gray-400">Reached Silver Tier</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-green-400 font-bold">+500 pts</p>
+              <p class="text-xs text-gray-500">Jun 12, 2025</p>
+            </div>
+          </div>
         </div>
       </div>
-
     </main>
   </div>
 
@@ -249,33 +243,11 @@
       document.getElementById('overlay').classList.toggle('hidden');
     }
 
-    // Earnings Chart
-    const ctx = document.getElementById('earningsChart').getContext('2d');
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-        datasets: [{
-          label: 'Earnings ($)',
-          data: [280, 420, 580, 720],
-          borderColor: '#8b5cf6',
-          backgroundColor: 'rgba(139, 92, 246, 0.2)',
-          tension: 0.4,
-          fill: true
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { display: false } },
-        scales: {
-          y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } },
-          x: { grid: { display: false } }
-        }
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        window.location.href = 'login.html';
       }
-    });
-  
-    
-
+    }
   </script>
   <script src="assets/js/theme.js"></script>
 </body>

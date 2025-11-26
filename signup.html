@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MyFigPoint - Create Account</title>
+  <title>MyFigPoint - Sign Up</title>
+  <meta name="description" content="Join MyFigPoint today and start earning rewards for completing tasks, referrals, and daily activities." />
 
-  <!-- Tailwind + Inter Font -->
+  <!-- Tailwind CSS v3 -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -21,14 +21,16 @@
       }
     }
   </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="assets/css/app.css" />
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 
-<body class="bg-background min-h-screen relative overflow-auto">
+<body class="bg-background text-text overflow-auto">
   <!-- Theme Toggle Button -->
-  <button id="themeToggle" class="theme-toggle">
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
     <i class="fas fa-moon"></i>
   </button>
 
@@ -227,14 +229,11 @@
         localStorage.setItem('access_token', 'test-token');
         confetti({
           particleCount: 200,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ['#a855f7', '#8b5cf6', '#ec4899', '#3b82f6']
+          spread: 100,
+          origin: { y: 0.6 }
         });
-        setTimeout(() => {
-          window.location.href = 'dashboard.html';
-        }, 1500);
-      }, 1000);
+        window.location.href = 'dashboard.html';
+      }, 1500);
       
       // Original code for reference (commented out)
       /*
@@ -243,21 +242,10 @@
         full_name: formData.get('full_name'),
         email: formData.get('email'),
         password: formData.get('password'),
-        role: document.querySelector('input[name="role"]:checked').value
+        referral_code: formData.get('referral_code'),
+        role: formData.get('role')
       };
       
-      // Get referral code if provided
-      const referralCode = formData.get('referral_code');
-      if (referralCode && referralCode.trim() !== '') {
-        data.referral_code = referralCode.trim();
-      }
-
-      // Show loading state
-      const submitButton = this.querySelector('button[type="submit"]');
-      const originalText = submitButton.innerHTML;
-      submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Creating Account...';
-      submitButton.disabled = true;
-
       fetch('/api/auth/register', {
         method: 'POST',
         headers: {
@@ -269,31 +257,23 @@
       .then(data => {
         if (data.access_token) {
           localStorage.setItem('access_token', data.access_token);
-          confetti({
-            particleCount: 200,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: ['#a855f7', '#8b5cf6', '#ec4899', '#3b82f6']
-          });
-          setTimeout(() => {
-            window.location.href = 'dashboard.html';
-          }, 1500);
+          window.location.href = 'dashboard.html';
         } else {
-          alert('Registration failed: ' + (data.message || 'Unknown error'));
+          alert('Registration failed: ' + (data.message || 'Please try again'));
+          submitButton.innerHTML = originalText;
+          submitButton.disabled = false;
         }
       })
       .catch(error => {
         console.error('Error:', error);
         alert('Registration failed. Please try again.');
-      })
-      .finally(() => {
-        // Reset button state
         submitButton.innerHTML = originalText;
         submitButton.disabled = false;
       });
       */
     });
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
   <script src="assets/js/theme.js"></script>
 </body>
 </html>

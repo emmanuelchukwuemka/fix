@@ -124,7 +124,7 @@ body {
   position: fixed;
   top: 1rem;
   right: 1rem;
-  z-index: 1000;
+  z-index: 9999; /* Highest z-index to ensure visibility above all elements */
   background-color: var(--card-background);
   border: 2px solid var(--border-color);
   color: var(--text-color);
