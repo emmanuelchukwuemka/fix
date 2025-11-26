@@ -17,8 +17,9 @@ def create_app():
     
     if os.environ.get('VERCEL') == '1':
         static_folder = os.path.abspath('../assets')
-        # Use /tmp directory for database in Vercel
-        database_url = 'sqlite:////tmp/myfigpoint.db'
+        # Use /tmp directory for database in Vercel if not already specified
+        if not os.environ.get('DATABASE_URL'):
+            database_url = 'sqlite:////tmp/myfigpoint.db'
     
     app = Flask(__name__, static_folder=static_folder)
     

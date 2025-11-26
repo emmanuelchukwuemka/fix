@@ -17,9 +17,9 @@
     }
   ],
   "env": {
-    "SECRET_KEY": "@secret-key",
-    "JWT_SECRET_KEY": "@jwt-secret-key",
-    "DATABASE_URL": "sqlite:///myfigpoint.db",
+    "SECRET_KEY": "your-secret-key-here-change-in-vercel-dashboard",
+    "JWT_SECRET_KEY": "your-jwt-secret-key-here-change-in-vercel-dashboard",
+    "DATABASE_URL": "sqlite:////tmp/myfigpoint.db",
     "VERCEL": "1"
   }
 }
