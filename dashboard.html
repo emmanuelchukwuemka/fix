@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MyFigPoint - Dashboard</title>
+  <title>MyFigPoint Dashboard</title>
+  <meta name="description" content="Manage your points, track earnings, and redeem rewards in your personalized dashboard." />
 
-  <!-- Tailwind CSS v3 + Inter Font -->
+  <!-- Tailwind CSS v3 -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -22,15 +22,15 @@
     }
   </script>
 
-  <!-- Heroicons -->
-  <script src="https://unpkg.com/heroicons@2.1.1/dist/heroicons.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="assets/css/app.css" />
 </head>
 
 <body class="bg-background text-text min-h-screen flex">
   <!-- Theme Toggle Button -->
-  <button id="themeToggle" class="theme-toggle">
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
     <i class="fas fa-moon"></i>
   </button>
 
@@ -228,7 +228,7 @@
               </div>
               <div>
                 <p class="font-medium">Referral Bonus</p>
-                <p class="text-sm text-gray-600 dark:text-gray-400">+$25 from friend signup</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">+500 points for inviting friend</p>
                 <p class="text-xs text-gray-500">5 hours ago</p>
               </div>
             </li>
@@ -238,8 +238,18 @@
               </div>
               <div>
                 <p class="font-medium">Reward Redeemed</p>
-                <p class="text-sm text-gray-600 dark:text-gray-400">Amazon Gift Card - $25</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">-$1,200 points for gift card</p>
                 <p class="text-xs text-gray-500">1 day ago</p>
+              </div>
+            </li>
+            <li class="flex items-start space-x-3">
+              <div class="mt-1 w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center">
+                <i class="fas fa-trophy text-yellow-500"></i>
+              </div>
+              <div>
+                <p class="font-medium">Tier Upgrade</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Promoted to Silver Tier</p>
+                <p class="text-xs text-gray-500">2 days ago</p>
               </div>
             </li>
           </ul>
@@ -249,13 +259,11 @@
   </div>
 
   <script>
-    
-    
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
       sidebar.classList.toggle('-translate-x-full');
     }
-    
+
     function logout() {
       if (confirm('Are you sure you want to logout?')) {
         // Add actual logout logic here

@@ -119,23 +119,60 @@ body {
   }
 }
 
-/* Toggle button styles */
+/* Enhanced Toggle button styles - bigger and more noticeable */
 .theme-toggle {
   position: fixed;
   top: 1rem;
   right: 1rem;
   z-index: 1000;
   background-color: var(--card-background);
-  border: 1px solid var(--border-color);
+  border: 2px solid var(--border-color);
   color: var(--text-color);
-  padding: 0.5rem;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-size: 1.5rem;
 }
 
+/* Make it even more prominent on hover */
 .theme-toggle:hover {
-  transform: scale(1.1);
+  transform: scale(1.15);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Ensure visibility on all pages */
+.theme-toggle-visible {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .theme-toggle {
+    width: 50px;
+    height: 50px;
+    font-size: 1.25rem;
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .theme-toggle {
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
 }
 
 /* Update button styles to use primary color */
