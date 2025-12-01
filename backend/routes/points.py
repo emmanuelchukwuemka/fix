@@ -1,9 +1,10 @@
 from flask import Blueprint, request, jsonify
 from backend.app import db
-from backend.models.user import User
+from backend.models.user import User, UserRole
 from backend.models.transaction import Transaction, TransactionType, TransactionStatus
 from backend.utils.helpers import points_to_usd, get_tier_level
 from backend.utils.emailer import Emailer
+from backend.utils.decorators import partner_restricted
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 points_bp = Blueprint('points', __name__)
@@ -30,6 +31,7 @@ def get_points_balance():
 
 @points_bp.route('/history', methods=['GET'])
 @jwt_required()
+@partner_restricted
 def get_points_history():
     try:
         current_user_id = get_jwt_identity()
@@ -55,6 +57,7 @@ def get_points_history():
 
 @points_bp.route('/withdraw', methods=['POST'])
 @jwt_required()
+@partner_restricted
 def withdraw_points():
     try:
         current_user_id = get_jwt_identity()
@@ -188,6 +191,7 @@ def withdraw_points():
 
 @points_bp.route('/convert', methods=['POST'])
 @jwt_required()
+@partner_restricted
 def convert_points():
     try:
         current_user_id = get_jwt_identity()

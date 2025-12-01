@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from backend.app import db, bcrypt
 from backend.models.user import User, UserRole
+from backend.utils.decorators import partner_restricted
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 users_bp = Blueprint('users', __name__)
@@ -22,6 +23,7 @@ def get_profile():
 
 @users_bp.route('/profile', methods=['PUT'])
 @jwt_required()
+@partner_restricted
 def update_profile():
     try:
         current_user_id = get_jwt_identity()
@@ -60,6 +62,7 @@ def update_profile():
 
 @users_bp.route('/change-password', methods=['POST'])
 @jwt_required()
+@partner_restricted
 def change_password():
     try:
         current_user_id = get_jwt_identity()

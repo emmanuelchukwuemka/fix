@@ -2,12 +2,14 @@ from flask import Blueprint, request, jsonify
 from backend.app import db
 from backend.models.user import User, UserRole
 from backend.models.support_message import SupportMessage, MessageType, MessageStatus
+from backend.utils.decorators import partner_restricted
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 support_bp = Blueprint('support', __name__)
 
 @support_bp.route('/', methods=['POST'])
 @jwt_required()
+@partner_restricted
 def create_support_message():
     try:
         current_user_id = get_jwt_identity()
@@ -48,6 +50,7 @@ def create_support_message():
 
 @support_bp.route('/', methods=['GET'])
 @jwt_required()
+@partner_restricted
 def get_support_messages():
     try:
         current_user_id = get_jwt_identity()
@@ -70,6 +73,7 @@ def get_support_messages():
 
 @support_bp.route('/<int:message_id>', methods=['GET'])
 @jwt_required()
+@partner_restricted
 def get_support_message(message_id):
     try:
         current_user_id = get_jwt_identity()
@@ -88,6 +92,7 @@ def get_support_message(message_id):
 
 @support_bp.route('/whatsapp', methods=['GET'])
 @jwt_required()
+@partner_restricted
 def get_whatsapp_support():
     try:
         # Return WhatsApp support contact info

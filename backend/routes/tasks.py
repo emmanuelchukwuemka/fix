@@ -3,7 +3,10 @@ from backend.app import db
 from backend.models.user import User, UserRole
 from backend.models.task import Task, UserTask
 from backend.models.transaction import Transaction, TransactionType, TransactionStatus
+from backend.models.reward_code import RewardCode
+from backend.utils.decorators import partner_restricted
 from flask_jwt_extended import jwt_required, get_jwt_identity
+import re
 
 tasks_bp = Blueprint('tasks', __name__)
 
@@ -51,6 +54,7 @@ def get_tasks():
 
 @tasks_bp.route('/<int:task_id>/start', methods=['POST'])
 @jwt_required()
+@partner_restricted
 def start_task(task_id):
     try:
         current_user_id = get_jwt_identity()
@@ -89,6 +93,7 @@ def start_task(task_id):
 
 @tasks_bp.route('/<int:task_id>/complete', methods=['POST'])
 @jwt_required()
+@partner_restricted
 def complete_task(task_id):
     try:
         current_user_id = get_jwt_identity()
@@ -276,3 +281,139 @@ def get_all_tasks():
         
     except Exception as e:
         return jsonify({'message': 'Failed to fetch tasks', 'error': str(e)}), 500
+
+@tasks_bp.route('/daily/upload-codes', methods=['POST'])
+@jwt_required()
+@partner_restricted
+def upload_daily_codes():
+    try:
+        current_user_id = get_jwt_identity()
+        user = User.query.get(current_user_id)
+        
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+        
+        data = request.get_json()
+        codes = data.get('codes', [])
+        
+        if not codes or not isinstance(codes, list):
+            return jsonify({'message': 'Codes array is required'}), 400
+        
+        # Validate code format and check if they exist
+        valid_codes = []
+        invalid_codes = []
+        
+        for code_str in codes:
+            # Validate format: 5 uppercase letters + 3 digits
+            if not re.match(r'^[A-Z]{5}[0-9]{3}$', code_str):
+                invalid_codes.append({'code': code_str, 'reason': 'Invalid format'})
+                continue
+            
+            # Check if code exists and is unused
+            code = RewardCode.query.filter_by(code=code_str, is_used=False).first()
+            if not code:
+                invalid_codes.append({'code': code_str, 'reason': 'Code not found or already used'})
+                continue
+            
+            valid_codes.append(code)
+        
+        # Process valid codes
+        points_earned = 0
+        for code in valid_codes:
+            # Mark code as used
+            code.is_used = True
+            code.used_by = current_user_id
+            code.used_at = db.func.current_timestamp()
+            
+            # Add points to user
+            user.points_balance += code.point_value
+            user.total_points_earned += code.point_value
+            points_earned += code.point_value
+        
+        # Check if user completed daily requirement (5 or 10 codes)
+        daily_requirement = getattr(user, 'daily_code_requirement', 5)  # Default to 5
+        extra_points = 0
+        
+        if len(valid_codes) >= daily_requirement:
+            # Award extra 2 points for completing daily requirement
+            extra_points = 2.0
+            user.points_balance += extra_points
+            user.total_points_earned += extra_points
+            
+            # Create transaction for extra points
+            extra_transaction = Transaction(
+                user_id=current_user_id,
+                type=TransactionType.EARNING,
+                status=TransactionStatus.COMPLETED,
+                description=f"Daily code upload bonus for {len(valid_codes)} codes",
+                amount=0,
+                points_amount=extra_points
+            )
+            db.session.add(extra_transaction)
+        
+        # Create transactions for each redeemed code
+        for code in valid_codes:
+            transaction = Transaction(
+                user_id=current_user_id,
+                type=TransactionType.CODE_REDEMPTION,
+                status=TransactionStatus.COMPLETED,
+                description=f"Redeemed code {code.code}",
+                amount=0,
+                points_amount=code.point_value,
+                reference_id=code.id
+            )
+            db.session.add(transaction)
+        
+        db.session.commit()
+        
+        return jsonify({
+            'message': f'Successfully processed {len(valid_codes)} codes',
+            'valid_codes': len(valid_codes),
+            'invalid_codes': invalid_codes,
+            'points_earned': points_earned,
+            'extra_points': extra_points,
+            'total_points': points_earned + extra_points,
+            'new_balance': user.points_balance
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': 'Failed to process codes', 'error': str(e)}), 500
+
+@tasks_bp.route('/daily/set-requirement', methods=['POST'])
+@jwt_required()
+def set_daily_requirement():
+    try:
+        current_user_id = get_jwt_identity()
+        admin_user = User.query.get(current_user_id)
+        
+        # Check if user is admin
+        if admin_user.role != UserRole.ADMIN:
+            return jsonify({'message': 'Access denied'}), 403
+        
+        data = request.get_json()
+        user_id = data.get('user_id')
+        requirement = data.get('requirement', 5)
+        
+        if not user_id:
+            return jsonify({'message': 'User ID is required'}), 400
+        
+        if requirement not in [5, 10]:
+            return jsonify({'message': 'Requirement must be 5 or 10'}), 400
+        
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+        
+        # Set daily requirement (we'll store this in a custom attribute for now)
+        # In a real implementation, you might want to create a separate table for user preferences
+        user.daily_code_requirement = requirement
+        
+        db.session.commit()
+        
+        return jsonify({
+            'message': f'Daily code requirement set to {requirement} for user {user.full_name}'
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to set daily requirement', 'error': str(e)}), 500

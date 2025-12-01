@@ -43,7 +43,7 @@
   <!-- Sidebar -->
   <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
     <div class="flex items-center justify-between p-6 border-b border-border">
-      <img src="assets/logo-circular.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
+      <img src="assets/logo.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
       <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
         <i class="fas fa-times text-xl"></i>
       </button>
@@ -72,7 +72,7 @@
       </a>
       <a href="redeem.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-gift"></i>
-        <span>Redeem Points</span>
+        <span>Redeem Code</span>
       </a>
       <a href="support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-headset"></i>
@@ -108,9 +108,9 @@
         </button>
         <div>
           <h1 class="text-3xl font-bold text-primary">
-            Redeem Gift Code
+            Redeem Code
           </h1>
-          <p class="text-gray-600 dark:text-gray-400">Enter your 8-character code to claim points instantly</p>
+          <p class="text-gray-600 dark:text-gray-400">Enter your 8-character code (5 letters + 3 numbers) to claim points instantly</p>
         </div>
       </div>
     </header>
@@ -122,7 +122,7 @@
         <div class="text-center mb-10">
           <i class="fas fa-gift text-7xl text-primary mb-6"></i>
           <h2 class="text-4xl font-bold">Enter Your Code</h2>
-          <p class="text-gray-600 dark:text-gray-400 mt-4 text-lg">Gift codes contain 5 letters + 3 numbers (e.g., ABCDE123)</p>
+          <p class="text-gray-600 dark:text-gray-400 mt-4 text-lg">Codes contain 5 letters + 3 numbers (e.g., ABCDE123)</p>
         </div>
 
         <!-- Code Input -->
@@ -215,8 +215,9 @@
     // Live code formatting
     codeInput.addEventListener('input', function() {
       this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-      if (this.value.length > 5) {
-        this.value = this.value.slice(0,5) + this.value.slice(5).replace(/./g, '');
+      // Limit to 8 characters total: 5 letters + 3 digits
+      if (this.value.length > 8) {
+        this.value = this.value.slice(0, 8);
       }
     });
 

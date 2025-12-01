@@ -4,6 +4,7 @@ from backend.models.user import User, UserRole
 from backend.models.transaction import Transaction, TransactionType, TransactionStatus
 from backend.models.reward_code import RewardCode
 from backend.utils.helpers import generate_batch_id, generate_reward_code
+from backend.utils.partner_approval import require_partner_approval
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 partners_bp = Blueprint('partners', __name__)
@@ -21,6 +22,10 @@ def get_partner_stats():
         # Check if user is a partner
         if user.role != UserRole.PARTNER:
             return jsonify({'message': 'Access denied. Partner access required.'}), 403
+        
+        # Check if partner is approved
+        if not user.is_approved:
+            return jsonify({'message': 'Partner account pending approval. Please contact admin.'}), 403
         
         # Get partner statistics
         # Count referred users
@@ -64,6 +69,10 @@ def get_partner_referrals():
         if user.role != UserRole.PARTNER:
             return jsonify({'message': 'Access denied. Partner access required.'}), 403
         
+        # Check if partner is approved
+        if not user.is_approved:
+            return jsonify({'message': 'Partner account pending approval. Please contact admin.'}), 403
+        
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 10, type=int)
         
@@ -94,6 +103,10 @@ def get_commission_rates():
         # Check if user is a partner
         if user.role != UserRole.PARTNER:
             return jsonify({'message': 'Access denied. Partner access required.'}), 403
+        
+        # Check if partner is approved
+        if not user.is_approved:
+            return jsonify({'message': 'Partner account pending approval. Please contact admin.'}), 403
         
         # Commission rates based on tier
         commission_rates = {
@@ -155,6 +168,10 @@ def get_partner_dashboard():
         if user.role != UserRole.PARTNER:
             return jsonify({'message': 'Access denied. Partner access required.'}), 403
         
+        # Check if partner is approved
+        if not user.is_approved:
+            return jsonify({'message': 'Partner account pending approval. Please contact admin.'}), 403
+        
         # Get partner statistics
         # Count referred users
         referred_count = User.query.filter_by(referred_by=current_user_id).count()
@@ -204,13 +221,14 @@ def promote_to_partner():
         if not user:
             return jsonify({'message': 'User not found'}), 404
         
-        # Promote user to partner
+        # Promote user to partner but require approval
         user.role = UserRole.PARTNER
+        user.is_approved = False  # Partners need admin approval
         
         db.session.commit()
         
         return jsonify({
-            'message': f'User {user.full_name} promoted to partner successfully',
+            'message': f'User {user.full_name} promoted to partner successfully. Awaiting admin approval.',
             'user': user.to_dict()
         }), 200
         
@@ -251,6 +269,83 @@ def demote_from_partner():
     except Exception as e:
         return jsonify({'message': 'Failed to demote partner to user', 'error': str(e)}), 500
 
+@partners_bp.route('/admin/approve', methods=['POST'])
+@jwt_required()
+def approve_partner():
+    try:
+        current_user_id = get_jwt_identity()
+        admin_user = User.query.get(current_user_id)
+        
+        # Check if user is admin
+        if admin_user.role != UserRole.ADMIN:
+            return jsonify({'message': 'Access denied'}), 403
+        
+        data = request.get_json()
+        user_id = data.get('user_id')
+        
+        if not user_id:
+            return jsonify({'message': 'User ID is required'}), 400
+        
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+        
+        # Check if user is a partner
+        if user.role != UserRole.PARTNER:
+            return jsonify({'message': 'User is not a partner'}), 400
+        
+        # Approve partner
+        user.is_approved = True
+        
+        db.session.commit()
+        
+        return jsonify({
+            'message': f'Partner {user.full_name} approved successfully',
+            'user': user.to_dict()
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to approve partner', 'error': str(e)}), 500
+
+@partners_bp.route('/admin/deny', methods=['POST'])
+@jwt_required()
+def deny_partner():
+    try:
+        current_user_id = get_jwt_identity()
+        admin_user = User.query.get(current_user_id)
+        
+        # Check if user is admin
+        if admin_user.role != UserRole.ADMIN:
+            return jsonify({'message': 'Access denied'}), 403
+        
+        data = request.get_json()
+        user_id = data.get('user_id')
+        
+        if not user_id:
+            return jsonify({'message': 'User ID is required'}), 400
+        
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+        
+        # Check if user is a partner
+        if user.role != UserRole.PARTNER:
+            return jsonify({'message': 'User is not a partner'}), 400
+        
+        # Deny partner (demote back to user)
+        user.role = UserRole.USER
+        user.is_approved = False
+        
+        db.session.commit()
+        
+        return jsonify({
+            'message': f'Partner {user.full_name} denied and demoted to user successfully',
+            'user': user.to_dict()
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to deny partner', 'error': str(e)}), 500
+
 @partners_bp.route('/admin/list', methods=['GET'])
 @jwt_required()
 def list_partners():
@@ -280,8 +375,15 @@ def list_partners():
             page=page, per_page=per_page, error_out=False
         )
         
+        # Add approval status to partner data
+        partners_data = []
+        for partner in partners.items:
+            partner_data = partner.to_dict()
+            partner_data['approval_status'] = 'approved' if partner.is_approved else 'pending'
+            partners_data.append(partner_data)
+        
         return jsonify({
-            'partners': [partner.to_dict() for partner in partners.items],
+            'partners': partners_data,
             'total': partners.total,
             'pages': partners.pages,
             'current_page': page
@@ -300,6 +402,10 @@ def generate_partner_codes():
         # Check if user is partner
         if user.role != UserRole.PARTNER and user.role != UserRole.ADMIN:
             return jsonify({'message': 'Access denied'}), 403
+        
+        # Check if partner is approved
+        if user.role == UserRole.PARTNER and not user.is_approved:
+            return jsonify({'message': 'Partner account pending approval. Please contact admin.'}), 403
         
         data = request.get_json()
         count = data.get('count', 100)

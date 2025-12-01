@@ -4,13 +4,16 @@ from backend.models.user import User, UserRole
 from backend.models.reward_code import RewardCode
 from backend.models.transaction import Transaction, TransactionType, TransactionStatus
 from backend.utils.helpers import generate_reward_code
+from backend.utils.decorators import partner_restricted
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime
+import re
 
 codes_bp = Blueprint('codes', __name__)
 
 @codes_bp.route('/redeem', methods=['POST'])
 @jwt_required()
+@partner_restricted
 def redeem_code():
     try:
         current_user_id = get_jwt_identity()
@@ -24,6 +27,10 @@ def redeem_code():
         
         if not code_value:
             return jsonify({'message': 'Code is required'}), 400
+        
+        # Validate code format: 5 uppercase letters + 3 digits
+        if not re.match(r'^[A-Z]{5}[0-9]{3}$', code_value):
+            return jsonify({'message': 'Invalid code format. Code must be 5 uppercase letters followed by 3 digits (e.g., ABCDE123)'}), 400
         
         # Find the code
         reward_code = RewardCode.query.filter_by(code=code_value).first()
@@ -68,6 +75,7 @@ def redeem_code():
 
 @codes_bp.route('/history', methods=['GET'])
 @jwt_required()
+@partner_restricted
 def get_redemption_history():
     try:
         current_user_id = get_jwt_identity()

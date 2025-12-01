@@ -2,12 +2,14 @@ from flask import Blueprint, request, jsonify
 from backend.app import db
 from backend.models.user import User, UserRole
 from backend.models.transaction import Transaction, TransactionType, TransactionStatus
+from backend.utils.decorators import partner_restricted
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 referrals_bp = Blueprint('referrals', __name__)
 
 @referrals_bp.route('/stats', methods=['GET'])
 @jwt_required()
+@partner_restricted
 def get_referral_stats():
     try:
         current_user_id = get_jwt_identity()
@@ -166,6 +168,7 @@ def get_top_referrers():
 
 @referrals_bp.route('/users', methods=['GET'])
 @jwt_required()
+@partner_restricted
 def get_referred_users():
     try:
         current_user_id = get_jwt_identity()
@@ -188,6 +191,7 @@ def get_referred_users():
 
 @referrals_bp.route('/link', methods=['GET'])
 @jwt_required()
+@partner_restricted
 def get_referral_link():
     try:
         current_user_id = get_jwt_identity()

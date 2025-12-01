@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from backend.app import db, bcrypt
 from backend.models.user import User, UserRole
 from backend.models.password_reset import PasswordResetToken
+from backend.models.transaction import Transaction, TransactionType, TransactionStatus
 from backend.utils.helpers import generate_referral_code
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 import re
@@ -32,16 +33,21 @@ def register():
         # Hash password
         hashed_password = bcrypt.generate_password_hash(data.get('password')).decode('utf-8')
         
-        # Create user
+        # Create user - only allow user or admin roles during registration
+        role = data.get('role', 'user')
+        if role == 'partner':
+            role = 'user'  # Force partner registrations to user role
+        
         user = User(
             full_name=data.get('full_name'),
             email=data.get('email'),
             password_hash=hashed_password,
-            role=UserRole(data.get('role', 'user')),
+            role=UserRole(role),
             referral_code=generate_referral_code()
         )
         
         # Set referral if provided
+        referrer = None
         if data.get('referral_code'):
             referrer = User.query.filter_by(referral_code=data.get('referral_code')).first()
             if referrer:
@@ -49,6 +55,26 @@ def register():
         
         db.session.add(user)
         db.session.commit()
+        
+        # Award referral bonus to referrer if applicable
+        if referrer:
+            # Award 100 points as referral bonus
+            bonus_points = 100.0
+            referrer.points_balance += bonus_points
+            referrer.total_points_earned += bonus_points
+            
+            # Create referral bonus transaction
+            transaction = Transaction(
+                user_id=referrer.id,
+                type=TransactionType.REFERRAL_BONUS,
+                status=TransactionStatus.COMPLETED,
+                description=f"Referral bonus for {user.full_name}",
+                amount=0,
+                points_amount=bonus_points
+            )
+            
+            db.session.add(transaction)
+            db.session.commit()
         
         # Create access token
         access_token = create_access_token(identity=user.id)

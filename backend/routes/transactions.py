@@ -2,12 +2,14 @@ from flask import Blueprint, request, jsonify
 from backend.app import db
 from backend.models.user import User, UserRole
 from backend.models.transaction import Transaction, TransactionType, TransactionStatus
+from backend.utils.decorators import partner_restricted
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 transactions_bp = Blueprint('transactions', __name__)
 
 @transactions_bp.route('/', methods=['GET'])
 @jwt_required()
+@partner_restricted
 def get_transactions():
     try:
         current_user_id = get_jwt_identity()
@@ -39,6 +41,7 @@ def get_transactions():
 
 @transactions_bp.route('/<int:transaction_id>', methods=['GET'])
 @jwt_required()
+@partner_restricted
 def get_transaction(transaction_id):
     try:
         current_user_id = get_jwt_identity()
@@ -163,6 +166,7 @@ def get_user_transactions(user_id):
 
 @transactions_bp.route('/summary', methods=['GET'])
 @jwt_required()
+@partner_restricted
 def get_transaction_summary():
     try:
         current_user_id = get_jwt_identity()

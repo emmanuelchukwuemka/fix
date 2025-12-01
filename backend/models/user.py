@@ -26,6 +26,8 @@ class User(db.Model):
     total_points_withdrawn = db.Column(db.Float, default=0.0)
     total_earnings = db.Column(db.Float, default=0.0)
     total_withdrawn = db.Column(db.Float, default=0.0)
+    daily_code_requirement = db.Column(db.Integer, default=5)  # 5 or 10 codes per day
+    is_approved = db.Column(db.Boolean, default=False)  # For partner account approval
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
@@ -54,6 +56,8 @@ class User(db.Model):
             'total_points_withdrawn': self.total_points_withdrawn,
             'total_earnings': self.total_earnings,
             'total_withdrawn': self.total_withdrawn,
+            'daily_code_requirement': self.daily_code_requirement,
+            'is_approved': self.is_approved,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None
         }
