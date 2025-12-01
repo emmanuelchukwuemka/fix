@@ -205,3 +205,48 @@ def reset_password():
         
     except Exception as e:
         return jsonify({'message': 'Failed to reset password', 'error': str(e)}), 500
+
+# Social Login Routes (Placeholder implementations)
+@auth_bp.route('/google', methods=['GET'])
+def google_login():
+    """
+    Placeholder for Google OAuth login.
+    In a real implementation, this would redirect to Google's OAuth endpoint.
+    """
+    return jsonify({
+        'message': 'Google login endpoint - In a real implementation, this would redirect to Google OAuth',
+        'note': 'For demo purposes, please use email login/signup'
+    }), 200
+
+@auth_bp.route('/apple', methods=['GET'])
+def apple_login():
+    """
+    Placeholder for Apple OAuth login.
+    In a real implementation, this would redirect to Apple's OAuth endpoint.
+    """
+    return jsonify({
+        'message': 'Apple login endpoint - In a real implementation, this would redirect to Apple OAuth',
+        'note': 'For demo purposes, please use email login/signup'
+    }), 200
+
+@auth_bp.route('/google/callback', methods=['GET'])
+def google_callback():
+    """
+    Placeholder for Google OAuth callback.
+    In a real implementation, this would handle the OAuth response from Google.
+    """
+    return jsonify({
+        'message': 'Google OAuth callback - In a real implementation, this would handle Google OAuth response',
+        'note': 'For demo purposes, please use email login/signup'
+    }), 200
+
+@auth_bp.route('/apple/callback', methods=['POST'])
+def apple_callback():
+    """
+    Placeholder for Apple OAuth callback.
+    In a real implementation, this would handle the OAuth response from Apple.
+    """
+    return jsonify({
+        'message': 'Apple OAuth callback - In a real implementation, this would handle Apple OAuth response',
+        'note': 'For demo purposes, please use email login/signup'
+    }), 200

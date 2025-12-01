@@ -225,21 +225,21 @@ body {
 
 /* Logo styles for consistent sizing */
 .logo-header {
-  height: 2.5rem;
-  width: 2.5rem;
+  height: 100px;
+  width: 100px;
 }
 
 /* Mobile responsive header styles */
 @media (max-width: 768px) {
   .logo-header {
-    height: 2rem;
-    width: 2rem;
+    height: 100px;
+    width: 100px;
   }
 }
 
 @media (max-width: 480px) {
   .logo-header {
-    height: 1.75rem;
-    width: 1.75rem;
+    height: 100px;
+    width: 100px;
   }
 }

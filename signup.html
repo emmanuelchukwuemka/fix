@@ -26,6 +26,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="assets/css/app.css" />
+  <style>
+    .logo-signup-login {
+      width: 300px !important;
+      height: 300px !important;
+    }
+  </style>
 </head>
 
 <body class="bg-background text-text overflow-auto">
@@ -55,7 +61,7 @@
       
       <!-- Logo -->
       <div class="text-center mb-6">
-        <img src="assets/logo2.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain mx-auto">
+        <img src="assets/logo2.png" alt="MyFigPoint Logo" class="logo-header logo-signup-login rounded-full object-contain mx-auto">
         <p class="text-text mt-2 text-base">Join thousands earning real money daily</p>
       </div>
 
@@ -290,5 +296,32 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
   <script src="assets/js/theme.js"></script>
+  <script>
+    // Add event listeners for social login buttons
+    document.addEventListener('DOMContentLoaded', function() {
+      const googleBtn = document.querySelector('.space-y-4.mb-8 button:first-child');
+      const appleBtn = document.querySelector('.space-y-4.mb-8 button:last-child');
+      
+      if (googleBtn) {
+        googleBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          // Simulate Google login process
+          alert('Google login would open here in a real implementation. For now, please use email signup.');
+          // In a real implementation, this would redirect to Google OAuth
+          // window.location.href = '/api/auth/google';
+        });
+      }
+      
+      if (appleBtn) {
+        appleBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          // Simulate Apple login process
+          alert('Apple login would open here in a real implementation. For now, please use email signup.');
+          // In a real implementation, this would redirect to Apple OAuth
+          // window.location.href = '/api/auth/apple';
+        });
+      }
+    });
+  </script>
 </body>
 </html>
