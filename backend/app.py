@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
@@ -37,7 +37,7 @@ def create_app():
     if os.environ.get('RENDER') == 'true':
         # Trust the proxy for HTTPS
         app.config['PREFERRED_URL_SCHEME'] = 'https'
-        app.config['SERVER_NAME'] = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+        # Don't set SERVER_NAME as it can cause issues with dynamic hosts
     
     # Initialize extensions with app
     db.init_app(app)

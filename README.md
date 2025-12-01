@@ -58,7 +58,7 @@ The default admin user credentials are:
    ```
 4. Run the application:
    ```bash
-   python run.py
+   python app.py
    ```
 
 ### Database Seeding

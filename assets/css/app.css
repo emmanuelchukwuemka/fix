@@ -16,7 +16,7 @@
 .dark-mode {
   --background-color: #012E03; /* Using the specified color for dark mode background */
   --text-color: #f1f5f9;
-  --card-background: #023e02; /* Slightly lighter shade for cards */
+  --card-background: #012903; /* Darker shade for cards and inputs */
   --border-color: #034f03; /* Slightly lighter border color */
 }
 
@@ -205,6 +205,22 @@ body {
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(253, 102, 6, 0.2);
   outline: none;
+}
+
+/* Dark mode specific input adjustments */
+.dark-mode .form-input {
+  background-color: #012903; /* Even darker for inputs in dark mode */
+  border-color: #034f03;
+  color: #f1f5f9;
+}
+
+/* Dark mode specific adjustments for elements using bg-card */
+.dark-mode .bg-card {
+  background-color: #012903; /* Match the darker input background */
+}
+
+.dark-mode .border-border {
+  border-color: #034f03;
 }
 
 /* Logo styles for consistent sizing */
