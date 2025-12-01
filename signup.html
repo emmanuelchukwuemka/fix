@@ -54,9 +54,9 @@
     <div class="bg-card backdrop-blur-2xl border border-border rounded-3xl shadow-2xl p-10 animate-fade-in-up animate-glow">
       
       <!-- Logo -->
-      <div class="text-center mb-8">
-        <img src="assets/logo-circular.png" alt="MyFigPoint Logo" class="h-20 w-20 rounded-full object-contain mx-auto mb-4">
-        <p class="text-text mt-3 text-lg">Join thousands earning real money daily</p>
+      <div class="text-center mb-6">
+        <img src="assets/logo-circular.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain mx-auto">
+        <p class="text-text mt-2 text-base">Join thousands earning real money daily</p>
       </div>
 
       <!-- Social Login -->
@@ -219,33 +219,39 @@
     document.getElementById('signupForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
-      // For testing purposes, allow signup with any credentials
+      // Get form values
+      const fullName = this.querySelector('input[name="full_name"]').value;
+      const email = this.querySelector('input[name="email"]').value;
+      const password = this.querySelector('input[name="password"]').value;
+      const referralCode = this.querySelector('input[name="referral_code"]').value;
+      const role = this.querySelector('input[name="role"]:checked').value;
+      
+      // Simple validation
+      if (!fullName || !email || !password) {
+        alert('Please fill in all required fields');
+        return;
+      }
+      
+      if (password.length < 8) {
+        alert('Password must be at least 8 characters long');
+        return;
+      }
+      
+      // Prepare data for backend
       const submitButton = this.querySelector('button[type="submit"]');
       const originalText = submitButton.innerHTML;
       submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Creating Account...';
       submitButton.disabled = true;
       
-      setTimeout(() => {
-        localStorage.setItem('access_token', 'test-token');
-        confetti({
-          particleCount: 200,
-          spread: 100,
-          origin: { y: 0.6 }
-        });
-        window.location.href = 'dashboard.html';
-      }, 1500);
-      
-      // Original code for reference (commented out)
-      /*
-      const formData = new FormData(this);
       const data = {
-        full_name: formData.get('full_name'),
-        email: formData.get('email'),
-        password: formData.get('password'),
-        referral_code: formData.get('referral_code'),
-        role: formData.get('role')
+        full_name: fullName,
+        email: email,
+        password: password,
+        referral_code: referralCode,
+        role: role
       };
       
+      // Send signup request to backend
       fetch('/api/auth/register', {
         method: 'POST',
         headers: {
@@ -257,6 +263,16 @@
       .then(data => {
         if (data.access_token) {
           localStorage.setItem('access_token', data.access_token);
+          // Store user data
+          if (data.user) {
+            localStorage.setItem('userName', data.user.full_name);
+            localStorage.setItem('userEmail', data.user.email);
+          }
+          confetti({
+            particleCount: 200,
+            spread: 100,
+            origin: { y: 0.6 }
+          });
           window.location.href = 'dashboard.html';
         } else {
           alert('Registration failed: ' + (data.message || 'Please try again'));
@@ -270,7 +286,6 @@
         submitButton.innerHTML = originalText;
         submitButton.disabled = false;
       });
-      */
     });
   </script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>

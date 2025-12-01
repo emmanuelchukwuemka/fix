@@ -46,27 +46,27 @@
 
   <!-- Navigation -->
   <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg bg-card border-b border-border">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-      <img src="assets/logo-circular.png" alt="MyFigPoint Logo" class="h-20 w-20 rounded-full object-contain mx-auto mb-4">
-      <div class="hidden md:flex items-center space-x-8">
-        <a href="#features" class="hover:text-primary transition">Features</a>
-        <a href="#how" class="hover:text-primary transition">How it Works</a>
-        <a href="#testimonials" class="hover:text-primary transition">Testimonials</a>
-        <a href="signup.html" class="bg-primary hover:bg-orange-700 px-5 py-2.5 rounded-full font-medium transition">Get Started</a>
+    <div class="max-w-7xl mx-auto px-4 py-1.5 flex justify-between items-center">
+      <img src="assets/logo-circular.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
+      <div class="hidden md:flex items-center space-x-4">
+        <a href="#features" class="hover:text-primary transition text-sm">Features</a>
+        <a href="#how" class="hover:text-primary transition text-sm">How it Works</a>
+        <a href="#testimonials" class="hover:text-primary transition text-sm">Testimonials</a>
+        <a href="signup.html" class="bg-primary hover:bg-orange-700 px-3 py-1.5 rounded-full font-medium transition text-sm">Get Started</a>
       </div>
-      <button id="mobileMenuButton" class="md:hidden p-2 rounded-lg text-3xl text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200 ease-in-out" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
+      <button id="mobileMenuButton" class="md:hidden p-2 rounded-lg text-2xl text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200 ease-in-out" aria-label="Toggle navigation menu">
         <i class="fas fa-bars"></i>
       </button>
     </div>
     
     <!-- Mobile Menu -->
     <div id="mobileMenu" class="hidden md:hidden bg-card backdrop-blur-lg border-t border-border">
-      <div class="px-6 py-4 space-y-4">
-        <a href="#features" class="block py-3 px-4 rounded-lg hover:bg-gray-800 hover:text-primary transition" onclick="toggleMobileMenu()">Features</a>
-        <a href="#how" class="block py-3 px-4 rounded-lg hover:bg-gray-800 hover:text-primary transition" onclick="toggleMobileMenu()">How it Works</a>
-        <a href="#testimonials" class="block py-3 px-4 rounded-lg hover:bg-gray-800 hover:text-primary transition" onclick="toggleMobileMenu()">Testimonials</a>
-        <a href="signup.html" class="block bg-primary hover:bg-orange-700 px-5 py-3 rounded-full font-medium transition text-center" onclick="toggleMobileMenu()">Get Started</a>
-        <a href="login.html" class="block text-center py-3 px-4 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition" onclick="toggleMobileMenu()">Log In</a>
+      <div class="px-3 py-2 space-y-2">
+        <a href="#features" class="block py-1.5 px-3 rounded-lg hover:bg-gray-800 hover:text-primary transition text-sm" onclick="toggleMobileMenu()">Features</a>
+        <a href="#how" class="block py-1.5 px-3 rounded-lg hover:bg-gray-800 hover:text-primary transition text-sm" onclick="toggleMobileMenu()">How it Works</a>
+        <a href="#testimonials" class="block py-1.5 px-3 rounded-lg hover:bg-gray-800 hover:text-primary transition text-sm" onclick="toggleMobileMenu()">Testimonials</a>
+        <a href="signup.html" class="block bg-primary hover:bg-orange-700 px-3 py-1.5 rounded-full font-medium transition text-center text-sm" onclick="toggleMobileMenu()">Get Started</a>
+        <a href="login.html" class="block text-center py-1.5 px-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition text-sm" onclick="toggleMobileMenu()">Log In</a>
       </div>
     </div>
   </nav>
@@ -269,6 +269,14 @@
         button.innerHTML = '<i class="fas fa-times"></i>';
       }
     }
+    
+    // Add event listener to mobile menu button
+    document.addEventListener('DOMContentLoaded', function() {
+      const mobileMenuButton = document.getElementById('mobileMenuButton');
+      if (mobileMenuButton) {
+        mobileMenuButton.addEventListener('click', toggleMobileMenu);
+      }
+    });
   </script>
   <script src="assets/js/theme.js"></script>
 </body>

@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: myfigpoint
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn --bind 0.0.0.0:$PORT run:app"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: myfigpoint-db
+          property: connectionString
+      - key: SECRET_KEY
+        sync: false
+      - key: JWT_SECRET_KEY
+        sync: false
+
+databases:
+  - name: myfigpoint-db
+    databaseName: myfigpoint

@@ -34,53 +34,53 @@
 
   <!-- Sidebar (Same as Dashboard) -->
   <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
-    <div class="flex items-center justify-between p-6 border-b border-border">
-      <img src="assets/logo-circular.png" alt="MyFigPoint Logo" class="h-20 w-20 rounded-full object-contain mx-auto mb-4">
+    <div class="flex items-center justify-between p-4 border-b border-border">
+      <img src="assets/logo-circular.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
       <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
         <i class="fas fa-times text-xl"></i>
       </button>
     </div>
 
-    <nav class="flex-1 overflow-y-auto p-4 space-y-2">
-      <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+    <nav class="flex-1 overflow-y-auto p-3 space-y-1">
+      <a href="dashboard.html" class="flex items-center space-x-2 px-3 py-2 hover:bg-card rounded-lg transition text-sm">
         <i class="fas fa-tachometer-alt"></i>
         <span>Dashboard</span>
       </a>
-      <a href="tasks.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="tasks.html" class="flex items-center space-x-2 px-3 py-2 bg-primary/20 border border-primary/50 rounded-lg text-primary font-medium text-sm">
         <i class="fas fa-tasks"></i>
         <span>Earn Points</span>
       </a>
-      <a href="referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="referrals.html" class="flex items-center space-x-2 px-3 py-2 hover:bg-card rounded-lg transition text-sm">
         <i class="fas fa-users"></i>
         <span>Refer & Earn</span>
       </a>
-      <a href="wallet.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="wallet.html" class="flex items-center space-x-2 px-3 py-2 hover:bg-card rounded-lg transition text-sm">
         <i class="fas fa-wallet"></i>
         <span>Wallet</span>
       </a>
-      <a href="transactions.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="transactions.html" class="flex items-center space-x-2 px-3 py-2 hover:bg-card rounded-lg transition text-sm">
         <i class="fas fa-history"></i>
         <span>Transaction History</span>
       </a>
-      <a href="redeem.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="redeem.html" class="flex items-center space-x-2 px-3 py-2 hover:bg-card rounded-lg transition text-sm">
         <i class="fas fa-gift"></i>
         <span>Redeem Points</span>
       </a>
-      <a href="profile.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="profile.html" class="flex items-center space-x-2 px-3 py-2 hover:bg-card rounded-lg transition text-sm">
         <i class="fas fa-user-cog"></i>
         <span>Profile & Settings</span>
       </a>
     </nav>
 
-    <div class="p-6 border-t border-border">
-      <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-primary">
+    <div class="p-4 border-t border-border">
+      <div class="flex items-center space-x-2">
+        <img id="sidebarAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-8 h-8 rounded-full ring-2 ring-primary">
         <div>
-          <p class="font-semibold">John Doe</p>
-          <p class="text-sm text-gray-600 dark:text-gray-400">john@example.com</p>
+          <p id="sidebarUserName" class="font-semibold text-sm">John Doe</p>
+          <p id="sidebarUserEmail" class="text-xs text-gray-600 dark:text-gray-400">john@example.com</p>
         </div>
       </div>
-      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+      <a href="#" onclick="logout()" class="mt-3 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-1.5 rounded text-xs font-medium transition">
         Logout
       </a>
     </div>
@@ -90,17 +90,17 @@
   <div class="flex-1 lg:ml-64">
     <!-- Top Bar -->
     <header class="bg-card backdrop-blur-xl border-b border-border sticky top-0 z-40">
-      <div class="flex items-center justify-between px-6 py-5">
+      <div class="flex items-center justify-between px-3 py-1.5">
         <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
           <i class="fas fa-bars text-xl"></i>
         </button>
         <div>
-          <h1 class="text-2xl font-bold">Earn Points</h1>
-          <p class="text-gray-600 dark:text-gray-400 text-sm">Complete tasks below and watch your balance grow!</p>
+          <h1 class="text-lg font-bold">Earn Points</h1>
+          <p class="text-gray-600 dark:text-gray-400 text-xs">Complete tasks below and watch your balance grow!</p>
         </div>
         <div class="text-right">
-          <p class="text-3xl font-bold text-primary">3,450.75 pts</p>
-          <p class="text-sm text-gray-600 dark:text-gray-400">$1,250.50 earned</p>
+          <p class="text-xl font-bold text-primary">3,450.75 pts</p>
+          <p class="text-xs text-gray-600 dark:text-gray-400">$1,250.50 earned</p>
         </div>
       </div>
     </header>
@@ -269,17 +269,39 @@
         return;
       }
       
+      // Load user information from localStorage
+      const savedAvatar = localStorage.getItem('userAvatar');
+      const savedName = localStorage.getItem('userName');
+      const savedEmail = localStorage.getItem('userEmail');
+      
+      if (savedAvatar) {
+        document.getElementById('sidebarAvatar').src = savedAvatar;
+      }
+      
+      if (savedName) {
+        document.getElementById('sidebarUserName').textContent = savedName;
+      }
+      
+      if (savedEmail) {
+        document.getElementById('sidebarUserEmail').textContent = savedEmail;
+      }
+      
+      // Fetch tasks from backend
       fetch('/api/tasks/', {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
+      .then(response => {
+        if (response.status === 401) {
+          throw new Error('401');
+        }
+        return response.json();
+      })
       .then(data => {
         if (data.tasks && data.tasks.length > 0) {
-          // In a real implementation, we would dynamically generate task cards
-          // For now, we'll just log the data to show it's working
           console.log('Tasks data:', data.tasks);
+          // In a real implementation, we would dynamically generate task cards from this data
         }
       })
       .catch(error => {
@@ -294,6 +316,9 @@
     // Logout function
     function logout() {
       localStorage.removeItem('access_token');
+      localStorage.removeItem('userAvatar');
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userEmail');
       window.location.href = 'login.html';
     }
   

@@ -2,7 +2,9 @@ from flask import Blueprint, request, jsonify
 from backend.app import db
 from backend.models.user import User, UserRole
 from backend.models.reward_code import RewardCode
+from backend.models.transaction import Transaction, TransactionType, TransactionStatus
 from backend.utils.helpers import generate_reward_code, generate_batch_id
+from backend.utils.emailer import Emailer
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import csv
 import io
@@ -205,3 +207,356 @@ def update_user_points():
         
     except Exception as e:
         return jsonify({'message': 'Failed to update user points', 'error': str(e)}), 500
+
+@admin_bp.route('/users', methods=['GET'])
+@jwt_required()
+def get_all_users():
+    try:
+        current_user_id = get_jwt_identity()
+        admin_user = User.query.get(current_user_id)
+        
+        # Check if user is admin
+        if admin_user.role != UserRole.ADMIN:
+            return jsonify({'message': 'Access denied'}), 403
+        
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 20, type=int)
+        search = request.args.get('search', '')
+        
+        query = User.query
+        
+        if search:
+            query = query.filter(
+                db.or_(
+                    User.full_name.ilike(f'%{search}%'),
+                    User.email.ilike(f'%{search}%')
+                )
+            )
+        
+        users = query.order_by(User.created_at.desc()).paginate(
+            page=page, per_page=per_page, error_out=False
+        )
+        
+        return jsonify({
+            'users': [user.to_dict() for user in users.items],
+            'total': users.total,
+            'pages': users.pages,
+            'current_page': page
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to fetch users', 'error': str(e)}), 500
+
+@admin_bp.route('/users/<int:user_id>/details', methods=['GET'])
+@jwt_required()
+def get_user_details(user_id):
+    try:
+        current_user_id = get_jwt_identity()
+        admin_user = User.query.get(current_user_id)
+        
+        # Check if user is admin
+        if admin_user.role != UserRole.ADMIN:
+            return jsonify({'message': 'Access denied'}), 403
+        
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+            
+        return jsonify({'user': user.to_dict()}), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to fetch user details', 'error': str(e)}), 500
+
+@admin_bp.route('/support-messages', methods=['GET'])
+@jwt_required()
+def get_all_support_messages():
+    try:
+        current_user_id = get_jwt_identity()
+        admin_user = User.query.get(current_user_id)
+        
+        # Check if user is admin
+        if admin_user.role != UserRole.ADMIN:
+            return jsonify({'message': 'Access denied'}), 403
+        
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 20, type=int)
+        status = request.args.get('status', '')
+        
+        query = SupportMessage.query
+        
+        if status:
+            query = query.filter_by(status=MessageStatus(status))
+        
+        messages = query.order_by(SupportMessage.created_at.desc()).paginate(
+            page=page, per_page=per_page, error_out=False
+        )
+        
+        return jsonify({
+            'messages': [msg.to_dict() for msg in messages.items],
+            'total': messages.total,
+            'pages': messages.pages,
+            'current_page': page
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to fetch support messages', 'error': str(e)}), 500
+
+@admin_bp.route('/support-messages/<int:message_id>/respond', methods=['POST'])
+@jwt_required()
+def respond_to_support_message(message_id):
+    try:
+        current_user_id = get_jwt_identity()
+        admin_user = User.query.get(current_user_id)
+        
+        # Check if user is admin
+        if admin_user.role != UserRole.ADMIN:
+            return jsonify({'message': 'Access denied'}), 403
+        
+        message = SupportMessage.query.get(message_id)
+        if not message:
+            return jsonify({'message': 'Support message not found'}), 404
+        
+        data = request.get_json()
+        response_text = data.get('response', '').strip()
+        
+        if not response_text:
+            return jsonify({'message': 'Response text is required'}), 400
+        
+        # Create response message
+        response_msg = SupportMessage(
+            user_id=message.user_id,
+            subject=f"Re: {message.subject}",
+            message=response_text,
+            message_type=MessageType.SUPPORT_TO_USER,
+            status=MessageStatus.REPLIED
+        )
+        
+        # Update original message status
+        message.response = response_text
+        message.status = MessageStatus.REPLIED
+        
+        db.session.add(response_msg)
+        db.session.commit()
+        
+        return jsonify({
+            'message': 'Response sent successfully',
+            'response_message': response_msg.to_dict()
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to respond to support message', 'error': str(e)}), 500
+
+@admin_bp.route('/withdrawals', methods=['GET'])
+@jwt_required()
+def get_pending_withdrawals():
+    try:
+        current_user_id = get_jwt_identity()
+        admin_user = User.query.get(current_user_id)
+        
+        # Check if user is admin
+        if admin_user.role != UserRole.ADMIN:
+            return jsonify({'message': 'Access denied'}), 403
+        
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 20, type=int)
+        status = request.args.get('status', 'pending')  # Default to pending withdrawals
+        
+        # Query for withdrawal transactions
+        query = Transaction.query.filter_by(type=TransactionType.POINT_WITHDRAWAL)
+        
+        if status:
+            query = query.filter_by(status=TransactionStatus(status))
+        
+        withdrawals = query.order_by(Transaction.created_at.desc()).paginate(
+            page=page, per_page=per_page, error_out=False
+        )
+        
+        # Get user details for each withdrawal
+        withdrawal_data = []
+        for withdrawal in withdrawals.items:
+            user = User.query.get(withdrawal.user_id)
+            withdrawal_data.append({
+                'transaction': withdrawal.to_dict(),
+                'user': user.to_dict() if user else None
+            })
+        
+        return jsonify({
+            'withdrawals': withdrawal_data,
+            'total': withdrawals.total,
+            'pages': withdrawals.pages,
+            'current_page': page
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to fetch withdrawals', 'error': str(e)}), 500
+
+@admin_bp.route('/withdrawals/<int:transaction_id>/approve', methods=['POST'])
+@jwt_required()
+def approve_withdrawal(transaction_id):
+    try:
+        current_user_id = get_jwt_identity()
+        admin_user = User.query.get(current_user_id)
+        
+        # Check if user is admin
+        if admin_user.role != UserRole.ADMIN:
+            return jsonify({'message': 'Access denied'}), 403
+        
+        # Validate transaction ID
+        if not isinstance(transaction_id, int) or transaction_id <= 0:
+            return jsonify({'message': 'Invalid transaction ID'}), 400
+        
+        # Get the transaction
+        transaction = Transaction.query.get(transaction_id)
+        if not transaction:
+            return jsonify({'message': 'Transaction not found'}), 404
+        
+        if transaction.type != TransactionType.POINT_WITHDRAWAL:
+            return jsonify({'message': 'Transaction is not a withdrawal request'}), 400
+        
+        if transaction.status != TransactionStatus.PENDING:
+            return jsonify({'message': 'Transaction is not pending approval'}), 400
+        
+        # Get the user
+        user = User.query.get(transaction.user_id)
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+        
+        # Update transaction status to completed
+        transaction.status = TransactionStatus.COMPLETED
+        transaction.updated_at = db.func.current_timestamp()
+        
+        db.session.commit()
+        
+        # Send email notification
+        emailer = Emailer()
+        email_sent = emailer.send_withdrawal_approved_notification(
+            user_email=user.email,
+            user_name=user.full_name,
+            points=abs(transaction.points_amount),
+            amount=abs(transaction.amount),
+            method=get_method_from_description(transaction.description)
+        )
+        
+        # Log email sending status (for debugging)
+        if not email_sent:
+            print(f"Warning: Failed to send withdrawal approval email to {user.email}")
+        
+        return jsonify({
+            'message': 'Withdrawal approved successfully',
+            'transaction': transaction.to_dict()
+        }), 200
+        
+    except Exception as e:
+        # Log the error for debugging
+        print(f"Error approving withdrawal: {str(e)}")
+        
+        # Attempt to rollback any changes if session is still active
+        try:
+            db.session.rollback()
+        except:
+            pass
+            
+        return jsonify({
+            'message': 'Failed to approve withdrawal. Please try again later.',
+            'error': 'An internal error occurred while processing your request'
+        }), 500
+
+@admin_bp.route('/withdrawals/<int:transaction_id>/reject', methods=['POST'])
+@jwt_required()
+def reject_withdrawal(transaction_id):
+    try:
+        current_user_id = get_jwt_identity()
+        admin_user = User.query.get(current_user_id)
+        
+        # Check if user is admin
+        if admin_user.role != UserRole.ADMIN:
+            return jsonify({'message': 'Access denied'}), 403
+        
+        # Validate transaction ID
+        if not isinstance(transaction_id, int) or transaction_id <= 0:
+            return jsonify({'message': 'Invalid transaction ID'}), 400
+        
+        # Get the transaction
+        transaction = Transaction.query.get(transaction_id)
+        if not transaction:
+            return jsonify({'message': 'Transaction not found'}), 404
+        
+        if transaction.type != TransactionType.POINT_WITHDRAWAL:
+            return jsonify({'message': 'Transaction is not a withdrawal request'}), 400
+        
+        if transaction.status != TransactionStatus.PENDING:
+            return jsonify({'message': 'Transaction is not pending approval'}), 400
+        
+        # Get the user
+        user = User.query.get(transaction.user_id)
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+        
+        # Store original values for rollback if needed
+        original_balance = user.points_balance
+        original_withdrawn_points = user.total_points_withdrawn
+        original_withdrawn_amount = user.total_withdrawn
+        
+        # Validate transaction amounts
+        if not isinstance(transaction.points_amount, (int, float)) or not isinstance(transaction.amount, (int, float)):
+            return jsonify({'message': 'Invalid transaction amounts'}), 400
+        
+        # Refund points to user
+        user.points_balance -= transaction.points_amount  # points_amount is negative for withdrawals
+        user.total_points_withdrawn += transaction.points_amount  # Add back the withdrawn points
+        user.total_withdrawn += transaction.amount  # amount is negative for withdrawals
+        
+        # Validate that the user's balance is not negative after refund
+        if user.points_balance < 0:
+            # Rollback changes
+            user.points_balance = original_balance
+            user.total_points_withdrawn = original_withdrawn_points
+            user.total_withdrawn = original_withdrawn_amount
+            return jsonify({'message': 'Cannot process refund: Invalid user balance'}), 400
+        
+        # Update transaction status to failed
+        transaction.status = TransactionStatus.FAILED
+        transaction.updated_at = db.func.current_timestamp()
+        
+        db.session.commit()
+        
+        # Send email notification
+        emailer = Emailer()
+        email_sent = emailer.send_withdrawal_rejected_notification(
+            user_email=user.email,
+            user_name=user.full_name,
+            points=abs(transaction.points_amount),
+            amount=abs(transaction.amount),
+            method=get_method_from_description(transaction.description),
+            reason="Administrative review"
+        )
+        
+        # Log email sending status (for debugging)
+        if not email_sent:
+            print(f"Warning: Failed to send withdrawal rejection email to {user.email}")
+        
+        return jsonify({
+            'message': 'Withdrawal rejected and points refunded',
+            'transaction': transaction.to_dict()
+        }), 200
+        
+    except Exception as e:
+        # Log the error for debugging
+        print(f"Error rejecting withdrawal: {str(e)}")
+        
+        # Attempt to rollback any changes if session is still active
+        try:
+            db.session.rollback()
+        except:
+            pass
+            
+        return jsonify({
+            'message': 'Failed to reject withdrawal. Please try again later.',
+            'error': 'An internal error occurred while processing your request'
+        }), 500
+
+def get_method_from_description(description):
+    """Extract payment method from transaction description"""
+    import re
+    match = re.search(r'via (\w+)', description)
+    return match.group(1) if match else 'unknown'

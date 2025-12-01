@@ -103,3 +103,79 @@ def get_profile():
         
     except Exception as e:
         return jsonify({'message': 'Failed to fetch profile', 'error': str(e)}), 500
+
+@auth_bp.route('/forgot-password', methods=['POST'])
+def forgot_password():
+    try:
+        data = request.get_json()
+        email = data.get('email')
+        
+        if not email:
+            return jsonify({'message': 'Email is required'}), 400
+        
+        user = User.query.filter_by(email=email).first()
+        
+        if not user:
+            # Don't reveal if email exists or not for security
+            return jsonify({'message': 'If your email is registered, you will receive a password reset link'}), 200
+        
+        # Create password reset token
+        reset_token = PasswordResetToken(user_id=user.id)
+        db.session.add(reset_token)
+        db.session.commit()
+        
+        # In a real implementation, you would send an email with the reset link
+        # For now, we'll just return the token (not recommended for production)
+        return jsonify({
+            'message': 'Password reset token generated',
+            'token': reset_token.token,
+            'expires_at': reset_token.expires_at.isoformat()
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to process password reset request', 'error': str(e)}), 500
+
+@auth_bp.route('/reset-password', methods=['POST'])
+def reset_password():
+    try:
+        data = request.get_json()
+        token = data.get('token')
+        new_password = data.get('password')
+        
+        if not token or not new_password:
+            return jsonify({'message': 'Token and new password are required'}), 400
+        
+        # Validate password strength
+        if len(new_password) < 6:
+            return jsonify({'message': 'Password must be at least 6 characters long'}), 400
+        
+        # Find reset token
+        reset_token = PasswordResetToken.query.filter_by(token=token).first()
+        
+        if not reset_token:
+            return jsonify({'message': 'Invalid or expired reset token'}), 400
+        
+        if reset_token.is_expired():
+            return jsonify({'message': 'Reset token has expired'}), 400
+        
+        if reset_token.used:
+            return jsonify({'message': 'Reset token has already been used'}), 400
+        
+        # Get user and update password
+        user = User.query.get(reset_token.user_id)
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+        
+        # Hash new password
+        hashed_password = bcrypt.generate_password_hash(new_password).decode('utf-8')
+        user.password_hash = hashed_password
+        
+        # Mark token as used
+        reset_token.used = True
+        
+        db.session.commit()
+        
+        return jsonify({'message': 'Password reset successfully'}), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to reset password', 'error': str(e)}), 500

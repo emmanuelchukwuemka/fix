@@ -206,3 +206,24 @@ body {
   box-shadow: 0 0 0 3px rgba(253, 102, 6, 0.2);
   outline: none;
 }
+
+/* Logo styles for consistent sizing */
+.logo-header {
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
+/* Mobile responsive header styles */
+@media (max-width: 768px) {
+  .logo-header {
+    height: 2rem;
+    width: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-header {
+    height: 1.75rem;
+    width: 1.75rem;
+  }
+}

@@ -3,6 +3,7 @@ from backend.app import db
 from backend.models.user import User
 from backend.models.transaction import Transaction, TransactionType, TransactionStatus
 from backend.utils.helpers import points_to_usd, get_tier_level
+from backend.utils.emailer import Emailer
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 points_bp = Blueprint('points', __name__)
@@ -63,17 +64,36 @@ def withdraw_points():
             return jsonify({'message': 'User not found'}), 404
 
         data = request.get_json()
+        if not data:
+            return jsonify({'message': 'Invalid request data'}), 400
+            
         points = data.get('points', 0)
+        method = data.get('method', 'bank')  # Default to bank transfer
 
+        # Validate points amount
+        if not isinstance(points, (int, float)):
+            return jsonify({'message': 'Points must be a number'}), 400
+            
         if points <= 0:
             return jsonify({'message': 'Points must be greater than 0'}), 400
 
         if points > user.points_balance:
             return jsonify({'message': 'Insufficient points balance'}), 400
 
-        # Check if user has required bank details
-        if not user.bank_name or not user.account_name or not user.account_number:
-            return jsonify({'message': 'Please complete your bank details in profile settings before withdrawing'}), 400
+        # Validate payment method
+        valid_methods = ['bank', 'paypal', 'crypto', 'gift_card']
+        if method not in valid_methods:
+            return jsonify({'message': f'Invalid payment method. Valid methods: {", ".join(valid_methods)}'}), 400
+
+        # Check if user has required details based on payment method
+        if method == 'bank' and (not user.bank_name or not user.account_name or not user.account_number):
+            return jsonify({'message': 'Please complete your bank details in profile settings before withdrawing via bank transfer'}), 400
+        elif method == 'paypal' and not user.email:
+            return jsonify({'message': 'Please verify your email address for PayPal withdrawals'}), 400
+        elif method == 'crypto' and not data.get('crypto_address'):
+            return jsonify({'message': 'Cryptocurrency address is required for crypto withdrawals'}), 400
+        elif method == 'gift_card' and not data.get('gift_card_type'):
+            return jsonify({'message': 'Gift card type is required for gift card withdrawals'}), 400
 
         # Check withdrawal tier eligibility
         tier = get_tier_level(user.points_balance)
@@ -82,30 +102,89 @@ def withdraw_points():
 
         # Convert points to USD
         usd_amount = points_to_usd(points)
+        
+        # Store original balance for rollback if needed
+        original_balance = user.points_balance
+        original_withdrawn_points = user.total_points_withdrawn
+        original_withdrawn_amount = user.total_withdrawn
+
+        # Deduct points from user balance
+        user.points_balance -= points
+        user.total_points_withdrawn += points
+        user.total_withdrawn += usd_amount
 
         # Create pending withdrawal transaction
+        description = f"Withdrawal request: {points} points (${usd_amount:.2f}) via {method}"
+        if method == 'crypto':
+            crypto_address = data.get('crypto_address', 'address')
+            if not crypto_address or not isinstance(crypto_address, str) or len(crypto_address) < 10:
+                # Rollback changes
+                user.points_balance = original_balance
+                user.total_points_withdrawn = original_withdrawn_points
+                user.total_withdrawn = original_withdrawn_amount
+                return jsonify({'message': 'Invalid cryptocurrency address'}), 400
+            description += f" to {crypto_address}"
+        elif method == 'gift_card':
+            gift_card_type = data.get('gift_card_type', 'gift card')
+            if not gift_card_type or not isinstance(gift_card_type, str):
+                # Rollback changes
+                user.points_balance = original_balance
+                user.total_points_withdrawn = original_withdrawn_points
+                user.total_withdrawn = original_withdrawn_amount
+                return jsonify({'message': 'Invalid gift card type'}), 400
+            description += f" as {gift_card_type}"
+
         transaction = Transaction(
             user_id=current_user_id,
             type=TransactionType.POINT_WITHDRAWAL,
             status=TransactionStatus.PENDING,
-            description=f"Withdrawal request: {points} points (${usd_amount:.2f})",
+            description=description,
             amount=-usd_amount,
-            points_amount=-points
+            points_amount=-points,
+            reference_id=data.get('crypto_address') or data.get('gift_card_type')
         )
 
         db.session.add(transaction)
         db.session.commit()
 
+        # Send email notification
+        emailer = Emailer()
+        email_sent = emailer.send_withdrawal_request_notification(
+            user_email=user.email,
+            user_name=user.full_name,
+            points=points,
+            amount=usd_amount,
+            method=method
+        )
+        
+        # Log email sending status (for debugging)
+        if not email_sent:
+            print(f"Warning: Failed to send withdrawal notification email to {user.email}")
+
         return jsonify({
-            'message': 'Withdrawal request submitted successfully. Payment will be processed within 24-48 hours.',
+            'message': f'Withdrawal request for {points} points (${usd_amount:.2f}) submitted successfully. Payment will be processed within 24-48 hours.',
             'points_requested': points,
             'usd_amount': usd_amount,
+            'method': method,
             'tier': tier,
-            'transaction_id': transaction.id
+            'transaction_id': transaction.id,
+            'new_balance': user.points_balance
         }), 200
 
     except Exception as e:
-        return jsonify({'message': 'Failed to process withdrawal', 'error': str(e)}), 500
+        # Log the error for debugging
+        print(f"Error processing withdrawal: {str(e)}")
+        
+        # Attempt to rollback any changes if session is still active
+        try:
+            db.session.rollback()
+        except:
+            pass
+            
+        return jsonify({
+            'message': 'Failed to process withdrawal. Please try again later.',
+            'error': 'An internal error occurred while processing your request'
+        }), 500
 
 @points_bp.route('/convert', methods=['POST'])
 @jwt_required()

@@ -35,7 +35,7 @@
   <!-- Sidebar -->
   <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
     <div class="flex items-center justify-between p-6 border-b border-border">
-      <img src="assets/logo-circular.png" alt="MyFigPoint Logo" class="h-20 w-20 rounded-full object-contain mx-auto mb-4">
+      <img src="assets/logo-circular.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
       <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
         <i class="fas fa-times text-xl"></i>
       </button>
@@ -90,7 +90,7 @@
   <div class="flex-1 lg:ml-64">
     <!-- Top Bar -->
     <header class="bg-card backdrop-blur-xl border-b border-border sticky top-0 z-40">
-      <div class="flex items-center justify-between px-6 py-5">
+      <div class="flex items-center justify-between px-3 py-1.5">
         <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
           <i class="fas fa-bars text-xl"></i>
         </button>
@@ -241,7 +241,12 @@
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = (e) => document.getElementById('avatarPreview').src = e.target.result;
+        reader.onload = (e) => {
+          const avatarPreview = document.getElementById('avatarPreview');
+          avatarPreview.src = e.target.result;
+          // Save the image to localStorage
+          localStorage.setItem('userAvatar', e.target.result);
+        };
         reader.readAsDataURL(file);
       }
     }
@@ -263,16 +268,71 @@
       btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Saving...';
       btn.disabled = true;
 
-      setTimeout(() => {
-        document.getElementById('toast').classList.remove('hidden');
-        btn.innerHTML = 'Save Changes';
-        btn.disabled = false;
+      // Get user info from form
+      const fullName = document.querySelector('input[type="text"]').value;
+      const email = document.querySelector('input[type="email"]').value;
+      const phone = document.querySelectorAll('input[type="tel"]')[0].value;
+      
+      // Save to localStorage
+      localStorage.setItem('userName', fullName);
+      localStorage.setItem('userEmail', email);
+      
+      // Also save avatar if it exists
+      const avatarPreview = document.getElementById('avatarPreview');
+      if (avatarPreview.src && avatarPreview.src.startsWith('data:image')) {
+        localStorage.setItem('userAvatar', avatarPreview.src);
+      }
 
+      // Send update request to backend
+      const token = localStorage.getItem('access_token');
+      if (token) {
+        // In a real implementation, you would send a PUT request to update the user profile
+        // For now, we'll just simulate the success
         setTimeout(() => {
-          document.getElementById('toast').classList.add('hidden');
-        }, 4000);
-      }, 1500);
+          document.getElementById('toast').classList.remove('hidden');
+          btn.innerHTML = 'Save Changes';
+          btn.disabled = false;
+
+          setTimeout(() => {
+            document.getElementById('toast').classList.add('hidden');
+          }, 4000);
+        }, 1500);
+      } else {
+        // Fallback to localStorage only if no token
+        setTimeout(() => {
+          document.getElementById('toast').classList.remove('hidden');
+          btn.innerHTML = 'Save Changes';
+          btn.disabled = false;
+
+          setTimeout(() => {
+            document.getElementById('toast').classList.add('hidden');
+          }, 4000);
+        }, 1500);
+      }
     }
+    
+    // Load saved user information when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedAvatar = localStorage.getItem('userAvatar');
+      const savedName = localStorage.getItem('userName');
+      const savedEmail = localStorage.getItem('userEmail');
+      
+      if (savedAvatar) {
+        document.getElementById('avatarPreview').src = savedAvatar;
+      }
+      
+      if (savedName) {
+        document.querySelector('h2').textContent = savedName;
+        // Update name in input field
+        document.querySelector('input[type="text"]').value = savedName;
+      }
+      
+      if (savedEmail) {
+        document.querySelector('p.text-xl').textContent = savedEmail;
+        // Update email in input field
+        document.querySelector('input[type="email"]').value = savedEmail;
+      }
+    });
   
     
 

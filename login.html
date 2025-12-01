@@ -54,9 +54,9 @@
     <div class="bg-card backdrop-blur-2xl border border-border rounded-3xl shadow-2xl p-10 animate-fade-in-up animate-glow">
       
       <!-- Logo + Title -->
-      <div class="text-center mb-8">
-        <img src="assets/logo-circular.png" alt="MyFigPoint Logo" class="h-20 w-20 rounded-full object-contain mx-auto mb-4">
-        <p class="text-text mt-3 text-lg">Welcome back! Sign in to continue</p>
+      <div class="text-center mb-6">
+        <img src="assets/logo-circular.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain mx-auto">
+        <p class="text-text mt-2 text-base">Welcome back! Sign in to continue</p>
       </div>
 
       <!-- Social Login -->
@@ -148,18 +148,19 @@
       button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Signing In...';
       button.disabled = true;
       
-      // For testing purposes, allow login with any credentials
-      setTimeout(() => {
-        localStorage.setItem('access_token', 'test-token');
-        window.location.href = 'dashboard.html';
-      }, 1000);
+      // Get form values
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
       
-      // Original code for reference (commented out)
-      /*
-      const formData = new FormData(this);
-      const email = formData.get('email');
-      const password = formData.get('password');
+      // Simple validation
+      if (!email || !password) {
+        alert('Please fill in all fields');
+        button.innerHTML = originalText;
+        button.disabled = false;
+        return;
+      }
       
+      // Send login request to backend
       fetch('/api/auth/login', {
         method: 'POST',
         headers: {
@@ -171,6 +172,11 @@
       .then(data => {
         if (data.access_token) {
           localStorage.setItem('access_token', data.access_token);
+          // Store user data
+          if (data.user) {
+            localStorage.setItem('userName', data.user.full_name);
+            localStorage.setItem('userEmail', data.user.email);
+          }
           window.location.href = 'dashboard.html';
         } else {
           alert('Login failed: ' + (data.message || 'Invalid credentials'));
@@ -184,7 +190,6 @@
         button.innerHTML = originalText;
         button.disabled = false;
       });
-      */
     });
   </script>
   <script src="assets/js/theme.js"></script>

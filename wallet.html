@@ -44,7 +44,7 @@
   <!-- Sidebar -->
   <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
     <div class="flex items-center justify-between p-6 border-b border-border">
-      <img src="assets/logo-circular.png" alt="MyFigPoint Logo" class="h-20 w-20 rounded-full object-contain mx-auto mb-4">
+      <img src="assets/logo-circular.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
       <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
         <i class="fas fa-times text-xl"></i>
       </button>
@@ -98,19 +98,19 @@
   <!-- Main Content -->
   <div class="flex-1 lg:ml-64">
     <header class="bg-card backdrop-blur-xl border-b border-border sticky top-0 z-40">
-      <div class="flex items-center justify-between px-6 py-6">
+      <div class="flex items-center justify-between px-3 py-1.5">
         <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
           <i class="fas fa-bars text-xl"></i>
         </button>
         <div>
-          <h1 class="text-4xl font-black text-primary">
+          <h1 class="text-2xl md:text-4xl font-black text-primary">
             Transaction History
           </h1>
-          <p class="text-gray-600 dark:text-gray-400 mt-2">Track every dollar earned & withdrawn</p>
+          <p class="text-gray-600 dark:text-gray-400 mt-2 text-sm md:text-base">Track every dollar earned & withdrawn</p>
         </div>
         <div class="text-right">
-          <p class="text-2xl font-bold">Total Balance</p>
-          <p class="text-5xl font-bold text-green-400">$2,850.<span class="text-3xl">75</span></p>
+          <p class="text-lg md:text-2xl font-bold">Total Balance</p>
+          <p class="text-3xl md:text-5xl font-bold text-green-400">$2,850.<span class="text-xl md:text-3xl">75</span></p>
         </div>
       </div>
     </header>

@@ -11,15 +11,19 @@ bcrypt = Bcrypt()
 jwt = JWTManager()
 
 def create_app():
-    # Use appropriate directory for Vercel deployments since it's writable
+    # Use appropriate directory for deployments since it's writable
     static_folder = '../assets'
     database_url = os.environ.get('DATABASE_URL') or 'sqlite:///myfigpoint.db'
     
+    # Handle different deployment environments
     if os.environ.get('VERCEL') == '1':
         static_folder = os.path.abspath('../assets')
         # Use /tmp directory for database in Vercel if not already specified
         if not os.environ.get('DATABASE_URL'):
             database_url = 'sqlite:////tmp/myfigpoint.db'
+    elif os.environ.get('RENDER') == 'true':
+        # Render provides a PORT environment variable
+        pass  # Database URL should come from environment
     
     app = Flask(__name__, static_folder=static_folder)
     
@@ -28,6 +32,12 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = database_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY') or 'jwt-secret-string-change-in-production'
+    
+    # Handle Render deployment
+    if os.environ.get('RENDER') == 'true':
+        # Trust the proxy for HTTPS
+        app.config['PREFERRED_URL_SCHEME'] = 'https'
+        app.config['SERVER_NAME'] = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
     
     # Initialize extensions with app
     db.init_app(app)
@@ -39,6 +49,11 @@ def create_app():
     @app.route('/')
     def index():
         return send_from_directory('../', 'index.html')
+    
+    # Health check endpoint for Render
+    @app.route('/healthz')
+    def healthz():
+        return {'status': 'ok', 'message': 'MyFigPoint is running on Render!'}
     
     @app.route('/health')
     def health_check():
@@ -56,6 +71,15 @@ def create_app():
                 return send_from_directory('../', filename)
             return send_from_directory('../assets', filename)
     
+    # Serve the main index.html for all non-API routes (for SPA)
+    @app.errorhandler(404)
+    def not_found(e):
+        # If the request is for an API route, return JSON error
+        if request.path.startswith('/api/'):
+            return jsonify({'message': 'Endpoint not found'}), 404
+        # Otherwise, serve the main index.html (for SPA routing)
+        return send_from_directory('../', 'index.html')
+    
     # Register blueprints
     from backend.routes.auth import auth_bp
     from backend.routes.users import users_bp
@@ -64,6 +88,10 @@ def create_app():
     from backend.routes.transactions import transactions_bp
     from backend.routes.referrals import referrals_bp
     from backend.routes.admin import admin_bp
+    from backend.routes.notifications import notifications_bp
+    from backend.routes.support import support_bp
+    from backend.routes.partners import partners_bp
+    from backend.routes.tasks import tasks_bp
     
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(users_bp, url_prefix='/api/users')
@@ -72,6 +100,10 @@ def create_app():
     app.register_blueprint(transactions_bp, url_prefix='/api/transactions')
     app.register_blueprint(referrals_bp, url_prefix='/api/referrals')
     app.register_blueprint(admin_bp, url_prefix='/api/admin')
+    app.register_blueprint(notifications_bp, url_prefix='/api/notifications')
+    app.register_blueprint(support_bp, url_prefix='/api/support')
+    app.register_blueprint(partners_bp, url_prefix='/api/partners')
+    app.register_blueprint(tasks_bp, url_prefix='/api/tasks')
     
     # Create tables
     with app.app_context():

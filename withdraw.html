@@ -42,7 +42,7 @@
   <!-- Sidebar -->
   <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900/90 backdrop-blur-xl border-r border-gray-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
     <div class="flex items-center justify-between p-6 border-b border-gray-800">
-      <img src="assets/logo-circular.png" alt="MyFigPoint Logo" class="h-20 w-20 rounded-full object-contain mx-auto mb-4">
+      <img src="assets/logo-circular.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
       <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
         <i class="fas fa-times text-xl"></i>
       </button>
@@ -183,12 +183,36 @@
 
             <div id="methodDetails">
               <!-- Bank Details -->
-              <div>
+              <div id="bankDetails">
                 <label class="block text-xl font-bold mb-4">Bank Name</label>
-                <input type="text" placeholder="e.g., Chase Bank" class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl px-8 py-6 text-xl focus:outline-none focus:border-indigo-500 transition" />
+                <input type="text" id="bankName" placeholder="e.g., Chase Bank" class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl px-8 py-6 text-xl focus:outline-none focus:border-indigo-500 transition" />
                 
                 <label class="block text-xl font-bold mt-6 mb-4">Account Number</label>
-                <input type="text" placeholder="••••••••4321" class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl px-8 py-6 text-xl focus:outline-none focus:border-indigo-500 transition" />
+                <input type="text" id="accountNumber" placeholder="••••••••4321" class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl px-8 py-6 text-xl focus:outline-none focus:border-indigo-500 transition" />
+              </div>
+              
+              <!-- Crypto Details -->
+              <div id="cryptoDetails" class="hidden">
+                <label class="block text-xl font-bold mb-4">Cryptocurrency Address</label>
+                <input type="text" id="cryptoAddress" placeholder="e.g., 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl px-8 py-6 text-xl focus:outline-none focus:border-indigo-500 transition" />
+                
+                <label class="block text-xl font-bold mt-6 mb-4">Currency</label>
+                <select id="cryptoCurrency" class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl px-8 py-6 text-xl focus:outline-none focus:border-indigo-500 transition">
+                  <option value="bitcoin">Bitcoin (BTC)</option>
+                  <option value="ethereum">Ethereum (ETH)</option>
+                  <option value="litecoin">Litecoin (LTC)</option>
+                </select>
+              </div>
+              
+              <!-- Gift Card Details -->
+              <div id="giftCardDetails" class="hidden">
+                <label class="block text-xl font-bold mb-4">Gift Card Type</label>
+                <select id="giftCardType" class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl px-8 py-6 text-xl focus:outline-none focus:border-indigo-500 transition">
+                  <option value="amazon">Amazon</option>
+                  <option value="steam">Steam</option>
+                  <option value="google_play">Google Play</option>
+                  <option value="itunes">iTunes</option>
+                </select>
               </div>
             </div>
           </div>
@@ -213,14 +237,26 @@
   <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/70 z-40 hidden lg:hidden"></div>
 
   <script>
+    // Track current selected method
+    let currentMethod = 'bank';
+    
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('overlay').classList.toggle('hidden');
     }
 
     function selectMethod(method) {
+      // Update UI
       document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active', 'bg-gradient-to-r', 'from-indigo-600', 'to-purple-600'));
       event.target.closest('button').classList.add('active', 'bg-gradient-to-r', 'from-indigo-600', 'to-purple-600');
+      
+      // Update current method
+      currentMethod = method;
+      
+      // Show/hide method-specific details
+      document.getElementById('bankDetails').classList.toggle('hidden', method !== 'bank');
+      document.getElementById('cryptoDetails').classList.toggle('hidden', method !== 'crypto');
+      document.getElementById('giftCardDetails').classList.toggle('hidden', method !== 'gift');
     }
 
     function updateUSD() {
@@ -250,17 +286,35 @@
       submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-4"></i> Processing...';
       submitButton.disabled = true;
 
-      fetch('/api/points/convert', {
+      // Prepare request data based on selected method
+      const requestData = { points: parseInt(points) };
+      
+      if (currentMethod === 'bank') {
+        requestData.method = 'bank';
+        requestData.bank_name = document.getElementById('bankName').value;
+        requestData.account_number = document.getElementById('accountNumber').value;
+      } else if (currentMethod === 'paypal') {
+        requestData.method = 'paypal';
+      } else if (currentMethod === 'crypto') {
+        requestData.method = 'crypto';
+        requestData.crypto_address = document.getElementById('cryptoAddress').value;
+        requestData.crypto_currency = document.getElementById('cryptoCurrency').value;
+      } else if (currentMethod === 'gift') {
+        requestData.method = 'gift_card';
+        requestData.gift_card_type = document.getElementById('giftCardType').value;
+      }
+
+      fetch('/api/points/withdraw', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + token
         },
-        body: JSON.stringify({ points: parseInt(points) })
+        body: JSON.stringify(requestData)
       })
       .then(response => response.json())
       .then(data => {
-        if (data.message && data.message.includes('Successfully')) {
+        if (data.message && data.message.includes('successfully')) {
           confetti({
             particleCount: 300,
             spread: 100,
@@ -274,8 +328,8 @@
             document.getElementById('usdValue').textContent = '$0.00 USD';
             
             // Update balance display
-            document.querySelector('header .text-right .text-6xl').textContent = '0.00';
-            document.querySelector('header .text-right .text-3xl').textContent = '$0.00 USD';
+            document.querySelector('header .text-right .text-6xl').innerHTML = data.new_balance.toFixed(2) + '<span class="text-4xl"> pts</span>';
+            document.querySelector('header .text-right .text-3xl').textContent = '$' + (data.new_balance * 0.1).toFixed(2) + ' USD';
           }, 1000);
         } else {
           alert('Withdrawal failed: ' + (data.message || 'Unknown error'));
