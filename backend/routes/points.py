@@ -89,8 +89,18 @@ def withdraw_points():
             return jsonify({'message': f'Invalid payment method. Valid methods: {", ".join(valid_methods)}'}), 400
 
         # Check if user has required details based on payment method
-        if method == 'bank' and (not user.bank_name or not user.account_name or not user.account_number):
-            return jsonify({'message': 'Please complete your bank details in profile settings before withdrawing via bank transfer'}), 400
+        if method == 'bank':
+            # Update user's banking details if provided in the request
+            if data.get('bank_name'):
+                user.bank_name = data['bank_name']
+            if data.get('account_holder_name'):
+                user.account_name = data['account_holder_name']
+            if data.get('account_number'):
+                user.account_number = data['account_number']
+            
+            # Validate that user has all required banking details
+            if not user.bank_name or not user.account_name or not user.account_number:
+                return jsonify({'message': 'Please complete your bank details in profile settings before withdrawing via bank transfer'}), 400
         elif method == 'paypal' and not user.email:
             return jsonify({'message': 'Please verify your email address for PayPal withdrawals'}), 400
         elif method == 'crypto' and not data.get('crypto_address'):
@@ -118,7 +128,9 @@ def withdraw_points():
 
         # Create pending withdrawal transaction
         description = f"Withdrawal request: {points} points (${usd_amount:.2f}) via {method}"
-        if method == 'crypto':
+        if method == 'bank':
+            description += f" to {user.bank_name} account ending in {user.account_number[-4:] if user.account_number else '****'}"
+        elif method == 'crypto':
             crypto_address = data.get('crypto_address', 'address')
             if not crypto_address or not isinstance(crypto_address, str) or len(crypto_address) < 10:
                 # Rollback changes

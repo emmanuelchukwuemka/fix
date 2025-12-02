@@ -178,6 +178,39 @@
         </div>
 
         <form id="withdrawForm" class="space-y-8">
+          <!-- Banking Details Section -->
+          <div class="bg-gray-700/50 rounded-2xl p-6 mb-8">
+            <h3 class="text-2xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-university text-yellow-400"></i> Banking Details</h3>
+            <p class="text-gray-300 mb-6">Please enter your banking information before withdrawing funds. This information will be securely stored for future withdrawals.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-lg font-bold mb-3">Bank Name *</label>
+                <input type="text" id="bankName" placeholder="e.g., Chase Bank" class="w-full bg-gray-800 border border-gray-600 rounded-xl px-6 py-4 text-lg focus:outline-none focus:border-yellow-500 transition" required />
+              </div>
+              
+              <div>
+                <label class="block text-lg font-bold mb-3">Account Holder Name *</label>
+                <input type="text" id="accountHolderName" placeholder="e.g., John Doe" class="w-full bg-gray-800 border border-gray-600 rounded-xl px-6 py-4 text-lg focus:outline-none focus:border-yellow-500 transition" required />
+              </div>
+              
+              <div>
+                <label class="block text-lg font-bold mb-3">Account Number *</label>
+                <input type="text" id="accountNumber" placeholder="••••••••4321" class="w-full bg-gray-800 border border-gray-600 rounded-xl px-6 py-4 text-lg focus:outline-none focus:border-yellow-500 transition" required />
+              </div>
+              
+              <div>
+                <label class="block text-lg font-bold mb-3">Routing Number</label>
+                <input type="text" id="routingNumber" placeholder="e.g., 021000021" class="w-full bg-gray-800 border border-gray-600 rounded-xl px-6 py-4 text-lg focus:outline-none focus:border-yellow-500 transition" />
+              </div>
+            </div>
+            
+            <div class="mt-6 flex items-center">
+              <input type="checkbox" id="saveBankDetails" class="w-5 h-5 text-yellow-500 rounded focus:ring-yellow-400">
+              <label for="saveBankDetails" class="ml-2 text-lg">Save these banking details for future withdrawals</label>
+            </div>
+          </div>
+          
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <label class="block text-xl font-bold mb-4">Points to Withdraw</label>
@@ -188,11 +221,7 @@
             <div id="methodDetails">
               <!-- Bank Details -->
               <div id="bankDetails">
-                <label class="block text-xl font-bold mb-4">Bank Name</label>
-                <input type="text" id="bankName" placeholder="e.g., Chase Bank" class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl px-8 py-6 text-xl focus:outline-none focus:border-indigo-500 transition" />
-                
-                <label class="block text-xl font-bold mt-6 mb-4">Account Number</label>
-                <input type="text" id="accountNumber" placeholder="••••••••4321" class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl px-8 py-6 text-xl focus:outline-none focus:border-indigo-500 transition" />
+                <p class="text-gray-300 mb-4">Your banking details will be used for this withdrawal.</p>
               </div>
               
               <!-- Crypto Details -->
@@ -261,6 +290,12 @@
       document.getElementById('bankDetails').classList.toggle('hidden', method !== 'bank');
       document.getElementById('cryptoDetails').classList.toggle('hidden', method !== 'crypto');
       document.getElementById('giftCardDetails').classList.toggle('hidden', method !== 'gift');
+      
+      // Show/hide banking details section based on method
+      const bankingDetailsSection = document.querySelector('.bg-gray-700/50.rounded-2xl.p-6.mb-8');
+      if (bankingDetailsSection) {
+        bankingDetailsSection.style.display = method === 'bank' ? 'block' : 'none';
+      }
     }
 
     function updateUSD() {
@@ -275,6 +310,18 @@
       if (!points || points < 500) {
         alert('Minimum withdrawal is 500 points');
         return;
+      }
+      
+      // Validate banking details if bank transfer is selected
+      if (currentMethod === 'bank') {
+        const bankName = document.getElementById('bankName').value;
+        const accountHolderName = document.getElementById('accountHolderName').value;
+        const accountNumber = document.getElementById('accountNumber').value;
+        
+        if (!bankName || !accountHolderName || !accountNumber) {
+          alert('Please fill in all required banking details');
+          return;
+        }
       }
       
       const token = localStorage.getItem('access_token');
@@ -296,7 +343,24 @@
       if (currentMethod === 'bank') {
         requestData.method = 'bank';
         requestData.bank_name = document.getElementById('bankName').value;
+        requestData.account_holder_name = document.getElementById('accountHolderName').value;
         requestData.account_number = document.getElementById('accountNumber').value;
+        requestData.routing_number = document.getElementById('routingNumber').value;
+        
+        // Save banking details if checkbox is checked
+        if (document.getElementById('saveBankDetails').checked) {
+          saveBankDetails(token).then(success => {
+            if (success) {
+              // Proceed with withdrawal after saving details
+              processWithdrawal(requestData, token, submitButton, originalText);
+            } else {
+              // Reset button if saving failed
+              submitButton.innerHTML = originalText;
+              submitButton.disabled = false;
+            }
+          });
+          return; // Don't proceed with withdrawal immediately
+        }
       } else if (currentMethod === 'paypal') {
         requestData.method = 'paypal';
       } else if (currentMethod === 'crypto') {
@@ -308,6 +372,27 @@
         requestData.gift_card_type = document.getElementById('giftCardType').value;
       }
 
+      // Save banking details if checkbox is checked
+        if (currentMethod === 'bank' && document.getElementById('saveBankDetails').checked) {
+          saveBankDetails(token).then(success => {
+            if (success) {
+              // Proceed with withdrawal after saving details
+              processWithdrawal(requestData, token, submitButton, originalText);
+            } else {
+              // Reset button if saving failed
+              submitButton.innerHTML = originalText;
+              submitButton.disabled = false;
+            }
+          });
+          return; // Don't proceed with withdrawal immediately
+        } else {
+          // Process withdrawal immediately
+          processWithdrawal(requestData, token, submitButton, originalText);
+        }
+    });
+    
+    // Process the actual withdrawal request
+    function processWithdrawal(requestData, token, submitButton, originalText) {
       fetch('/api/points/withdraw', {
         method: 'POST',
         headers: {
@@ -328,7 +413,7 @@
 
           setTimeout(() => {
             alert(data.message);
-            this.reset();
+            document.getElementById('withdrawForm').reset();
             document.getElementById('usdValue').textContent = '$0.00 USD';
             
             // Update balance display
@@ -348,7 +433,75 @@
         submitButton.innerHTML = originalText;
         submitButton.disabled = false;
       });
-    });
+    }
+    
+    // Save banking details to user profile
+    function saveBankDetails(token) {
+      const bankData = {
+        bank_name: document.getElementById('bankName').value,
+        account_name: document.getElementById('accountHolderName').value,
+        account_number: document.getElementById('accountNumber').value
+      };
+      
+      return fetch('/api/users/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify(bankData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message && data.message.includes('success')) {
+          console.log('Banking details saved successfully');
+          // Show success message to user
+          const successMessage = document.createElement('div');
+          successMessage.className = 'mt-4 p-3 bg-green-600 text-white rounded-lg text-center';
+          successMessage.textContent = 'Banking details saved successfully!';
+          document.querySelector('#withdrawForm').prepend(successMessage);
+          
+          // Remove message after 3 seconds
+          setTimeout(() => {
+            if (successMessage.parentNode) {
+              successMessage.parentNode.removeChild(successMessage);
+            }
+          }, 3000);
+          return true;
+        } else {
+          console.error('Failed to save banking details:', data.message);
+          // Show error message to user
+          const errorMessage = document.createElement('div');
+          errorMessage.className = 'mt-4 p-3 bg-red-600 text-white rounded-lg text-center';
+          errorMessage.textContent = 'Failed to save banking details: ' + (data.message || 'Unknown error');
+          document.querySelector('#withdrawForm').prepend(errorMessage);
+          
+          // Remove message after 3 seconds
+          setTimeout(() => {
+            if (errorMessage.parentNode) {
+              errorMessage.parentNode.removeChild(errorMessage);
+            }
+          }, 3000);
+          return false;
+        }
+      })
+      .catch(error => {
+        console.error('Error saving banking details:', error);
+        // Show error message to user
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'mt-4 p-3 bg-red-600 text-white rounded-lg text-center';
+        errorMessage.textContent = 'Error saving banking details. Please try again.';
+        document.querySelector('#withdrawForm').prepend(errorMessage);
+        
+        // Remove message after 3 seconds
+        setTimeout(() => {
+          if (errorMessage.parentNode) {
+            errorMessage.parentNode.removeChild(errorMessage);
+          }
+        }, 3000);
+        return false;
+      });
+    }
     
     // Fetch user points balance when page loads
     document.addEventListener('DOMContentLoaded', function() {
@@ -390,5 +543,10 @@
 
   </script>
   <script src="assets/js/theme.js"></script>
+  
+  <!-- Fixed Theme Toggle Button -->
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+    <i class="fas fa-moon"></i>
+  </button>
 </body>
 </html>

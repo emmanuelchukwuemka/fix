@@ -33,10 +33,6 @@
 </head>
 
 <body class="bg-background text-text overflow-auto">
-  <!-- Theme Toggle Button -->
-  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
-    <i class="fas fa-moon"></i>
-  </button>
 
   <!-- Background Gradient Orbs -->
   <div class="fixed inset-0 -z-10">
@@ -52,6 +48,7 @@
         <a href="#features" class="hover:text-primary transition text-sm">Features</a>
         <a href="#how" class="hover:text-primary transition text-sm">How it Works</a>
         <a href="#testimonials" class="hover:text-primary transition text-sm">Testimonials</a>
+        <a href="about.html" class="hover:text-primary transition text-sm">About</a>
         <a href="signup.html" class="bg-primary hover:bg-orange-700 px-3 py-1.5 rounded-full font-medium transition text-sm">Get Started</a>
       </div>
       <button id="mobileMenuButton" class="md:hidden p-2 rounded-lg text-2xl text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200 ease-in-out" aria-label="Toggle navigation menu">
@@ -65,6 +62,7 @@
         <a href="#features" class="block py-1.5 px-3 rounded-lg hover:bg-gray-800 hover:text-primary transition text-sm" onclick="toggleMobileMenu()">Features</a>
         <a href="#how" class="block py-1.5 px-3 rounded-lg hover:bg-gray-800 hover:text-primary transition text-sm" onclick="toggleMobileMenu()">How it Works</a>
         <a href="#testimonials" class="block py-1.5 px-3 rounded-lg hover:bg-gray-800 hover:text-primary transition text-sm" onclick="toggleMobileMenu()">Testimonials</a>
+        <a href="about.html" class="block py-1.5 px-3 rounded-lg hover:bg-gray-800 hover:text-primary transition text-sm" onclick="toggleMobileMenu()">About</a>
         <a href="signup.html" class="block bg-primary hover:bg-orange-700 px-3 py-1.5 rounded-full font-medium transition text-center text-sm" onclick="toggleMobileMenu()">Get Started</a>
         <a href="login.html" class="block text-center py-1.5 px-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition text-sm" onclick="toggleMobileMenu()">Log In</a>
       </div>
@@ -203,6 +201,69 @@
     </div>
   </section>
 
+  <!-- About MyFigPoint -->
+  <section class="py-24 px-6 bg-gradient-to-br from-background to-card">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="text-4xl md:text-5xl font-bold">About MyFigPoint</h2>
+        <p class="mt-4 text-xl text-gray-600 dark:text-gray-400">Learn more about our mission and policies</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-10">
+        <div class="about-card rounded-2xl p-8" data-aos="fade-up" data-aos-delay="100">
+          <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
+            <div class="about-icon">
+              <i class="fas fa-building"></i>
+            </div>
+            Our Company
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400 mb-6">
+            MyFigPoint is an independent loyalty and distributor-reward platform designed to help users earn, track, and redeem reward points from participating companies across Africa.
+          </p>
+          <p class="text-gray-600 dark:text-gray-400 mb-6">
+            We empower brands to appreciate loyalty, motivate performance, and reward genuine engagement through a simple and transparent digital system.
+          </p>
+          <div class="flex items-start gap-4 mt-6 p-4 bg-card rounded-xl border border-border">
+            <i class="fas fa-bullseye text-primary mt-1"></i>
+            <div>
+              <span class="font-medium">Our Mission:</span>
+              <p class="text-gray-600 dark:text-gray-400 mt-1">To build Africa's most trusted digital reward ecosystem</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-card rounded-2xl p-8" data-aos="fade-up" data-aos-delay="200">
+          <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
+            <div class="about-icon">
+              <i class="fas fa-file-contract"></i>
+            </div>
+            Policies & Information
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400 mb-6">
+            We operate with full transparency in our reward processing and payout policies. MyFigPoint acts as a facilitator between users and brands.
+          </p>
+          <p class="text-gray-600 dark:text-gray-400 mb-6">
+            All rewards are fulfilled directly by the issuing brand, not by MyFigPoint.
+          </p>
+          <div class="flex items-start gap-4 mt-6 p-4 bg-card rounded-xl border border-border">
+            <i class="fas fa-exclamation-circle text-primary mt-1"></i>
+            <div>
+              <span class="font-medium">Key Policy:</span>
+              <p class="text-gray-600 dark:text-gray-400 mt-1">Points once redeemed cannot be reversed or refunded</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-12">
+        <a href="about.html" class="about-link">
+          View Full Company Profile & Policies
+          <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA Final -->
   <section class="py-24 px-6 text-center">
     <div class="max-w-4xl mx-auto">
@@ -278,5 +339,10 @@
     });
   </script>
   <script src="assets/js/theme.js"></script>
+  
+  <!-- Fixed Theme Toggle Button -->
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+    <i class="fas fa-moon"></i>
+  </button>
 </body>
 </html>

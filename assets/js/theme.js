@@ -1,7 +1,6 @@
 // Theme toggle functionality
 function initTheme() {
-  const themeToggle = document.getElementById('themeToggle');
-  const icon = themeToggle ? themeToggle.querySelector('i') : null;
+  const themeToggles = document.querySelectorAll('#themeToggle, #themeToggleMobile');
   
   // Check for saved theme or default to light mode
   const savedTheme = localStorage.getItem('theme');
@@ -9,42 +8,55 @@ function initTheme() {
   
   if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
     document.body.classList.add('dark-mode');
-    if (icon) {
-      icon.classList.remove('fa-moon');
-      icon.classList.add('fa-sun');
-    }
+    themeToggles.forEach(toggle => {
+      const icon = toggle ? toggle.querySelector('i') : null;
+      if (icon) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      }
+    });
   } else {
     document.body.classList.remove('dark-mode');
-    if (icon) {
-      icon.classList.remove('fa-sun');
-      icon.classList.add('fa-moon');
-    }
+    themeToggles.forEach(toggle => {
+      const icon = toggle ? toggle.querySelector('i') : null;
+      if (icon) {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      }
+    });
   }
   
-  // Make sure the button is visible and properly sized
-  if (themeToggle) {
-    themeToggle.classList.add('theme-toggle-visible');
-  }
+  // Make sure the buttons are visible and properly sized
+  themeToggles.forEach(toggle => {
+    if (toggle) {
+      toggle.classList.add('theme-toggle-visible');
+    }
+  });
 }
 
 function toggleTheme() {
-  const themeToggle = document.getElementById('themeToggle');
-  const icon = themeToggle ? themeToggle.querySelector('i') : null;
+  const themeToggles = document.querySelectorAll('#themeToggle, #themeToggleMobile');
   
   document.body.classList.toggle('dark-mode');
   
   if (document.body.classList.contains('dark-mode')) {
     localStorage.setItem('theme', 'dark');
-    if (icon) {
-      icon.classList.remove('fa-moon');
-      icon.classList.add('fa-sun');
-    }
+    themeToggles.forEach(toggle => {
+      const icon = toggle ? toggle.querySelector('i') : null;
+      if (icon) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      }
+    });
   } else {
     localStorage.setItem('theme', 'light');
-    if (icon) {
-      icon.classList.remove('fa-sun');
-      icon.classList.add('fa-moon');
-    }
+    themeToggles.forEach(toggle => {
+      const icon = toggle ? toggle.querySelector('i') : null;
+      if (icon) {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      }
+    });
   }
 }
 
@@ -52,11 +64,13 @@ function toggleTheme() {
 document.addEventListener('DOMContentLoaded', function() {
   initTheme();
   
-  // Add event listener to theme toggle button
-  const themeToggle = document.getElementById('themeToggle');
-  if (themeToggle) {
-    themeToggle.addEventListener('click', toggleTheme);
-  }
+  // Add event listeners to theme toggle buttons
+  const themeToggles = document.querySelectorAll('#themeToggle, #themeToggleMobile');
+  themeToggles.forEach(toggle => {
+    if (toggle) {
+      toggle.addEventListener('click', toggleTheme);
+    }
+  });
 });
 
 // Also initialize theme when the page is loaded (for SPA-like behavior)

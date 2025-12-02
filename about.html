@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us - MyFigPoint</title>
+  <meta name="description" content="Learn more about MyFigPoint, our mission, vision, and reward policies." />
+
+  <!-- Tailwind CSS v3 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            primary: '#FD6606',
+            secondary: '#012E03'
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="assets/css/app.css" />
+</head>
+
+<body class="bg-background text-text overflow-auto">
+
+  <!-- Background Gradient Orbs -->
+  <div class="fixed inset-0 -z-10">
+    <div
+      class="absolute top-0 left-0 w-96 h-96 bg-primary rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse">
+    </div>
+    <div
+      class="absolute bottom-0 right-0 w-96 h-96 bg-secondary rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse delay-1000">
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg bg-card border-b border-border">
+    <div class="max-w-7xl mx-auto px-4 py-1.5 flex justify-between items-center">
+      <a href="index.html">
+        <img src="assets/logo.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
+      </a>
+      <div class="hidden md:flex items-center space-x-4">
+        <a href="index.html" class="hover:text-primary transition text-sm">Home</a>
+        <a href="index.html#features" class="hover:text-primary transition text-sm">Features</a>
+        <a href="index.html#how" class="hover:text-primary transition text-sm">How it Works</a>
+        <a href="index.html#testimonials" class="hover:text-primary transition text-sm">Testimonials</a>
+        <a href="about.html" class="text-primary font-medium transition text-sm">About</a>
+        <a href="signup.html"
+          class="bg-primary hover:bg-orange-700 px-3 py-1.5 rounded-full font-medium transition text-sm">Get Started</a>
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+      <button id="mobileMenuButton"
+        class="md:hidden p-2 rounded-lg text-2xl text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200 ease-in-out"
+        aria-label="Toggle navigation menu">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden md:hidden bg-card backdrop-blur-lg border-t border-border">
+      <div class="px-3 py-2 space-y-2">
+        <a href="index.html"
+          class="block py-1.5 px-3 rounded-lg hover:bg-gray-800 hover:text-primary transition text-sm"
+          onclick="toggleMobileMenu()">Home</a>
+        <a href="index.html#features"
+          class="block py-1.5 px-3 rounded-lg hover:bg-gray-800 hover:text-primary transition text-sm"
+          onclick="toggleMobileMenu()">Features</a>
+        <a href="index.html#how"
+          class="block py-1.5 px-3 rounded-lg hover:bg-gray-800 hover:text-primary transition text-sm"
+          onclick="toggleMobileMenu()">How it Works</a>
+        <a href="index.html#testimonials"
+          class="block py-1.5 px-3 rounded-lg hover:bg-gray-800 hover:text-primary transition text-sm"
+          onclick="toggleMobileMenu()">Testimonials</a>
+        <a href="about.html"
+          class="block py-1.5 px-3 rounded-lg hover:bg-gray-800 hover:text-primary transition text-sm"
+          onclick="toggleMobileMenu()">About</a>
+        <a href="signup.html"
+          class="block bg-primary hover:bg-orange-700 px-3 py-1.5 rounded-full font-medium transition text-center text-sm"
+          onclick="toggleMobileMenu()">Get Started</a>
+        <a href="login.html"
+          class="block text-center py-1.5 px-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition text-sm"
+          onclick="toggleMobileMenu()">Log In</a>
+        <div class="flex justify-center pt-2">
+          <button id="themeToggleMobile" class="theme-toggle" aria-label="Toggle theme">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="pt-20">
+    <!-- About & Policy – Beautiful Grid with Smooth Transition Slides -->
+    <section id="about" class="py-20">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16" data-aos="fade-up">
+          <h2
+            class="text-4xl md:text-5xl font-bold mode-gradient bg-clip-text text-transparent">
+            Official Company Profile & Reward Policy
+          </h2>
+          <p class="text-white mt-4 text-lg">Date: October 8, 2025 • Operated by BlueTech Resources Ltd</p>
+        </div>
+
+        <!-- Main Grid Layout -->
+        <div class="grid lg:grid-cols-2 gap-12">
+
+          <!-- COLUMN 1: ABOUT MYFIGPOINT -->
+          <div class="space-y-8" data-aos="fade-right">
+            <!-- Intro Card -->
+            <div class="bg-[#012E03] backdrop-blur-2xl border border-green-800 rounded-3xl p-8 shadow-xl">
+              <h3 class="text-3xl font-bold text-white mb-6 flex items-center gap-3">
+                <i class="fas fa-info-circle text-primary"></i> ABOUT MYFIGPOINT
+              </h3>
+              <p class="text-lg leading-relaxed text-white mb-6">
+                MyFigPoint is an independent loyalty and distributor-reward platform designed to help users earn, track,
+                and redeem reward points from participating companies across Africa.
+              </p>
+              <p class="text-lg leading-relaxed text-white mb-6">
+                We empower brands to appreciate loyalty, motivate performance, and reward genuine engagement — all
+                through a simple and transparent digital system.
+              </p>
+              <div class="bg-[#012E03] p-6 rounded-xl border-l-4 border-green-500">
+                <p class="text-white font-medium">
+                  Unlike traditional systems, MyFigPoint does not handle or transfer money directly. Instead, it
+                  provides a secure platform where users can:
+                </p>
+                <ul class="mt-4 space-y-2 text-white">
+                  <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-400"></i> View their
+                    accumulated points</li>
+                  <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-400"></i> Request product
+                    or cash-equivalent rewards</li>
+                  <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-400"></i> Track
+                    redemption progress</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Mission & Vision Grid -->
+            <div class="grid md:grid-cols-2 gap-6">
+              <div
+                class="bg-[#012E03] backdrop-blur-2xl border border-green-800 rounded-3xl p-6 shadow-xl hover:border-primary transition-colors">
+                <div class="w-12 h-12 bg-[#012E03] rounded-full flex items-center justify-center mb-4">
+                  <i class="fas fa-bullseye text-white text-xl"></i>
+                </div>
+                <h4 class="text-xl font-bold text-white mb-3">Our Mission</h4>
+                <p class="text-white text-sm leading-relaxed">
+                  To build Africa’s most trusted digital reward ecosystem that inspires loyalty, promotes transparency,
+                  and connects brands with their customers through purpose-driven incentives.
+                </p>
+              </div>
+              <div
+                class="bg-[#012E03] backdrop-blur-2xl border border-green-800 rounded-3xl p-6 shadow-xl hover:border-primary transition-colors">
+                <div class="w-12 h-12 bg-[#012E03] rounded-full flex items-center justify-center mb-4">
+                  <i class="fas fa-lightbulb text-white text-xl"></i>
+                </div>
+                <h4 class="text-xl font-bold text-white mb-3">Our Vision</h4>
+                <p class="text-white text-sm leading-relaxed">
+                  To empower individuals to turn passion into purpose through digital recognition, loyalty, and reward
+                  innovation.
+                </p>
+              </div>
+            </div>
+
+            <!-- How It Works Card -->
+            <div class="bg-[#012E03] backdrop-blur-2xl border border-green-800 rounded-3xl p-8 shadow-xl">
+              <h4 class="text-2xl font-bold text-white mb-6">How It Works</h4>
+              <div class="space-y-6">
+                <div class="flex gap-4">
+                  <div
+                    class="flex-shrink-0 w-10 h-10 bg-primary rounded-full flex items-center justify-center font-bold text-white">
+                    1</div>
+                  <div>
+                    <h5 class="text-lg font-bold text-white">Earn Points</h5>
+                    <p class="text-white text-sm">Users earn points whenever they buy from or engage with
+                      participating brands.</p>
+                  </div>
+                </div>
+                <div class="flex gap-4">
+                  <div
+                    class="flex-shrink-0 w-10 h-10 bg-primary rounded-full flex items-center justify-center font-bold text-white">
+                    2</div>
+                  <div>
+                    <h5 class="text-lg font-bold text-white">Track Progress</h5>
+                    <p class="text-white text-sm">All points are displayed in one unified dashboard for easy
+                      monitoring.</p>
+                  </div>
+                </div>
+                <div class="flex gap-4">
+                  <div
+                    class="flex-shrink-0 w-10 h-10 bg-primary rounded-full flex items-center justify-center font-bold text-white">
+                    3</div>
+                  <div>
+                    <h5 class="text-lg font-bold text-white">Redeem Rewards</h5>
+                    <p class="text-white text-sm">Users can request gifts, airtime, or cash-equivalent rewards.
+                      Requests are sent to the brand for fulfillment.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Powered By -->
+            <div
+              class="bg-gradient-to-r from-[#012E03] to-[#012E03] border border-green-800 rounded-2xl p-6 text-center">
+              <p class="text-white">
+                <span class="font-bold text-white">Powered by BlueTech Resources Ltd</span>, a technology company based
+                in United States focused on developing digital systems that connect people, products, and opportunities
+                across Africa.
+              </p>
+            </div>
+          </div>
+
+          <!-- COLUMN 2: POLICY -->
+          <div class="space-y-8" data-aos="fade-left">
+            <!-- Policy Header & Intro -->
+            <div class="bg-[#012E03] backdrop-blur-2xl border border-green-800 rounded-3xl p-8 shadow-xl">
+              <h3 class="text-3xl font-bold text-white mb-6 flex items-center gap-3">
+                <i class="fas fa-file-contract text-primary"></i> REWARD POLICY
+              </h3>
+
+              <div class="space-y-6">
+                <div>
+                  <h4 class="text-lg font-bold text-white mb-2">1. Purpose</h4>
+                  <p class="text-white text-sm">This policy outlines how MyFigPoint processes reward redemptions and
+                    communicates payout requests to partner companies. It ensures transparency between users, brands,
+                    and the platform.</p>
+                </div>
+                <div>
+                  <h4 class="text-lg font-bold text-white mb-2">2. Nature of Service</h4>
+                  <p class="text-white text-sm">MyFigPoint is a reward-management and communication system, not a
+                    financial institution. It allows users to accumulate points from verified brands and submit
+                    redemption requests for rewards. MyFigPoint itself does not handle, hold, or transfer any funds on
+                    behalf of users or companies.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Redemption Process -->
+            <div class="bg-[#012E03] backdrop-blur-2xl border border-green-800 rounded-3xl p-8 shadow-xl">
+              <h4 class="text-xl font-bold text-white mb-4">3. Redemption Process</h4>
+              <p class="text-white text-sm mb-6">
+                Users submit a redemption request via their dashboard. MyFigPoint collects the required information
+                (e.g., name, user ID, reward type, and bank account details if necessary). This information is forwarded
+                securely to the brand that issued the points for final verification and payout. The brand processes the
+                reward — which may include product delivery, airtime, or direct payment — within 3–7 working days.
+              </p>
+
+              <h5 class="text-sm font-bold text-white uppercase tracking-wider mb-4">Preferred Reward Types</h5>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="bg-[#012E03] p-4 rounded-xl border border-green-800">
+                  <i class="fas fa-box-open text-primary mb-2"></i>
+                  <h6 class="font-bold text-white text-sm">Product Rewards</h6>
+                  <p class="text-xs text-white mt-1">Herbal products, merchandise, gifts.</p>
+                </div>
+                <div class="bg-[#012E03] p-4 rounded-xl border border-green-800">
+                  <i class="fas fa-wifi text-primary mb-2"></i>
+                  <h6 class="font-bold text-white text-sm">Digital Rewards</h6>
+                  <p class="text-xs text-white mt-1">Airtime, data bundles, e-vouchers.</p>
+                </div>
+                <div class="bg-[#012E03] p-4 rounded-xl border border-green-800">
+                  <i class="fas fa-ticket-alt text-primary mb-2"></i>
+                  <h6 class="font-bold text-white text-sm">Service Rewards</h6>
+                  <p class="text-xs text-white mt-1">Discounts, event access, training.</p>
+                </div>
+                <div class="bg-[#012E03] p-4 rounded-xl border border-green-800">
+                  <i class="fas fa-money-bill-wave text-primary mb-2"></i>
+                  <h6 class="font-bold text-white text-sm">Cash-Equivalent</h6>
+                  <p class="text-xs text-white mt-1">Monetary value (if permitted).</p>
+                </div>
+              </div>
+              <p class="text-xs text-white italic mt-4">Note: The availability of specific reward types depends on
+                each participating company’s policy and discretion.</p>
+            </div>
+
+            <!-- Roles & Responsibilities -->
+            <div class="grid sm:grid-cols-2 gap-6">
+              <div class="bg-[#012E03] backdrop-blur-2xl border border-green-800 rounded-3xl p-6 shadow-xl">
+                <h4 class="text-lg font-bold text-white mb-3">4. Role of MyFigPoint</h4>
+                <p class="text-white text-sm">
+                  Acts as a facilitator that bridges users and companies. Provides the digital infrastructure for
+                  tracking and managing points. Does not process payments or store user funds. Once a request is
+                  successfully forwarded to a brand, MyFigPoint’s role in the payout process is complete.
+                </p>
+              </div>
+              <div class="bg-[#012E03] backdrop-blur-2xl border border-green-800 rounded-3xl p-6 shadow-xl">
+                <h4 class="text-lg font-bold text-white mb-3">5. Partner Responsibility</h4>
+                <p class="text-white text-sm">
+                  Each participating brand is fully responsible for verifying, approving, and completing its reward
+                  payouts. All forms of payment or physical reward delivery are done by the respective company, not by
+                  MyFigPoint.
+                </p>
+              </div>
+            </div>
+
+            <!-- Additional Terms (Collapsed/Link) -->
+            <div class="text-center">
+              <a href="#terms"
+                class="inline-flex items-center gap-2 text-primary hover:text-white transition font-medium">
+                View Full Terms & Privacy Policy <i class="fas fa-arrow-down"></i>
+              </a>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Terms & Privacy Section (Below Grid) -->
+        <div id="terms"
+          class="mt-20 max-w-4xl mx-auto bg-[#012E03] backdrop-blur-2xl border border-green-800 rounded-3xl p-10 shadow-xl"
+          data-aos="fade-up">
+          <div class="grid md:grid-cols-2 gap-10">
+            <div>
+              <h3 class="text-2xl font-bold text-white mb-6">TERMS OF USE</h3>
+              <ol class="list-decimal pl-6 space-y-3 text-sm text-white">
+                <li><strong>Acceptance</strong> – By using MyFigPoint, you agree to follow these Terms of Use and all
+                  related policies.</li>
+                <li><strong>User Conduct</strong> – Users must not attempt to manipulate, hack, or misuse the platform.
+                  Creating multiple fake accounts or engaging in fraudulent point activities is strictly prohibited.
+                  MyFigPoint reserves the right to suspend or terminate accounts that violate these rules.</li>
+                <li><strong>Intellectual Property</strong> – All content, logos, and systems on MyFigPoint are the
+                  property of BlueTech Resources Ltd. Unauthorized copying or reverse-engineering is not permitted.</li>
+                <li><strong>Limitation of Liability</strong> – MyFigPoint is not responsible for losses, damages, or
+                  delays caused by partner companies or network failures.</li>
+              </ol>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold text-white mb-6">PRIVACY POLICY</h3>
+              <ol class="list-decimal pl-6 space-y-3 text-sm text-white">
+                <li><strong>Information We Collect</strong> – We collect limited information, including name, email,
+                  points, and activity history, and bank account name and number (only if required for reward
+                  forwarding).</li>
+                <li><strong>How We Use It</strong> – We use this data to manage user accounts, forward reward requests
+                  to the correct brand, and provide customer support and updates.</li>
+                <li><strong>Data Security</strong> – All data is stored securely with encryption. We never sell or share
+                  personal data with unrelated third parties. Only verified partner brands receive necessary details for
+                  reward fulfillment.</li>
+                <li><strong>User Rights</strong> – Users can request correction or deletion of their data by emailing
+                  support@bluetechio.com.</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="text-center pt-8 mt-8 border-t border-green-800">
+            <p class="text-2xl font-bold bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">
+              MyFigPoint — Trusted. Transparent. Reward-Driven.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-card border-t border-border py-12 px-6">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-8 text-center md:text-left">
+      <div>
+        <img src="assets/logo.png" alt="MyFigPoint Logo" class="h-12 w-auto">
+      </div>
+      <div>
+        <h4 class="font-semibold mb-4">Company</h4>
+        <ul class="space-y-2 text-gray-600 dark:text-gray-400">
+          <li><a href="about.html" class="hover:text-primary">About</a></li>
+          <li><a href="careers.html" class="hover:text-primary">Careers</a></li>
+          <li><a href="blog.html" class="hover:text-primary">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-4">Support</h4>
+        <ul class="space-y-2 text-gray-600 dark:text-gray-400">
+          <li><a href="support.html" class="hover:text-primary">Help Center</a></li>
+          <li><a href="contact.html" class="hover:text-primary">Contact</a></li>
+          <li><a href="status.html" class="hover:text-primary">Status</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-4">Legal</h4>
+        <ul class="space-y-2 text-gray-600 dark:text-gray-400">
+          <li><a href="terms.html" class="hover:text-primary">Terms</a></li>
+          <li><a href="privacy.html" class="hover:text-primary">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 text-center text-gray-600 dark:text-gray-400 text-sm">
+      © 2025 MyFigPoint. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    // AOS initialization
+    AOS.init({ duration: 800, once: true });
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const button = document.getElementById('mobileMenuButton');
+
+      menu.classList.toggle('hidden');
+
+      // Change icon based on state
+      if (menu.classList.contains('hidden')) {
+        button.innerHTML = '<i class="fas fa-bars"></i>';
+      } else {
+        button.innerHTML = '<i class="fas fa-times"></i>';
+      }
+    }
+
+    // Add event listener to mobile menu button
+    document.addEventListener('DOMContentLoaded', function () {
+      const mobileMenuButton = document.getElementById('mobileMenuButton');
+      if (mobileMenuButton) {
+        mobileMenuButton.addEventListener('click', toggleMobileMenu);
+      }
+    });
+  </script>
+  <script src="assets/js/theme.js"></script>
+</body>
+
+</html>

@@ -35,10 +35,6 @@
 </head>
 
 <body class="bg-background text-text overflow-auto">
-  <!-- Theme Toggle Button -->
-  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
-    <i class="fas fa-moon"></i>
-  </button>
 
   <!-- Animated Background Orbs -->
   <div class="absolute inset-0 -z-10">
@@ -124,6 +120,13 @@
         </button>
       </form>
 
+      <!-- Theme Toggle -->
+      <div class="flex justify-center mt-6">
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+
       <!-- Sign Up Link -->
       <p class="text-center mt-8 text-text">
         Don't have an account? 
@@ -208,20 +211,60 @@
       if (googleBtn) {
         googleBtn.addEventListener('click', function(e) {
           e.preventDefault();
-          // Simulate Google login process
-          alert('Google login would open here in a real implementation. For now, please use email login.');
           // In a real implementation, this would redirect to Google OAuth
-          // window.location.href = '/api/auth/google';
+          console.log('Google login initiated');
+          // For demo purposes, we'll just show a loading state
+          const originalHTML = this.innerHTML;
+          this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Connecting...';
+          this.disabled = true;
+          
+          // Simulate API call delay
+          setTimeout(() => {
+            this.innerHTML = originalHTML;
+            this.disabled = false;
+            // Show a more subtle notification
+            const notification = document.createElement('div');
+            notification.className = 'mt-4 p-3 bg-blue-100 text-blue-800 rounded-lg text-center';
+            notification.textContent = 'Google login would connect in a real implementation. Please use email login for now.';
+            this.parentNode.appendChild(notification);
+            
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+              if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+              }
+            }, 3000);
+          }, 1500);
         });
       }
       
       if (appleBtn) {
         appleBtn.addEventListener('click', function(e) {
           e.preventDefault();
-          // Simulate Apple login process
-          alert('Apple login would open here in a real implementation. For now, please use email login.');
           // In a real implementation, this would redirect to Apple OAuth
-          // window.location.href = '/api/auth/apple';
+          console.log('Apple login initiated');
+          // For demo purposes, we'll just show a loading state
+          const originalHTML = this.innerHTML;
+          this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Connecting...';
+          this.disabled = true;
+          
+          // Simulate API call delay
+          setTimeout(() => {
+            this.innerHTML = originalHTML;
+            this.disabled = false;
+            // Show a more subtle notification
+            const notification = document.createElement('div');
+            notification.className = 'mt-4 p-3 bg-blue-100 text-blue-800 rounded-lg text-center';
+            notification.textContent = 'Apple login would connect in a real implementation. Please use email login for now.';
+            this.parentNode.appendChild(notification);
+            
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+              if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+              }
+            }, 3000);
+          }, 1500);
         });
       }
     });

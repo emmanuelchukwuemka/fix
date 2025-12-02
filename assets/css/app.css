@@ -122,14 +122,13 @@ body {
 /* Enhanced Toggle button styles - bigger and more noticeable */
 .theme-toggle {
   position: fixed;
-  top: 1rem;
-  right: 1rem;
-  z-index: 9999; /* Highest z-index to ensure visibility above all elements */
+  top: 6rem; /* Move it down to avoid blocking navbar */
+  right: 1.5rem;
   background-color: var(--card-background);
   border: 2px solid var(--border-color);
   color: var(--text-color);
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -137,7 +136,8 @@ body {
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  z-index: 9999; /* Ensure it's above other elements */
 }
 
 /* Make it even more prominent on hover */
@@ -157,21 +157,21 @@ body {
 /* Responsive design for mobile */
 @media (max-width: 768px) {
   .theme-toggle {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     font-size: 1.25rem;
-    top: 0.75rem;
-    right: 0.75rem;
+    top: 5.5rem;
+    right: 1rem;
   }
 }
 
 @media (max-width: 480px) {
   .theme-toggle {
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     font-size: 1.1rem;
-    top: 0.5rem;
-    right: 0.5rem;
+    top: 5rem;
+    right: 0.75rem;
   }
 }
 
@@ -201,6 +201,23 @@ body {
   transition: all 0.3s ease;
 }
 
+/* Mode-specific gradient for about page header */
+.mode-gradient {
+  background: linear-gradient(to right, #059669, #047857); /* Green gradient for light mode */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.dark-mode .mode-gradient {
+  background: none; /* Remove background in dark mode */
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: inherit;
+  background-clip: unset;
+  color: #f97316; /* Use orange text color in dark mode */
+}
+
 .form-input:focus {
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(253, 102, 6, 0.2);
@@ -227,6 +244,74 @@ body {
 .logo-header {
   height: 100px;
   width: 100px;
+}
+
+/* About section styles */
+.about-section {
+  background: linear-gradient(135deg, var(--card-background) 0%, rgba(248, 249, 250, 0.8) 100%);
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.dark-mode .about-section {
+  background: linear-gradient(135deg, var(--card-background) 0%, rgba(1, 41, 3, 0.8) 100%);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.about-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, var(--primary-color) 0%, #ff8c42 100%);
+  color: white;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 15px rgba(253, 102, 6, 0.3);
+}
+
+.about-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid var(--border-color);
+  background-color: var(--card-background);
+}
+
+.about-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.dark-mode .about-card:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.about-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, var(--primary-color) 0%, #ff8c42 100%);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(253, 102, 6, 0.3);
+}
+
+.about-link:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(253, 102, 6, 0.4);
+}
+
+.about-link i {
+  transition: transform 0.3s ease;
+}
+
+.about-link:hover i {
+  transform: translateX(3px);
 }
 
 /* Mobile responsive header styles */
