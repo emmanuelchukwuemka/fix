@@ -12,6 +12,7 @@ class Task(db.Model):
     category = db.Column(db.String(50))  # Daily, Survey, Video, etc.
     time_required = db.Column(db.Integer)  # Minutes
     is_active = db.Column(db.Boolean, default=True)
+    requires_admin_verification = db.Column(db.Boolean, default=False)  # New field for admin verification
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
@@ -28,6 +29,7 @@ class Task(db.Model):
             'category': self.category,
             'time_required': self.time_required,
             'is_active': self.is_active,
+            'requires_admin_verification': self.requires_admin_verification,  # Include in dict
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None
         }
@@ -38,7 +40,7 @@ class UserTask(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'), nullable=False)
-    status = db.Column(db.String(20), default='available')  # available, in_progress, completed
+    status = db.Column(db.String(20), default='available')  # available, in_progress, completed, pending_review, rejected
     completed_at = db.Column(db.DateTime)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     

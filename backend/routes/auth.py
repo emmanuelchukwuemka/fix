@@ -4,11 +4,9 @@ from backend.models.user import User, UserRole
 from backend.models.password_reset import PasswordResetToken
 from backend.models.transaction import Transaction, TransactionType, TransactionStatus
 from backend.utils.helpers import generate_referral_code
+from backend.utils.emailer import Emailer
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 import re
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 import os
 
 auth_bp = Blueprint('auth', __name__)
@@ -150,13 +148,70 @@ def forgot_password():
         db.session.add(reset_token)
         db.session.commit()
         
-        # In a real implementation, you would send an email with the reset link
-        # For now, we'll just return the token (not recommended for production)
-        return jsonify({
-            'message': 'Password reset token generated',
-            'token': reset_token.token,
-            'expires_at': reset_token.expires_at.isoformat()
-        }), 200
+        # Send password reset email
+        emailer = Emailer()
+        reset_link = f"http://localhost:5000/reset-password.html?token={reset_token.token}"
+        
+        subject = "Password Reset Request - MyFigPoint"
+        body = f"""
+Hi {user.full_name},
+
+You have requested to reset your password. Click the link below to reset your password:
+
+{reset_link}
+
+This link will expire in 24 hours.
+
+If you did not request this, please ignore this email.
+
+Best regards,
+MyFigPoint Team
+"""
+        
+        html_body = f"""
+<html>
+  <body>
+    <h2>Hello {user.full_name},</h2>
+    
+    <p>You have requested to reset your password. Click the button below to reset your password:</p>
+    
+    <p style="text-align: center; margin: 30px 0;">
+      <a href="{reset_link}" 
+         style="background-color: #FD6606; color: white; padding: 12px 24px; text-decoration: none; 
+                border-radius: 5px; display: inline-block; font-weight: bold;">
+        Reset Password
+      </a>
+    </p>
+    
+    <p>Or copy and paste this link in your browser:</p>
+    <p>{reset_link}</p>
+    
+    <p><small>This link will expire in 24 hours.</small></p>
+    
+    <p>If you did not request this, please ignore this email.</p>
+    
+    <br>
+    <p>Best regards,<br>
+    The MyFigPoint Team</p>
+  </body>
+</html>
+"""
+        
+        # Send email (in development, this might fail if email settings aren't configured)
+        email_sent = emailer.send_email(email, subject, body, html_body)
+        
+        # For development purposes, we'll return the token so you can test manually
+        # In production, you should only return a success message
+        if os.environ.get('FLASK_ENV') == 'development':
+            return jsonify({
+                'message': 'If your email is registered, you will receive a password reset link',
+                'token': reset_token.token,  # Only for development
+                'reset_link': reset_link     # Only for development
+            }), 200
+        else:
+            return jsonify({
+                'message': 'If your email is registered, you will receive a password reset link'
+            }), 200
         
     except Exception as e:
         return jsonify({'message': 'Failed to process password reset request', 'error': str(e)}), 500

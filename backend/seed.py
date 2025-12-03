@@ -84,7 +84,8 @@ def seed_database():
                 'money_reward': 8.0,
                 'points_reward': 80.0,
                 'category': 'Survey',
-                'time_required': 12
+                'time_required': 12,
+                'requires_admin_verification': False  # Add the new field
             },
             {
                 'title': 'Daily Login Bonus',
@@ -92,7 +93,8 @@ def seed_database():
                 'money_reward': 2.0,
                 'points_reward': 20.0,
                 'category': 'Daily',
-                'time_required': 1
+                'time_required': 1,
+                'requires_admin_verification': False  # Add the new field
             },
             {
                 'title': 'Install & Play Mobile Game',
@@ -100,7 +102,8 @@ def seed_database():
                 'money_reward': 25.0,
                 'points_reward': 250.0,
                 'category': 'Limited Time',
-                'time_required': 30
+                'time_required': 30,
+                'requires_admin_verification': True  # Example of a task requiring admin verification
             },
             {
                 'title': 'Watch Video Ads (5x)',
@@ -108,7 +111,8 @@ def seed_database():
                 'money_reward': 3.5,
                 'points_reward': 35.0,
                 'category': 'Videos',
-                'time_required': 5
+                'time_required': 5,
+                'requires_admin_verification': False  # Add the new field
             },
             {
                 'title': 'Invite a Friend',
@@ -116,7 +120,8 @@ def seed_database():
                 'money_reward': 10.0,
                 'points_reward': 100.0,
                 'category': 'Referral',
-                'time_required': 2
+                'time_required': 2,
+                'requires_admin_verification': False  # Add the new field
             }
         ]
         
