@@ -242,8 +242,8 @@ body {
 
 /* Logo styles for consistent sizing */
 .logo-header {
-  height: 100px;
-  width: 100px;
+  height: 80px;
+  width: 80px;
 }
 
 /* About section styles */
@@ -317,14 +317,14 @@ body {
 /* Mobile responsive header styles */
 @media (max-width: 768px) {
   .logo-header {
-    height: 100px;
-    width: 100px;
+    height: 80px;
+    width: 80px;
   }
 }
 
 @media (max-width: 480px) {
   .logo-header {
-    height: 100px;
-    width: 100px;
+    height: 80px;
+    width: 80px;
   }
 }

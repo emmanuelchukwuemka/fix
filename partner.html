@@ -36,7 +36,10 @@
   <!-- Sidebar -->
   <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
     <div class="flex items-center justify-between p-6 border-b border-border">
-      <img src="assets/logo.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
+      <div class="flex flex-col items-center">
+        <img src="assets/logo.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
+        <p class="text-primary font-bold mt-1 text-xs">MyFigPoint</p>
+      </div>
       <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
         <i class="fas fa-times text-xl"></i>
       </button>
