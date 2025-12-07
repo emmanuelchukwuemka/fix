@@ -84,7 +84,7 @@ def withdraw_points():
             return jsonify({'message': 'Insufficient points balance'}), 400
 
         # Validate payment method
-        valid_methods = ['bank', 'paypal', 'crypto', 'gift_card']
+        valid_methods = ['bank', 'gift_card']
         if method not in valid_methods:
             return jsonify({'message': f'Invalid payment method. Valid methods: {", ".join(valid_methods)}'}), 400
 
@@ -101,10 +101,6 @@ def withdraw_points():
             # Validate that user has all required banking details
             if not user.bank_name or not user.account_name or not user.account_number:
                 return jsonify({'message': 'Please complete your bank details in profile settings before withdrawing via bank transfer'}), 400
-        elif method == 'paypal' and not user.email:
-            return jsonify({'message': 'Please verify your email address for PayPal withdrawals'}), 400
-        elif method == 'crypto' and not data.get('crypto_address'):
-            return jsonify({'message': 'Cryptocurrency address is required for crypto withdrawals'}), 400
         elif method == 'gift_card' and not data.get('gift_card_type'):
             return jsonify({'message': 'Gift card type is required for gift card withdrawals'}), 400
 
@@ -130,15 +126,6 @@ def withdraw_points():
         description = f"Withdrawal request: {points} points (${usd_amount:.2f}) via {method}"
         if method == 'bank':
             description += f" to {user.bank_name} account ending in {user.account_number[-4:] if user.account_number else '****'}"
-        elif method == 'crypto':
-            crypto_address = data.get('crypto_address', 'address')
-            if not crypto_address or not isinstance(crypto_address, str) or len(crypto_address) < 10:
-                # Rollback changes
-                user.points_balance = original_balance
-                user.total_points_withdrawn = original_withdrawn_points
-                user.total_withdrawn = original_withdrawn_amount
-                return jsonify({'message': 'Invalid cryptocurrency address'}), 400
-            description += f" to {crypto_address}"
         elif method == 'gift_card':
             gift_card_type = data.get('gift_card_type', 'gift card')
             if not gift_card_type or not isinstance(gift_card_type, str):
@@ -156,7 +143,7 @@ def withdraw_points():
             description=description,
             amount=-usd_amount,
             points_amount=-points,
-            reference_id=data.get('crypto_address') or data.get('gift_card_type')
+            reference_id=data.get('gift_card_type')
         )
 
         db.session.add(transaction)

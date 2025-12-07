@@ -7,7 +7,7 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text)
-    money_reward = db.Column(db.Float, default=0.0)
+    reward_amount = db.Column(db.Float, default=0.0)
     points_reward = db.Column(db.Float, default=0.0)
     category = db.Column(db.String(50))  # Daily, Survey, Video, etc.
     time_required = db.Column(db.Integer)  # Minutes
@@ -24,7 +24,7 @@ class Task(db.Model):
             'id': self.id,
             'title': self.title,
             'description': self.description,
-            'money_reward': self.money_reward,
+            'reward_amount': self.reward_amount,
             'points_reward': self.points_reward,
             'category': self.category,
             'time_required': self.time_required,

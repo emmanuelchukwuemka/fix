@@ -144,10 +144,10 @@ def complete_task(task_id):
             user_task.status = 'completed'
             user_task.completed_at = db.func.current_timestamp()
             
-            # Award points and money to user
+            # Award points and Reward to user
             user.points_balance += task.points_reward
             user.total_points_earned += task.points_reward
-            user.total_earnings += task.money_reward
+            user.total_earnings += task.reward_amount
             
             # Create transaction record
             transaction = Transaction(
@@ -155,7 +155,7 @@ def complete_task(task_id):
                 type=TransactionType.EARNING,
                 status=TransactionStatus.COMPLETED,
                 description=f"Completed task: {task.title}",
-                amount=task.money_reward,
+                amount=task.reward_amount,
                 points_amount=task.points_reward
             )
             
@@ -165,7 +165,7 @@ def complete_task(task_id):
             return jsonify({
                 'message': 'Task completed successfully',
                 'points_awarded': task.points_reward,
-                'money_awarded': task.money_reward,
+                'reward_awarded': task.reward_amount,
                 'new_points_balance': user.points_balance,
                 'new_total_earnings': user.total_earnings
             }), 200
@@ -193,7 +193,7 @@ def create_task():
         task = Task(
             title=data.get('title'),
             description=data.get('description', ''),
-            money_reward=data.get('money_reward', 0.0),
+            reward_amount=data.get('reward_amount', 0.0),
             points_reward=data.get('points_reward', 0.0),
             category=data.get('category', 'General'),
             time_required=data.get('time_required', 0),
@@ -232,7 +232,7 @@ def update_task(task_id):
         # Update task fields
         task.title = data.get('title', task.title)
         task.description = data.get('description', task.description)
-        task.money_reward = data.get('money_reward', task.money_reward)
+        task.reward_amount = data.get('reward_amount', task.reward_amount)
         task.points_reward = data.get('points_reward', task.points_reward)
         task.category = data.get('category', task.category)
         task.time_required = data.get('time_required', task.time_required)
@@ -485,10 +485,10 @@ def admin_complete_task(task_id):
         # Get the user who completed the task
         user = User.query.get(user_id)
         
-        # Award points and money to user
+        # Award points and Reward to user
         user.points_balance += task.points_reward
         user.total_points_earned += task.points_reward
-        user.total_earnings += task.money_reward
+        user.total_earnings += task.reward_amount
         
         # Create transaction record
         transaction = Transaction(
@@ -496,7 +496,7 @@ def admin_complete_task(task_id):
             type=TransactionType.EARNING,
             status=TransactionStatus.COMPLETED,
             description=f"Completed task: {task.title}",
-            amount=task.money_reward,
+            amount=task.reward_amount,
             points_amount=task.points_reward
         )
         
@@ -525,7 +525,7 @@ def admin_complete_task(task_id):
         return jsonify({
             'message': 'Task completed and reward awarded successfully',
             'points_awarded': task.points_reward,
-            'money_awarded': task.money_reward,
+            'reward_awarded': task.reward_amount,
             'user_notified': True
         }), 200
         

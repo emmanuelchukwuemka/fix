@@ -349,12 +349,7 @@
       
       // Extract additional details
       let additionalDetails = '';
-      if (method === 'crypto') {
-        const addressMatch = withdrawal.description.match(/to ([^\s]+)/);
-        if (addressMatch) {
-          additionalDetails = `<p><strong>Crypto Address:</strong> ${addressMatch[1]}</p>`;
-        }
-      } else if (method === 'gift_card') {
+      if (method === 'gift_card') {
         const typeMatch = withdrawal.description.match(/as ([^\s]+)/);
         if (typeMatch) {
           additionalDetails = `<p><strong>Gift Card Type:</strong> ${typeMatch[1]}</p>`;

@@ -151,7 +151,7 @@
       <!-- Withdraw Funds Section -->
       <div class="card rounded-3xl p-8 mb-10 shadow-2xl bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/30">
         <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
-          <i class="fas fa-money-bill-transfer text-primary"></i> Withdraw Funds
+          <i class="fas fa-money-bill-transfer text-primary"></i> Withdraw Reward
         </h2>
         
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -162,8 +162,6 @@
                 <label class="block text-lg font-bold mb-3">Withdrawal Method</label>
                 <select id="withdrawalMethod" class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
                   <option value="bank">Bank Transfer</option>
-                  <option value="paypal">PayPal</option>
-                  <option value="crypto">Cryptocurrency</option>
                   <option value="gift">Gift Card</option>
                 </select>
               </div>
@@ -547,10 +545,6 @@
         requestData.account_holder_name = document.getElementById('accountHolderName').value;
         requestData.account_number = document.getElementById('accountNumber').value;
         requestData.routing_number = document.getElementById('routingNumber').value;
-      } else if (method === 'paypal') {
-        requestData.method = 'paypal';
-      } else if (method === 'crypto') {
-        requestData.method = 'crypto';
       } else if (method === 'gift') {
         requestData.method = 'gift_card';
       }

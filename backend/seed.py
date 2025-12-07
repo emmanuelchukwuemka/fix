@@ -81,7 +81,7 @@ def seed_database():
             {
                 'title': 'Complete Health Survey',
                 'description': 'Share your opinion on wellness products (10-15 min)',
-                'money_reward': 8.0,
+                'reward_amount': 8.0,
                 'points_reward': 80.0,
                 'category': 'Survey',
                 'time_required': 12,
@@ -90,7 +90,7 @@ def seed_database():
             {
                 'title': 'Daily Login Bonus',
                 'description': 'Just log in to claim your free points!',
-                'money_reward': 2.0,
+                'reward_amount': 2.0,
                 'points_reward': 20.0,
                 'category': 'Daily',
                 'time_required': 1,
@@ -99,7 +99,7 @@ def seed_database():
             {
                 'title': 'Install & Play Mobile Game',
                 'description': 'Reach level 10 in "Rise of Kingdoms" (New users only)',
-                'money_reward': 25.0,
+                'reward_amount': 25.0,
                 'points_reward': 250.0,
                 'category': 'Limited Time',
                 'time_required': 30,
@@ -108,7 +108,7 @@ def seed_database():
             {
                 'title': 'Watch Video Ads (5x)',
                 'description': 'Watch short ads and earn instantly',
-                'money_reward': 3.5,
+                'reward_amount': 3.5,
                 'points_reward': 35.0,
                 'category': 'Videos',
                 'time_required': 5,
@@ -117,7 +117,7 @@ def seed_database():
             {
                 'title': 'Invite a Friend',
                 'description': 'They join → You both get bonus points!',
-                'money_reward': 10.0,
+                'reward_amount': 10.0,
                 'points_reward': 100.0,
                 'category': 'Referral',
                 'time_required': 2,
