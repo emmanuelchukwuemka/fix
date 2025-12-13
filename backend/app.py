@@ -1,14 +1,12 @@
 from flask import Flask, send_from_directory, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt
-from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 import os
 
-# Initialize extensions
-db = SQLAlchemy()
-bcrypt = Bcrypt()
-jwt = JWTManager()
+# Import the admin auth decorator
+from backend.utils.admin_auth import admin_required
+
+# Import extensions
+from backend.extensions import db, bcrypt, jwt
 
 def create_app():
     # Get the absolute path to the project root directory
@@ -67,16 +65,78 @@ def create_app():
     # Serve admin files
     @app.route('/admin/')
     def admin_index():
+        # Serve the admin login page by default
+        return send_from_directory(project_root, 'admin/login.html')
+    
+    @app.route('/admin/dashboard')
+    @admin_required
+    def admin_dashboard():
+        # Serve the actual admin dashboard
         return send_from_directory(project_root, 'admin/index.html')
+    
+    @app.route('/admin/tasks')
+    @admin_required
+    def admin_tasks():
+        # Serve the admin tasks page
+        return send_from_directory(project_root, 'admin/tasks.html')
+    
+    @app.route('/admin/referrals')
+    @admin_required
+    def admin_referrals():
+        # Serve the admin referrals page
+        return send_from_directory(project_root, 'admin/referrals.html')
+    
+    @app.route('/admin/withdrawals')
+    @admin_required
+    def admin_withdrawals():
+        # Serve the admin withdrawals page
+        return send_from_directory(project_root, 'admin/withdrawals.html')
+    
+    @app.route('/admin/activities')
+    @admin_required
+    def admin_activities():
+        # Serve the admin activities page
+        return send_from_directory(project_root, 'admin/activities.html')
+    
+    @app.route('/admin/codes')
+    @admin_required
+    def admin_codes():
+        # Serve the admin codes page
+        return send_from_directory(project_root, 'admin/codes.html')
+    
+    @app.route('/admin/support')
+    @admin_required
+    def admin_support():
+        # Serve the admin support page
+        return send_from_directory(project_root, 'admin/support.html')
+    
+    @app.route('/admin/profiles')
+    @admin_required
+    def admin_profiles():
+        # Serve the admin profiles page
+        return send_from_directory(project_root, 'admin/profiles.html')
+    
+    @app.route('/admin/users')
+    @admin_required
+    def admin_users():
+        # Serve the admin users page
+        return send_from_directory(project_root, 'admin/users.html')
+    
+    @app.route('/admin/partners')
+    @admin_required
+    def admin_partners():
+        # Serve the admin partners page
+        return send_from_directory(project_root, 'admin/partners.html')
     
     @app.route('/admin/<path:filename>')
     def serve_admin_files(filename):
-        admin_path = os.path.join(project_root, 'admin', filename)
-        # If the file exists in the admin directory, serve it
-        if os.path.exists(admin_path) and os.path.isfile(admin_path):
+        # Allow access to login page without authentication
+        if filename == 'login.html':
             return send_from_directory(os.path.join(project_root, 'admin'), filename)
-        # If not found, serve the admin index.html (for SPA-like behavior)
-        return send_from_directory(project_root, 'admin/index.html')
+            
+        # For all other admin files, redirect to the login page
+        # In a real implementation, you would check for a valid JWT token and admin role here
+        return send_from_directory(project_root, 'admin/login.html')
     
     # Serve frontend files
     @app.route('/frontend/')

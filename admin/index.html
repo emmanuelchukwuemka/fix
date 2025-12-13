@@ -26,6 +26,18 @@
 </head>
 
 <body class="bg-background text-text min-h-screen flex relative overflow-auto">
+  <!-- Check for authentication -->
+  <script>
+    // Check if user is authenticated
+    const token = localStorage.getItem('access_token');
+    const userRole = localStorage.getItem('userRole');
+    
+    // Redirect to login if not authenticated or not admin
+    if (!token || userRole !== 'admin') {
+      window.location.href = '/admin/';
+    }
+  </script>
+  
   <!-- Theme Toggle Button -->
   <button id="themeToggle" class="theme-toggle">
     <i class="fas fa-moon"></i>
@@ -50,45 +62,45 @@
     </div>
 
     <nav class="p-4 space-y-2">
-      <a href="/admin/" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/dashboard" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-home"></i>
         <span>Dashboard</span>
       </a>
-      <a href="/admin/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/tasks" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-tasks"></i>
         <span>Earn Points</span>
       </a>
-      <a href="/admin/referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/referrals" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-users"></i>
         <span>Refer & Earn</span>
       </a>
-      <a href="/admin/withdrawals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/withdrawals" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-wallet"></i>
         <span>Wallet</span>
       </a>
-      <a href="/admin/activities.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/activities" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-history"></i>
         <span>Transaction History</span>
       </a>
-      <a href="/admin/codes.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/codes" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-gift"></i>
         <span>Redeem Code</span>
       </a>
-      <a href="/admin/support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/support" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-headset"></i>
         <span>Support Center</span>
       </a>
-      <a href="/admin/" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="/admin/profiles" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-user-shield"></i>
         <span>Admin Panel</span>
       </a>
-      <a href="/admin/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/tasks" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-clipboard-check"></i>
         <span>Task Review</span>
       </a>
-      <a href="/admin/profiles.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/users" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-user-cog"></i>
-        <span>Profile & Settings</span>
+        <span>User Management</span>
       </a>
     </nav>
 
@@ -426,15 +438,15 @@
             <div class="space-y-4">
               <div class="flex justify-between items-center p-4 bg-card rounded-2xl border border-border">
                 <span>Total Platform Earnings</span>
-                <span class="font-bold text-green-500">$12,450.75</span>
+                <span class="font-bold text-green-500" data-stat="platformEarnings">$12,450.75</span>
               </div>
               <div class="flex justify-between items-center p-4 bg-card rounded-2xl border border-border">
                 <span>Daily Active Users</span>
-                <span class="font-bold text-blue-500">1,248</span>
+                <span class="font-bold text-blue-500" data-stat="dailyActiveUsers">1,248</span>
               </div>
               <div class="flex justify-between items-center p-4 bg-card rounded-2xl border border-border">
                 <span>Tasks Completed Today</span>
-                <span class="font-bold text-purple-500">342</span>
+                <span class="font-bold text-purple-500" data-stat="tasksCompletedToday">342</span>
               </div>
             </div>
           </div>
@@ -539,7 +551,7 @@
               <i class="fas fa-users text-indigo-500 text-2xl"></i>
             </div>
             <h3 class="text-xl font-bold">Total Referrals</h3>
-            <p class="text-3xl font-bold text-indigo-500 mt-2">1,842</p>
+            <p class="text-3xl font-bold text-indigo-500 mt-2" data-stat="totalReferrals">1,842</p>
           </div>
           
           <div class="p-6 bg-card rounded-2xl border border-border text-center">
@@ -547,7 +559,7 @@
               <i class="fas fa-dollar-sign text-green-500 text-2xl"></i>
             </div>
             <h3 class="text-xl font-bold">Referral Earnings</h3>
-            <p class="text-3xl font-bold text-green-500 mt-2">$3,240.50</p>
+            <p class="text-3xl font-bold text-green-500 mt-2" data-stat="referralEarnings">$3,240.50</p>
           </div>
           
           <div class="p-6 bg-card rounded-2xl border border-border text-center">
@@ -601,7 +613,7 @@
               <i class="fas fa-user-friends text-pink-500 text-2xl"></i>
             </div>
             <h3 class="text-xl font-bold">Total Partners</h3>
-            <p class="text-3xl font-bold text-pink-500 mt-2">142</p>
+            <p class="text-3xl font-bold text-pink-500 mt-2" data-stat="totalPartners">142</p>
           </div>
           
           <div class="p-6 bg-card rounded-2xl border border-border text-center">
@@ -609,7 +621,7 @@
               <i class="fas fa-clock text-blue-500 text-2xl"></i>
             </div>
             <h3 class="text-xl font-bold">Pending Approval</h3>
-            <p class="text-3xl font-bold text-blue-500 mt-2">7</p>
+            <p class="text-3xl font-bold text-blue-500 mt-2" data-stat="pendingApprovals">7</p>
           </div>
           
           <div class="p-6 bg-card rounded-2xl border border-border text-center">
@@ -617,7 +629,7 @@
               <i class="fas fa-check-circle text-green-500 text-2xl"></i>
             </div>
             <h3 class="text-xl font-bold">Approved Partners</h3>
-            <p class="text-3xl font-bold text-green-500 mt-2">135</p>
+            <p class="text-3xl font-bold text-green-500 mt-2" data-stat="approvedPartners">135</p>
           </div>
         </div>
         
@@ -839,7 +851,10 @@
     // Logout function
     function logout() {
       localStorage.removeItem('access_token');
-      window.location.href = '../frontend/login.html';
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userRole');
+      window.location.href = '/admin/';
     }
 
     // Navigation functions (these would connect to the existing pages)
@@ -974,13 +989,72 @@
 
     // Fetch dashboard stats when page loads
     document.addEventListener('DOMContentLoaded', function() {
-      // In a real implementation, these would be fetched from the API
-      document.getElementById('statTotalUsers').textContent = '1,247';
-      document.getElementById('statPendingWithdrawals').textContent = '23';
-      document.getElementById('statActiveTasks').textContent = '156';
-      document.getElementById('statPendingSupport').textContent = '8';
-      document.getElementById('totalUsers').textContent = '1,247';
+      loadDashboardStats();
+      loadAdminInfo();
     });
+    
+    function loadAdminInfo() {
+      const userName = localStorage.getItem('userName');
+      const userEmail = localStorage.getItem('userEmail');
+      
+      if (userName) {
+        document.querySelector('.p-6.border-t.border-border .font-semibold').textContent = userName;
+      }
+      
+      if (userEmail) {
+        document.querySelector('.p-6.border-t.border-border .text-sm.text-gray-600.dark\:text-gray-400').textContent = userEmail;
+      }
+    }
+    
+    function loadDashboardStats() {
+      // Fetch dashboard statistics from the API
+      fetch('/api/admin/dashboard/stats', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.stats) {
+          const stats = data.stats;
+          document.getElementById('statTotalUsers').textContent = stats.total_users.toLocaleString();
+          document.getElementById('statPendingWithdrawals').textContent = stats.pending_withdrawals;
+          document.getElementById('statActiveTasks').textContent = stats.active_tasks;
+          document.getElementById('statPendingSupport').textContent = stats.pending_support;
+          document.getElementById('totalUsers').textContent = stats.total_users.toLocaleString();
+          
+          // Update other stats if available
+          if (stats.platform_earnings !== undefined) {
+            document.querySelector('[data-stat="platformEarnings"]').textContent = `$${stats.platform_earnings.toFixed(2)}`;
+          }
+          if (stats.daily_active_users !== undefined) {
+            document.querySelector('[data-stat="dailyActiveUsers"]').textContent = stats.daily_active_users.toLocaleString();
+          }
+          if (stats.tasks_completed_today !== undefined) {
+            document.querySelector('[data-stat="tasksCompletedToday"]').textContent = stats.tasks_completed_today;
+          }
+          if (stats.total_referrals !== undefined) {
+            document.querySelector('[data-stat="totalReferrals"]').textContent = stats.total_referrals.toLocaleString();
+          }
+          if (stats.referral_earnings !== undefined) {
+            document.querySelector('[data-stat="referralEarnings"]').textContent = `$${stats.referral_earnings.toFixed(2)}`;
+          }
+          if (stats.total_partners !== undefined) {
+            document.querySelector('[data-stat="totalPartners"]').textContent = stats.total_partners;
+          }
+          if (stats.pending_approvals !== undefined) {
+            document.querySelector('[data-stat="pendingApprovals"]').textContent = stats.pending_approvals;
+          }
+          if (stats.approved_partners !== undefined) {
+            document.querySelector('[data-stat="approvedPartners"]').textContent = stats.approved_partners;
+          }
+        }
+      })
+      .catch(error => {
+        console.error('Error loading dashboard stats:', error);
+      });
+    }
   </script>
   <script src="../assets/js/theme.js"></script>
   

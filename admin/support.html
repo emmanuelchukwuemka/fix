@@ -26,6 +26,18 @@
 </head>
 
 <body class="bg-background text-text min-h-screen flex relative overflow-auto">
+  <!-- Check for authentication -->
+  <script>
+    // Check if user is authenticated
+    const token = localStorage.getItem('access_token');
+    const userRole = localStorage.getItem('userRole');
+    
+    // Redirect to login if not authenticated or not admin
+    if (!token || userRole !== 'admin') {
+      window.location.href = '/admin/';
+    }
+  </script>
+
   <!-- Theme Toggle Button -->
   <button id="themeToggle" class="theme-toggle">
     <i class="fas fa-moon"></i>
@@ -50,43 +62,43 @@
     </div>
 
     <nav class="p-4 space-y-2">
-      <a href="/admin/" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/dashboard" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-home"></i>
         <span>Dashboard</span>
       </a>
-      <a href="/admin/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/tasks" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-tasks"></i>
         <span>Earn Points</span>
       </a>
-      <a href="/admin/referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/referrals" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-users"></i>
         <span>Refer & Earn</span>
       </a>
-      <a href="/admin/withdrawals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/withdrawals" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-wallet"></i>
         <span>Wallet</span>
       </a>
-      <a href="/admin/activities.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/activities" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-history"></i>
         <span>Transaction History</span>
       </a>
-      <a href="/admin/codes.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/codes" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-gift"></i>
         <span>Redeem Code</span>
       </a>
-      <a href="/admin/support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/support" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-headset"></i>
         <span>Support Center</span>
       </a>
-      <a href="/admin/" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="/admin/users" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-user-shield"></i>
         <span>Admin Panel</span>
       </a>
-      <a href="/admin/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/tasks" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-clipboard-check"></i>
         <span>Task Review</span>
       </a>
-      <a href="/admin/profiles.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/profiles" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-user-cog"></i>
         <span>Profile & Settings</span>
       </a>
@@ -94,10 +106,10 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <img id="adminAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin" class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
-          <p class="font-semibold">Admin User</p>
-          <p class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
+          <p id="adminName" class="font-semibold">Admin User</p>
+          <p id="adminEmail" class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
         </div>
       </div>
       <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
@@ -117,7 +129,7 @@
           Support Management
         </h1>
         <div class="flex items-center gap-4">
-          <button onclick="refreshMessages()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
+          <button onclick="loadSupportMessages()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
             <i class="fas fa-sync-alt"></i> Refresh
           </button>
         </div>
@@ -131,7 +143,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Total Tickets</p>
-              <p class="text-3xl font-bold mt-2">142</p>
+              <p id="totalTickets" class="text-3xl font-bold mt-2">0</p>
             </div>
             <div class="w-14 h-14 bg-blue-600/20 rounded-xl flex items-center justify-center">
               <i class="fas fa-ticket-alt text-blue-500 text-2xl"></i>
@@ -143,7 +155,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Resolved</p>
-              <p class="text-3xl font-bold mt-2">118</p>
+              <p id="resolvedTickets" class="text-3xl font-bold mt-2">0</p>
             </div>
             <div class="w-14 h-14 bg-green-600/20 rounded-xl flex items-center justify-center">
               <i class="fas fa-check-circle text-green-500 text-2xl"></i>
@@ -155,7 +167,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Pending</p>
-              <p class="text-3xl font-bold mt-2">18</p>
+              <p id="pendingTickets" class="text-3xl font-bold mt-2">0</p>
             </div>
             <div class="w-14 h-14 bg-yellow-600/20 rounded-xl flex items-center justify-center">
               <i class="fas fa-clock text-yellow-500 text-2xl"></i>
@@ -167,7 +179,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Urgent</p>
-              <p class="text-3xl font-bold mt-2">6</p>
+              <p id="urgentTickets" class="text-3xl font-bold mt-2">0</p>
             </div>
             <div class="w-14 h-14 bg-red-600/20 rounded-xl flex items-center justify-center">
               <i class="fas fa-exclamation-triangle text-red-500 text-2xl"></i>
@@ -191,9 +203,9 @@
             <label class="block text-sm font-bold mb-2">Status</label>
             <select class="form-input w-full px-4 py-3 rounded-2xl" id="statusFilter">
               <option value="">All Statuses</option>
-              <option value="open">Open</option>
-              <option value="pending">Pending</option>
-              <option value="resolved">Resolved</option>
+              <option value="sent">Open</option>
+              <option value="read">Pending</option>
+              <option value="replied">Resolved</option>
               <option value="closed">Closed</option>
             </select>
           </div>
@@ -234,7 +246,7 @@
         <div class="flex items-center justify-between mb-6">
           <h2 class="text-2xl font-bold">Support Tickets</h2>
           <div class="text-right">
-            <p class="text-lg font-bold">Total Tickets: <span id="totalTicketsCount">142</span></p>
+            <p class="text-lg font-bold">Total Tickets: <span id="totalTicketsCount">0</span></p>
           </div>
         </div>
         
@@ -253,112 +265,15 @@
             </thead>
             <tbody id="ticketsTableBody">
               <!-- Ticket rows will be populated dynamically -->
-              <tr class="border-b border-border hover:bg-card/50">
-                <td class="py-4">
-                  <div>
-                    <p class="font-bold">Issue with reward code redemption</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 truncate max-w-xs">I tried to redeem my code but got an error message saying it was already used...</p>
-                  </div>
-                </td>
-                <td class="py-4">
-                  <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-8 h-8 rounded-full" alt="User">
-                    <span>Sarah Johnson</span>
-                  </div>
-                </td>
-                <td class="py-4">Technical</td>
-                <td class="py-4">
-                  <span class="bg-yellow-600/20 text-yellow-500 px-2 py-1 rounded-full text-xs font-bold">Medium</span>
-                </td>
-                <td class="py-4">
-                  <span class="bg-blue-600/20 text-blue-500 px-2 py-1 rounded-full text-xs font-bold">Open</span>
-                </td>
-                <td class="py-4">Dec 10, 2024</td>
-                <td class="py-4 text-right">
-                  <button onclick="viewTicketDetails(1)" class="text-primary hover:text-orange-700 mx-2">
-                    <i class="fas fa-eye"></i>
-                  </button>
-                  <button onclick="respondToTicket(1)" class="text-green-500 hover:text-green-700 mx-2">
-                    <i class="fas fa-reply"></i>
-                  </button>
-                </td>
-              </tr>
-              
-              <tr class="border-b border-border hover:bg-card/50">
-                <td class="py-4">
-                  <div>
-                    <p class="font-bold">Withdrawal not processed</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 truncate max-w-xs">I submitted a withdrawal request 5 days ago but haven't received my payment yet...</p>
-                  </div>
-                </td>
-                <td class="py-4">
-                  <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" class="w-8 h-8 rounded-full" alt="User">
-                    <span>John Smith</span>
-                  </div>
-                </td>
-                <td class="py-4">Payment</td>
-                <td class="py-4">
-                  <span class="bg-red-600/20 text-red-500 px-2 py-1 rounded-full text-xs font-bold">High</span>
-                </td>
-                <td class="py-4">
-                  <span class="bg-yellow-600/20 text-yellow-500 px-2 py-1 rounded-full text-xs font-bold">Pending</span>
-                </td>
-                <td class="py-4">Dec 9, 2024</td>
-                <td class="py-4 text-right">
-                  <button onclick="viewTicketDetails(2)" class="text-primary hover:text-orange-700 mx-2">
-                    <i class="fas fa-eye"></i>
-                  </button>
-                  <button onclick="respondToTicket(2)" class="text-green-500 hover:text-green-700 mx-2">
-                    <i class="fas fa-reply"></i>
-                  </button>
-                </td>
-              </tr>
-              
-              <tr class="border-b border-border hover:bg-card/50">
-                <td class="py-4">
-                  <div>
-                    <p class="font-bold">Account verification needed</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 truncate max-w-xs">I need to verify my account to increase withdrawal limits...</p>
-                  </div>
-                </td>
-                <td class="py-4">
-                  <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mike" class="w-8 h-8 rounded-full" alt="User">
-                    <span>Mike Thompson</span>
-                  </div>
-                </td>
-                <td class="py-4">Account</td>
-                <td class="py-4">
-                  <span class="bg-green-600/20 text-green-500 px-2 py-1 rounded-full text-xs font-bold">Low</span>
-                </td>
-                <td class="py-4">
-                  <span class="bg-green-600/20 text-green-500 px-2 py-1 rounded-full text-xs font-bold">Resolved</span>
-                </td>
-                <td class="py-4">Dec 8, 2024</td>
-                <td class="py-4 text-right">
-                  <button onclick="viewTicketDetails(3)" class="text-primary hover:text-orange-700 mx-2">
-                    <i class="fas fa-eye"></i>
-                  </button>
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>
         
         <!-- Pagination -->
         <div class="flex items-center justify-between mt-8">
-          <p class="text-gray-600 dark:text-gray-400">Showing 1 to 3 of 142 tickets</p>
-          <div class="flex gap-2">
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
-              <i class="fas fa-chevron-left"></i>
-            </button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">2</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">3</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
-              <i class="fas fa-chevron-right"></i>
-            </button>
+          <p class="text-gray-600 dark:text-gray-400">Showing <span id="showingStart">0</span> to <span id="showingEnd">0</span> of <span id="totalCount">0</span> tickets</p>
+          <div class="flex gap-2" id="paginationControls">
+            <!-- Pagination buttons will be populated dynamically -->
           </div>
         </div>
       </div>
@@ -384,43 +299,43 @@
           <div class="space-y-4">
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Ticket ID</p>
-              <p class="font-bold">#TKT-00124</p>
+              <p id="ticketId" class="font-bold">#TKT-00000</p>
             </div>
             
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Submitted By</p>
               <div class="flex items-center gap-3 mt-2">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-10 h-10 rounded-full" alt="User">
+                <img id="ticketUserAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=User" class="w-10 h-10 rounded-full" alt="User">
                 <div>
-                  <p class="font-bold">Sarah Johnson</p>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">sarah.j@example.com</p>
+                  <p id="ticketUserName" class="font-bold">-</p>
+                  <p id="ticketUserEmail" class="text-sm text-gray-600 dark:text-gray-400">-</p>
                 </div>
               </div>
             </div>
             
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Category</p>
-              <p class="font-bold">Technical Issue</p>
+              <p id="ticketCategory" class="font-bold">-</p>
             </div>
             
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Priority</p>
-              <p>
-                <span class="bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold">Medium</span>
+              <p id="ticketPriority">
+                <span class="px-3 py-1 rounded-full text-sm font-bold">-</span>
               </p>
             </div>
             
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Status</p>
-              <p>
-                <span class="bg-blue-600/20 text-blue-500 px-3 py-1 rounded-full text-sm font-bold">Open</span>
+              <p id="ticketStatus">
+                <span class="px-3 py-1 rounded-full text-sm font-bold">-</span>
               </p>
             </div>
             
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Submitted</p>
-              <p class="font-bold">December 10, 2024</p>
-              <p class="text-sm text-gray-600 dark:text-gray-400">10:30 AM</p>
+              <p id="ticketSubmittedDate" class="font-bold">-</p>
+              <p id="ticketSubmittedTime" class="text-sm text-gray-600 dark:text-gray-400">-</p>
             </div>
           </div>
         </div>
@@ -430,11 +345,9 @@
           <div class="mb-8">
             <h3 class="text-xl font-bold mb-4">Issue Description</h3>
             <div class="p-6 bg-card border border-border rounded-2xl">
-              <p class="font-bold mb-2">Issue with reward code redemption</p>
-              <p class="text-gray-600 dark:text-gray-400">
-                I tried to redeem my code ABCDE123 but got an error message saying it was already used. 
-                However, I've never used this code before. Please help me resolve this issue as I need 
-                to redeem these points for my withdrawal request.
+              <p id="ticketSubject" class="font-bold mb-2">-</p>
+              <p id="ticketMessage" class="text-gray-600 dark:text-gray-400">
+                -
               </p>
             </div>
           </div>
@@ -442,34 +355,8 @@
           <!-- Conversation History -->
           <div class="mb-8">
             <h3 class="text-xl font-bold mb-4">Conversation History</h3>
-            <div class="space-y-4">
-              <div class="p-4 bg-card border border-border rounded-2xl">
-                <div class="flex items-center gap-3 mb-2">
-                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-8 h-8 rounded-full" alt="User">
-                  <div>
-                    <p class="font-bold">Sarah Johnson</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">User • Dec 10, 2024 at 10:30 AM</p>
-                  </div>
-                </div>
-                <p class="mt-2">
-                  I tried to redeem my code ABCDE123 but got an error message saying it was already used. 
-                  However, I've never used this code before. Please help me resolve this issue as I need 
-                  to redeem these points for my withdrawal request.
-                </p>
-              </div>
-              
-              <div class="p-4 bg-primary/10 border border-primary/30 rounded-2xl">
-                <div class="flex items-center gap-3 mb-2">
-                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" class="w-8 h-8 rounded-full" alt="Admin">
-                  <div>
-                    <p class="font-bold">Admin Support</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Support Agent • Dec 10, 2024 at 11:15 AM</p>
-                  </div>
-                </div>
-                <p class="mt-2">
-                  Thank you for contacting support. I'm looking into this issue now and will get back to you shortly.
-                </p>
-              </div>
+            <div id="conversationHistory" class="space-y-4">
+              <!-- Messages will be populated dynamically -->
             </div>
           </div>
           
@@ -477,7 +364,7 @@
           <div class="mb-6">
             <h3 class="text-xl font-bold mb-4">Respond to Ticket</h3>
             <div class="p-6 bg-card border border-border rounded-2xl">
-              <textarea class="form-input w-full px-4 py-3 rounded-2xl mb-4" rows="4" placeholder="Enter your response..."></textarea>
+              <textarea id="responseMessage" class="form-input w-full px-4 py-3 rounded-2xl mb-4" rows="4" placeholder="Enter your response..."></textarea>
               <div class="flex flex-wrap gap-4">
                 <button onclick="sendResponse()" class="flex-1 bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
                   <i class="fas fa-paper-plane mr-2"></i> Send Response
@@ -497,56 +384,454 @@
   </div>
 
   <script>
+    // Global variables
+    let currentTickets = [];
+    let currentPage = 1;
+    let totalPages = 1;
+    let totalCount = 0;
+    let currentDetailTicket = null;
+    
+    // Load admin info
+    document.addEventListener('DOMContentLoaded', function() {
+      loadAdminInfo();
+      loadSupportMessages();
+    });
+    
+    function loadAdminInfo() {
+      const userName = localStorage.getItem('userName');
+      const userEmail = localStorage.getItem('userEmail');
+      
+      if (userName) {
+        document.getElementById('adminName').textContent = userName;
+      }
+      
+      if (userEmail) {
+        document.getElementById('adminEmail').textContent = userEmail;
+      }
+    }
+    
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('overlay').classList.toggle('hidden');
     }
-
+    
     function logout() {
       localStorage.removeItem('access_token');
-      window.location.href = '../frontend/login.html';
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userRole');
+      window.location.href = '/admin/';
     }
-
-    function refreshMessages() {
-      // In a real implementation, this would fetch fresh data from the API
-      alert('Refreshing ticket data...');
+    
+    function loadSupportMessages(page = 1) {
+      // Show loading indicator
+      const tableBody = document.getElementById('ticketsTableBody');
+      tableBody.innerHTML = '<tr><td colspan="7" class="py-4 text-center">Loading...</td></tr>';
+      
+      // Get filter values
+      const statusFilter = document.getElementById('statusFilter').value;
+      const priorityFilter = document.getElementById('priorityFilter').value;
+      const ticketSearch = document.getElementById('ticketSearch').value;
+      
+      // Build query parameters
+      const params = new URLSearchParams();
+      params.set('page', page);
+      params.set('per_page', 20);
+      
+      // Make API request to admin endpoint for all support messages
+      fetch(`/api/admin/support-messages?${params.toString()}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.messages) {
+          currentTickets = data.messages;
+          currentPage = data.current_page || 1;
+          totalPages = data.pages || 1;
+          totalCount = data.total || 0;
+          
+          renderTicketsTable();
+          updateStats(data);
+          updatePagination();
+        } else {
+          tableBody.innerHTML = '<tr><td colspan="7" class="py-4 text-center">No support tickets found</td></tr>';
+        }
+      })
+      .catch(error => {
+        console.error('Error loading support messages:', error);
+        tableBody.innerHTML = '<tr><td colspan="7" class="py-4 text-center text-red-500">Error loading support tickets</td></tr>';
+      });
     }
-
+    
+    function renderTicketsTable() {
+      const tableBody = document.getElementById('ticketsTableBody');
+      
+      if (currentTickets.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="7" class="py-4 text-center">No support tickets found</td></tr>';
+        return;
+      }
+      
+      tableBody.innerHTML = '';
+      
+      currentTickets.forEach(item => {
+        const message = item;
+        const user = item.user;
+        
+        if (!message) return;
+        
+        const row = document.createElement('tr');
+        row.className = 'border-b border-border hover:bg-card/50';
+        
+        // Format date
+        const createdDate = new Date(message.created_at);
+        const formattedDate = createdDate.toLocaleDateString('en-US', { 
+          month: 'short', 
+          day: 'numeric', 
+          year: 'numeric' 
+        });
+        
+        // Format status
+        let statusClass = '';
+        let statusText = '';
+        switch (message.status) {
+          case 'sent':
+            statusClass = 'bg-blue-600/20 text-blue-500';
+            statusText = 'Open';
+            break;
+          case 'read':
+            statusClass = 'bg-yellow-600/20 text-yellow-500';
+            statusText = 'Pending';
+            break;
+          case 'replied':
+            statusClass = 'bg-green-600/20 text-green-500';
+            statusText = 'Resolved';
+            break;
+          case 'closed':
+            statusClass = 'bg-gray-600/20 text-gray-500';
+            statusText = 'Closed';
+            break;
+          default:
+            statusClass = 'bg-gray-600/20 text-gray-500';
+            statusText = message.status;
+        }
+        
+        // Priority (using a simple mapping since there's no priority field in the model)
+        const priorityClass = 'bg-yellow-600/20 text-yellow-500';
+        const priorityText = 'Medium';
+        
+        // Category (using a simple mapping)
+        const category = 'General';
+        
+        row.innerHTML = `
+          <td class="py-4">
+            <div>
+              <p class="font-bold">${message.subject || 'No Subject'}</p>
+              <p class="text-sm text-gray-600 dark:text-gray-400 truncate max-w-xs">${message.message ? message.message.substring(0, 60) + '...' : 'No message content'}</p>
+            </div>
+          </td>
+          <td class="py-4">
+            <div class="flex items-center gap-3">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user ? user.full_name || user.email : 'Unknown')}" class="w-8 h-8 rounded-full" alt="User">
+              <span>${user ? (user.full_name || user.email) : 'Unknown User'}</span>
+            </div>
+          </td>
+          <td class="py-4">${category}</td>
+          <td class="py-4">
+            <span class="${priorityClass} px-2 py-1 rounded-full text-xs font-bold">${priorityText}</span>
+          </td>
+          <td class="py-4">
+            <span class="${statusClass} px-2 py-1 rounded-full text-xs font-bold">${statusText}</span>
+          </td>
+          <td class="py-4">${formattedDate}</td>
+          <td class="py-4 text-right">
+            <button onclick="viewTicketDetails(${message.id})" class="text-primary hover:text-orange-700 mx-2">
+              <i class="fas fa-eye"></i>
+            </button>
+            ${(message.status === 'sent' || message.status === 'read') ? `
+              <button onclick="respondToTicket(${message.id})" class="text-green-500 hover:text-green-700 mx-2">
+                <i class="fas fa-reply"></i>
+              </button>
+            ` : ''}
+          </td>
+        `;
+        
+        tableBody.appendChild(row);
+      });
+    }
+    
+    function updateStats(data) {
+      // Update stats overview (simplified for now)
+      document.getElementById('totalTickets').textContent = totalCount;
+      document.getElementById('totalTicketsCount').textContent = totalCount;
+      
+      // Count resolved tickets
+      const resolvedCount = data.messages ? 
+        data.messages.filter(m => m.status === 'replied').length : 0;
+      document.getElementById('resolvedTickets').textContent = resolvedCount;
+      
+      // Count pending tickets
+      const pendingCount = data.messages ? 
+        data.messages.filter(m => m.status === 'read').length : 0;
+      document.getElementById('pendingTickets').textContent = pendingCount;
+      
+      // Count urgent tickets (using a simple heuristic)
+      const urgentCount = 0; // Would need a priority field in the model
+      document.getElementById('urgentTickets').textContent = urgentCount;
+    }
+    
+    function updatePagination() {
+      const showingStart = ((currentPage - 1) * 20) + 1;
+      const showingEnd = Math.min(showingStart + 19, totalCount);
+      
+      document.getElementById('showingStart').textContent = showingStart;
+      document.getElementById('showingEnd').textContent = showingEnd;
+      document.getElementById('totalCount').textContent = totalCount;
+      
+      const paginationControls = document.getElementById('paginationControls');
+      paginationControls.innerHTML = '';
+      
+      // Previous button
+      const prevButton = document.createElement('button');
+      prevButton.className = 'w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80';
+      prevButton.disabled = currentPage === 1;
+      prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+      prevButton.onclick = () => loadSupportMessages(currentPage - 1);
+      paginationControls.appendChild(prevButton);
+      
+      // Page buttons (simplified to show current page only)
+      const pageButton = document.createElement('button');
+      pageButton.className = 'w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold';
+      pageButton.textContent = currentPage;
+      paginationControls.appendChild(pageButton);
+      
+      // Next button
+      const nextButton = document.createElement('button');
+      nextButton.className = 'w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80';
+      nextButton.disabled = currentPage === totalPages;
+      nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+      nextButton.onclick = () => loadSupportMessages(currentPage + 1);
+      paginationControls.appendChild(nextButton);
+    }
+    
     function applyFilters() {
-      // In a real implementation, this would apply filters to the ticket list
-      alert('Applying filters...');
+      loadSupportMessages(1); // Reset to first page when applying filters
     }
-
+    
     function viewTicketDetails(ticketId) {
+      const ticket = currentTickets.find(t => t.id === ticketId);
+      if (!ticket) return;
+      
+      currentDetailTicket = ticket;
+      
+      // Populate modal with data
+      document.getElementById('ticketId').textContent = `#TKT-${ticket.id.toString().padStart(5, '0')}`;
+      document.getElementById('ticketSubject').textContent = ticket.subject || 'No Subject';
+      document.getElementById('ticketMessage').textContent = ticket.message || 'No message content';
+      
+      // User info
+      const user = ticket.user;
+      if (user) {
+        document.getElementById('ticketUserName').textContent = user.full_name || 'N/A';
+        document.getElementById('ticketUserEmail').textContent = user.email || 'N/A';
+        document.getElementById('ticketUserAvatar').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name || user.email)}`;
+      }
+      
+      // Category (using a simple mapping)
+      document.getElementById('ticketCategory').textContent = 'General';
+      
+      // Priority (using a simple mapping)
+      const prioritySpan = document.getElementById('ticketPriority').querySelector('span');
+      prioritySpan.className = 'bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold';
+      prioritySpan.textContent = 'Medium';
+      
+      // Status
+      let statusClass = '';
+      let statusText = '';
+      switch (ticket.status) {
+        case 'sent':
+          statusClass = 'bg-blue-600/20 text-blue-500';
+          statusText = 'Open';
+          break;
+        case 'read':
+          statusClass = 'bg-yellow-600/20 text-yellow-500';
+          statusText = 'Pending';
+          break;
+        case 'replied':
+          statusClass = 'bg-green-600/20 text-green-500';
+          statusText = 'Resolved';
+          break;
+        case 'closed':
+          statusClass = 'bg-gray-600/20 text-gray-500';
+          statusText = 'Closed';
+          break;
+        default:
+          statusClass = 'bg-gray-600/20 text-gray-500';
+          statusText = ticket.status;
+      }
+      const statusSpan = document.getElementById('ticketStatus').querySelector('span');
+      statusSpan.className = `${statusClass} px-3 py-1 rounded-full text-sm font-bold`;
+      statusSpan.textContent = statusText;
+      
+      // Submitted date and time
+      if (ticket.created_at) {
+        const submittedDate = new Date(ticket.created_at);
+        document.getElementById('ticketSubmittedDate').textContent = submittedDate.toLocaleDateString('en-US', { 
+          month: 'long', 
+          day: 'numeric', 
+          year: 'numeric' 
+        });
+        document.getElementById('ticketSubmittedTime').textContent = submittedDate.toLocaleTimeString('en-US');
+      }
+      
+      // Conversation history
+      const conversationHistory = document.getElementById('conversationHistory');
+      conversationHistory.innerHTML = '';
+      
+      // Original message
+      const userMessage = document.createElement('div');
+      userMessage.className = 'p-4 bg-card border border-border rounded-2xl';
+      userMessage.innerHTML = `
+        <div class="flex items-center gap-3 mb-2">
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user ? user.full_name || user.email : 'Unknown')}" class="w-8 h-8 rounded-full" alt="User">
+          <div>
+            <p class="font-bold">${user ? (user.full_name || user.email) : 'Unknown User'}</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">User • ${ticket.created_at ? new Date(ticket.created_at).toLocaleString('en-US') : '-'}</p>
+          </div>
+        </div>
+        <p class="mt-2">
+          ${ticket.message || 'No message content'}
+        </p>
+      `;
+      conversationHistory.appendChild(userMessage);
+      
+      // Response message (if exists)
+      if (ticket.response) {
+        const responseMessage = document.createElement('div');
+        responseMessage.className = 'p-4 bg-primary/10 border border-primary/30 rounded-2xl';
+        responseMessage.innerHTML = `
+          <div class="flex items-center gap-3 mb-2">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" class="w-8 h-8 rounded-full" alt="Admin">
+            <div>
+              <p class="font-bold">Admin Support</p>
+              <p class="text-sm text-gray-600 dark:text-gray-400">Support Agent • ${ticket.updated_at ? new Date(ticket.updated_at).toLocaleString('en-US') : '-'}</p>
+            </div>
+          </div>
+          <p class="mt-2">
+            ${ticket.response}
+          </p>
+        `;
+        conversationHistory.appendChild(responseMessage);
+      }
+      
+      // Clear response textarea
+      document.getElementById('responseMessage').value = '';
+      
+      // Show modal
       document.getElementById('ticketDetailsModal').classList.remove('hidden');
     }
-
+    
     function respondToTicket(ticketId) {
-      document.getElementById('ticketDetailsModal').classList.remove('hidden');
+      viewTicketDetails(ticketId);
     }
-
+    
+    function sendResponse() {
+      if (!currentDetailTicket) return;
+      
+      const responseText = document.getElementById('responseMessage').value.trim();
+      if (!responseText) {
+        alert('Please enter a response message');
+        return;
+      }
+      
+      // Make API request to respond to support message
+      fetch(`/api/admin/support-messages/${currentDetailTicket.id}/respond`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ response: responseText })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message) {
+          alert(data.message);
+          if (data.message.includes('successfully')) {
+            // Reload tickets
+            loadSupportMessages(currentPage);
+            // Close modal
+            closeModal('ticketDetailsModal');
+          }
+        } else {
+          alert('Response sent successfully');
+          // Reload tickets
+          loadSupportMessages(currentPage);
+          // Close modal
+          closeModal('ticketDetailsModal');
+        }
+      })
+      .catch(error => {
+        console.error('Error sending response:', error);
+        alert('Error sending response');
+      });
+    }
+    
+    function resolveTicket() {
+      if (!currentDetailTicket) return;
+      
+      const responseText = document.getElementById('responseMessage').value.trim() || 'Ticket has been resolved.';
+      
+      // Make API request to respond to support message
+      fetch(`/api/admin/support-messages/${currentDetailTicket.id}/respond`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ response: responseText })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message) {
+          alert(data.message);
+          if (data.message.includes('successfully')) {
+            // Reload tickets
+            loadSupportMessages(currentPage);
+            // Close modal
+            closeModal('ticketDetailsModal');
+          }
+        } else {
+          alert('Ticket marked as resolved');
+          // Reload tickets
+          loadSupportMessages(currentPage);
+          // Close modal
+          closeModal('ticketDetailsModal');
+        }
+      })
+      .catch(error => {
+        console.error('Error resolving ticket:', error);
+        alert('Error resolving ticket');
+      });
+    }
+    
+    function closeTicket() {
+      if (!currentDetailTicket) return;
+      
+      if (confirm('Are you sure you want to close this ticket?')) {
+        // In a real implementation, you would send a request to close the ticket
+        alert('Ticket closed successfully');
+        closeModal('ticketDetailsModal');
+        loadSupportMessages(currentPage);
+      }
+    }
+    
     function closeModal(modalId) {
       document.getElementById(modalId).classList.add('hidden');
     }
-
-    function sendResponse() {
-      alert('Response sent successfully');
-    }
-
-    function resolveTicket() {
-      if (confirm('Are you sure you want to mark this ticket as resolved?')) {
-        alert('Ticket marked as resolved');
-        closeModal('ticketDetailsModal');
-      }
-    }
-
-    function closeTicket() {
-      if (confirm('Are you sure you want to close this ticket?')) {
-        alert('Ticket closed');
-        closeModal('ticketDetailsModal');
-      }
-    }
-
+    
     // Close modals when clicking outside
     window.onclick = function(event) {
       if (event.target.classList.contains('fixed') && event.target.classList.contains('inset-0')) {

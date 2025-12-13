@@ -26,6 +26,18 @@
 </head>
 
 <body class="bg-background text-text min-h-screen flex relative overflow-auto">
+  <!-- Check for authentication -->
+  <script>
+    // Check if user is authenticated
+    const token = localStorage.getItem('access_token');
+    const userRole = localStorage.getItem('userRole');
+    
+    // Redirect to login if not authenticated or not admin
+    if (!token || userRole !== 'admin') {
+      window.location.href = '/admin/';
+    }
+  </script>
+
   <!-- Theme Toggle Button -->
   <button id="themeToggle" class="theme-toggle">
     <i class="fas fa-moon"></i>
@@ -50,43 +62,43 @@
     </div>
 
     <nav class="p-4 space-y-2">
-      <a href="/admin/" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/dashboard" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-home"></i>
         <span>Dashboard</span>
       </a>
-      <a href="/admin/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/tasks" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-tasks"></i>
         <span>Earn Points</span>
       </a>
-      <a href="/admin/referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/referrals" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-users"></i>
         <span>Refer & Earn</span>
       </a>
-      <a href="/admin/withdrawals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/withdrawals" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-wallet"></i>
         <span>Wallet</span>
       </a>
-      <a href="/admin/activities.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/activities" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-history"></i>
         <span>Transaction History</span>
       </a>
-      <a href="/admin/codes.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/codes" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-gift"></i>
         <span>Redeem Code</span>
       </a>
-      <a href="/admin/support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/support" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-headset"></i>
         <span>Support Center</span>
       </a>
-      <a href="/admin/" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="/admin/users" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-user-shield"></i>
         <span>Admin Panel</span>
       </a>
-      <a href="/admin/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/tasks" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-clipboard-check"></i>
         <span>Task Review</span>
       </a>
-      <a href="/admin/profiles.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/profiles" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-user-cog"></i>
         <span>Profile & Settings</span>
       </a>
@@ -94,10 +106,10 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <img id="adminAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin" class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
-          <p class="font-semibold">Admin User</p>
-          <p class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
+          <p id="adminName" class="font-semibold">Admin User</p>
+          <p id="adminEmail" class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
         </div>
       </div>
       <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
@@ -117,10 +129,10 @@
           Partner Management
         </h1>
         <div class="flex items-center gap-4">
-          <button onclick="promoteToPartner()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
+          <button onclick="openPromoteUserModal()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
             <i class="fas fa-user-plus"></i> Promote User
           </button>
-          <button onclick="refreshPartners()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
+          <button onclick="loadPartners()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
             <i class="fas fa-sync-alt"></i> Refresh
           </button>
         </div>
@@ -134,7 +146,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Total Partners</p>
-              <p class="text-3xl font-bold mt-2">142</p>
+              <p id="totalPartners" class="text-3xl font-bold mt-2">0</p>
             </div>
             <div class="w-14 h-14 bg-pink-600/20 rounded-xl flex items-center justify-center">
               <i class="fas fa-user-friends text-pink-500 text-2xl"></i>
@@ -146,7 +158,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Pending Approval</p>
-              <p class="text-3xl font-bold mt-2">7</p>
+              <p id="pendingApproval" class="text-3xl font-bold mt-2">0</p>
             </div>
             <div class="w-14 h-14 bg-blue-600/20 rounded-xl flex items-center justify-center">
               <i class="fas fa-clock text-blue-500 text-2xl"></i>
@@ -158,7 +170,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Approved Partners</p>
-              <p class="text-3xl font-bold mt-2">135</p>
+              <p id="approvedPartners" class="text-3xl font-bold mt-2">0</p>
             </div>
             <div class="w-14 h-14 bg-green-600/20 rounded-xl flex items-center justify-center">
               <i class="fas fa-check-circle text-green-500 text-2xl"></i>
@@ -170,7 +182,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Partner Earnings</p>
-              <p class="text-3xl font-bold mt-2">$8,450.75</p>
+              <p id="partnerEarnings" class="text-3xl font-bold mt-2">$0.00</p>
             </div>
             <div class="w-14 h-14 bg-purple-600/20 rounded-xl flex items-center justify-center">
               <i class="fas fa-dollar-sign text-purple-500 text-2xl"></i>
@@ -228,7 +240,7 @@
         <div class="flex items-center justify-between mb-6">
           <h2 class="text-2xl font-bold">Partner Accounts</h2>
           <div class="text-right">
-            <p class="text-lg font-bold">Total Partners: <span id="totalPartnersCount">142</span></p>
+            <p class="text-lg font-bold">Total Partners: <span id="totalPartnersCount">0</span></p>
           </div>
         </div>
         
@@ -247,112 +259,15 @@
             </thead>
             <tbody id="partnersTableBody">
               <!-- Partner rows will be populated dynamically -->
-              <tr class="border-b border-border hover:bg-card/50">
-                <td class="py-4">
-                  <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-10 h-10 rounded-full" alt="User">
-                    <div>
-                      <p class="font-bold">Sarah Johnson</p>
-                      <p class="text-sm text-gray-600 dark:text-gray-400">sarah.j@example.com</p>
-                    </div>
-                  </div>
-                </td>
-                <td class="py-4">
-                  <span class="bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold">Gold</span>
-                </td>
-                <td class="py-4 font-bold">142</td>
-                <td class="py-4">$1,250.75</td>
-                <td class="py-4">Mar 22, 2024</td>
-                <td class="py-4">
-                  <span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Approved</span>
-                </td>
-                <td class="py-4 text-right">
-                  <button onclick="viewPartnerDetails(1)" class="text-primary hover:text-orange-700 mx-2">
-                    <i class="fas fa-eye"></i>
-                  </button>
-                  <button onclick="demotePartner(1)" class="text-red-500 hover:text-red-700 mx-2">
-                    <i class="fas fa-user-minus"></i>
-                  </button>
-                </td>
-              </tr>
-              
-              <tr class="border-b border-border hover:bg-card/50">
-                <td class="py-4">
-                  <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" class="w-10 h-10 rounded-full" alt="User">
-                    <div>
-                      <p class="font-bold">John Smith</p>
-                      <p class="text-sm text-gray-600 dark:text-gray-400">john.smith@example.com</p>
-                    </div>
-                  </div>
-                </td>
-                <td class="py-4">
-                  <span class="bg-purple-600/20 text-purple-500 px-3 py-1 rounded-full text-sm font-bold">Platinum</span>
-                </td>
-                <td class="py-4 font-bold">98</td>
-                <td class="py-4">$2,450.50</td>
-                <td class="py-4">Jan 15, 2024</td>
-                <td class="py-4">
-                  <span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Approved</span>
-                </td>
-                <td class="py-4 text-right">
-                  <button onclick="viewPartnerDetails(2)" class="text-primary hover:text-orange-700 mx-2">
-                    <i class="fas fa-eye"></i>
-                  </button>
-                  <button onclick="demotePartner(2)" class="text-red-500 hover:text-red-700 mx-2">
-                    <i class="fas fa-user-minus"></i>
-                  </button>
-                </td>
-              </tr>
-              
-              <tr class="border-b border-border hover:bg-card/50">
-                <td class="py-4">
-                  <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mike" class="w-10 h-10 rounded-full" alt="User">
-                    <div>
-                      <p class="font-bold">Mike Thompson</p>
-                      <p class="text-sm text-gray-600 dark:text-gray-400">mike.t@example.com</p>
-                    </div>
-                  </div>
-                </td>
-                <td class="py-4">
-                  <span class="bg-blue-600/20 text-blue-500 px-3 py-1 rounded-full text-sm font-bold">Pending</span>
-                </td>
-                <td class="py-4 font-bold">0</td>
-                <td class="py-4">$0.00</td>
-                <td class="py-4">Dec 5, 2024</td>
-                <td class="py-4">
-                  <span class="bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold">Pending</span>
-                </td>
-                <td class="py-4 text-right">
-                  <button onclick="viewPartnerDetails(3)" class="text-primary hover:text-orange-700 mx-2">
-                    <i class="fas fa-eye"></i>
-                  </button>
-                  <button onclick="approvePartner(3)" class="text-green-500 hover:text-green-700 mx-2">
-                    <i class="fas fa-check"></i>
-                  </button>
-                  <button onclick="denyPartner(3)" class="text-red-500 hover:text-red-700 mx-2">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>
         
         <!-- Pagination -->
         <div class="flex items-center justify-between mt-8">
-          <p class="text-gray-600 dark:text-gray-400">Showing 1 to 3 of 142 partners</p>
-          <div class="flex gap-2">
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
-              <i class="fas fa-chevron-left"></i>
-            </button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">2</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">3</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
-              <i class="fas fa-chevron-right"></i>
-            </button>
+          <p class="text-gray-600 dark:text-gray-400">Showing <span id="showingStart">0</span> to <span id="showingEnd">0</span> of <span id="totalCount">0</span> partners</p>
+          <div class="flex gap-2" id="paginationControls">
+            <!-- Pagination buttons will be populated dynamically -->
           </div>
         </div>
       </div>
@@ -460,29 +375,29 @@
         <!-- Partner Info -->
         <div class="md:col-span-1">
           <div class="text-center mb-6">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-24 h-24 rounded-full mx-auto mb-4" alt="User">
-            <h3 class="text-xl font-bold">Sarah Johnson</h3>
-            <p class="text-gray-600 dark:text-gray-400">sarah.j@example.com</p>
+            <img id="partnerAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Partner" class="w-24 h-24 rounded-full mx-auto mb-4" alt="User">
+            <h3 id="partnerName" class="text-xl font-bold">-</h3>
+            <p id="partnerEmail" class="text-gray-600 dark:text-gray-400">-</p>
             <div class="mt-3">
-              <span class="bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold">Gold Tier</span>
+              <span id="partnerTier" class="px-3 py-1 rounded-full text-sm font-bold">-</span>
             </div>
           </div>
           
           <div class="space-y-4">
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Member Since</p>
-              <p class="font-bold">March 22, 2024</p>
+              <p id="memberSince" class="font-bold">-</p>
             </div>
             
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Commission Rate</p>
-              <p class="font-bold">7.5%</p>
+              <p id="commissionRateDisplay" class="font-bold">-</p>
             </div>
             
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Approval Status</p>
               <p class="font-bold">
-                <span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Approved</span>
+                <span id="approvalStatusDisplay" class="px-3 py-1 rounded-full text-sm font-bold">-</span>
               </p>
             </div>
           </div>
@@ -493,58 +408,30 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div class="p-6 bg-gradient-to-br from-pink-600/20 to-rose-600/20 rounded-2xl border border-pink-500/30">
               <p class="text-gray-600 dark:text-gray-400">Referred Users</p>
-              <p class="text-3xl font-bold mt-2">142</p>
+              <p id="referredUsers" class="text-3xl font-bold mt-2">0</p>
             </div>
             
             <div class="p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 rounded-2xl border border-green-500/30">
               <p class="text-gray-600 dark:text-gray-400">Total Earnings</p>
-              <p class="text-3xl font-bold mt-2">$1,250.75</p>
+              <p id="totalEarnings" class="text-3xl font-bold mt-2">$0.00</p>
             </div>
             
             <div class="p-6 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 rounded-2xl border border-blue-500/30">
               <p class="text-gray-600 dark:text-gray-400">Pending Approvals</p>
-              <p class="text-3xl font-bold mt-2">3</p>
+              <p id="pendingApprovals" class="text-3xl font-bold mt-2">0</p>
             </div>
             
             <div class="p-6 bg-gradient-to-br from-purple-600/20 to-indigo-600/20 rounded-2xl border border-purple-500/30">
               <p class="text-gray-600 dark:text-gray-400">Conversion Rate</p>
-              <p class="text-3xl font-bold mt-2">32.5%</p>
+              <p id="conversionRate" class="text-3xl font-bold mt-2">0%</p>
             </div>
           </div>
           
           <!-- Recent Activity -->
           <div class="mb-8">
             <h3 class="text-xl font-bold mb-4">Recent Activity</h3>
-            <div class="space-y-3">
-              <div class="flex items-start gap-3 p-3 bg-card border border-border rounded-2xl">
-                <div class="w-10 h-10 bg-green-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                  <i class="fas fa-user-plus text-green-500"></i>
-                </div>
-                <div>
-                  <p class="font-medium">New referral: Alice Brown</p>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">2 hours ago</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start gap-3 p-3 bg-card border border-border rounded-2xl">
-                <div class="w-10 h-10 bg-blue-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                  <i class="fas fa-dollar-sign text-blue-500"></i>
-                </div>
-                <div>
-                  <p class="font-medium">Earned $25.50 commission</p>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">Yesterday</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start gap-3 p-3 bg-card border border-border rounded-2xl">
-                <div class="w-10 h-10 bg-purple-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                  <i class="fas fa-qrcode text-purple-500"></i>
-                </div>
-                <div>
-                  <p class="font-medium">Generated 50 new codes</p>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">Dec 10, 2024</p>
-                </div>
-              </div>
+            <div id="recentActivity" class="space-y-3">
+              <!-- Activities will be populated dynamically -->
             </div>
           </div>
           
@@ -566,6 +453,39 @@
   </div>
 
   <script>
+    // Global variables
+    let currentPartners = [];
+    let currentPage = 1;
+    let totalPages = 1;
+    let totalCount = 0;
+    let currentDetailPartner = null;
+    let allUsers = []; // For the promote user dropdown
+    
+    // Redirect to login if not authenticated or not admin
+    if (!token || userRole !== 'admin') {
+      window.location.href = '/admin/';
+    }
+    
+    // Load admin info
+    document.addEventListener('DOMContentLoaded', function() {
+      loadAdminInfo();
+      loadPartners();
+      loadAllUsers(); // Load users for the promote dropdown
+    });
+    
+    function loadAdminInfo() {
+      const userName = localStorage.getItem('userName');
+      const userEmail = localStorage.getItem('userEmail');
+      
+      if (userName) {
+        document.getElementById('adminName').textContent = userName;
+      }
+      
+      if (userEmail) {
+        document.getElementById('adminEmail').textContent = userEmail;
+      }
+    }
+    
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('overlay').classList.toggle('hidden');
@@ -573,43 +493,409 @@
 
     function logout() {
       localStorage.removeItem('access_token');
-      window.location.href = '../frontend/login.html';
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userRole');
+      window.location.href = '/admin/';
     }
 
-    function promoteToPartner() {
-      document.getElementById('promoteUserModal').classList.remove('hidden');
+    function loadPartners(page = 1) {
+      // Show loading indicator
+      const tableBody = document.getElementById('partnersTableBody');
+      tableBody.innerHTML = '<tr><td colspan="7" class="py-4 text-center">Loading...</td></tr>';
+      
+      // Get filter values
+      const searchFilter = document.getElementById('partnerSearch').value;
+      const approvalFilter = document.getElementById('approvalFilter').value;
+      
+      // Build query parameters
+      const params = new URLSearchParams();
+      params.set('page', page);
+      params.set('per_page', 20);
+      
+      if (searchFilter) {
+        params.set('search', searchFilter);
+      }
+      
+      // Make API request to get partners
+      fetch(`/api/partners/admin/list?${params.toString()}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.partners) {
+          currentPartners = data.partners;
+          currentPage = data.current_page || 1;
+          totalPages = data.pages || 1;
+          totalCount = data.total || 0;
+          
+          renderPartnersTable();
+          updateStats(data);
+          updatePagination();
+        } else {
+          tableBody.innerHTML = '<tr><td colspan="7" class="py-4 text-center">No partners found</td></tr>';
+        }
+      })
+      .catch(error => {
+        console.error('Error loading partners:', error);
+        tableBody.innerHTML = '<tr><td colspan="7" class="py-4 text-center text-red-500">Error loading partners</td></tr>';
+      });
     }
 
-    function refreshPartners() {
-      // In a real implementation, this would fetch fresh data from the API
-      alert('Refreshing partner data...');
+    function renderPartnersTable() {
+      const tableBody = document.getElementById('partnersTableBody');
+      
+      if (currentPartners.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="7" class="py-4 text-center">No partners found</td></tr>';
+        return;
+      }
+      
+      tableBody.innerHTML = '';
+      
+      currentPartners.forEach(partner => {
+        const row = document.createElement('tr');
+        row.className = 'border-b border-border hover:bg-card/50';
+        
+        // Format date
+        const joinedDate = new Date(partner.created_at);
+        const formattedDate = joinedDate.toLocaleDateString('en-US', { 
+          month: 'short', 
+          day: 'numeric', 
+          year: 'numeric' 
+        });
+        
+        // Format status
+        let statusClass = '';
+        let statusText = '';
+        if (partner.approval_status === 'approved') {
+          statusClass = 'bg-green-600/20 text-green-500';
+          statusText = 'Approved';
+        } else {
+          statusClass = 'bg-yellow-600/20 text-yellow-500';
+          statusText = 'Pending';
+        }
+        
+        // Determine tier (simple implementation)
+        let tierClass = 'bg-blue-600/20 text-blue-500';
+        let tierText = 'Bronze';
+        if (partner.total_points_earned > 10000) {
+          tierClass = 'bg-purple-600/20 text-purple-500';
+          tierText = 'Platinum';
+        } else if (partner.total_points_earned > 5000) {
+          tierClass = 'bg-yellow-600/20 text-yellow-500';
+          tierText = 'Gold';
+        } else if (partner.total_points_earned > 1000) {
+          tierClass = 'bg-gray-600/20 text-gray-500';
+          tierText = 'Silver';
+        }
+        
+        row.innerHTML = `
+          <td class="py-4">
+            <div class="flex items-center gap-3">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(partner.full_name || partner.email)}" class="w-10 h-10 rounded-full" alt="User">
+              <div>
+                <p class="font-bold">${partner.full_name || 'N/A'}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">${partner.email || 'N/A'}</p>
+              </div>
+            </div>
+          </td>
+          <td class="py-4">
+            <span class="${tierClass} px-3 py-1 rounded-full text-sm font-bold">${tierText}</span>
+          </td>
+          <td class="py-4 font-bold">${partner.referred_users_count || 0}</td>
+          <td class="py-4">$${(partner.total_earnings || 0).toFixed(2)}</td>
+          <td class="py-4">${formattedDate}</td>
+          <td class="py-4">
+            <span class="${statusClass} px-3 py-1 rounded-full text-sm font-bold">${statusText}</span>
+          </td>
+          <td class="py-4 text-right">
+            <button onclick="viewPartnerDetails(${partner.id})" class="text-primary hover:text-orange-700 mx-2">
+              <i class="fas fa-eye"></i>
+            </button>
+            ${partner.approval_status === 'approved' ? `
+              <button onclick="demotePartner(${partner.id})" class="text-red-500 hover:text-red-700 mx-2">
+                <i class="fas fa-user-minus"></i>
+              </button>
+            ` : `
+              <button onclick="approvePartner(${partner.id})" class="text-green-500 hover:text-green-700 mx-2">
+                <i class="fas fa-check"></i>
+              </button>
+              <button onclick="denyPartner(${partner.id})" class="text-red-500 hover:text-red-700 mx-2">
+                <i class="fas fa-times"></i>
+              </button>
+            `}
+          </td>
+        `;
+        
+        tableBody.appendChild(row);
+      });
+    }
+
+    function updateStats(data) {
+      // Update stats overview
+      document.getElementById('totalPartners').textContent = totalCount;
+      document.getElementById('totalPartnersCount').textContent = totalCount;
+      
+      // Count pending approvals
+      const pendingCount = data.partners ? 
+        data.partners.filter(p => p.approval_status === 'pending').length : 0;
+      document.getElementById('pendingApproval').textContent = pendingCount;
+      
+      // Count approved partners
+      const approvedCount = data.partners ? 
+        data.partners.filter(p => p.approval_status === 'approved').length : 0;
+      document.getElementById('approvedPartners').textContent = approvedCount;
+      
+      // Calculate total earnings
+      const totalEarnings = data.partners ? 
+        data.partners.reduce((sum, partner) => sum + (partner.total_earnings || 0), 0) : 0;
+      document.getElementById('partnerEarnings').textContent = `$${totalEarnings.toFixed(2)}`;
+    }
+
+    function updatePagination() {
+      const showingStart = ((currentPage - 1) * 20) + 1;
+      const showingEnd = Math.min(showingStart + 19, totalCount);
+      
+      document.getElementById('showingStart').textContent = showingStart;
+      document.getElementById('showingEnd').textContent = showingEnd;
+      document.getElementById('totalCount').textContent = totalCount;
+      
+      const paginationControls = document.getElementById('paginationControls');
+      paginationControls.innerHTML = '';
+      
+      // Previous button
+      const prevButton = document.createElement('button');
+      prevButton.className = 'w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80';
+      prevButton.disabled = currentPage === 1;
+      prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+      prevButton.onclick = () => loadPartners(currentPage - 1);
+      paginationControls.appendChild(prevButton);
+      
+      // Page buttons (simplified to show current page only)
+      const pageButton = document.createElement('button');
+      pageButton.className = 'w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold';
+      pageButton.textContent = currentPage;
+      paginationControls.appendChild(pageButton);
+      
+      // Next button
+      const nextButton = document.createElement('button');
+      nextButton.className = 'w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80';
+      nextButton.disabled = currentPage === totalPages;
+      nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+      nextButton.onclick = () => loadPartners(currentPage + 1);
+      paginationControls.appendChild(nextButton);
     }
 
     function applyFilters() {
-      // In a real implementation, this would apply filters to the partner list
-      alert('Applying filters...');
+      loadPartners(1); // Reset to first page when applying filters
+    }
+
+    function openPromoteUserModal() {
+      // Refresh user list
+      loadAllUsers();
+      document.getElementById('promoteUserModal').classList.remove('hidden');
+    }
+
+    function loadAllUsers() {
+      // Make API request to get all users (we'll need to implement this endpoint)
+      // For now, we'll use a simplified approach
+      
+      // In a real implementation, you would fetch users from the API
+      // For demonstration, we'll populate with sample data
+      const userSelect = document.getElementById('userSelect');
+      userSelect.innerHTML = '<option value="">Select a user...</option>';
+      
+      // Sample users (in a real implementation, these would come from the API)
+      const sampleUsers = [
+        { id: 1, full_name: 'John Smith', email: 'john.smith@example.com' },
+        { id: 2, full_name: 'Sarah Johnson', email: 'sarah.j@example.com' },
+        { id: 3, full_name: 'Mike Thompson', email: 'mike.t@example.com' }
+      ];
+      
+      sampleUsers.forEach(user => {
+        const option = document.createElement('option');
+        option.value = user.id;
+        option.textContent = `${user.full_name} (${user.email})`;
+        userSelect.appendChild(option);
+      });
     }
 
     function viewPartnerDetails(partnerId) {
+      const partner = currentPartners.find(p => p.id === partnerId);
+      if (!partner) return;
+      
+      currentDetailPartner = partner;
+      
+      // Populate modal with data
+      document.getElementById('partnerName').textContent = partner.full_name || 'N/A';
+      document.getElementById('partnerEmail').textContent = partner.email || 'N/A';
+      document.getElementById('partnerAvatar').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(partner.full_name || partner.email)}`;
+      
+      // Tier (simple implementation)
+      let tierClass = 'bg-blue-600/20 text-blue-500';
+      let tierText = 'Bronze';
+      if (partner.total_points_earned > 10000) {
+        tierClass = 'bg-purple-600/20 text-purple-500';
+        tierText = 'Platinum';
+      } else if (partner.total_points_earned > 5000) {
+        tierClass = 'bg-yellow-600/20 text-yellow-500';
+        tierText = 'Gold';
+      } else if (partner.total_points_earned > 1000) {
+        tierClass = 'bg-gray-600/20 text-gray-500';
+        tierText = 'Silver';
+      }
+      const tierSpan = document.getElementById('partnerTier');
+      tierSpan.className = `${tierClass} px-3 py-1 rounded-full text-sm font-bold`;
+      tierSpan.textContent = tierText;
+      
+      // Member since
+      if (partner.created_at) {
+        const memberSince = new Date(partner.created_at);
+        document.getElementById('memberSince').textContent = memberSince.toLocaleDateString('en-US', { 
+          month: 'long', 
+          day: 'numeric', 
+          year: 'numeric' 
+        });
+      }
+      
+      // Commission rate (simple implementation)
+      document.getElementById('commissionRateDisplay').textContent = '5.0%';
+      
+      // Approval status
+      let statusClass = '';
+      let statusText = '';
+      if (partner.approval_status === 'approved') {
+        statusClass = 'bg-green-600/20 text-green-500';
+        statusText = 'Approved';
+      } else {
+        statusClass = 'bg-yellow-600/20 text-yellow-500';
+        statusText = 'Pending';
+      }
+      const statusSpan = document.getElementById('approvalStatusDisplay');
+      statusSpan.className = `${statusClass} px-3 py-1 rounded-full text-sm font-bold`;
+      statusSpan.textContent = statusText;
+      
+      // Stats
+      document.getElementById('referredUsers').textContent = partner.referred_users_count || 0;
+      document.getElementById('totalEarnings').textContent = `$${(partner.total_earnings || 0).toFixed(2)}`;
+      document.getElementById('pendingApprovals').textContent = '0'; // Would need separate API call
+      document.getElementById('conversionRate').textContent = '0%'; // Would need calculation
+      
+      // Recent activity (sample data)
+      const recentActivity = document.getElementById('recentActivity');
+      recentActivity.innerHTML = `
+        <div class="flex items-start gap-3 p-3 bg-card border border-border rounded-2xl">
+          <div class="w-10 h-10 bg-green-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+            <i class="fas fa-user-plus text-green-500"></i>
+          </div>
+          <div>
+            <p class="font-medium">Partner account created</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">-</p>
+          </div>
+        </div>
+      `;
+      
+      // Show modal
       document.getElementById('partnerDetailsModal').classList.remove('hidden');
     }
 
     function approvePartner(partnerId) {
       if (confirm('Are you sure you want to approve this partner?')) {
-        alert('Partner approved successfully');
+        // Make API request to approve partner
+        fetch('/api/partners/admin/approve', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ user_id: partnerId })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message) {
+            alert(data.message);
+            if (data.message.includes('successfully')) {
+              // Reload partners
+              loadPartners(currentPage);
+            }
+          } else {
+            alert('Partner approved successfully');
+            // Reload partners
+            loadPartners(currentPage);
+          }
+        })
+        .catch(error => {
+          console.error('Error approving partner:', error);
+          alert('Error approving partner');
+        });
       }
     }
 
     function denyPartner(partnerId) {
       const reason = prompt('Please enter a reason for denying this partner:');
       if (reason) {
-        alert('Partner denied with reason: ' + reason);
+        // Make API request to deny partner
+        fetch('/api/partners/admin/deny', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ user_id: partnerId })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message) {
+            alert(data.message);
+            if (data.message.includes('successfully')) {
+              // Reload partners
+              loadPartners(currentPage);
+            }
+          } else {
+            alert('Partner denied successfully');
+            // Reload partners
+            loadPartners(currentPage);
+          }
+        })
+        .catch(error => {
+          console.error('Error denying partner:', error);
+          alert('Error denying partner');
+        });
       }
     }
 
     function demotePartner(partnerId) {
       if (confirm('Are you sure you want to demote this partner to a regular user?')) {
-        alert('Partner demoted successfully');
+        // Make API request to demote partner
+        fetch('/api/partners/admin/demote', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ user_id: partnerId })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message) {
+            alert(data.message);
+            if (data.message.includes('successfully')) {
+              // Reload partners
+              loadPartners(currentPage);
+            }
+          } else {
+            alert('Partner demoted successfully');
+            // Reload partners
+            loadPartners(currentPage);
+          }
+        })
+        .catch(error => {
+          console.error('Error demoting partner:', error);
+          alert('Error demoting partner');
+        });
       }
     }
 
@@ -626,8 +912,8 @@
     }
 
     function demotePartnerConfirm() {
-      if (confirm('Are you sure you want to demote this partner to a regular user?')) {
-        alert('Partner demoted successfully');
+      if (currentDetailPartner && confirm('Are you sure you want to demote this partner to a regular user?')) {
+        demotePartner(currentDetailPartner.id);
         closeModal('partnerDetailsModal');
       }
     }
@@ -635,8 +921,44 @@
     // Form submission
     document.getElementById('promoteUserForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      alert('User promotion would be processed here');
-      closeModal('promoteUserModal');
+      
+      const userId = document.getElementById('userSelect').value;
+      if (!userId) {
+        alert('Please select a user to promote');
+        return;
+      }
+      
+      // Make API request to promote user to partner
+      fetch('/api/partners/admin/promote', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ user_id: userId })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message) {
+          alert(data.message);
+          if (data.message.includes('successfully')) {
+            // Reload partners
+            loadPartners(currentPage);
+            // Close modal
+            closeModal('promoteUserModal');
+          }
+        } else {
+          alert('User promoted to partner successfully');
+          // Reload partners
+          loadPartners(currentPage);
+          // Close modal
+          closeModal('promoteUserModal');
+        }
+      })
+      .catch(error => {
+        console.error('Error promoting user:', error);
+        alert('Error promoting user to partner');
+      });
     });
 
     // Close modals when clicking outside

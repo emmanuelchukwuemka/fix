@@ -3,6 +3,7 @@ from backend.app import db
 from backend.models.user import User, UserRole
 from backend.models.reward_code import RewardCode
 from backend.models.transaction import Transaction, TransactionType, TransactionStatus
+from backend.models.support_message import SupportMessage, MessageStatus
 from backend.utils.helpers import generate_reward_code, generate_batch_id
 from backend.utils.emailer import Emailer
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -620,3 +621,82 @@ def award_referral_bonus():
         
     except Exception as e:
         return jsonify({'message': 'Failed to award referral bonus', 'error': str(e)}), 500
+
+@admin_bp.route('/dashboard/stats', methods=['GET'])
+@jwt_required()
+def get_dashboard_stats():
+    try:
+        current_user_id = get_jwt_identity()
+        admin_user = User.query.get(current_user_id)
+        
+        # Check if user is admin
+        if admin_user.role != UserRole.ADMIN:
+            return jsonify({'message': 'Access denied'}), 403
+        
+        # Get total users
+        total_users = User.query.count()
+        
+        # Get pending withdrawals
+        pending_withdrawals = Transaction.query.filter_by(
+            type=TransactionType.POINT_WITHDRAWAL,
+            status=TransactionStatus.PENDING
+        ).count()
+        
+        # Get active tasks (assuming tasks are stored in a separate table)
+        # For now, we'll use a placeholder value
+        active_tasks = 156
+        
+        # Get pending support messages
+        pending_support = SupportMessage.query.filter_by(
+            status=MessageStatus.SENT
+        ).count()
+        
+        # Get platform earnings (sum of all completed transactions)
+        platform_earnings = db.session.query(db.func.sum(Transaction.amount)).filter(
+            Transaction.status == TransactionStatus.COMPLETED,
+            Transaction.type != TransactionType.POINT_WITHDRAWAL
+        ).scalar() or 0.0
+        
+        # Get daily active users (placeholder)
+        daily_active_users = 1248
+        
+        # Get tasks completed today (placeholder)
+        tasks_completed_today = 342
+        
+        # Get total referrals (users with referred_by not null)
+        total_referrals = User.query.filter(User.referred_by.isnot(None)).count()
+        
+        # Get referral earnings (sum of referral bonus transactions)
+        referral_earnings = db.session.query(db.func.sum(Transaction.amount)).filter(
+            Transaction.type == TransactionType.REFERRAL_BONUS,
+            Transaction.status == TransactionStatus.COMPLETED
+        ).scalar() or 0.0
+        
+        # Get total partners
+        total_partners = User.query.filter_by(role=UserRole.PARTNER).count()
+        
+        # Get pending partner approvals
+        pending_approvals = User.query.filter_by(role=UserRole.PARTNER, is_approved=False).count()
+        
+        # Get approved partners
+        approved_partners = User.query.filter_by(role=UserRole.PARTNER, is_approved=True).count()
+        
+        return jsonify({
+            'stats': {
+                'total_users': total_users,
+                'pending_withdrawals': pending_withdrawals,
+                'active_tasks': active_tasks,
+                'pending_support': pending_support,
+                'platform_earnings': abs(platform_earnings),
+                'daily_active_users': daily_active_users,
+                'tasks_completed_today': tasks_completed_today,
+                'total_referrals': total_referrals,
+                'referral_earnings': abs(referral_earnings),
+                'total_partners': total_partners,
+                'pending_approvals': pending_approvals,
+                'approved_partners': approved_partners
+            }
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to fetch dashboard stats', 'error': str(e)}), 500

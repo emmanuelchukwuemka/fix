@@ -26,6 +26,18 @@
 </head>
 
 <body class="bg-background text-text min-h-screen flex relative overflow-auto">
+  <!-- Check for authentication -->
+  <script>
+    // Check if user is authenticated
+    const token = localStorage.getItem('access_token');
+    const userRole = localStorage.getItem('userRole');
+    
+    // Redirect to login if not authenticated or not admin
+    if (!token || userRole !== 'admin') {
+      window.location.href = '/admin/';
+    }
+  </script>
+
   <!-- Theme Toggle Button -->
   <button id="themeToggle" class="theme-toggle">
     <i class="fas fa-moon"></i>
@@ -445,7 +457,10 @@
 
     function logout() {
       localStorage.removeItem('access_token');
-      window.location.href = '../frontend/login.html';
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userRole');
+      window.location.href = '/admin/';
     }
 
     function loadActivities() {

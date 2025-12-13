@@ -26,6 +26,18 @@
 </head>
 
 <body class="bg-background text-text min-h-screen flex relative overflow-auto">
+  <!-- Check for authentication -->
+  <script>
+    // Check if user is authenticated
+    const token = localStorage.getItem('access_token');
+    const userRole = localStorage.getItem('userRole');
+    
+    // Redirect to login if not authenticated or not admin
+    if (!token || userRole !== 'admin') {
+      window.location.href = '/admin/';
+    }
+  </script>
+
   <!-- Theme Toggle Button -->
   <button id="themeToggle" class="theme-toggle">
     <i class="fas fa-moon"></i>
@@ -50,43 +62,43 @@
     </div>
 
     <nav class="p-4 space-y-2">
-      <a href="/admin/" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/dashboard" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-home"></i>
         <span>Dashboard</span>
       </a>
-      <a href="/admin/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/tasks" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-tasks"></i>
         <span>Earn Points</span>
       </a>
-      <a href="/admin/referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/referrals" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-users"></i>
         <span>Refer & Earn</span>
       </a>
-      <a href="/admin/withdrawals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/withdrawals" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-wallet"></i>
         <span>Wallet</span>
       </a>
-      <a href="/admin/activities.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/activities" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-history"></i>
         <span>Transaction History</span>
       </a>
-      <a href="/admin/codes.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/codes" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-gift"></i>
         <span>Redeem Code</span>
       </a>
-      <a href="/admin/support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/support" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-headset"></i>
         <span>Support Center</span>
       </a>
-      <a href="/admin/" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="/admin/users" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-user-shield"></i>
         <span>Admin Panel</span>
       </a>
-      <a href="/admin/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/tasks" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-clipboard-check"></i>
         <span>Task Review</span>
       </a>
-      <a href="/admin/profiles.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/profiles" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-user-cog"></i>
         <span>Profile & Settings</span>
       </a>
@@ -94,10 +106,10 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <img id="adminAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin" class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
-          <p class="font-semibold">Admin User</p>
-          <p class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
+          <p id="adminName" class="font-semibold">Admin User</p>
+          <p id="adminEmail" class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
         </div>
       </div>
       <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
@@ -117,7 +129,7 @@
           Withdrawal Management
         </h1>
         <div class="flex items-center gap-4">
-          <button onclick="refreshWithdrawals()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
+          <button onclick="loadWithdrawals()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
             <i class="fas fa-sync-alt"></i> Refresh
           </button>
         </div>
@@ -131,7 +143,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Pending Requests</p>
-              <p class="text-3xl font-bold mt-2">23</p>
+              <p id="pendingCount" class="text-3xl font-bold mt-2">0</p>
             </div>
             <div class="w-14 h-14 bg-green-600/20 rounded-xl flex items-center justify-center">
               <i class="fas fa-clock text-green-500 text-2xl"></i>
@@ -143,7 +155,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Today Approved</p>
-              <p class="text-3xl font-bold mt-2">7</p>
+              <p id="todayApproved" class="text-3xl font-bold mt-2">0</p>
             </div>
             <div class="w-14 h-14 bg-blue-600/20 rounded-xl flex items-center justify-center">
               <i class="fas fa-check-circle text-blue-500 text-2xl"></i>
@@ -155,7 +167,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">This Week</p>
-              <p class="text-3xl font-bold mt-2">$2,450.75</p>
+              <p id="weekTotal" class="text-3xl font-bold mt-2">$0.00</p>
             </div>
             <div class="w-14 h-14 bg-yellow-600/20 rounded-xl flex items-center justify-center">
               <i class="fas fa-money-bill-wave text-yellow-500 text-2xl"></i>
@@ -167,7 +179,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Rejected</p>
-              <p class="text-3xl font-bold mt-2">2</p>
+              <p id="rejectedCount" class="text-3xl font-bold mt-2">0</p>
             </div>
             <div class="w-14 h-14 bg-red-600/20 rounded-xl flex items-center justify-center">
               <i class="fas fa-times-circle text-red-500 text-2xl"></i>
@@ -192,8 +204,8 @@
             <select class="form-input w-full px-4 py-3 rounded-2xl" id="statusFilter">
               <option value="">All Statuses</option>
               <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
+              <option value="completed">Approved</option>
+              <option value="failed">Rejected</option>
             </select>
           </div>
           
@@ -225,7 +237,7 @@
         <div class="flex items-center justify-between mb-6">
           <h2 class="text-2xl font-bold">Withdrawal Requests</h2>
           <div class="text-right">
-            <p class="text-lg font-bold">Total Requests: <span id="totalRequestsCount">142</span></p>
+            <p class="text-lg font-bold">Total Requests: <span id="totalRequestsCount">0</span></p>
           </div>
         </div>
         
@@ -244,100 +256,15 @@
             </thead>
             <tbody id="withdrawalsTableBody">
               <!-- Withdrawal rows will be populated dynamically -->
-              <tr class="border-b border-border hover:bg-card/50">
-                <td class="py-4">
-                  <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" class="w-10 h-10 rounded-full" alt="User">
-                    <div>
-                      <p class="font-bold">John Smith</p>
-                      <p class="text-sm text-gray-600 dark:text-gray-400">john.smith@example.com</p>
-                    </div>
-                  </div>
-                </td>
-                <td class="py-4 font-bold">$150.00</td>
-                <td class="py-4">Bank Transfer</td>
-                <td class="py-4">500 pts</td>
-                <td class="py-4">Dec 10, 2024</td>
-                <td class="py-4">
-                  <span class="bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold">Pending</span>
-                </td>
-                <td class="py-4 text-right">
-                  <button onclick="viewWithdrawalDetails(1)" class="text-primary hover:text-orange-700 mx-2">
-                    <i class="fas fa-eye"></i>
-                  </button>
-                  <button onclick="approveWithdrawal(1)" class="text-green-500 hover:text-green-700 mx-2">
-                    <i class="fas fa-check"></i>
-                  </button>
-                  <button onclick="rejectWithdrawal(1)" class="text-red-500 hover:text-red-700 mx-2">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </td>
-              </tr>
-              
-              <tr class="border-b border-border hover:bg-card/50">
-                <td class="py-4">
-                  <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-10 h-10 rounded-full" alt="User">
-                    <div>
-                      <p class="font-bold">Sarah Johnson</p>
-                      <p class="text-sm text-gray-600 dark:text-gray-400">sarah.j@example.com</p>
-                    </div>
-                  </div>
-                </td>
-                <td class="py-4 font-bold">$75.50</td>
-                <td class="py-4">PayPal</td>
-                <td class="py-4">251.67 pts</td>
-                <td class="py-4">Dec 9, 2024</td>
-                <td class="py-4">
-                  <span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Approved</span>
-                </td>
-                <td class="py-4 text-right">
-                  <button onclick="viewWithdrawalDetails(2)" class="text-primary hover:text-orange-700 mx-2">
-                    <i class="fas fa-eye"></i>
-                  </button>
-                </td>
-              </tr>
-              
-              <tr class="border-b border-border hover:bg-card/50">
-                <td class="py-4">
-                  <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mike" class="w-10 h-10 rounded-full" alt="User">
-                    <div>
-                      <p class="font-bold">Mike Thompson</p>
-                      <p class="text-sm text-gray-600 dark:text-gray-400">mike.t@example.com</p>
-                    </div>
-                  </div>
-                </td>
-                <td class="py-4 font-bold">$300.00</td>
-                <td class="py-4">Gift Card</td>
-                <td class="py-4">1,000 pts</td>
-                <td class="py-4">Dec 8, 2024</td>
-                <td class="py-4">
-                  <span class="bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold">Rejected</span>
-                </td>
-                <td class="py-4 text-right">
-                  <button onclick="viewWithdrawalDetails(3)" class="text-primary hover:text-orange-700 mx-2">
-                    <i class="fas fa-eye"></i>
-                  </button>
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>
         
         <!-- Pagination -->
         <div class="flex items-center justify-between mt-8">
-          <p class="text-gray-600 dark:text-gray-400">Showing 1 to 3 of 142 requests</p>
-          <div class="flex gap-2">
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
-              <i class="fas fa-chevron-left"></i>
-            </button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">2</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">3</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
-              <i class="fas fa-chevron-right"></i>
-            </button>
+          <p class="text-gray-600 dark:text-gray-400">Showing <span id="showingStart">0</span> to <span id="showingEnd">0</span> of <span id="totalCount">0</span> requests</p>
+          <div class="flex gap-2" id="paginationControls">
+            <!-- Pagination buttons will be populated dynamically -->
           </div>
         </div>
       </div>
@@ -361,9 +288,9 @@
         <!-- User Info -->
         <div class="md:col-span-1">
           <div class="text-center mb-6">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" class="w-24 h-24 rounded-full mx-auto mb-4" alt="User">
-            <h3 class="text-xl font-bold">John Smith</h3>
-            <p class="text-gray-600 dark:text-gray-400">john.smith@example.com</p>
+            <img id="detailUserAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" class="w-24 h-24 rounded-full mx-auto mb-4" alt="User">
+            <h3 id="detailUserName" class="text-xl font-bold">John Smith</h3>
+            <p id="detailUserEmail" class="text-gray-600 dark:text-gray-400">john.smith@example.com</p>
             <div class="mt-3">
               <span class="bg-blue-600/20 text-blue-500 px-3 py-1 rounded-full text-sm font-bold">User</span>
             </div>
@@ -372,17 +299,17 @@
           <div class="space-y-4">
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Member Since</p>
-              <p class="font-bold">January 15, 2024</p>
+              <p id="memberSince" class="font-bold">January 15, 2024</p>
             </div>
             
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Total Points</p>
-              <p class="font-bold">1,250.75 pts</p>
+              <p id="totalPoints" class="font-bold">0 pts</p>
             </div>
             
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Previous Withdrawals</p>
-              <p class="font-bold">3 ($420.50)</p>
+              <p id="previousWithdrawals" class="font-bold">0 ($0.00)</p>
             </div>
           </div>
         </div>
@@ -392,24 +319,24 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div class="p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 rounded-2xl border border-green-500/30">
               <p class="text-gray-600 dark:text-gray-400">Amount Requested</p>
-              <p class="text-3xl font-bold mt-2">$150.00</p>
+              <p id="requestedAmount" class="text-3xl font-bold mt-2">$0.00</p>
             </div>
             
             <div class="p-6 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 rounded-2xl border border-blue-500/30">
               <p class="text-gray-600 dark:text-gray-400">Points Converted</p>
-              <p class="text-3xl font-bold mt-2">500 pts</p>
+              <p id="convertedPoints" class="text-3xl font-bold mt-2">0 pts</p>
             </div>
             
             <div class="p-6 bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-2xl border border-purple-500/30">
               <p class="text-gray-600 dark:text-gray-400">Payment Method</p>
-              <p class="font-bold mt-2">Bank Transfer</p>
-              <p class="text-sm mt-1">First National Bank</p>
+              <p id="paymentMethod" class="font-bold mt-2">Unknown</p>
+              <p id="paymentDetails" class="text-sm mt-1"></p>
             </div>
             
             <div class="p-6 bg-gradient-to-br from-yellow-600/20 to-amber-600/20 rounded-2xl border border-yellow-500/30">
               <p class="text-gray-600 dark:text-gray-400">Request Date</p>
-              <p class="font-bold mt-2">December 10, 2024</p>
-              <p class="text-sm mt-1">10:30 AM</p>
+              <p id="requestDate" class="font-bold mt-2">-</p>
+              <p id="requestTime" class="text-sm mt-1">-</p>
             </div>
           </div>
           
@@ -420,22 +347,22 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Bank Name</p>
-                  <p class="font-bold">First National Bank</p>
+                  <p id="bankName" class="font-bold">-</p>
                 </div>
                 
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Account Holder</p>
-                  <p class="font-bold">John Smith</p>
+                  <p id="accountHolder" class="font-bold">-</p>
                 </div>
                 
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Account Number</p>
-                  <p class="font-bold">**** **** **** 4829</p>
+                  <p id="accountNumber" class="font-bold">-</p>
                 </div>
                 
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Routing Number</p>
-                  <p class="font-bold">**** **** 1234</p>
+                  <p id="routingNumber" class="font-bold">-</p>
                 </div>
               </div>
             </div>
@@ -445,19 +372,14 @@
           <div class="mb-6">
             <h3 class="text-xl font-bold mb-4">Request Status</h3>
             <div class="flex items-center gap-4">
-              <span class="bg-yellow-600/20 text-yellow-500 px-4 py-2 rounded-full text-sm font-bold">Pending Review</span>
-              <span class="text-gray-600 dark:text-gray-400">Submitted 2 days ago</span>
+              <span id="requestStatus" class="px-4 py-2 rounded-full text-sm font-bold">-</span>
+              <span id="submittedInfo" class="text-gray-600 dark:text-gray-400">-</span>
             </div>
           </div>
           
           <!-- Actions -->
-          <div class="flex flex-wrap gap-4">
-            <button onclick="approveWithdrawalConfirm()" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-bold">
-              <i class="fas fa-check mr-2"></i> Approve Request
-            </button>
-            <button onclick="rejectWithdrawalConfirm()" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold">
-              <i class="fas fa-times mr-2"></i> Reject Request
-            </button>
+          <div class="flex flex-wrap gap-4" id="actionButtons">
+            <!-- Action buttons will be populated dynamically -->
           </div>
         </div>
       </div>
@@ -465,61 +387,436 @@
   </div>
 
   <script>
+    // Global variables
+    let currentWithdrawals = [];
+    let currentPage = 1;
+    let totalPages = 1;
+    let totalCount = 0;
+    let currentDetailTransaction = null;
+    
+    // Load admin info
+    document.addEventListener('DOMContentLoaded', function() {
+      loadAdminInfo();
+      loadWithdrawals();
+    });
+    
+    function loadAdminInfo() {
+      const userName = localStorage.getItem('userName');
+      const userEmail = localStorage.getItem('userEmail');
+      
+      if (userName) {
+        document.getElementById('adminName').textContent = userName;
+      }
+      
+      if (userEmail) {
+        document.getElementById('adminEmail').textContent = userEmail;
+      }
+    }
+    
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('overlay').classList.toggle('hidden');
     }
-
+    
     function logout() {
       localStorage.removeItem('access_token');
-      window.location.href = '../frontend/login.html';
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userRole');
+      window.location.href = '/admin/';
     }
-
-    function refreshWithdrawals() {
-      // In a real implementation, this would fetch fresh data from the API
-      alert('Refreshing withdrawal data...');
+    
+    function loadWithdrawals(page = 1) {
+      // Show loading indicator
+      const tableBody = document.getElementById('withdrawalsTableBody');
+      tableBody.innerHTML = '<tr><td colspan="7" class="py-4 text-center">Loading...</td></tr>';
+      
+      // Get filter values
+      const statusFilter = document.getElementById('statusFilter').value;
+      const methodFilter = document.getElementById('methodFilter').value;
+      const userSearch = document.getElementById('userSearch').value;
+      
+      // Build query parameters
+      const params = new URLSearchParams();
+      params.set('page', page);
+      params.set('per_page', 20);
+      
+      if (statusFilter) {
+        params.set('status', statusFilter);
+      }
+      
+      // Make API request
+      fetch(`/api/admin/withdrawals?${params.toString()}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.withdrawals) {
+          currentWithdrawals = data.withdrawals;
+          currentPage = data.current_page || 1;
+          totalPages = data.pages || 1;
+          totalCount = data.total || 0;
+          
+          renderWithdrawalsTable();
+          updateStats(data);
+          updatePagination();
+        } else {
+          tableBody.innerHTML = '<tr><td colspan="7" class="py-4 text-center">No withdrawal requests found</td></tr>';
+        }
+      })
+      .catch(error => {
+        console.error('Error loading withdrawals:', error);
+        tableBody.innerHTML = '<tr><td colspan="7" class="py-4 text-center text-red-500">Error loading withdrawal requests</td></tr>';
+      });
     }
-
+    
+    function renderWithdrawalsTable() {
+      const tableBody = document.getElementById('withdrawalsTableBody');
+      
+      if (currentWithdrawals.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="7" class="py-4 text-center">No withdrawal requests found</td></tr>';
+        return;
+      }
+      
+      tableBody.innerHTML = '';
+      
+      currentWithdrawals.forEach(item => {
+        const transaction = item.transaction;
+        const user = item.user;
+        
+        if (!transaction || !user) return;
+        
+        const row = document.createElement('tr');
+        row.className = 'border-b border-border hover:bg-card/50';
+        
+        // Format date
+        const requestDate = new Date(transaction.created_at);
+        const formattedDate = requestDate.toLocaleDateString('en-US', { 
+          month: 'short', 
+          day: 'numeric', 
+          year: 'numeric' 
+        });
+        
+        // Format status
+        let statusClass = '';
+        let statusText = '';
+        switch (transaction.status) {
+          case 'pending':
+            statusClass = 'bg-yellow-600/20 text-yellow-500';
+            statusText = 'Pending';
+            break;
+          case 'completed':
+            statusClass = 'bg-green-600/20 text-green-500';
+            statusText = 'Approved';
+            break;
+          case 'failed':
+            statusClass = 'bg-red-600/20 text-red-500';
+            statusText = 'Rejected';
+            break;
+          default:
+            statusClass = 'bg-gray-600/20 text-gray-500';
+            statusText = transaction.status;
+        }
+        
+        // Extract payment method from description
+        let method = 'Unknown';
+        if (transaction.description) {
+          const methodMatch = transaction.description.match(/via (\w+)/i);
+          if (methodMatch) {
+            method = methodMatch[1].charAt(0).toUpperCase() + methodMatch[1].slice(1);
+          }
+        }
+        
+        row.innerHTML = `
+          <td class="py-4">
+            <div class="flex items-center gap-3">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name || user.email)}" class="w-10 h-10 rounded-full" alt="User">
+              <div>
+                <p class="font-bold">${user.full_name || 'N/A'}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">${user.email || 'N/A'}</p>
+              </div>
+            </div>
+          </td>
+          <td class="py-4 font-bold">$${Math.abs(transaction.amount || 0).toFixed(2)}</td>
+          <td class="py-4">${method}</td>
+          <td class="py-4">${Math.abs(transaction.points_amount || 0)} pts</td>
+          <td class="py-4">${formattedDate}</td>
+          <td class="py-4">
+            <span class="${statusClass} px-3 py-1 rounded-full text-sm font-bold">${statusText}</span>
+          </td>
+          <td class="py-4 text-right">
+            <button onclick="viewWithdrawalDetails(${transaction.id})" class="text-primary hover:text-orange-700 mx-2">
+              <i class="fas fa-eye"></i>
+            </button>
+            ${transaction.status === 'pending' ? `
+              <button onclick="approveWithdrawal(${transaction.id})" class="text-green-500 hover:text-green-700 mx-2">
+                <i class="fas fa-check"></i>
+              </button>
+              <button onclick="rejectWithdrawal(${transaction.id})" class="text-red-500 hover:text-red-700 mx-2">
+                <i class="fas fa-times"></i>
+              </button>
+            ` : ''}
+          </td>
+        `;
+        
+        tableBody.appendChild(row);
+      });
+    }
+    
+    function updateStats(data) {
+      // Update stats overview (simplified for now)
+      document.getElementById('pendingCount').textContent = data.withdrawals ? 
+        data.withdrawals.filter(w => w.transaction.status === 'pending').length : 0;
+      document.getElementById('totalRequestsCount').textContent = totalCount;
+    }
+    
+    function updatePagination() {
+      const showingStart = ((currentPage - 1) * 20) + 1;
+      const showingEnd = Math.min(showingStart + 19, totalCount);
+      
+      document.getElementById('showingStart').textContent = showingStart;
+      document.getElementById('showingEnd').textContent = showingEnd;
+      document.getElementById('totalCount').textContent = totalCount;
+      
+      const paginationControls = document.getElementById('paginationControls');
+      paginationControls.innerHTML = '';
+      
+      // Previous button
+      const prevButton = document.createElement('button');
+      prevButton.className = 'w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80';
+      prevButton.disabled = currentPage === 1;
+      prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+      prevButton.onclick = () => loadWithdrawals(currentPage - 1);
+      paginationControls.appendChild(prevButton);
+      
+      // Page buttons (simplified to show current page only)
+      const pageButton = document.createElement('button');
+      pageButton.className = 'w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold';
+      pageButton.textContent = currentPage;
+      paginationControls.appendChild(pageButton);
+      
+      // Next button
+      const nextButton = document.createElement('button');
+      nextButton.className = 'w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80';
+      nextButton.disabled = currentPage === totalPages;
+      nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+      nextButton.onclick = () => loadWithdrawals(currentPage + 1);
+      paginationControls.appendChild(nextButton);
+    }
+    
     function applyFilters() {
-      // In a real implementation, this would apply filters to the withdrawal list
-      alert('Applying filters...');
+      loadWithdrawals(1); // Reset to first page when applying filters
     }
-
-    function viewWithdrawalDetails(requestId) {
+    
+    function viewWithdrawalDetails(transactionId) {
+      const withdrawal = currentWithdrawals.find(w => w.transaction.id === transactionId);
+      if (!withdrawal) return;
+      
+      currentDetailTransaction = withdrawal;
+      const transaction = withdrawal.transaction;
+      const user = withdrawal.user;
+      
+      // Populate modal with data
+      document.getElementById('detailUserName').textContent = user.full_name || 'N/A';
+      document.getElementById('detailUserEmail').textContent = user.email || 'N/A';
+      document.getElementById('detailUserAvatar').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name || user.email)}`;
+      
+      // Member since
+      if (user.created_at) {
+        const memberSince = new Date(user.created_at);
+        document.getElementById('memberSince').textContent = memberSince.toLocaleDateString('en-US', { 
+          month: 'long', 
+          day: 'numeric', 
+          year: 'numeric' 
+        });
+      }
+      
+      // Total points
+      document.getElementById('totalPoints').textContent = `${user.points_balance || 0} pts`;
+      
+      // Previous withdrawals (simplified)
+      document.getElementById('previousWithdrawals').textContent = `${user.total_points_withdrawn || 0} pts ($${user.total_withdrawn || 0})`;
+      
+      // Amount requested
+      document.getElementById('requestedAmount').textContent = `$${Math.abs(transaction.amount || 0).toFixed(2)}`;
+      
+      // Points converted
+      document.getElementById('convertedPoints').textContent = `${Math.abs(transaction.points_amount || 0)} pts`;
+      
+      // Payment method
+      let method = 'Unknown';
+      let details = '';
+      if (transaction.description) {
+        const methodMatch = transaction.description.match(/via (\w+)/i);
+        if (methodMatch) {
+          method = methodMatch[1].charAt(0).toUpperCase() + methodMatch[1].slice(1);
+        }
+      }
+      document.getElementById('paymentMethod').textContent = method;
+      
+      // Request date and time
+      if (transaction.created_at) {
+        const requestDate = new Date(transaction.created_at);
+        document.getElementById('requestDate').textContent = requestDate.toLocaleDateString('en-US', { 
+          month: 'long', 
+          day: 'numeric', 
+          year: 'numeric' 
+        });
+        document.getElementById('requestTime').textContent = requestDate.toLocaleTimeString('en-US');
+      }
+      
+      // Banking information (from user profile)
+      document.getElementById('bankName').textContent = user.bank_name || '-';
+      document.getElementById('accountHolder').textContent = user.account_name || '-';
+      document.getElementById('accountNumber').textContent = user.account_number ? `**** **** **** ${user.account_number.slice(-4)}` : '-';
+      document.getElementById('routingNumber').textContent = '-';
+      
+      // Status
+      let statusClass = '';
+      let statusText = '';
+      switch (transaction.status) {
+        case 'pending':
+          statusClass = 'bg-yellow-600/20 text-yellow-500';
+          statusText = 'Pending Review';
+          break;
+        case 'completed':
+          statusClass = 'bg-green-600/20 text-green-500';
+          statusText = 'Approved';
+          break;
+        case 'failed':
+          statusClass = 'bg-red-600/20 text-red-500';
+          statusText = 'Rejected';
+          break;
+        default:
+          statusClass = 'bg-gray-600/20 text-gray-500';
+          statusText = transaction.status;
+      }
+      document.getElementById('requestStatus').className = `${statusClass} px-4 py-2 rounded-full text-sm font-bold`;
+      document.getElementById('requestStatus').textContent = statusText;
+      
+      // Submitted info
+      if (transaction.created_at) {
+        const submittedDate = new Date(transaction.created_at);
+        const now = new Date();
+        const diffTime = Math.abs(now - submittedDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        document.getElementById('submittedInfo').textContent = `Submitted ${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+      }
+      
+      // Action buttons
+      const actionButtons = document.getElementById('actionButtons');
+      if (transaction.status === 'pending') {
+        actionButtons.innerHTML = `
+          <button onclick="approveWithdrawalConfirm(${transaction.id})" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-bold">
+            <i class="fas fa-check mr-2"></i> Approve Request
+          </button>
+          <button onclick="rejectWithdrawalConfirm(${transaction.id})" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold">
+            <i class="fas fa-times mr-2"></i> Reject Request
+          </button>
+        `;
+      } else {
+        actionButtons.innerHTML = '<p class="text-gray-600 dark:text-gray-400 w-full text-center">No actions available</p>';
+      }
+      
+      // Show modal
       document.getElementById('withdrawalDetailsModal').classList.remove('hidden');
     }
-
-    function approveWithdrawal(requestId) {
+    
+    function approveWithdrawal(transactionId) {
       if (confirm('Are you sure you want to approve this withdrawal request?')) {
-        alert('Withdrawal request approved');
+        // Make API request to approve withdrawal
+        fetch(`/api/admin/withdrawals/${transactionId}/approve`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message) {
+            alert(data.message);
+            if (data.message.includes('successfully')) {
+              // Reload withdrawals
+              loadWithdrawals(currentPage);
+              // Close modal if it's the detail modal
+              if (currentDetailTransaction && currentDetailTransaction.transaction.id === transactionId) {
+                closeModal('withdrawalDetailsModal');
+              }
+            }
+          } else {
+            alert('Withdrawal request approved');
+            loadWithdrawals(currentPage);
+            if (currentDetailTransaction && currentDetailTransaction.transaction.id === transactionId) {
+              closeModal('withdrawalDetailsModal');
+            }
+          }
+        })
+        .catch(error => {
+          console.error('Error approving withdrawal:', error);
+          alert('Error approving withdrawal request');
+        });
       }
     }
-
-    function rejectWithdrawal(requestId) {
+    
+    function rejectWithdrawal(transactionId) {
       if (confirm('Are you sure you want to reject this withdrawal request?')) {
-        alert('Withdrawal request rejected');
+        // Make API request to reject withdrawal
+        fetch(`/api/admin/withdrawals/${transactionId}/reject`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message) {
+            alert(data.message);
+            if (data.message.includes('refunded')) {
+              // Reload withdrawals
+              loadWithdrawals(currentPage);
+              // Close modal if it's the detail modal
+              if (currentDetailTransaction && currentDetailTransaction.transaction.id === transactionId) {
+                closeModal('withdrawalDetailsModal');
+              }
+            }
+          } else {
+            alert('Withdrawal request rejected');
+            loadWithdrawals(currentPage);
+            if (currentDetailTransaction && currentDetailTransaction.transaction.id === transactionId) {
+              closeModal('withdrawalDetailsModal');
+            }
+          }
+        })
+        .catch(error => {
+          console.error('Error rejecting withdrawal:', error);
+          alert('Error rejecting withdrawal request');
+        });
       }
     }
-
+    
+    function approveWithdrawalConfirm(transactionId) {
+      if (confirm('Are you sure you want to approve this withdrawal request?')) {
+        approveWithdrawal(transactionId);
+      }
+    }
+    
+    function rejectWithdrawalConfirm(transactionId) {
+      const reason = prompt('Please enter a reason for rejecting this withdrawal request:');
+      if (reason) {
+        // In a real implementation, you would send the reason to the backend
+        rejectWithdrawal(transactionId);
+      }
+    }
+    
     function closeModal(modalId) {
       document.getElementById(modalId).classList.add('hidden');
     }
-
-    function approveWithdrawalConfirm() {
-      if (confirm('Are you sure you want to approve this withdrawal request?')) {
-        alert('Withdrawal request approved successfully');
-        closeModal('withdrawalDetailsModal');
-      }
-    }
-
-    function rejectWithdrawalConfirm() {
-      const reason = prompt('Please enter a reason for rejecting this withdrawal request:');
-      if (reason) {
-        alert('Withdrawal request rejected with reason: ' + reason);
-        closeModal('withdrawalDetailsModal');
-      }
-    }
-
+    
     // Close modals when clicking outside
     window.onclick = function(event) {
       if (event.target.classList.contains('fixed') && event.target.classList.contains('inset-0')) {

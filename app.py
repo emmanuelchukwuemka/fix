@@ -10,7 +10,7 @@ app = create_app()
 
 # Initialize database tables and seed data
 with app.app_context():
-    from backend.app import db
+    from backend.extensions import db
     db.create_all()
     
     # Also initialize with seed data if needed
