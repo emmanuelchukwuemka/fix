@@ -11,13 +11,17 @@ bcrypt = Bcrypt()
 jwt = JWTManager()
 
 def create_app():
-    # Use appropriate directory for deployments since it's writable
-    static_folder = '../assets'
+    # Get the absolute path to the project root directory
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    
+    # Define paths to frontend and assets directories
+    frontend_folder = os.path.join(project_root, 'frontend')
+    static_folder = os.path.join(project_root, 'assets')
+    
     database_url = os.environ.get('DATABASE_URL') or 'sqlite:///myfigpoint.db'
     
     # Handle different deployment environments
     if os.environ.get('VERCEL') == '1':
-        static_folder = os.path.abspath('../assets')
         # Use /tmp directory for database in Vercel if not already specified
         if not os.environ.get('DATABASE_URL'):
             database_url = 'sqlite:////tmp/myfigpoint.db'
@@ -48,7 +52,8 @@ def create_app():
     # Serve static files
     @app.route('/')
     def index():
-        return send_from_directory('../', 'index.html')
+        # Serve the main index.html from the frontend directory
+        return send_from_directory(frontend_folder, 'index.html')
     
     # Health check endpoint for Render
     @app.route('/healthz')
@@ -64,12 +69,12 @@ def create_app():
         # Handle Vercel deployment differently for static files
         if os.environ.get('VERCEL') == '1':
             if filename.endswith('.html') or filename.endswith('.css') or filename.endswith('.js'):
-                return send_from_directory('../', filename)
-            return send_from_directory('../assets', filename)
+                return send_from_directory(frontend_folder, filename)
+            return send_from_directory(static_folder, filename)
         else:
             if filename.endswith('.html') or filename.endswith('.css') or filename.endswith('.js'):
-                return send_from_directory('../', filename)
-            return send_from_directory('../assets', filename)
+                return send_from_directory(frontend_folder, filename)
+            return send_from_directory(static_folder, filename)
     
     # Serve the main index.html for all non-API routes (for SPA)
     @app.errorhandler(404)
@@ -78,7 +83,7 @@ def create_app():
         if request.path.startswith('/api/'):
             return jsonify({'message': 'Endpoint not found'}), 404
         # Otherwise, serve the main index.html (for SPA routing)
-        return send_from_directory('../', 'index.html')
+        return send_from_directory(frontend_folder, 'index.html')
     
     # Register blueprints
     from backend.routes.auth import auth_bp

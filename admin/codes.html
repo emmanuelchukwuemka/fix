@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyFigPoint - Reward Code Management</title>
+
+  <!-- Tailwind + Inter Font -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            primary: '#FD6606',
+            secondary: '#012E03'
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../assets/css/app.css" />
+</head>
+
+<body class="bg-background text-text min-h-screen flex relative overflow-auto">
+  <!-- Theme Toggle Button -->
+  <button id="themeToggle" class="theme-toggle">
+    <i class="fas fa-moon"></i>
+  </button>
+
+  <!-- Animated Background -->
+  <div class="absolute inset-0 -z-10">
+    <div class="absolute top-10 left-10 w-96 h-96 bg-primary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse"></div>
+    <div class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse"></div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+    <div class="p-6 border-b border-border">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 bg-gradient-to-br from-primary to-orange-600 rounded-xl flex items-center justify-center">
+          <i class="fas fa-crown text-white text-xl"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-black text-primary">MyFigPoint</h2>
+          <p class="text-xs text-gray-500">Admin Dashboard</p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="p-4 space-y-2">
+      <a href="../frontend/dashboard.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-home"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="../frontend/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-tasks"></i>
+        <span>Earn Points</span>
+      </a>
+      <a href="../frontend/referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-users"></i>
+        <span>Refer & Earn</span>
+      </a>
+      <a href="../frontend/wallet.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-wallet"></i>
+        <span>Wallet</span>
+      </a>
+      <a href="../frontend/transactions.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-history"></i>
+        <span>Transaction History</span>
+      </a>
+      <a href="../frontend/redeem.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-gift"></i>
+        <span>Redeem Code</span>
+      </a>
+      <a href="../frontend/support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-headset"></i>
+        <span>Support Center</span>
+      </a>
+      <a href="index.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+        <i class="fas fa-user-shield"></i>
+        <span>Admin Panel</span>
+      </a>
+      <a href="tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-clipboard-check"></i>
+        <span>Task Review</span>
+      </a>
+      <a href="../frontend/profile.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-user-cog"></i>
+        <span>Profile & Settings</span>
+      </a>
+    </nav>
+
+    <div class="p-6 border-t border-border">
+      <div class="flex items-center space-x-3">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <div>
+          <p class="font-semibold">Admin User</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
+        </div>
+      </div>
+      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+        Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 lg:ml-64">
+    <header class="bg-card backdrop-blur-xl border-b border-border sticky top-0 z-40">
+      <div class="flex items-center justify-between px-3 py-1.5">
+        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+        <h1 class="text-2xl md:text-4xl font-black text-primary">
+          Reward Code Management
+        </h1>
+        <div class="flex items-center gap-4">
+          <button onclick="generateNewCodes()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
+            <i class="fas fa-plus"></i> Generate Codes
+          </button>
+          <button onclick="refreshCodes()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
+            <i class="fas fa-sync-alt"></i> Refresh
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="p-6 lg:p-10 max-w-7xl mx-auto">
+      <!-- Stats Overview -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="card rounded-2xl p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 border border-green-500/30">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600 dark:text-gray-400">Total Codes</p>
+              <p class="text-3xl font-bold mt-2">12,450</p>
+            </div>
+            <div class="w-14 h-14 bg-green-600/20 rounded-xl flex items-center justify-center">
+              <i class="fas fa-qrcode text-green-500 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card rounded-2xl p-6 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-blue-500/30">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600 dark:text-gray-400">Used Codes</p>
+              <p class="text-3xl font-bold mt-2">8,723</p>
+            </div>
+            <div class="w-14 h-14 bg-blue-600/20 rounded-xl flex items-center justify-center">
+              <i class="fas fa-check-circle text-blue-500 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card rounded-2xl p-6 bg-gradient-to-br from-yellow-600/20 to-amber-600/20 border border-yellow-500/30">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600 dark:text-gray-400">Available Codes</p>
+              <p class="text-3xl font-bold mt-2">3,727</p>
+            </div>
+            <div class="w-14 h-14 bg-yellow-600/20 rounded-xl flex items-center justify-center">
+              <i class="fas fa-clock text-yellow-500 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card rounded-2xl p-6 bg-gradient-to-br from-purple-600/20 to-pink-600/20 border border-purple-500/30">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600 dark:text-gray-400">Batches</p>
+              <p class="text-3xl font-bold mt-2">42</p>
+            </div>
+            <div class="w-14 h-14 bg-purple-600/20 rounded-xl flex items-center justify-center">
+              <i class="fas fa-layer-group text-purple-500 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="card rounded-3xl p-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div>
+            <label class="block text-sm font-bold mb-2">Search Codes</label>
+            <div class="relative">
+              <input type="text" id="codeSearch" class="form-input w-full px-4 py-3 rounded-2xl pl-10" placeholder="Code or batch ID...">
+              <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
+            </div>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-bold mb-2">Status</label>
+            <select class="form-input w-full px-4 py-3 rounded-2xl" id="statusFilter">
+              <option value="">All Statuses</option>
+              <option value="available">Available</option>
+              <option value="used">Used</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-bold mb-2">Batch</label>
+            <select class="form-input w-full px-4 py-3 rounded-2xl" id="batchFilter">
+              <option value="">All Batches</option>
+              <option value="batch-001">Batch 001</option>
+              <option value="batch-002">Batch 002</option>
+              <option value="batch-003">Batch 003</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-bold mb-2">Date Range</label>
+            <input type="date" class="form-input w-full px-4 py-3 rounded-2xl" id="dateFrom">
+          </div>
+          
+          <div class="flex items-end">
+            <button onclick="applyFilters()" class="w-full bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
+              Apply Filters
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reward Codes Table -->
+      <div class="card rounded-3xl p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold">Reward Codes</h2>
+          <div class="text-right">
+            <p class="text-lg font-bold">Total Codes: <span id="totalCodesCount">12,450</span></p>
+          </div>
+        </div>
+        
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="pb-4 text-left">Code</th>
+                <th class="pb-4 text-left">Point Value</th>
+                <th class="pb-4 text-left">USD Value</th>
+                <th class="pb-4 text-left">Batch ID</th>
+                <th class="pb-4 text-left">Created</th>
+                <th class="pb-4 text-left">Status</th>
+                <th class="pb-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="codesTableBody">
+              <!-- Code rows will be populated dynamically -->
+              <tr class="border-b border-border hover:bg-card/50">
+                <td class="py-4 font-mono font-bold">ABCDE123</td>
+                <td class="py-4">0.30 pts</td>
+                <td class="py-4">$0.09</td>
+                <td class="py-4">BATCH-001</td>
+                <td class="py-4">Dec 10, 2024</td>
+                <td class="py-4">
+                  <span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Used</span>
+                </td>
+                <td class="py-4 text-right">
+                  <button onclick="viewCodeDetails('ABCDE123')" class="text-primary hover:text-orange-700 mx-2">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button onclick="deleteCode('ABCDE123')" class="text-red-500 hover:text-red-700 mx-2">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              
+              <tr class="border-b border-border hover:bg-card/50">
+                <td class="py-4 font-mono font-bold">FGHIJ456</td>
+                <td class="py-4">0.30 pts</td>
+                <td class="py-4">$0.09</td>
+                <td class="py-4">BATCH-001</td>
+                <td class="py-4">Dec 10, 2024</td>
+                <td class="py-4">
+                  <span class="bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold">Available</span>
+                </td>
+                <td class="py-4 text-right">
+                  <button onclick="viewCodeDetails('FGHIJ456')" class="text-primary hover:text-orange-700 mx-2">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button onclick="deleteCode('FGHIJ456')" class="text-red-500 hover:text-red-700 mx-2">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              
+              <tr class="border-b border-border hover:bg-card/50">
+                <td class="py-4 font-mono font-bold">KLMNO789</td>
+                <td class="py-4">0.30 pts</td>
+                <td class="py-4">$0.09</td>
+                <td class="py-4">BATCH-002</td>
+                <td class="py-4">Dec 9, 2024</td>
+                <td class="py-4">
+                  <span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Used</span>
+                </td>
+                <td class="py-4 text-right">
+                  <button onclick="viewCodeDetails('KLMNO789')" class="text-primary hover:text-orange-700 mx-2">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button onclick="deleteCode('KLMNO789')" class="text-red-500 hover:text-red-700 mx-2">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="flex items-center justify-between mt-8">
+          <p class="text-gray-600 dark:text-gray-400">Showing 1 to 3 of 12,450 codes</p>
+          <div class="flex gap-2">
+            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
+            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">2</button>
+            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">3</button>
+            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Overlay -->
+  <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/70 z-40 hidden lg:hidden"></div>
+
+  <!-- Generate Codes Modal -->
+  <div id="generateCodesModal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-card rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold">Generate Reward Codes</h2>
+        <button onclick="closeModal('generateCodesModal')" class="text-gray-500 hover:text-text">
+          <i class="fas fa-times text-2xl"></i>
+        </button>
+      </div>
+      
+      <form id="generateCodesForm" class="space-y-6">
+        <div>
+          <label class="block text-lg font-bold mb-2">Number of Codes</label>
+          <input type="number" min="1" max="10000" class="form-input w-full px-4 py-3 rounded-2xl" id="codeCount" value="100" placeholder="Enter number of codes to generate">
+        </div>
+        
+        <div>
+          <label class="block text-lg font-bold mb-2">Point Value per Code</label>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+            <input type="number" step="0.01" min="0.01" class="form-input w-full pl-10 pr-4 py-3 rounded-2xl" id="pointValue" value="0.30" placeholder="Enter point value">
+          </div>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Each code will be worth $0.30 USD per point</p>
+        </div>
+        
+        <div>
+          <label class="block text-lg font-bold mb-2">Batch Description (Optional)</label>
+          <input type="text" class="form-input w-full px-4 py-3 rounded-2xl" id="batchDescription" placeholder="Enter description for this batch">
+        </div>
+        
+        <div class="flex gap-4 pt-4">
+          <button type="button" onclick="closeModal('generateCodesModal')" class="flex-1 py-3 rounded-2xl border border-border font-bold hover:bg-card/80 transition">
+            Cancel
+          </button>
+          <button type="submit" class="flex-1 py-3 rounded-2xl bg-primary hover:bg-orange-700 text-white font-bold transition">
+            Generate Codes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Code Details Modal -->
+  <div id="codeDetailsModal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-card rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold">Code Details</h2>
+        <button onclick="closeModal('codeDetailsModal')" class="text-gray-500 hover:text-text">
+          <i class="fas fa-times text-2xl"></i>
+        </button>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Code Info -->
+        <div>
+          <div class="p-6 bg-gradient-to-br from-primary/20 to-orange-600/20 rounded-2xl border border-primary/30 mb-6">
+            <div class="text-center">
+              <div class="font-mono text-2xl font-bold mb-2">ABCDE123</div>
+              <div class="flex items-center justify-center gap-4 mt-4">
+                <div class="text-center">
+                  <p class="text-sm text-gray-600 dark:text-gray-400">Point Value</p>
+                  <p class="font-bold">0.30 pts</p>
+                </div>
+                <div class="text-center">
+                  <p class="text-sm text-gray-600 dark:text-gray-400">USD Value</p>
+                  <p class="font-bold">$0.09</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="space-y-4">
+            <div class="p-4 bg-card border border-border rounded-2xl">
+              <p class="text-sm text-gray-600 dark:text-gray-400">Batch ID</p>
+              <p class="font-bold">BATCH-001</p>
+            </div>
+            
+            <div class="p-4 bg-card border border-border rounded-2xl">
+              <p class="text-sm text-gray-600 dark:text-gray-400">Created</p>
+              <p class="font-bold">December 10, 2024</p>
+            </div>
+            
+            <div class="p-4 bg-card border border-border rounded-2xl">
+              <p class="text-sm text-gray-600 dark:text-gray-400">Status</p>
+              <p class="font-bold">
+                <span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Used</span>
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Usage Details -->
+        <div>
+          <h3 class="text-xl font-bold mb-4">Usage Information</h3>
+          
+          <div class="p-6 bg-card border border-border rounded-2xl mb-6">
+            <div class="flex items-center gap-4 mb-4">
+              <div class="w-12 h-12 bg-green-600/20 rounded-xl flex items-center justify-center">
+                <i class="fas fa-user text-green-500"></i>
+              </div>
+              <div>
+                <p class="font-bold">John Smith</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">john.smith@example.com</p>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 mt-6">
+              <div>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Redeemed On</p>
+                <p class="font-bold">December 11, 2024</p>
+              </div>
+              
+              <div>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Time</p>
+                <p class="font-bold">2:45 PM</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex flex-wrap gap-4">
+            <button onclick="exportCode()" class="flex-1 bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
+              <i class="fas fa-download mr-2"></i> Export Code
+            </button>
+            <button onclick="deleteCodeConfirm()" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold">
+              <i class="fas fa-trash mr-2"></i> Delete Code
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('-translate-x-full');
+      document.getElementById('overlay').classList.toggle('hidden');
+    }
+
+    function logout() {
+      localStorage.removeItem('access_token');
+      window.location.href = '../frontend/login.html';
+    }
+
+    function generateNewCodes() {
+      document.getElementById('generateCodesModal').classList.remove('hidden');
+    }
+
+    function refreshCodes() {
+      // In a real implementation, this would fetch fresh data from the API
+      alert('Refreshing code data...');
+    }
+
+    function applyFilters() {
+      // In a real implementation, this would apply filters to the code list
+      alert('Applying filters...');
+    }
+
+    function viewCodeDetails(code) {
+      document.getElementById('codeDetailsModal').classList.remove('hidden');
+    }
+
+    function deleteCode(code) {
+      if (confirm('Are you sure you want to delete this code?')) {
+        alert('Code deleted successfully');
+      }
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.add('hidden');
+    }
+
+    function exportCode() {
+      alert('Export functionality would be implemented here');
+    }
+
+    function deleteCodeConfirm() {
+      if (confirm('Are you sure you want to delete this code? This action cannot be undone.')) {
+        alert('Code deleted successfully');
+        closeModal('codeDetailsModal');
+      }
+    }
+
+    // Form submission
+    document.getElementById('generateCodesForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Codes generation would be processed here');
+      closeModal('generateCodesModal');
+    });
+
+    // Close modals when clicking outside
+    window.onclick = function(event) {
+      if (event.target.classList.contains('fixed') && event.target.classList.contains('inset-0')) {
+        event.target.classList.add('hidden');
+      }
+    }
+  </script>
+  <script src="../assets/js/theme.js"></script>
+  
+  <!-- Fixed Theme Toggle Button -->
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+    <i class="fas fa-moon"></i>
+  </button>
+</body>
+</html>

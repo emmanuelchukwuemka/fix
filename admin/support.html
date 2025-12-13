@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyFigPoint - Support Management</title>
+
+  <!-- Tailwind + Inter Font -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            primary: '#FD6606',
+            secondary: '#012E03'
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../assets/css/app.css" />
+</head>
+
+<body class="bg-background text-text min-h-screen flex relative overflow-auto">
+  <!-- Theme Toggle Button -->
+  <button id="themeToggle" class="theme-toggle">
+    <i class="fas fa-moon"></i>
+  </button>
+
+  <!-- Animated Background -->
+  <div class="absolute inset-0 -z-10">
+    <div class="absolute top-10 left-10 w-96 h-96 bg-primary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse"></div>
+    <div class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse"></div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+    <div class="p-6 border-b border-border">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 bg-gradient-to-br from-primary to-orange-600 rounded-xl flex items-center justify-center">
+          <i class="fas fa-crown text-white text-xl"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-black text-primary">MyFigPoint</h2>
+          <p class="text-xs text-gray-500">Admin Dashboard</p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="p-4 space-y-2">
+      <a href="../frontend/dashboard.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-home"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="../frontend/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-tasks"></i>
+        <span>Earn Points</span>
+      </a>
+      <a href="../frontend/referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-users"></i>
+        <span>Refer & Earn</span>
+      </a>
+      <a href="../frontend/wallet.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-wallet"></i>
+        <span>Wallet</span>
+      </a>
+      <a href="../frontend/transactions.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-history"></i>
+        <span>Transaction History</span>
+      </a>
+      <a href="../frontend/redeem.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-gift"></i>
+        <span>Redeem Code</span>
+      </a>
+      <a href="../frontend/support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-headset"></i>
+        <span>Support Center</span>
+      </a>
+      <a href="index.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+        <i class="fas fa-user-shield"></i>
+        <span>Admin Panel</span>
+      </a>
+      <a href="tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-clipboard-check"></i>
+        <span>Task Review</span>
+      </a>
+      <a href="../frontend/profile.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-user-cog"></i>
+        <span>Profile & Settings</span>
+      </a>
+    </nav>
+
+    <div class="p-6 border-t border-border">
+      <div class="flex items-center space-x-3">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <div>
+          <p class="font-semibold">Admin User</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
+        </div>
+      </div>
+      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+        Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 lg:ml-64">
+    <header class="bg-card backdrop-blur-xl border-b border-border sticky top-0 z-40">
+      <div class="flex items-center justify-between px-3 py-1.5">
+        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+        <h1 class="text-2xl md:text-4xl font-black text-primary">
+          Support Management
+        </h1>
+        <div class="flex items-center gap-4">
+          <button onclick="refreshMessages()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
+            <i class="fas fa-sync-alt"></i> Refresh
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="p-6 lg:p-10 max-w-7xl mx-auto">
+      <!-- Stats Overview -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="card rounded-2xl p-6 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-blue-500/30">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600 dark:text-gray-400">Total Tickets</p>
+              <p class="text-3xl font-bold mt-2">142</p>
+            </div>
+            <div class="w-14 h-14 bg-blue-600/20 rounded-xl flex items-center justify-center">
+              <i class="fas fa-ticket-alt text-blue-500 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card rounded-2xl p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 border border-green-500/30">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600 dark:text-gray-400">Resolved</p>
+              <p class="text-3xl font-bold mt-2">118</p>
+            </div>
+            <div class="w-14 h-14 bg-green-600/20 rounded-xl flex items-center justify-center">
+              <i class="fas fa-check-circle text-green-500 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card rounded-2xl p-6 bg-gradient-to-br from-yellow-600/20 to-amber-600/20 border border-yellow-500/30">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600 dark:text-gray-400">Pending</p>
+              <p class="text-3xl font-bold mt-2">18</p>
+            </div>
+            <div class="w-14 h-14 bg-yellow-600/20 rounded-xl flex items-center justify-center">
+              <i class="fas fa-clock text-yellow-500 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card rounded-2xl p-6 bg-gradient-to-br from-red-600/20 to-pink-600/20 border border-red-500/30">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600 dark:text-gray-400">Urgent</p>
+              <p class="text-3xl font-bold mt-2">6</p>
+            </div>
+            <div class="w-14 h-14 bg-red-600/20 rounded-xl flex items-center justify-center">
+              <i class="fas fa-exclamation-triangle text-red-500 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="card rounded-3xl p-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div>
+            <label class="block text-sm font-bold mb-2">Search Tickets</label>
+            <div class="relative">
+              <input type="text" id="ticketSearch" class="form-input w-full px-4 py-3 rounded-2xl pl-10" placeholder="Subject or user...">
+              <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
+            </div>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-bold mb-2">Status</label>
+            <select class="form-input w-full px-4 py-3 rounded-2xl" id="statusFilter">
+              <option value="">All Statuses</option>
+              <option value="open">Open</option>
+              <option value="pending">Pending</option>
+              <option value="resolved">Resolved</option>
+              <option value="closed">Closed</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-bold mb-2">Priority</label>
+            <select class="form-input w-full px-4 py-3 rounded-2xl" id="priorityFilter">
+              <option value="">All Priorities</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="urgent">Urgent</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-bold mb-2">Category</label>
+            <select class="form-input w-full px-4 py-3 rounded-2xl" id="categoryFilter">
+              <option value="">All Categories</option>
+              <option value="account">Account Issues</option>
+              <option value="payment">Payment/Withdrawal</option>
+              <option value="technical">Technical Issues</option>
+              <option value="feature">Feature Request</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          
+          <div class="flex items-end">
+            <button onclick="applyFilters()" class="w-full bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
+              Apply Filters
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Support Tickets Table -->
+      <div class="card rounded-3xl p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold">Support Tickets</h2>
+          <div class="text-right">
+            <p class="text-lg font-bold">Total Tickets: <span id="totalTicketsCount">142</span></p>
+          </div>
+        </div>
+        
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="pb-4 text-left">Ticket</th>
+                <th class="pb-4 text-left">User</th>
+                <th class="pb-4 text-left">Category</th>
+                <th class="pb-4 text-left">Priority</th>
+                <th class="pb-4 text-left">Status</th>
+                <th class="pb-4 text-left">Created</th>
+                <th class="pb-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="ticketsTableBody">
+              <!-- Ticket rows will be populated dynamically -->
+              <tr class="border-b border-border hover:bg-card/50">
+                <td class="py-4">
+                  <div>
+                    <p class="font-bold">Issue with reward code redemption</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 truncate max-w-xs">I tried to redeem my code but got an error message saying it was already used...</p>
+                  </div>
+                </td>
+                <td class="py-4">
+                  <div class="flex items-center gap-3">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-8 h-8 rounded-full" alt="User">
+                    <span>Sarah Johnson</span>
+                  </div>
+                </td>
+                <td class="py-4">Technical</td>
+                <td class="py-4">
+                  <span class="bg-yellow-600/20 text-yellow-500 px-2 py-1 rounded-full text-xs font-bold">Medium</span>
+                </td>
+                <td class="py-4">
+                  <span class="bg-blue-600/20 text-blue-500 px-2 py-1 rounded-full text-xs font-bold">Open</span>
+                </td>
+                <td class="py-4">Dec 10, 2024</td>
+                <td class="py-4 text-right">
+                  <button onclick="viewTicketDetails(1)" class="text-primary hover:text-orange-700 mx-2">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button onclick="respondToTicket(1)" class="text-green-500 hover:text-green-700 mx-2">
+                    <i class="fas fa-reply"></i>
+                  </button>
+                </td>
+              </tr>
+              
+              <tr class="border-b border-border hover:bg-card/50">
+                <td class="py-4">
+                  <div>
+                    <p class="font-bold">Withdrawal not processed</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 truncate max-w-xs">I submitted a withdrawal request 5 days ago but haven't received my payment yet...</p>
+                  </div>
+                </td>
+                <td class="py-4">
+                  <div class="flex items-center gap-3">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" class="w-8 h-8 rounded-full" alt="User">
+                    <span>John Smith</span>
+                  </div>
+                </td>
+                <td class="py-4">Payment</td>
+                <td class="py-4">
+                  <span class="bg-red-600/20 text-red-500 px-2 py-1 rounded-full text-xs font-bold">High</span>
+                </td>
+                <td class="py-4">
+                  <span class="bg-yellow-600/20 text-yellow-500 px-2 py-1 rounded-full text-xs font-bold">Pending</span>
+                </td>
+                <td class="py-4">Dec 9, 2024</td>
+                <td class="py-4 text-right">
+                  <button onclick="viewTicketDetails(2)" class="text-primary hover:text-orange-700 mx-2">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button onclick="respondToTicket(2)" class="text-green-500 hover:text-green-700 mx-2">
+                    <i class="fas fa-reply"></i>
+                  </button>
+                </td>
+              </tr>
+              
+              <tr class="border-b border-border hover:bg-card/50">
+                <td class="py-4">
+                  <div>
+                    <p class="font-bold">Account verification needed</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 truncate max-w-xs">I need to verify my account to increase withdrawal limits...</p>
+                  </div>
+                </td>
+                <td class="py-4">
+                  <div class="flex items-center gap-3">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mike" class="w-8 h-8 rounded-full" alt="User">
+                    <span>Mike Thompson</span>
+                  </div>
+                </td>
+                <td class="py-4">Account</td>
+                <td class="py-4">
+                  <span class="bg-green-600/20 text-green-500 px-2 py-1 rounded-full text-xs font-bold">Low</span>
+                </td>
+                <td class="py-4">
+                  <span class="bg-green-600/20 text-green-500 px-2 py-1 rounded-full text-xs font-bold">Resolved</span>
+                </td>
+                <td class="py-4">Dec 8, 2024</td>
+                <td class="py-4 text-right">
+                  <button onclick="viewTicketDetails(3)" class="text-primary hover:text-orange-700 mx-2">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="flex items-center justify-between mt-8">
+          <p class="text-gray-600 dark:text-gray-400">Showing 1 to 3 of 142 tickets</p>
+          <div class="flex gap-2">
+            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
+            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">2</button>
+            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">3</button>
+            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Overlay -->
+  <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/70 z-40 hidden lg:hidden"></div>
+
+  <!-- Ticket Details Modal -->
+  <div id="ticketDetailsModal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-card rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold">Ticket Details</h2>
+        <button onclick="closeModal('ticketDetailsModal')" class="text-gray-500 hover:text-text">
+          <i class="fas fa-times text-2xl"></i>
+        </button>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Ticket Info -->
+        <div class="md:col-span-1">
+          <div class="space-y-4">
+            <div class="p-4 bg-card border border-border rounded-2xl">
+              <p class="text-sm text-gray-600 dark:text-gray-400">Ticket ID</p>
+              <p class="font-bold">#TKT-00124</p>
+            </div>
+            
+            <div class="p-4 bg-card border border-border rounded-2xl">
+              <p class="text-sm text-gray-600 dark:text-gray-400">Submitted By</p>
+              <div class="flex items-center gap-3 mt-2">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-10 h-10 rounded-full" alt="User">
+                <div>
+                  <p class="font-bold">Sarah Johnson</p>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">sarah.j@example.com</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="p-4 bg-card border border-border rounded-2xl">
+              <p class="text-sm text-gray-600 dark:text-gray-400">Category</p>
+              <p class="font-bold">Technical Issue</p>
+            </div>
+            
+            <div class="p-4 bg-card border border-border rounded-2xl">
+              <p class="text-sm text-gray-600 dark:text-gray-400">Priority</p>
+              <p>
+                <span class="bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold">Medium</span>
+              </p>
+            </div>
+            
+            <div class="p-4 bg-card border border-border rounded-2xl">
+              <p class="text-sm text-gray-600 dark:text-gray-400">Status</p>
+              <p>
+                <span class="bg-blue-600/20 text-blue-500 px-3 py-1 rounded-full text-sm font-bold">Open</span>
+              </p>
+            </div>
+            
+            <div class="p-4 bg-card border border-border rounded-2xl">
+              <p class="text-sm text-gray-600 dark:text-gray-400">Submitted</p>
+              <p class="font-bold">December 10, 2024</p>
+              <p class="text-sm text-gray-600 dark:text-gray-400">10:30 AM</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Ticket Content -->
+        <div class="md:col-span-2">
+          <div class="mb-8">
+            <h3 class="text-xl font-bold mb-4">Issue Description</h3>
+            <div class="p-6 bg-card border border-border rounded-2xl">
+              <p class="font-bold mb-2">Issue with reward code redemption</p>
+              <p class="text-gray-600 dark:text-gray-400">
+                I tried to redeem my code ABCDE123 but got an error message saying it was already used. 
+                However, I've never used this code before. Please help me resolve this issue as I need 
+                to redeem these points for my withdrawal request.
+              </p>
+            </div>
+          </div>
+          
+          <!-- Conversation History -->
+          <div class="mb-8">
+            <h3 class="text-xl font-bold mb-4">Conversation History</h3>
+            <div class="space-y-4">
+              <div class="p-4 bg-card border border-border rounded-2xl">
+                <div class="flex items-center gap-3 mb-2">
+                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-8 h-8 rounded-full" alt="User">
+                  <div>
+                    <p class="font-bold">Sarah Johnson</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">User • Dec 10, 2024 at 10:30 AM</p>
+                  </div>
+                </div>
+                <p class="mt-2">
+                  I tried to redeem my code ABCDE123 but got an error message saying it was already used. 
+                  However, I've never used this code before. Please help me resolve this issue as I need 
+                  to redeem these points for my withdrawal request.
+                </p>
+              </div>
+              
+              <div class="p-4 bg-primary/10 border border-primary/30 rounded-2xl">
+                <div class="flex items-center gap-3 mb-2">
+                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" class="w-8 h-8 rounded-full" alt="Admin">
+                  <div>
+                    <p class="font-bold">Admin Support</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Support Agent • Dec 10, 2024 at 11:15 AM</p>
+                  </div>
+                </div>
+                <p class="mt-2">
+                  Thank you for contacting support. I'm looking into this issue now and will get back to you shortly.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Response Form -->
+          <div class="mb-6">
+            <h3 class="text-xl font-bold mb-4">Respond to Ticket</h3>
+            <div class="p-6 bg-card border border-border rounded-2xl">
+              <textarea class="form-input w-full px-4 py-3 rounded-2xl mb-4" rows="4" placeholder="Enter your response..."></textarea>
+              <div class="flex flex-wrap gap-4">
+                <button onclick="sendResponse()" class="flex-1 bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
+                  <i class="fas fa-paper-plane mr-2"></i> Send Response
+                </button>
+                <button onclick="resolveTicket()" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-bold">
+                  <i class="fas fa-check mr-2"></i> Mark Resolved
+                </button>
+                <button onclick="closeTicket()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-2xl font-bold">
+                  <i class="fas fa-times mr-2"></i> Close Ticket
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('-translate-x-full');
+      document.getElementById('overlay').classList.toggle('hidden');
+    }
+
+    function logout() {
+      localStorage.removeItem('access_token');
+      window.location.href = '../frontend/login.html';
+    }
+
+    function refreshMessages() {
+      // In a real implementation, this would fetch fresh data from the API
+      alert('Refreshing ticket data...');
+    }
+
+    function applyFilters() {
+      // In a real implementation, this would apply filters to the ticket list
+      alert('Applying filters...');
+    }
+
+    function viewTicketDetails(ticketId) {
+      document.getElementById('ticketDetailsModal').classList.remove('hidden');
+    }
+
+    function respondToTicket(ticketId) {
+      document.getElementById('ticketDetailsModal').classList.remove('hidden');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.add('hidden');
+    }
+
+    function sendResponse() {
+      alert('Response sent successfully');
+    }
+
+    function resolveTicket() {
+      if (confirm('Are you sure you want to mark this ticket as resolved?')) {
+        alert('Ticket marked as resolved');
+        closeModal('ticketDetailsModal');
+      }
+    }
+
+    function closeTicket() {
+      if (confirm('Are you sure you want to close this ticket?')) {
+        alert('Ticket closed');
+        closeModal('ticketDetailsModal');
+      }
+    }
+
+    // Close modals when clicking outside
+    window.onclick = function(event) {
+      if (event.target.classList.contains('fixed') && event.target.classList.contains('inset-0')) {
+        event.target.classList.add('hidden');
+      }
+    }
+  </script>
+  <script src="../assets/js/theme.js"></script>
+  
+  <!-- Fixed Theme Toggle Button -->
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+    <i class="fas fa-moon"></i>
+  </button>
+</body>
+</html>

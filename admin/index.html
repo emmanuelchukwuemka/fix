@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyFigPoint - Admin Overview Dashboard</title>
+
+  <!-- Tailwind + Inter Font -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            primary: '#FD6606',
+            secondary: '#012E03'
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../assets/css/app.css" />
+</head>
+
+<body class="bg-background text-text min-h-screen flex relative overflow-auto">
+  <!-- Theme Toggle Button -->
+  <button id="themeToggle" class="theme-toggle">
+    <i class="fas fa-moon"></i>
+  </button>
+
+  <!-- Animated Background -->
+  <div class="absolute inset-0 -z-10">
+    <div class="absolute top-10 left-10 w-96 h-96 bg-primary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse"></div>
+    <div class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse"></div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+    <div class="p-6 border-b border-border">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 bg-gradient-to-br from-primary to-orange-600 rounded-xl flex items-center justify-center">
+          <i class="fas fa-crown text-white text-xl"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-black text-primary">MyFigPoint</h2>
+          <p class="text-xs text-gray-500">Admin Dashboard</p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="p-4 space-y-2">
+      <a href="../frontend/dashboard.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-home"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="../frontend/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-tasks"></i>
+        <span>Earn Points</span>
+      </a>
+      <a href="../frontend/referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-users"></i>
+        <span>Refer & Earn</span>
+      </a>
+      <a href="../frontend/wallet.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-wallet"></i>
+        <span>Wallet</span>
+      </a>
+      <a href="../frontend/transactions.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-history"></i>
+        <span>Transaction History</span>
+      </a>
+      <a href="../frontend/redeem.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-gift"></i>
+        <span>Redeem Code</span>
+      </a>
+      <a href="../frontend/support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-headset"></i>
+        <span>Support Center</span>
+      </a>
+      <a href="index.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+        <i class="fas fa-user-shield"></i>
+        <span>Admin Panel</span>
+      </a>
+      <a href="tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-clipboard-check"></i>
+        <span>Task Review</span>
+      </a>
+      <a href="../frontend/profile.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-user-cog"></i>
+        <span>Profile & Settings</span>
+      </a>
+    </nav>
+
+    <div class="p-6 border-t border-border">
+      <div class="flex items-center space-x-3">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <div>
+          <p class="font-semibold">Admin User</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
+        </div>
+      </div>
+      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+        Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 lg:ml-64">
+    <header class="bg-card backdrop-blur-xl border-b border-border sticky top-0 z-40">
+      <div class="flex items-center justify-between px-3 py-1.5">
+        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+        <h1 class="text-2xl md:text-4xl font-black text-primary">
+          Admin Overview Dashboard
+        </h1>
+        <div class="text-right">
+          <p class="text-lg md:text-2xl font-bold">Platform Stats</p>
+          <p class="text-3xl md:text-5xl font-bold text-green-400" id="totalUsers">0</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="p-6 lg:p-10 max-w-7xl mx-auto">
+      <!-- Dashboard Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        <div class="card rounded-2xl p-6 bg-gradient-to-br from-primary/20 to-orange-600/20 border border-primary/30">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600 dark:text-gray-400">Total Users</p>
+              <p class="text-3xl font-bold mt-2" id="statTotalUsers">0</p>
+            </div>
+            <div class="w-14 h-14 bg-primary/20 rounded-xl flex items-center justify-center">
+              <i class="fas fa-users text-primary text-2xl"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card rounded-2xl p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 border border-green-500/30">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600 dark:text-gray-400">Pending Withdrawals</p>
+              <p class="text-3xl font-bold mt-2" id="statPendingWithdrawals">0</p>
+            </div>
+            <div class="w-14 h-14 bg-green-600/20 rounded-xl flex items-center justify-center">
+              <i class="fas fa-money-bill-transfer text-green-500 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card rounded-2xl p-6 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-blue-500/30">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600 dark:text-gray-400">Active Tasks</p>
+              <p class="text-3xl font-bold mt-2" id="statActiveTasks">0</p>
+            </div>
+            <div class="w-14 h-14 bg-blue-600/20 rounded-xl flex items-center justify-center">
+              <i class="fas fa-tasks text-blue-500 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card rounded-2xl p-6 bg-gradient-to-br from-purple-600/20 to-pink-600/20 border border-purple-500/30">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600 dark:text-gray-400">Pending Support</p>
+              <p class="text-3xl font-bold mt-2" id="statPendingSupport">0</p>
+            </div>
+            <div class="w-14 h-14 bg-purple-600/20 rounded-xl flex items-center justify-center">
+              <i class="fas fa-headset text-purple-500 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Dashboard Sections -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- User Wallet & Points Management -->
+        <div class="card rounded-3xl p-8">
+          <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+            <i class="fas fa-wallet text-primary"></i> User Wallet & Points Management
+          </h2>
+          
+          <div class="mb-6">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-xl font-bold">Standard Point Rate</h3>
+              <span class="bg-primary/20 text-primary px-3 py-1 rounded-full font-bold">$0.30 USD per point</span>
+            </div>
+            <p class="text-gray-600 dark:text-gray-400">Manage user wallets, view transaction details, and adjust points when necessary.</p>
+          </div>
+          
+          <div class="space-y-4">
+            <button onclick="showUserManagement()" class="w-full bg-card hover:bg-card/80 border border-border rounded-2xl p-4 text-left transition">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 bg-blue-600/20 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-user text-blue-500"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold">View User Wallets</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Check balances and transaction history</p>
+                  </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+              </div>
+            </button>
+            
+            <button onclick="showAdjustPoints()" class="w-full bg-card hover:bg-card/80 border border-border rounded-2xl p-4 text-left transition">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 bg-green-600/20 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-coins text-green-500"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold">Adjust User Points</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Add or deduct points for users</p>
+                  </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+              </div>
+            </button>
+            
+            <button onclick="showWithdrawalApproval()" class="w-full bg-card hover:bg-card/80 border border-border rounded-2xl p-4 text-left transition">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 bg-yellow-600/20 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-check-circle text-yellow-500"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold">Approve Withdrawals</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Review and approve withdrawal requests</p>
+                  </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Reward Code Management -->
+        <div class="card rounded-3xl p-8">
+          <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+            <i class="fas fa-gift text-purple-500"></i> Reward Code Management
+          </h2>
+          
+          <div class="mb-6">
+            <p class="text-gray-600 dark:text-gray-400">Generate, manage, and track reward codes with $0.30 USD per point value.</p>
+          </div>
+          
+          <div class="space-y-4">
+            <button onclick="showGenerateCodes()" class="w-full bg-card hover:bg-card/80 border border-border rounded-2xl p-4 text-left transition">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 bg-purple-600/20 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-plus-circle text-purple-500"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold">Generate New Codes</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Create unique reward codes with point values</p>
+                  </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+              </div>
+            </button>
+            
+            <button onclick="showManageCodes()" class="w-full bg-card hover:bg-card/80 border border-border rounded-2xl p-4 text-left transition">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 bg-indigo-600/20 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-list text-indigo-500"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold">Manage Existing Codes</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">View and manage all generated codes</p>
+                  </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+              </div>
+            </button>
+            
+            <button onclick="showCodeUsage()" class="w-full bg-card hover:bg-card/80 border border-border rounded-2xl p-4 text-left transition">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 bg-pink-600/20 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-chart-bar text-pink-500"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold">Track Code Usage</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Monitor code redemptions and statistics</p>
+                  </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Internal Messaging & Support Management -->
+        <div class="card rounded-3xl p-8">
+          <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+            <i class="fas fa-comments text-blue-500"></i> Internal Messaging & Support
+          </h2>
+          
+          <div class="mb-6">
+            <p class="text-gray-600 dark:text-gray-400">Manage user messages, support tickets, and conversation history.</p>
+          </div>
+          
+          <div class="space-y-4">
+            <button onclick="showSupportMessages()" class="w-full bg-card hover:bg-card/80 border border-border rounded-2xl p-4 text-left transition">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 bg-blue-600/20 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-envelope text-blue-500"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold">Support Messages</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">View and respond to user inquiries</p>
+                  </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+              </div>
+            </button>
+            
+            <button onclick="showComplaints()" class="w-full bg-card hover:bg-card/80 border border-border rounded-2xl p-4 text-left transition">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 bg-red-600/20 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-red-500"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold">User Complaints</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Handle user complaints and issues</p>
+                  </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+              </div>
+            </button>
+            
+            <button onclick="showConversationHistory()" class="w-full bg-card hover:bg-card/80 border border-border rounded-2xl p-4 text-left transition">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 bg-teal-600/20 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-history text-teal-500"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold">Conversation History</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Review past conversations and resolutions</p>
+                  </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- User Profile Access & Verification -->
+        <div class="card rounded-3xl p-8">
+          <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+            <i class="fas fa-user-shield text-green-500"></i> User Profile Access & Verification
+          </h2>
+          
+          <div class="mb-6">
+            <p class="text-gray-600 dark:text-gray-400">Access user profiles, verify details, and manage account information.</p>
+          </div>
+          
+          <div class="space-y-4">
+            <button onclick="showUserProfile()" class="w-full bg-card hover:bg-card/80 border border-border rounded-2xl p-4 text-left transition">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 bg-green-600/20 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-user-circle text-green-500"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold">View User Profiles</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Access complete user profile information</p>
+                  </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+              </div>
+            </button>
+            
+            <button onclick="showBankDetails()" class="w-full bg-card hover:bg-card/80 border border-border rounded-2xl p-4 text-left transition">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 bg-yellow-600/20 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-university text-yellow-500"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold">Verify Bank Details</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Check bank information for withdrawals</p>
+                  </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+              </div>
+            </button>
+            
+            <button onclick="showActivityLogs()" class="w-full bg-card hover:bg-card/80 border border-border rounded-2xl p-4 text-left transition">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 bg-indigo-600/20 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-clipboard-list text-indigo-500"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold">Activity Logs</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Monitor user activities and behavior</p>
+                  </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Earnings & Activities Overview -->
+      <div class="card rounded-3xl p-8 mt-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+          <i class="fas fa-chart-line text-yellow-500"></i> Earnings & Activities Overview
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h3 class="text-xl font-bold mb-4">Platform Performance</h3>
+            <div class="space-y-4">
+              <div class="flex justify-between items-center p-4 bg-card rounded-2xl border border-border">
+                <span>Total Platform Earnings</span>
+                <span class="font-bold text-green-500">$12,450.75</span>
+              </div>
+              <div class="flex justify-between items-center p-4 bg-card rounded-2xl border border-border">
+                <span>Daily Active Users</span>
+                <span class="font-bold text-blue-500">1,248</span>
+              </div>
+              <div class="flex justify-between items-center p-4 bg-card rounded-2xl border border-border">
+                <span>Tasks Completed Today</span>
+                <span class="font-bold text-purple-500">342</span>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <h3 class="text-xl font-bold mb-4">Recent Activities</h3>
+            <div class="space-y-3">
+              <div class="flex items-start gap-3 p-3 bg-card rounded-xl border border-border">
+                <div class="w-10 h-10 bg-green-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <i class="fas fa-check text-green-500"></i>
+                </div>
+                <div>
+                  <p class="font-medium">User John completed a survey task</p>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">2 minutes ago</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start gap-3 p-3 bg-card rounded-xl border border-border">
+                <div class="w-10 h-10 bg-blue-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <i class="fas fa-user-plus text-blue-500"></i>
+                </div>
+                <div>
+                  <p class="font-medium">New user registered via referral</p>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">15 minutes ago</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start gap-3 p-3 bg-card rounded-xl border border-border">
+                <div class="w-10 h-10 bg-purple-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <i class="fas fa-gift text-purple-500"></i>
+                </div>
+                <div>
+                  <p class="font-medium">User Sarah redeemed a reward code</p>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">28 minutes ago</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start gap-3 p-3 bg-card rounded-xl border border-border">
+                <div class="w-10 h-10 bg-yellow-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <i class="fas fa-money-bill-wave text-yellow-500"></i>
+                </div>
+                <div>
+                  <p class="font-medium">Withdrawal request submitted</p>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">32 minutes ago</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mt-8">
+          <h3 class="text-xl font-bold mb-4">Task Management</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <button onclick="createNewTask()" class="bg-card hover:bg-card/80 border border-border rounded-2xl p-4 text-left transition">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-blue-600/20 rounded-xl flex items-center justify-center">
+                  <i class="fas fa-plus text-blue-500"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold">Create New Task</h4>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">Add earning opportunities</p>
+                </div>
+              </div>
+            </button>
+            
+            <button onclick="assignRewards()" class="bg-card hover:bg-card/80 border border-border rounded-2xl p-4 text-left transition">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-green-600/20 rounded-xl flex items-center justify-center">
+                  <i class="fas fa-award text-green-500"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold">Assign Rewards</h4>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">Award points for completed tasks</p>
+                </div>
+              </div>
+            </button>
+            
+            <button onclick="viewAllActivities()" class="bg-card hover:bg-card/80 border border-border rounded-2xl p-4 text-left transition">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-indigo-600/20 rounded-xl flex items-center justify-center">
+                  <i class="fas fa-list-alt text-indigo-500"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold">View All Activities</h4>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">Detailed activity monitoring</p>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Referral System Management -->
+      <div class="card rounded-3xl p-8 mt-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+          <i class="fas fa-network-wired text-indigo-500"></i> Referral System Management
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-6 bg-card rounded-2xl border border-border text-center">
+            <div class="w-16 h-16 bg-indigo-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-users text-indigo-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold">Total Referrals</h3>
+            <p class="text-3xl font-bold text-indigo-500 mt-2">1,842</p>
+          </div>
+          
+          <div class="p-6 bg-card rounded-2xl border border-border text-center">
+            <div class="w-16 h-16 bg-green-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-dollar-sign text-green-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold">Referral Earnings</h3>
+            <p class="text-3xl font-bold text-green-500 mt-2">$3,240.50</p>
+          </div>
+          
+          <div class="p-6 bg-card rounded-2xl border border-border text-center">
+            <div class="w-16 h-16 bg-yellow-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-percentage text-yellow-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold">Avg. Conversion</h3>
+            <p class="text-3xl font-bold text-yellow-500 mt-2">24.7%</p>
+          </div>
+        </div>
+        
+        <div class="mt-8">
+          <h3 class="text-xl font-bold mb-4">Referral Management Actions</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <button onclick="awardReferralBonus()" class="bg-card hover:bg-card/80 border border-border rounded-2xl p-4 text-left transition">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-yellow-600/20 rounded-xl flex items-center justify-center">
+                  <i class="fas fa-gift text-yellow-500"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold">Award Referral Bonuses</h4>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">Manually award referral bonuses to users</p>
+                </div>
+              </div>
+            </button>
+            
+            <button onclick="viewReferralTree()" class="bg-card hover:bg-card/80 border border-border rounded-2xl p-4 text-left transition">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-teal-600/20 rounded-xl flex items-center justify-center">
+                  <i class="fas fa-sitemap text-teal-500"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold">View Referral Tree</h4>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">Explore user referral networks</p>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Partner Account Management -->
+      <div class="card rounded-3xl p-8 mt-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+          <i class="fas fa-handshake text-pink-500"></i> Partner Account Management
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-6 bg-card rounded-2xl border border-border text-center">
+            <div class="w-16 h-16 bg-pink-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-user-friends text-pink-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold">Total Partners</h3>
+            <p class="text-3xl font-bold text-pink-500 mt-2">142</p>
+          </div>
+          
+          <div class="p-6 bg-card rounded-2xl border border-border text-center">
+            <div class="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-clock text-blue-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold">Pending Approval</h3>
+            <p class="text-3xl font-bold text-blue-500 mt-2">7</p>
+          </div>
+          
+          <div class="p-6 bg-card rounded-2xl border border-border text-center">
+            <div class="w-16 h-16 bg-green-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-check-circle text-green-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold">Approved Partners</h3>
+            <p class="text-3xl font-bold text-green-500 mt-2">135</p>
+          </div>
+        </div>
+        
+        <div class="mt-8">
+          <h3 class="text-xl font-bold mb-4">Partner Management Actions</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <button onclick="approvePartners()" class="bg-card hover:bg-card/80 border border-border rounded-2xl p-4 text-left transition">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-green-600/20 rounded-xl flex items-center justify-center">
+                  <i class="fas fa-user-check text-green-500"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold">Approve Pending Partners</h4>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">Review and approve partner accounts</p>
+                </div>
+              </div>
+            </button>
+            
+            <button onclick="managePartnerCodes()" class="bg-card hover:bg-card/80 border border-border rounded-2xl p-4 text-left transition">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-purple-600/20 rounded-xl flex items-center justify-center">
+                  <i class="fas fa-qrcode text-purple-500"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold">Manage Partner Codes</h4>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">Generate and track partner codes</p>
+                </div>
+              </div>
+            </button>
+            
+            <button onclick="viewPartnerStats()" class="bg-card hover:bg-card/80 border border-border rounded-2xl p-4 text-left transition">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-indigo-600/20 rounded-xl flex items-center justify-center">
+                  <i class="fas fa-chart-pie text-indigo-500"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold">View Partner Statistics</h4>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">Analyze partner performance</p>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Full App Features Control -->
+      <div class="card rounded-3xl p-8 mt-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+          <i class="fas fa-sliders-h text-red-500"></i> Full App Features Control
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <button onclick="manageEarnPoints()" class="bg-card hover:bg-card/80 border border-border rounded-2xl p-6 text-center transition">
+            <div class="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-tasks text-blue-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold">Earn Points Module</h3>
+            <p class="text-gray-600 dark:text-gray-400 mt-2">Create and manage earning tasks</p>
+          </button>
+          
+          <button onclick="manageReferEarn()" class="bg-card hover:bg-card/80 border border-border rounded-2xl p-6 text-center transition">
+            <div class="w-16 h-16 bg-indigo-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-users text-indigo-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold">Refer & Earn Module</h3>
+            <p class="text-gray-600 dark:text-gray-400 mt-2">Configure referral program settings</p>
+          </button>
+          
+          <button onclick="manageWallet()" class="bg-card hover:bg-card/80 border border-border rounded-2xl p-6 text-center transition">
+            <div class="w-16 h-16 bg-green-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-wallet text-green-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold">Wallet Management</h3>
+            <p class="text-gray-600 dark:text-gray-400 mt-2">Control wallet features and limits</p>
+          </button>
+          
+          <button onclick="manageTransactions()" class="bg-card hover:bg-card/80 border border-border rounded-2xl p-6 text-center transition">
+            <div class="w-16 h-16 bg-yellow-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-history text-yellow-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold">Transaction History</h3>
+            <p class="text-gray-600 dark:text-gray-400 mt-2">Monitor all financial transactions</p>
+          </button>
+          
+          <button onclick="manageRedeemCodes()" class="bg-card hover:bg-card/80 border border-border rounded-2xl p-6 text-center transition">
+            <div class="w-16 h-16 bg-purple-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-gift text-purple-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold">Redeem Code System</h3>
+            <p class="text-gray-600 dark:text-gray-400 mt-2">Manage code generation and usage</p>
+          </button>
+          
+          <button onclick="manageSupportCenter()" class="bg-card hover:bg-card/80 border border-border rounded-2xl p-6 text-center transition">
+            <div class="w-16 h-16 bg-red-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-headset text-red-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold">Support Center</h3>
+            <p class="text-gray-600 dark:text-gray-400 mt-2">Handle user support and inquiries</p>
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Overlay -->
+  <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/70 z-40 hidden lg:hidden"></div>
+
+  <!-- Modals for various admin functions -->
+  <!-- Adjust Points Modal -->
+  <div id="adjustPointsModal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-card rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold">Adjust User Points</h2>
+        <button onclick="closeModal('adjustPointsModal')" class="text-gray-500 hover:text-text">
+          <i class="fas fa-times text-2xl"></i>
+        </button>
+      </div>
+      
+      <form id="adjustPointsForm" class="space-y-6">
+        <div>
+          <label class="block text-lg font-bold mb-2">Select User</label>
+          <select class="form-input w-full px-4 py-3 rounded-2xl" id="userIdSelect">
+            <option value="">Select a user...</option>
+            <!-- Options will be populated dynamically -->
+          </select>
+        </div>
+        
+        <div>
+          <label class="block text-lg font-bold mb-2">Operation</label>
+          <div class="grid grid-cols-2 gap-4">
+            <label class="flex items-center gap-3 p-4 bg-card border border-border rounded-2xl cursor-pointer">
+              <input type="radio" name="operation" value="add" checked class="hidden peer">
+              <div class="w-6 h-6 rounded-full border-2 border-gray-400 peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center">
+                <i class="fas fa-check text-white text-xs"></i>
+              </div>
+              <span class="font-bold">Add Points</span>
+            </label>
+            
+            <label class="flex items-center gap-3 p-4 bg-card border border-border rounded-2xl cursor-pointer">
+              <input type="radio" name="operation" value="subtract" class="hidden peer">
+              <div class="w-6 h-6 rounded-full border-2 border-gray-400 peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center">
+                <i class="fas fa-check text-white text-xs"></i>
+              </div>
+              <span class="font-bold">Subtract Points</span>
+            </label>
+          </div>
+        </div>
+        
+        <div>
+          <label class="block text-lg font-bold mb-2">Points Amount</label>
+          <input type="number" step="0.01" min="0" class="form-input w-full px-4 py-3 rounded-2xl" id="pointsAmount" placeholder="Enter points amount">
+        </div>
+        
+        <div>
+          <label class="block text-lg font-bold mb-2">Reason (Optional)</label>
+          <textarea class="form-input w-full px-4 py-3 rounded-2xl" id="adjustReason" rows="3" placeholder="Enter reason for adjustment"></textarea>
+        </div>
+        
+        <div class="flex gap-4 pt-4">
+          <button type="button" onclick="closeModal('adjustPointsModal')" class="flex-1 py-3 rounded-2xl border border-border font-bold hover:bg-card/80 transition">
+            Cancel
+          </button>
+          <button type="submit" class="flex-1 py-3 rounded-2xl bg-primary hover:bg-orange-700 text-white font-bold transition">
+            Adjust Points
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Generate Codes Modal -->
+  <div id="generateCodesModal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-card rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold">Generate Reward Codes</h2>
+        <button onclick="closeModal('generateCodesModal')" class="text-gray-500 hover:text-text">
+          <i class="fas fa-times text-2xl"></i>
+        </button>
+      </div>
+      
+      <form id="generateCodesForm" class="space-y-6">
+        <div>
+          <label class="block text-lg font-bold mb-2">Number of Codes</label>
+          <input type="number" min="1" max="1000" class="form-input w-full px-4 py-3 rounded-2xl" id="codeCount" value="100" placeholder="Enter number of codes to generate">
+        </div>
+        
+        <div>
+          <label class="block text-lg font-bold mb-2">Point Value per Code</label>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+            <input type="number" step="0.01" min="0.01" class="form-input w-full pl-10 pr-4 py-3 rounded-2xl" id="pointValue" value="0.30" placeholder="Enter point value">
+          </div>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Each code will be worth $0.30 USD per point</p>
+        </div>
+        
+        <div>
+          <label class="block text-lg font-bold mb-2">Batch Description (Optional)</label>
+          <input type="text" class="form-input w-full px-4 py-3 rounded-2xl" id="batchDescription" placeholder="Enter description for this batch">
+        </div>
+        
+        <div class="flex gap-4 pt-4">
+          <button type="button" onclick="closeModal('generateCodesModal')" class="flex-1 py-3 rounded-2xl border border-border font-bold hover:bg-card/80 transition">
+            Cancel
+          </button>
+          <button type="submit" class="flex-1 py-3 rounded-2xl bg-primary hover:bg-orange-700 text-white font-bold transition">
+            Generate Codes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('-translate-x-full');
+      document.getElementById('overlay').classList.toggle('hidden');
+    }
+
+    // Logout function
+    function logout() {
+      localStorage.removeItem('access_token');
+      window.location.href = '../frontend/login.html';
+    }
+
+    // Navigation functions (these would connect to the existing pages)
+    function showUserManagement() {
+      window.location.href = 'users.html';
+    }
+
+    function showAdjustPoints() {
+      document.getElementById('adjustPointsModal').classList.remove('hidden');
+    }
+
+    function showWithdrawalApproval() {
+      window.location.href = 'withdrawals.html';
+    }
+
+    function showGenerateCodes() {
+      document.getElementById('generateCodesModal').classList.remove('hidden');
+    }
+
+    function showManageCodes() {
+      window.location.href = 'codes.html';
+    }
+
+    function showCodeUsage() {
+      window.location.href = 'codes.html#usage';
+    }
+
+    function showSupportMessages() {
+      window.location.href = 'support.html';
+    }
+
+    function showComplaints() {
+      window.location.href = 'support.html#complaints';
+    }
+
+    function showConversationHistory() {
+      window.location.href = 'support.html#history';
+    }
+
+    function showUserProfile() {
+      window.location.href = 'profiles.html';
+    }
+
+    function showBankDetails() {
+      window.location.href = 'profiles.html#bank-details';
+    }
+
+    function showActivityLogs() {
+      window.location.href = 'activities.html';
+    }
+
+    function awardReferralBonus() {
+      window.location.href = 'referrals.html#award-bonus';
+    }
+
+    function viewReferralTree() {
+      window.location.href = 'referrals.html#tree';
+    }
+
+    function manageEarnPoints() {
+      window.location.href = 'tasks.html';
+    }
+
+    function manageReferEarn() {
+      window.location.href = 'referrals.html';
+    }
+
+    function manageWallet() {
+      window.location.href = 'withdrawals.html';
+    }
+
+    function manageTransactions() {
+      window.location.href = '../transactions.html';
+    }
+
+    function manageRedeemCodes() {
+      window.location.href = 'codes.html';
+    }
+
+    function manageSupportCenter() {
+      window.location.href = 'support.html';
+    }
+
+    function createNewTask() {
+      window.location.href = 'tasks.html#create-task';
+    }
+
+    function assignRewards() {
+      window.location.href = 'tasks.html#assign-rewards';
+    }
+
+    function viewAllActivities() {
+      window.location.href = 'activities.html';
+    }
+
+    function approvePartners() {
+      window.location.href = 'partners.html#approvals';
+    }
+
+    function managePartnerCodes() {
+      window.location.href = 'partners.html#codes';
+    }
+
+    function viewPartnerStats() {
+      window.location.href = 'partners.html#statistics';
+    }
+
+    // Modal functions
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.add('hidden');
+    }
+
+    // Close modals when clicking outside
+    window.onclick = function(event) {
+      if (event.target.classList.contains('fixed') && event.target.classList.contains('inset-0')) {
+        event.target.classList.add('hidden');
+      }
+    }
+
+    // Form submissions
+    document.getElementById('adjustPointsForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Points adjustment would be processed here');
+      closeModal('adjustPointsModal');
+    });
+
+    document.getElementById('generateCodesForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Code generation would be processed here');
+      closeModal('generateCodesModal');
+    });
+
+    // Fetch dashboard stats when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      // In a real implementation, these would be fetched from the API
+      document.getElementById('statTotalUsers').textContent = '1,247';
+      document.getElementById('statPendingWithdrawals').textContent = '23';
+      document.getElementById('statActiveTasks').textContent = '156';
+      document.getElementById('statPendingSupport').textContent = '8';
+      document.getElementById('totalUsers').textContent = '1,247';
+    });
+  </script>
+  <script src="../assets/js/theme.js"></script>
+  
+  <!-- Fixed Theme Toggle Button -->
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+    <i class="fas fa-moon"></i>
+  </button>
+</body>
+</html>
