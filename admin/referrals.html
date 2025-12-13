@@ -41,9 +41,7 @@
   <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
     <div class="p-6 border-b border-border">
       <div class="flex items-center gap-3">
-        <div class="w-12 h-12 bg-gradient-to-br from-primary to-orange-600 rounded-xl flex items-center justify-center">
-          <i class="fas fa-crown text-white text-xl"></i>
-        </div>
+        <img src="../assets/logo.png" alt="MyFigPoint Logo" class="w-12 h-12 rounded-full object-contain">
         <div>
           <h2 class="text-xl font-black text-primary">MyFigPoint</h2>
           <p class="text-xs text-gray-500">Admin Dashboard</p>
@@ -52,45 +50,45 @@
     </div>
 
     <nav class="p-4 space-y-2">
-      <a href="../frontend/dashboard.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-home"></i>
         <span>Dashboard</span>
       </a>
-      <a href="../frontend/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-tasks"></i>
         <span>Earn Points</span>
       </a>
-      <a href="../frontend/referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-users"></i>
         <span>Refer & Earn</span>
       </a>
-      <a href="../frontend/wallet.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/withdrawals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-wallet"></i>
         <span>Wallet</span>
       </a>
-      <a href="../frontend/transactions.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/activities.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-history"></i>
         <span>Transaction History</span>
       </a>
-      <a href="../frontend/redeem.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/codes.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-gift"></i>
         <span>Redeem Code</span>
       </a>
-      <a href="../frontend/support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-headset"></i>
         <span>Support Center</span>
       </a>
-      <a href="index.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="/admin/profiles.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-user-shield"></i>
         <span>Admin Panel</span>
       </a>
-      <a href="tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-clipboard-check"></i>
         <span>Task Review</span>
       </a>
-      <a href="../frontend/profile.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/users.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-user-cog"></i>
-        <span>Profile & Settings</span>
+        <span>User Management</span>
       </a>
     </nav>
 
@@ -538,6 +536,47 @@
   </div>
 
   <script>
+    // API Base URL
+    const API_BASE_URL = '/api';
+    
+    // Get auth token from localStorage
+    function getAuthToken() {
+      return localStorage.getItem('access_token');
+    }
+    
+    // Common headers for API requests
+    function getAuthHeaders() {
+      const token = getAuthToken();
+      return {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      };
+    }
+    
+    // Fetch with error handling
+    async function apiRequest(url, options = {}) {
+      try {
+        const response = await fetch(API_BASE_URL + url, {
+          ...options,
+          headers: {
+            ...getAuthHeaders(),
+            ...options.headers
+          }
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'API request failed');
+        }
+        
+        return await response.json();
+      } catch (error) {
+        console.error('API request failed:', error);
+        alert('Error: ' + error.message);
+        throw error;
+      }
+    }
+    
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('overlay').classList.toggle('hidden');
@@ -545,7 +584,76 @@
 
     function logout() {
       localStorage.removeItem('access_token');
-      window.location.href = '../frontend/login.html';
+      window.location.href = '/frontend/login.html';
+    }
+
+    async function loadReferralStats() {
+      try {
+        const statsResponse = await apiRequest('/referrals/admin/top-referrers');
+        const stats = statsResponse.top_referrers;
+        
+        if (stats && stats.length > 0) {
+          // Update top referrer in stats
+          document.querySelector('.card.rounded-2xl.p-6.bg-gradient-to-br.from-blue-600\\/20.to-indigo-600\\/20.border.border-blue-500\\/30 .text-3xl.font-bold.mt-2').textContent = 
+            stats[0].full_name.split(' ')[0]; // First name only
+          
+          // Update total referrals count
+          document.getElementById('totalReferrersCount').textContent = stats.length;
+        }
+      } catch (error) {
+        console.error('Failed to load referral stats:', error);
+      }
+    }
+    
+    async function loadTopReferrers() {
+      try {
+        const response = await apiRequest('/referrals/admin/top-referrers');
+        const referrers = response.top_referrers;
+        
+        const tableBody = document.getElementById('referrersTableBody');
+        tableBody.innerHTML = '';
+        
+        referrers.forEach((referrer, index) => {
+          const row = document.createElement('tr');
+          row.className = 'border-b border-border hover:bg-card/50';
+          row.innerHTML = `
+            <td class="py-4">
+              <div class="flex items-center gap-3">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${referrer.full_name}" class="w-10 h-10 rounded-full" alt="User">
+                <div>
+                  <p class="font-bold">${referrer.full_name}</p>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">${referrer.email}</p>
+                </div>
+              </div>
+            </td>
+            <td class="py-4 font-mono font-bold">${referrer.referral_code}</td>
+            <td class="py-4 font-bold">${referrer.referral_count}</td>
+            <td class="py-4">$${referrer.total_earnings.toFixed(2)}</td>
+            <td class="py-4">${Math.min(100, Math.round((referrer.referral_count / (referrer.referral_count + 10)) * 100))}%</td>
+            <td class="py-4 text-right">
+              <button onclick="viewReferrerDetails(${referrer.id})" class="text-primary hover:text-orange-700 mx-2">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button onclick="awardBonus(${referrer.id})" class="text-yellow-500 hover:text-yellow-700 mx-2">
+                <i class="fas fa-gift"></i>
+              </button>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+        
+        // Populate referrer select dropdown
+        const referrerSelect = document.getElementById('referrerSelect');
+        referrerSelect.innerHTML = '<option value="">Select a referrer...</option>';
+        referrers.forEach(referrer => {
+          const option = document.createElement('option');
+          option.value = referrer.id;
+          option.textContent = `${referrer.full_name} (${referrer.referral_count} referrals)`;
+          referrerSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Failed to load top referrers:', error);
+      }
     }
 
     function awardBulkBonuses() {
@@ -553,13 +661,14 @@
     }
 
     function refreshReferrals() {
-      // In a real implementation, this would fetch fresh data from the API
-      alert('Refreshing referral data...');
+      loadReferralStats();
+      loadTopReferrers();
+      alert('Referral data refreshed successfully!');
     }
 
     function applyFilters() {
       // In a real implementation, this would apply filters to the referrer list
-      alert('Applying filters...');
+      alert('Filters would be applied in a full implementation');
     }
 
     function viewFullTree() {
@@ -589,13 +698,53 @@
     function viewFullReferralTree() {
       alert('Full referral tree visualization would open here');
     }
+    
+    async function submitAwardBonusForm(event) {
+      event.preventDefault();
+      
+      const formData = new FormData(event.target);
+      const userId = document.getElementById('referrerSelect').value;
+      const bonusType = document.querySelector('input[name="bonusType"]:checked').value;
+      const amount = document.getElementById('bonusAmount').value;
+      const reason = document.getElementById('bonusReason').value;
+      
+      if (!userId) {
+        alert('Please select a referrer');
+        return;
+      }
+      
+      if (!amount || amount <= 0) {
+        alert('Please enter a valid amount');
+        return;
+      }
+      
+      try {
+        const requestData = {
+          user_id: parseInt(userId),
+          reason: reason || 'Admin awarded bonus'
+        };
+        
+        if (bonusType === 'points') {
+          requestData.points = parseFloat(amount);
+        } else {
+          requestData.amount = parseFloat(amount);
+        }
+        
+        await apiRequest('/admin/referrals/award-bonus', {
+          method: 'POST',
+          body: JSON.stringify(requestData)
+        });
+        
+        alert('Bonus awarded successfully!');
+        closeModal('awardBonusModal');
+        refreshReferrals(); // Refresh the data
+      } catch (error) {
+        console.error('Failed to award bonus:', error);
+      }
+    }
 
     // Form submission
-    document.getElementById('awardBonusForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      alert('Bonus award would be processed here');
-      closeModal('awardBonusModal');
-    });
+    document.getElementById('awardBonusForm').addEventListener('submit', submitAwardBonusForm);
 
     // Update amount prefix based on bonus type
     document.querySelectorAll('input[name="bonusType"]').forEach(radio => {
@@ -611,6 +760,12 @@
         event.target.classList.add('hidden');
       }
     }
+    
+    // Load data when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      loadReferralStats();
+      loadTopReferrers();
+    });
   </script>
   <script src="../assets/js/theme.js"></script>
   

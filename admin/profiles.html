@@ -41,9 +41,7 @@
   <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
     <div class="p-6 border-b border-border">
       <div class="flex items-center gap-3">
-        <div class="w-12 h-12 bg-gradient-to-br from-primary to-orange-600 rounded-xl flex items-center justify-center">
-          <i class="fas fa-crown text-white text-xl"></i>
-        </div>
+        <img src="../assets/logo.png" alt="MyFigPoint Logo" class="w-12 h-12 rounded-full object-contain">
         <div>
           <h2 class="text-xl font-black text-primary">MyFigPoint</h2>
           <p class="text-xs text-gray-500">Admin Dashboard</p>
@@ -52,43 +50,43 @@
     </div>
 
     <nav class="p-4 space-y-2">
-      <a href="../frontend/dashboard.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-home"></i>
         <span>Dashboard</span>
       </a>
-      <a href="../frontend/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-tasks"></i>
         <span>Earn Points</span>
       </a>
-      <a href="../frontend/referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-users"></i>
         <span>Refer & Earn</span>
       </a>
-      <a href="../frontend/wallet.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/withdrawals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-wallet"></i>
         <span>Wallet</span>
       </a>
-      <a href="../frontend/transactions.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/activities.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-history"></i>
         <span>Transaction History</span>
       </a>
-      <a href="../frontend/redeem.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/codes.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-gift"></i>
         <span>Redeem Code</span>
       </a>
-      <a href="../frontend/support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-headset"></i>
         <span>Support Center</span>
       </a>
-      <a href="index.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="/admin/" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-user-shield"></i>
         <span>Admin Panel</span>
       </a>
-      <a href="tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-clipboard-check"></i>
         <span>Task Review</span>
       </a>
-      <a href="../frontend/profile.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/profiles.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-user-cog"></i>
         <span>Profile & Settings</span>
       </a>
@@ -245,102 +243,10 @@
             </thead>
             <tbody id="profilesTableBody">
               <!-- Profile rows will be populated dynamically -->
-              <tr class="border-b border-border hover:bg-card/50">
-                <td class="py-4">
-                  <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-10 h-10 rounded-full" alt="User">
-                    <div>
-                      <p class="font-bold">Sarah Johnson</p>
-                      <p class="text-sm text-gray-600 dark:text-gray-400">sarah.j@example.com</p>
-                    </div>
-                  </div>
-                </td>
-                <td class="py-4">
-                  <div>
-                    <p>+1 (555) 123-4567</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">ID: MP7XK9</p>
-                  </div>
-                </td>
-                <td class="py-4">
-                  <span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Verified</span>
-                </td>
-                <td class="py-4">
-                  <span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Active</span>
-                </td>
-                <td class="py-4">Mar 22, 2024</td>
-                <td class="py-4 text-right">
-                  <button onclick="viewProfileDetails(1)" class="text-primary hover:text-orange-700 mx-2">
-                    <i class="fas fa-eye"></i>
-                  </button>
-                  <button onclick="verifyProfile(1)" class="text-blue-500 hover:text-blue-700 mx-2">
-                    <i class="fas fa-badge-check"></i>
-                  </button>
-                </td>
-              </tr>
-              
-              <tr class="border-b border-border hover:bg-card/50">
-                <td class="py-4">
-                  <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" class="w-10 h-10 rounded-full" alt="User">
-                    <div>
-                      <p class="font-bold">John Smith</p>
-                      <p class="text-sm text-gray-600 dark:text-gray-400">john.smith@example.com</p>
-                    </div>
-                  </div>
-                </td>
-                <td class="py-4">
-                  <div>
-                    <p>+1 (555) 987-6543</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">ID: JOHN8YK</p>
-                  </div>
-                </td>
-                <td class="py-4">
-                  <span class="bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold">Pending</span>
-                </td>
-                <td class="py-4">
-                  <span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Active</span>
-                </td>
-                <td class="py-4">Jan 15, 2024</td>
-                <td class="py-4 text-right">
-                  <button onclick="viewProfileDetails(2)" class="text-primary hover:text-orange-700 mx-2">
-                    <i class="fas fa-eye"></i>
-                  </button>
-                  <button onclick="verifyProfile(2)" class="text-blue-500 hover:text-blue-700 mx-2">
-                    <i class="fas fa-badge-check"></i>
-                  </button>
-                </td>
-              </tr>
-              
-              <tr class="border-b border-border hover:bg-card/50">
-                <td class="py-4">
-                  <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mike" class="w-10 h-10 rounded-full" alt="User">
-                    <div>
-                      <p class="font-bold">Mike Thompson</p>
-                      <p class="text-sm text-gray-600 dark:text-gray-400">mike.t@example.com</p>
-                    </div>
-                  </div>
-                </td>
-                <td class="py-4">
-                  <div>
-                    <p>+1 (555) 456-7890</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">ID: MIKE9ZK</p>
-                  </div>
-                </td>
-                <td class="py-4">
-                  <span class="bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold">Unverified</span>
-                </td>
-                <td class="py-4">
-                  <span class="bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold">Suspended</span>
-                </td>
-                <td class="py-4">Dec 5, 2024</td>
-                <td class="py-4 text-right">
-                  <button onclick="viewProfileDetails(3)" class="text-primary hover:text-orange-700 mx-2">
-                    <i class="fas fa-eye"></i>
-                  </button>
-                  <button onclick="unsuspendAccount(3)" class="text-green-500 hover:text-green-700 mx-2">
-                    <i class="fas fa-user-check"></i>
-                  </button>
+              <tr>
+                <td colspan="6" class="text-center py-10">
+                  <i class="fas fa-spinner fa-spin text-4xl text-primary"></i>
+                  <p class="mt-4 text-xl">Loading profiles...</p>
                 </td>
               </tr>
             </tbody>
@@ -552,6 +458,10 @@
   </div>
 
   <script>
+    // Global variables
+    let currentPage = 1;
+    let currentProfileId = null;
+    
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('overlay').classList.toggle('hidden');
@@ -562,29 +472,358 @@
       window.location.href = '../frontend/login.html';
     }
 
+    function loadProfiles() {
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        window.location.href = '../frontend/login.html';
+        return;
+      }
+      
+      // Get filter values
+      const searchQuery = document.getElementById('userSearch').value;
+      const verificationFilter = document.getElementById('verificationFilter').value;
+      const accountFilter = document.getElementById('accountFilter').value;
+      const joinDate = document.getElementById('joinDate').value;
+      
+      // Build query parameters
+      const params = new URLSearchParams();
+      params.append('page', currentPage);
+      params.append('per_page', 20);
+      
+      if (searchQuery) params.append('search', searchQuery);
+      if (verificationFilter) params.append('verification_status', verificationFilter);
+      if (accountFilter) params.append('account_status', accountFilter);
+      if (joinDate) params.append('join_date', joinDate);
+      
+      // Show loading state
+      document.getElementById('profilesTableBody').innerHTML = `
+        <tr>
+          <td colspan="6" class="text-center py-10">
+            <i class="fas fa-spinner fa-spin text-4xl text-primary"></i>
+            <p class="mt-4 text-xl">Loading profiles...</p>
+          </td>
+        </tr>
+      `;
+      
+      fetch(`/api/admin/users?${params.toString()}`, {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.users) {
+          // Update total users count
+          document.getElementById('totalUsersCount').textContent = data.total.toLocaleString();
+          
+          // Render profiles
+          renderProfiles(data.users);
+        } else {
+          throw new Error(data.message || 'Failed to load profiles');
+        }
+      })
+      .catch(error => {
+        console.error('Error loading profiles:', error);
+        document.getElementById('profilesTableBody').innerHTML = `
+          <tr>
+            <td colspan="6" class="text-center py-10">
+              <i class="fas fa-exclamation-triangle text-4xl text-red-500"></i>
+              <p class="mt-4 text-xl">Failed to load profiles</p>
+              <button onclick="loadProfiles()" class="mt-4 bg-primary hover:bg-orange-700 px-6 py-3 rounded-xl font-bold transition">
+                Retry
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+    
+    function renderProfiles(users) {
+      const tbody = document.getElementById('profilesTableBody');
+      
+      if (users.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="text-center py-10">
+              <i class="fas fa-inbox text-4xl text-gray-500"></i>
+              <p class="mt-4 text-xl">No profiles found</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      tbody.innerHTML = '';
+      
+      users.forEach(user => {
+        const row = document.createElement('tr');
+        row.className = 'border-b border-border hover:bg-card/50';
+        
+        // Format join date
+        const joinDate = new Date(user.created_at);
+        const formattedDate = joinDate.toLocaleDateString();
+        
+        // Determine verification status badge
+        let verificationBadge = '';
+        if (user.is_verified) {
+          verificationBadge = '<span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Verified</span>';
+        } else if (user.verification_pending) {
+          verificationBadge = '<span class="bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold">Pending</span>';
+        } else {
+          verificationBadge = '<span class="bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold">Unverified</span>';
+        }
+        
+        // Determine account status badge
+        let accountBadge = '';
+        if (user.is_suspended) {
+          accountBadge = '<span class="bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold">Suspended</span>';
+        } else {
+          accountBadge = '<span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Active</span>';
+        }
+        
+        row.innerHTML = `
+          <td class="py-4">
+            <div class="flex items-center gap-3">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}" class="w-10 h-10 rounded-full" alt="User">
+              <div>
+                <p class="font-bold">${user.full_name}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">${user.email}</p>
+              </div>
+            </div>
+          </td>
+          <td class="py-4">
+            <div>
+              <p>${user.phone || 'N/A'}</p>
+              <p class="text-sm text-gray-600 dark:text-gray-400">ID: ${user.id}</p>
+            </div>
+          </td>
+          <td class="py-4">
+            ${verificationBadge}
+          </td>
+          <td class="py-4">
+            ${accountBadge}
+          </td>
+          <td class="py-4">${formattedDate}</td>
+          <td class="py-4 text-right">
+            <button onclick="viewProfileDetails(${user.id})" class="text-primary hover:text-orange-700 mx-2">
+              <i class="fas fa-eye"></i>
+            </button>
+            ${user.is_verified ? 
+              '' : 
+              `<button onclick="verifyProfile(${user.id})" class="text-blue-500 hover:text-blue-700 mx-2">
+                <i class="fas fa-badge-check"></i>
+              </button>`
+            }
+            ${user.is_suspended ? 
+              `<button onclick="unsuspendAccount(${user.id})" class="text-green-500 hover:text-green-700 mx-2">
+                <i class="fas fa-user-check"></i>
+              </button>` :
+              ''
+            }
+          </td>
+        `;
+        
+        tbody.appendChild(row);
+      });
+    }
+
     function refreshProfiles() {
-      // In a real implementation, this would fetch fresh data from the API
-      alert('Refreshing profile data...');
+      loadProfiles();
     }
 
     function applyFilters() {
-      // In a real implementation, this would apply filters to the profile list
-      alert('Applying filters...');
+      currentPage = 1;
+      loadProfiles();
     }
 
     function viewProfileDetails(profileId) {
-      document.getElementById('profileDetailsModal').classList.remove('hidden');
+      currentProfileId = profileId;
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        window.location.href = '../frontend/login.html';
+        return;
+      }
+      
+      fetch(`/api/admin/users/${profileId}/details`, {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.user) {
+          populateProfileDetails(data.user);
+          document.getElementById('profileDetailsModal').classList.remove('hidden');
+        } else {
+          alert('Failed to load profile details: ' + (data.message || 'Unknown error'));
+        }
+      })
+      .catch(error => {
+        console.error('Error loading profile details:', error);
+        alert('Failed to load profile details. Please try again.');
+      });
+    }
+    
+    function populateProfileDetails(user) {
+      // Update user info section
+      document.querySelector('#profileDetailsModal .text-xl.font-bold').textContent = user.full_name;
+      document.querySelector('#profileDetailsModal .text-gray-600.dark\:text-gray-400').textContent = user.email;
+      
+      // Update avatar
+      document.querySelector('#profileDetailsModal img').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`;
+      
+      // Update verification status badge
+      const verificationElement = document.querySelector('#profileDetailsModal .bg-green-600\/20');
+      if (verificationElement) {
+        let verificationClass = '';
+        let verificationText = '';
+        if (user.is_verified) {
+          verificationClass = 'bg-green-600/20 text-green-500';
+          verificationText = 'Verified';
+        } else if (user.verification_pending) {
+          verificationClass = 'bg-yellow-600/20 text-yellow-500';
+          verificationText = 'Pending';
+        } else {
+          verificationClass = 'bg-red-600/20 text-red-500';
+          verificationText = 'Unverified';
+        }
+        verificationElement.className = `px-3 py-1 rounded-full text-sm font-bold ${verificationClass}`;
+        verificationElement.textContent = verificationText;
+      }
+      
+      // Update user ID
+      document.querySelectorAll('#profileDetailsModal .font-mono.font-bold')[0].textContent = `USR-${String(user.id).padStart(6, '0')}`;
+      
+      // Update member since
+      const joinDate = new Date(user.created_at);
+      document.querySelectorAll('#profileDetailsModal .font-bold')[2].textContent = joinDate.toLocaleDateString();
+      
+      // Update account status
+      const accountStatusElement = document.querySelectorAll('#profileDetailsModal .bg-green-600\/20')[1];
+      if (accountStatusElement) {
+        let accountClass = '';
+        let accountText = '';
+        if (user.is_suspended) {
+          accountClass = 'bg-red-600/20 text-red-500';
+          accountText = 'Suspended';
+        } else {
+          accountClass = 'bg-green-600/20 text-green-500';
+          accountText = 'Active';
+        }
+        accountStatusElement.className = `px-3 py-1 rounded-full text-sm font-bold ${accountClass}`;
+        accountStatusElement.textContent = accountText;
+      }
+      
+      // Update personal information
+      document.querySelectorAll('#profileDetailsModal .font-bold')[4].textContent = user.full_name;
+      document.querySelectorAll('#profileDetailsModal .font-bold')[5].textContent = user.phone || 'N/A';
+      document.querySelectorAll('#profileDetailsModal .font-mono.font-bold')[1].textContent = user.referral_code || 'N/A';
+      
+      // Update banking information
+      if (user.bank_name) {
+        document.querySelectorAll('#profileDetailsModal .font-bold')[7].textContent = user.bank_name;
+      }
+      if (user.account_name) {
+        document.querySelectorAll('#profileDetailsModal .font-bold')[8].textContent = user.account_name;
+      }
+      if (user.account_number) {
+        // Mask account number for security
+        const maskedAccount = user.account_number.replace(/.(?=.{4})/g, '*');
+        document.querySelectorAll('#profileDetailsModal .font-mono.font-bold')[2].textContent = maskedAccount;
+      }
+      
+      // Update verification statuses
+      const idVerificationElement = document.querySelectorAll('#profileDetailsModal .bg-green-600\/20')[2];
+      if (idVerificationElement) {
+        idVerificationElement.textContent = user.id_verified ? 'Verified' : 'Not Verified';
+        idVerificationElement.className = user.id_verified ? 
+          'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold' : 
+          'bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold';
+      }
+      
+      const addressVerificationElement = document.querySelectorAll('#profileDetailsModal .bg-green-600\/20')[3];
+      if (addressVerificationElement) {
+        addressVerificationElement.textContent = user.address_verified ? 'Verified' : 'Not Verified';
+        addressVerificationElement.className = user.address_verified ? 
+          'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold' : 
+          'bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold';
+      }
+      
+      const bankVerificationElement = document.querySelectorAll('#profileDetailsModal .bg-yellow-600\/20')[0];
+      if (bankVerificationElement) {
+        bankVerificationElement.textContent = user.bank_verified ? 'Verified' : 'Pending';
+        bankVerificationElement.className = user.bank_verified ? 
+          'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold' : 
+          'bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold';
+      }
+      
+      // Update account statistics
+      document.querySelectorAll('#profileDetailsModal .font-bold')[13].textContent = `${user.points_balance.toFixed(2)} pts`;
+      document.querySelectorAll('#profileDetailsModal .font-bold')[14].textContent = `$${user.total_earnings.toFixed(2)}`;
+      
+      // Note: Referrals count would need a separate API call
     }
 
     function verifyProfile(profileId) {
       if (confirm('Are you sure you want to verify this user\'s profile?')) {
-        alert('Profile verified successfully');
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+          window.location.href = '../frontend/login.html';
+          return;
+        }
+        
+        fetch(`/api/admin/users/${profileId}/verify`, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ verified: true })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message && data.message.includes('success')) {
+            alert('Profile verified successfully');
+            loadProfiles(); // Refresh the list
+          } else {
+            alert('Failed to verify profile: ' + (data.message || 'Unknown error'));
+          }
+        })
+        .catch(error => {
+          console.error('Error verifying profile:', error);
+          alert('Failed to verify profile. Please try again.');
+        });
       }
     }
 
     function unsuspendAccount(profileId) {
       if (confirm('Are you sure you want to unsuspend this account?')) {
-        alert('Account unsuspended successfully');
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+          window.location.href = '../frontend/login.html';
+          return;
+        }
+        
+        fetch(`/api/admin/users/${profileId}/unsuspend`, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message && data.message.includes('success')) {
+            alert('Account unsuspended successfully');
+            loadProfiles(); // Refresh the list
+          } else {
+            alert('Failed to unsuspend account: ' + (data.message || 'Unknown error'));
+          }
+        })
+        .catch(error => {
+          console.error('Error unsuspending account:', error);
+          alert('Failed to unsuspend account. Please try again.');
+        });
       }
     }
 
@@ -594,18 +833,99 @@
 
     function verifyDocuments() {
       if (confirm('Are you sure you want to verify all documents for this user?')) {
-        alert('Documents verified successfully');
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+          window.location.href = '../frontend/login.html';
+          return;
+        }
+        
+        fetch(`/api/admin/users/${currentProfileId}/verify-documents`, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message && data.message.includes('success')) {
+            alert('Documents verified successfully');
+            // Refresh profile details
+            viewProfileDetails(currentProfileId);
+          } else {
+            alert('Failed to verify documents: ' + (data.message || 'Unknown error'));
+          }
+        })
+        .catch(error => {
+          console.error('Error verifying documents:', error);
+          alert('Failed to verify documents. Please try again.');
+        });
       }
     }
 
     function sendMessage() {
-      alert('Send message functionality would open here');
+      const message = prompt('Enter your message to the user:');
+      if (message) {
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+          window.location.href = '../frontend/login.html';
+          return;
+        }
+        
+        fetch(`/api/admin/users/${currentProfileId}/message`, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message: message })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message && data.message.includes('success')) {
+            alert('Message sent successfully');
+          } else {
+            alert('Failed to send message: ' + (data.message || 'Unknown error'));
+          }
+        })
+        .catch(error => {
+          console.error('Error sending message:', error);
+          alert('Failed to send message. Please try again.');
+        });
+      }
     }
 
     function suspendAccount() {
       const reason = prompt('Please enter a reason for suspending this account:');
       if (reason) {
-        alert('Account suspended with reason: ' + reason);
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+          window.location.href = '../frontend/login.html';
+          return;
+        }
+        
+        fetch(`/api/admin/users/${currentProfileId}/suspend`, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ reason: reason })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message && data.message.includes('success')) {
+            alert('Account suspended with reason: ' + reason);
+            closeModal('profileDetailsModal');
+            loadProfiles(); // Refresh the list
+          } else {
+            alert('Failed to suspend account: ' + (data.message || 'Unknown error'));
+          }
+        })
+        .catch(error => {
+          console.error('Error suspending account:', error);
+          alert('Failed to suspend account. Please try again.');
+        });
       }
     }
 
@@ -615,6 +935,11 @@
         event.target.classList.add('hidden');
       }
     }
+    
+    // Load profiles when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      loadProfiles();
+    });
   </script>
   <script src="../assets/js/theme.js"></script>
   

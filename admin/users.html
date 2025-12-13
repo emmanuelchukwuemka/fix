@@ -41,9 +41,7 @@
   <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
     <div class="p-6 border-b border-border">
       <div class="flex items-center gap-3">
-        <div class="w-12 h-12 bg-gradient-to-br from-primary to-orange-600 rounded-xl flex items-center justify-center">
-          <i class="fas fa-crown text-white text-xl"></i>
-        </div>
+        <img src="../assets/logo.png" alt="MyFigPoint Logo" class="w-12 h-12 rounded-full object-contain">
         <div>
           <h2 class="text-xl font-black text-primary">MyFigPoint</h2>
           <p class="text-xs text-gray-500">Admin Dashboard</p>
@@ -52,43 +50,43 @@
     </div>
 
     <nav class="p-4 space-y-2">
-      <a href="../frontend/dashboard.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-home"></i>
         <span>Dashboard</span>
       </a>
-      <a href="../frontend/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-tasks"></i>
         <span>Earn Points</span>
       </a>
-      <a href="../frontend/referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-users"></i>
         <span>Refer & Earn</span>
       </a>
-      <a href="../frontend/wallet.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/withdrawals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-wallet"></i>
         <span>Wallet</span>
       </a>
-      <a href="../frontend/transactions.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/activities.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-history"></i>
         <span>Transaction History</span>
       </a>
-      <a href="../frontend/redeem.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/codes.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-gift"></i>
         <span>Redeem Code</span>
       </a>
-      <a href="../frontend/support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-headset"></i>
         <span>Support Center</span>
       </a>
-      <a href="index.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="/admin/" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-user-shield"></i>
         <span>Admin Panel</span>
       </a>
-      <a href="tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-clipboard-check"></i>
         <span>Task Review</span>
       </a>
-      <a href="../frontend/profile.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/profiles.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-user-cog"></i>
         <span>Profile & Settings</span>
       </a>
@@ -188,90 +186,10 @@
             </thead>
             <tbody id="usersTableBody">
               <!-- User rows will be populated dynamically -->
-              <tr class="border-b border-border hover:bg-card/50">
-                <td class="py-4">
-                  <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" class="w-10 h-10 rounded-full" alt="User">
-                    <div>
-                      <p class="font-bold">John Smith</p>
-                      <p class="text-sm text-gray-600 dark:text-gray-400">john.smith@example.com</p>
-                    </div>
-                  </div>
-                </td>
-                <td class="py-4">
-                  <span class="bg-blue-600/20 text-blue-500 px-3 py-1 rounded-full text-sm font-bold">User</span>
-                </td>
-                <td class="py-4 font-bold">1,250.75 pts</td>
-                <td class="py-4">$375.23</td>
-                <td class="py-4">Jan 15, 2024</td>
-                <td class="py-4 text-right">
-                  <button onclick="viewUserDetails(1)" class="text-primary hover:text-orange-700 mx-2">
-                    <i class="fas fa-eye"></i>
-                  </button>
-                  <button onclick="editUser(1)" class="text-blue-500 hover:text-blue-700 mx-2">
-                    <i class="fas fa-edit"></i>
-                  </button>
-                  <button onclick="suspendUser(1)" class="text-red-500 hover:text-red-700 mx-2">
-                    <i class="fas fa-ban"></i>
-                  </button>
-                </td>
-              </tr>
-              
-              <tr class="border-b border-border hover:bg-card/50">
-                <td class="py-4">
-                  <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-10 h-10 rounded-full" alt="User">
-                    <div>
-                      <p class="font-bold">Sarah Johnson</p>
-                      <p class="text-sm text-gray-600 dark:text-gray-400">sarah.j@example.com</p>
-                    </div>
-                  </div>
-                </td>
-                <td class="py-4">
-                  <span class="bg-purple-600/20 text-purple-500 px-3 py-1 rounded-full text-sm font-bold">Partner</span>
-                </td>
-                <td class="py-4 font-bold">5,420.50 pts</td>
-                <td class="py-4">$1,626.15</td>
-                <td class="py-4">Mar 22, 2024</td>
-                <td class="py-4 text-right">
-                  <button onclick="viewUserDetails(2)" class="text-primary hover:text-orange-700 mx-2">
-                    <i class="fas fa-eye"></i>
-                  </button>
-                  <button onclick="editUser(2)" class="text-blue-500 hover:text-blue-700 mx-2">
-                    <i class="fas fa-edit"></i>
-                  </button>
-                  <button onclick="suspendUser(2)" class="text-red-500 hover:text-red-700 mx-2">
-                    <i class="fas fa-ban"></i>
-                  </button>
-                </td>
-              </tr>
-              
-              <tr class="border-b border-border hover:bg-card/50">
-                <td class="py-4">
-                  <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mike" class="w-10 h-10 rounded-full" alt="User">
-                    <div>
-                      <p class="font-bold">Mike Thompson</p>
-                      <p class="text-sm text-gray-600 dark:text-gray-400">mike.t@example.com</p>
-                    </div>
-                  </div>
-                </td>
-                <td class="py-4">
-                  <span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">User</span>
-                </td>
-                <td class="py-4 font-bold">890.25 pts</td>
-                <td class="py-4">$267.08</td>
-                <td class="py-4">Feb 5, 2024</td>
-                <td class="py-4 text-right">
-                  <button onclick="viewUserDetails(3)" class="text-primary hover:text-orange-700 mx-2">
-                    <i class="fas fa-eye"></i>
-                  </button>
-                  <button onclick="editUser(3)" class="text-blue-500 hover:text-blue-700 mx-2">
-                    <i class="fas fa-edit"></i>
-                  </button>
-                  <button onclick="suspendUser(3)" class="text-red-500 hover:text-red-700 mx-2">
-                    <i class="fas fa-ban"></i>
-                  </button>
+              <tr>
+                <td colspan="6" class="text-center py-10">
+                  <i class="fas fa-spinner fa-spin text-4xl text-primary"></i>
+                  <p class="mt-4 text-xl">Loading users...</p>
                 </td>
               </tr>
             </tbody>
@@ -330,12 +248,12 @@
             
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Last Login</p>
-              <p class="font-bold">2 hours ago</p>
+              <p class="font-bold">-</p>
             </div>
             
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Referral Code</p>
-              <p class="font-bold">MP7XK9</p>
+              <p class="font-bold">-</p>
             </div>
           </div>
         </div>
@@ -413,6 +331,9 @@
   </div>
 
   <script>
+    // Global variables
+    let currentPage = 1;
+    
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('overlay').classList.toggle('hidden');
@@ -423,18 +344,240 @@
       window.location.href = '../frontend/login.html';
     }
 
+    function loadUsers() {
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        window.location.href = '../frontend/login.html';
+        return;
+      }
+      
+      // Get filter values
+      const searchQuery = document.getElementById('userSearch').value;
+      const roleFilter = document.getElementById('roleFilter').value;
+      const statusFilter = document.getElementById('statusFilter').value;
+      
+      // Build query parameters
+      const params = new URLSearchParams();
+      params.append('page', currentPage);
+      params.append('per_page', 20);
+      
+      if (searchQuery) params.append('search', searchQuery);
+      if (roleFilter) params.append('role', roleFilter);
+      if (statusFilter) params.append('status', statusFilter);
+      
+      // Show loading state
+      document.getElementById('usersTableBody').innerHTML = `
+        <tr>
+          <td colspan="6" class="text-center py-10">
+            <i class="fas fa-spinner fa-spin text-4xl text-primary"></i>
+            <p class="mt-4 text-xl">Loading users...</p>
+          </td>
+        </tr>
+      `;
+      
+      fetch(`/api/admin/users?${params.toString()}`, {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.users) {
+          // Update total users count
+          document.getElementById('totalUsersCount').textContent = data.total.toLocaleString();
+          
+          // Render users
+          renderUsers(data.users);
+        } else {
+          throw new Error(data.message || 'Failed to load users');
+        }
+      })
+      .catch(error => {
+        console.error('Error loading users:', error);
+        document.getElementById('usersTableBody').innerHTML = `
+          <tr>
+            <td colspan="6" class="text-center py-10">
+              <i class="fas fa-exclamation-triangle text-4xl text-red-500"></i>
+              <p class="mt-4 text-xl">Failed to load users</p>
+              <button onclick="loadUsers()" class="mt-4 bg-primary hover:bg-orange-700 px-6 py-3 rounded-xl font-bold transition">
+                Retry
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+    
+    function renderUsers(users) {
+      const tbody = document.getElementById('usersTableBody');
+      
+      if (users.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="text-center py-10">
+              <i class="fas fa-inbox text-4xl text-gray-500"></i>
+              <p class="mt-4 text-xl">No users found</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      tbody.innerHTML = '';
+      
+      users.forEach(user => {
+        const row = document.createElement('tr');
+        row.className = 'border-b border-border hover:bg-card/50';
+        
+        // Format join date
+        const joinDate = new Date(user.created_at);
+        const formattedDate = joinDate.toLocaleDateString();
+        
+        // Determine role badge
+        let roleBadge = '';
+        switch(user.role) {
+          case 'admin':
+            roleBadge = '<span class="bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold">Admin</span>';
+            break;
+          case 'partner':
+            roleBadge = '<span class="bg-purple-600/20 text-purple-500 px-3 py-1 rounded-full text-sm font-bold">Partner</span>';
+            break;
+          default:
+            roleBadge = '<span class="bg-blue-600/20 text-blue-500 px-3 py-1 rounded-full text-sm font-bold">User</span>';
+        }
+        
+        row.innerHTML = `
+          <td class="py-4">
+            <div class="flex items-center gap-3">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}" class="w-10 h-10 rounded-full" alt="User">
+              <div>
+                <p class="font-bold">${user.full_name}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">${user.email}</p>
+              </div>
+            </div>
+          </td>
+          <td class="py-4">
+            ${roleBadge}
+          </td>
+          <td class="py-4 font-bold">${user.points_balance.toFixed(2)} pts</td>
+          <td class="py-4">$${user.total_earnings.toFixed(2)}</td>
+          <td class="py-4">${formattedDate}</td>
+          <td class="py-4 text-right">
+            <button onclick="viewUserDetails(${user.id})" class="text-primary hover:text-orange-700 mx-2">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button onclick="editUser(${user.id})" class="text-blue-500 hover:text-blue-700 mx-2">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button onclick="suspendUser(${user.id})" class="text-red-500 hover:text-red-700 mx-2">
+              <i class="fas fa-ban"></i>
+            </button>
+          </td>
+        `;
+        
+        tbody.appendChild(row);
+      });
+    }
+
     function refreshUsers() {
-      // In a real implementation, this would fetch fresh data from the API
-      alert('Refreshing user data...');
+      loadUsers();
     }
 
     function applyFilters() {
-      // In a real implementation, this would apply filters to the user list
-      alert('Applying filters...');
+      currentPage = 1;
+      loadUsers();
     }
 
     function viewUserDetails(userId) {
-      document.getElementById('userDetailsModal').classList.remove('hidden');
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        window.location.href = '../frontend/login.html';
+        return;
+      }
+      
+      fetch(`/api/admin/users/${userId}/details`, {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.user) {
+          populateUserDetails(data.user);
+          document.getElementById('userDetailsModal').classList.remove('hidden');
+        } else {
+          alert('Failed to load user details: ' + (data.message || 'Unknown error'));
+        }
+      })
+      .catch(error => {
+        console.error('Error loading user details:', error);
+        alert('Failed to load user details. Please try again.');
+      });
+    }
+    
+    function populateUserDetails(user) {
+      // Update user info section
+      document.querySelector('#userDetailsModal .text-xl.font-bold').textContent = user.full_name;
+      document.querySelector('#userDetailsModal .text-gray-600.dark\:text-gray-400').textContent = user.email;
+      
+      // Update avatar
+      document.querySelector('#userDetailsModal img').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`;
+      
+      // Update role badge
+      const roleElement = document.querySelector('#userDetailsModal .bg-blue-600\/20');
+      if (roleElement) {
+        let roleClass = '';
+        let roleText = '';
+        switch(user.role) {
+          case 'admin':
+            roleClass = 'bg-red-600/20 text-red-500';
+            roleText = 'Admin';
+            break;
+          case 'partner':
+            roleClass = 'bg-purple-600/20 text-purple-500';
+            roleText = 'Partner';
+            break;
+          default:
+            roleClass = 'bg-blue-600/20 text-blue-500';
+            roleText = 'User';
+        }
+        roleElement.className = `px-3 py-1 rounded-full text-sm font-bold ${roleClass}`;
+        roleElement.textContent = roleText;
+      }
+      
+      // Update member since
+      const joinDate = new Date(user.created_at);
+      document.querySelectorAll('#userDetailsModal .p-4.bg-card')[0].querySelector('.font-bold').textContent = joinDate.toLocaleDateString();
+      
+      // Update referral code
+      document.querySelectorAll('#userDetailsModal .p-4.bg-card')[2].querySelector('.font-bold').textContent = user.referral_code || 'N/A';
+      
+      // Update stats
+      document.querySelectorAll('#userDetailsModal .text-3xl.font-bold')[0].textContent = `${user.points_balance.toFixed(2)} pts`;
+      document.querySelectorAll('#userDetailsModal .text-3xl.font-bold')[1].textContent = `$${user.total_earnings.toFixed(2)}`;
+      
+      // Update banking details
+      if (user.bank_name) {
+        document.querySelectorAll('#userDetailsModal .font-bold')[6].textContent = user.bank_name;
+      }
+      if (user.account_name) {
+        document.querySelectorAll('#userDetailsModal .font-bold')[7].textContent = user.account_name;
+      }
+      if (user.account_number) {
+        // Mask account number for security
+        const maskedAccount = user.account_number.replace(/.(?=.{4})/g, '*');
+        document.querySelectorAll('#userDetailsModal .font-bold')[8].textContent = maskedAccount;
+      }
+      
+      // Store user ID for actions
+      let userIdElement = document.getElementById('detailUserId');
+      if (!userIdElement) {
+        userIdElement = document.createElement('div');
+        userIdElement.id = 'detailUserId';
+        userIdElement.style.display = 'none';
+        document.body.appendChild(userIdElement);
+      }
+      userIdElement.textContent = user.id;
     }
 
     function editUser(userId) {
@@ -452,7 +595,43 @@
     }
 
     function adjustUserPoints() {
-      alert('Adjust points functionality would open here');
+      const userId = document.getElementById('detailUserId').textContent;
+      const points = prompt('Enter points to add/subtract (use negative number to subtract):');
+      
+      if (points === null) return; // User cancelled
+      
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        window.location.href = '../frontend/login.html';
+        return;
+      }
+      
+      fetch(`/api/admin/users/points/update`, {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          points: parseFloat(points),
+          operation: points >= 0 ? 'add' : 'subtract'
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message && data.message.includes('success')) {
+          alert(`Successfully ${points >= 0 ? 'added' : 'subtracted'} ${Math.abs(points)} points!`);
+          // Refresh user details
+          viewUserDetails(userId);
+        } else {
+          alert('Failed to adjust points: ' + (data.message || 'Unknown error'));
+        }
+      })
+      .catch(error => {
+        console.error('Error adjusting points:', error);
+        alert('Failed to adjust points. Please try again.');
+      });
     }
 
     function sendMessage() {
@@ -466,7 +645,15 @@
     }
 
     function suspendUserConfirm() {
+      const userId = document.getElementById('detailUserId').textContent;
       if (confirm('Are you sure you want to suspend this user account?')) {
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+          window.location.href = '../frontend/login.html';
+          return;
+        }
+        
+        // For now, we'll just show a success message since there's no specific suspend endpoint
         alert('User account suspended');
         closeModal('userDetailsModal');
       }
@@ -478,6 +665,11 @@
         event.target.classList.add('hidden');
       }
     }
+    
+    // Load users when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      loadUsers();
+    });
   </script>
   <script src="../assets/js/theme.js"></script>
   

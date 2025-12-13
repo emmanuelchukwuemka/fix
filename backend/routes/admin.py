@@ -560,3 +560,63 @@ def get_method_from_description(description):
     import re
     match = re.search(r'via (\w+)', description)
     return match.group(1) if match else 'unknown'
+
+
+@admin_bp.route('/referrals/award-bonus', methods=['POST'])
+@jwt_required()
+def award_referral_bonus():
+    try:
+        current_user_id = get_jwt_identity()
+        admin_user = User.query.get(current_user_id)
+        
+        # Check if user is admin
+        if admin_user.role != UserRole.ADMIN:
+            return jsonify({'message': 'Access denied'}), 403
+        
+        data = request.get_json()
+        user_id = data.get('user_id')
+        points = data.get('points', 0)
+        amount = data.get('amount', 0.0)
+        reason = data.get('reason', 'Admin awarded referral bonus')
+        
+        if not user_id:
+            return jsonify({'message': 'User ID is required'}), 400
+            
+        if points <= 0 and amount <= 0:
+            return jsonify({'message': 'Either points or amount must be greater than 0'}), 400
+        
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+        
+        # Award points/amount to user
+        if points > 0:
+            user.points_balance += points
+            user.total_points_earned += points
+            
+        if amount > 0:
+            user.total_earnings += amount
+        
+        # Create referral bonus transaction
+        transaction = Transaction(
+            user_id=user_id,
+            type=TransactionType.REFERRAL_BONUS,
+            status=TransactionStatus.COMPLETED,
+            description=reason,
+            amount=amount,
+            points_amount=points
+        )
+        
+        db.session.add(transaction)
+        db.session.commit()
+        
+        return jsonify({
+            'message': f'Successfully awarded referral bonus to {user.full_name}',
+            'user_id': user_id,
+            'points_awarded': points,
+            'amount_awarded': amount,
+            'new_balance': user.points_balance
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to award referral bonus', 'error': str(e)}), 500

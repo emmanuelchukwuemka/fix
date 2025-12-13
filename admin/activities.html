@@ -41,9 +41,7 @@
   <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
     <div class="p-6 border-b border-border">
       <div class="flex items-center gap-3">
-        <div class="w-12 h-12 bg-gradient-to-br from-primary to-orange-600 rounded-xl flex items-center justify-center">
-          <i class="fas fa-crown text-white text-xl"></i>
-        </div>
+        <img src="../assets/logo.png" alt="MyFigPoint Logo" class="w-12 h-12 rounded-full object-contain">
         <div>
           <h2 class="text-xl font-black text-primary">MyFigPoint</h2>
           <p class="text-xs text-gray-500">Admin Dashboard</p>
@@ -52,43 +50,43 @@
     </div>
 
     <nav class="p-4 space-y-2">
-      <a href="../frontend/dashboard.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-home"></i>
         <span>Dashboard</span>
       </a>
-      <a href="../frontend/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-tasks"></i>
         <span>Earn Points</span>
       </a>
-      <a href="../frontend/referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-users"></i>
         <span>Refer & Earn</span>
       </a>
-      <a href="../frontend/wallet.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/withdrawals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-wallet"></i>
         <span>Wallet</span>
       </a>
-      <a href="../frontend/transactions.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/activities.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-history"></i>
         <span>Transaction History</span>
       </a>
-      <a href="../frontend/redeem.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/codes.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-gift"></i>
         <span>Redeem Code</span>
       </a>
-      <a href="../frontend/support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-headset"></i>
         <span>Support Center</span>
       </a>
-      <a href="index.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="/admin/" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-user-shield"></i>
         <span>Admin Panel</span>
       </a>
-      <a href="tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-clipboard-check"></i>
         <span>Task Review</span>
       </a>
-      <a href="../frontend/profile.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/profiles.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-user-cog"></i>
         <span>Profile & Settings</span>
       </a>
@@ -450,13 +448,145 @@
       window.location.href = '../frontend/login.html';
     }
 
+    function loadActivities() {
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        window.location.href = '../frontend/login.html';
+        return;
+      }
+      
+      // Fetch dashboard statistics
+      fetch('/api/admin/dashboard/stats', {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.stats) {
+          // Update stats
+          document.querySelectorAll('.text-3xl.font-bold')[0].textContent = `$${data.stats.total_earnings.toFixed(2)}`;
+          document.querySelectorAll('.text-3xl.font-bold')[1].textContent = data.stats.daily_active_users;
+          document.querySelectorAll('.text-3xl.font-bold')[2].textContent = data.stats.tasks_completed;
+          document.querySelectorAll('.text-3xl.font-bold')[3].textContent = data.stats.codes_used;
+        }
+      })
+      .catch(error => {
+        console.error('Error loading dashboard stats:', error);
+      });
+      
+      // Fetch recent activities
+      fetch('/api/admin/activities/recent', {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.activities) {
+          renderActivities(data.activities);
+        }
+      })
+      .catch(error => {
+        console.error('Error loading activities:', error);
+      });
+    }
+    
+    function renderActivities(activities) {
+      const container = document.querySelector('.space-y-4');
+      container.innerHTML = '';
+      
+      if (activities.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-10">
+            <i class="fas fa-inbox text-4xl text-gray-500"></i>
+            <p class="mt-4 text-xl">No recent activities</p>
+          </div>
+        `;
+        return;
+      }
+      
+      activities.forEach(activity => {
+        const div = document.createElement('div');
+        div.className = 'flex items-start gap-4 p-4 bg-card border border-border rounded-2xl hover:border-primary transition';
+        
+        // Determine icon and color based on activity type
+        let iconClass = '';
+        let bgColor = '';
+        let title = '';
+        let description = '';
+        let details = '';
+        
+        switch(activity.type) {
+          case 'task_completion':
+            iconClass = 'fa-check text-green-500';
+            bgColor = 'bg-green-600/20';
+            title = 'User completed a task';
+            description = `${activity.user_name} earned ${activity.points} points for completing ${activity.task_title}`;
+            details = `<span class="text-green-500 font-medium">+${activity.points} pts</span>`;
+            if (activity.cash_value) {
+              details += `<span class="text-blue-500 font-medium">+$${activity.cash_value.toFixed(2)}</span>`;
+            }
+            break;
+          case 'user_registration':
+            iconClass = 'fa-user-plus text-blue-500';
+            bgColor = 'bg-blue-600/20';
+            title = 'New user registered';
+            description = `${activity.user_name} joined via referral code ${activity.referral_code || 'N/A'}`;
+            details = '<span class="text-indigo-500 font-medium">Referral Bonus</span>';
+            break;
+          case 'code_redemption':
+            iconClass = 'fa-gift text-purple-500';
+            bgColor = 'bg-purple-600/20';
+            title = 'Reward code redeemed';
+            description = `${activity.user_name} redeemed code ${activity.code} for ${activity.points} points`;
+            details = `<span class="text-purple-500 font-medium">+${activity.points} pts</span>`;
+            if (activity.cash_value) {
+              details += `<span class="text-blue-500 font-medium">+$${activity.cash_value.toFixed(2)}</span>`;
+            }
+            break;
+          case 'withdrawal_request':
+            iconClass = 'fa-money-bill-wave text-yellow-500';
+            bgColor = 'bg-yellow-600/20';
+            title = 'Withdrawal request submitted';
+            description = `${activity.user_name} requested withdrawal of ${activity.points} points ($${activity.cash_value.toFixed(2)})`;
+            details = '<span class="text-yellow-500 font-medium">Pending Approval</span>';
+            break;
+          default:
+            iconClass = 'fa-info-circle text-gray-500';
+            bgColor = 'bg-gray-600/20';
+            title = activity.title || 'Platform Activity';
+            description = activity.description || 'Activity details';
+            details = '';
+        }
+        
+        div.innerHTML = `
+          <div class="w-12 h-12 ${bgColor} rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+            <i class="fas ${iconClass}"></i>
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold">${title}</h3>
+              <span class="text-sm text-gray-500">${activity.time_ago || 'Just now'}</span>
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 mt-1">${description}</p>
+            <div class="flex items-center gap-4 mt-3">
+              ${details}
+            </div>
+          </div>
+        `;
+        
+        container.appendChild(div);
+      });
+    }
+
     function refreshActivities() {
-      // In a real implementation, this would fetch fresh data from the API
-      alert('Refreshing activity data...');
+      loadActivities();
     }
 
     function viewAllActivities() {
-      alert('View all activities functionality would open here');
+      // Navigate to full activities page
+      window.location.href = '/admin/full-activities.html';
     }
 
     function createNewTask() {
@@ -464,14 +594,15 @@
     }
 
     function manageActiveTasks() {
-      window.location.href = 'admin-tasks.html';
+      window.location.href = '/admin/tasks.html';
     }
 
     function reviewPendingTasks() {
-      window.location.href = 'admin-tasks.html#pending';
+      window.location.href = '/admin/tasks.html#pending';
     }
 
     function distributeRewards() {
+      // In a real implementation, this would open a rewards distribution interface
       alert('Reward distribution functionality would open here');
     }
 
@@ -479,11 +610,60 @@
       document.getElementById(modalId).classList.add('hidden');
     }
 
-    // Form submission
+    // Form submission for creating tasks
     document.getElementById('createTaskForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      alert('Task creation would be processed here');
-      closeModal('createTaskModal');
+      
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        window.location.href = '../frontend/login.html';
+        return;
+      }
+      
+      const formData = {
+        title: document.getElementById('taskTitle').value,
+        description: document.getElementById('taskDescription').value,
+        category: document.getElementById('taskCategory').value,
+        points_reward: parseFloat(document.getElementById('pointsReward').value) || 0,
+        reward_amount: parseFloat(document.getElementById('cashReward').value) || 0,
+        time_required: parseInt(document.getElementById('taskDuration').value) || 0,
+        instructions: document.getElementById('taskInstructions').value
+      };
+      
+      // Show loading state
+      const submitButton = this.querySelector('button[type="submit"]');
+      const originalText = submitButton.innerHTML;
+      submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Creating...';
+      submitButton.disabled = true;
+      
+      fetch('/api/tasks/admin', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message && data.message.includes('success')) {
+          alert('Task created successfully!');
+          closeModal('createTaskModal');
+          // Reset form
+          this.reset();
+        } else {
+          alert('Failed to create task: ' + (data.message || 'Unknown error'));
+        }
+      })
+      .catch(error => {
+        console.error('Error creating task:', error);
+        alert('Failed to create task. Please try again.');
+      })
+      .finally(() => {
+        // Reset button
+        submitButton.innerHTML = originalText;
+        submitButton.disabled = false;
+      });
     });
 
     // Close modals when clicking outside
@@ -492,6 +672,11 @@
         event.target.classList.add('hidden');
       }
     }
+    
+    // Load activities when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      loadActivities();
+    });
   </script>
   <script src="../assets/js/theme.js"></script>
   

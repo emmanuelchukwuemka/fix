@@ -64,6 +64,34 @@ def create_app():
     def health_check():
         return {'status': 'ok', 'message': 'MyFigPoint is running!'}
     
+    # Serve admin files
+    @app.route('/admin/')
+    def admin_index():
+        return send_from_directory(project_root, 'admin/index.html')
+    
+    @app.route('/admin/<path:filename>')
+    def serve_admin_files(filename):
+        admin_path = os.path.join(project_root, 'admin', filename)
+        # If the file exists in the admin directory, serve it
+        if os.path.exists(admin_path) and os.path.isfile(admin_path):
+            return send_from_directory(os.path.join(project_root, 'admin'), filename)
+        # If not found, serve the admin index.html (for SPA-like behavior)
+        return send_from_directory(project_root, 'admin/index.html')
+    
+    # Serve frontend files
+    @app.route('/frontend/')
+    def frontend_index():
+        return send_from_directory(project_root, 'frontend/index.html')
+    
+    @app.route('/frontend/<path:filename>')
+    def serve_frontend_files(filename):
+        frontend_path = os.path.join(project_root, 'frontend', filename)
+        # If the file exists in the frontend directory, serve it
+        if os.path.exists(frontend_path) and os.path.isfile(frontend_path):
+            return send_from_directory(os.path.join(project_root, 'frontend'), filename)
+        # If not found, serve the frontend index.html (for SPA-like behavior)
+        return send_from_directory(project_root, 'frontend/index.html')
+    
     @app.route('/<path:filename>')
     def serve_static(filename):
         # Handle Vercel deployment differently for static files
