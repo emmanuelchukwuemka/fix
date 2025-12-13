@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from backend.app import db
+from backend.extensions import db
 from backend.models.user import User, UserRole
 from backend.models.reward_code import RewardCode
 from backend.models.transaction import Transaction, TransactionType, TransactionStatus
@@ -16,7 +16,7 @@ admin_bp = Blueprint('admin', __name__)
 @jwt_required()
 def generate_codes():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -64,7 +64,7 @@ def generate_codes():
 @jwt_required()
 def export_codes(batch_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -106,7 +106,7 @@ def export_codes(batch_id):
 @jwt_required()
 def get_used_codes():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -134,7 +134,7 @@ def get_used_codes():
 @jwt_required()
 def delete_used_codes():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -167,7 +167,7 @@ def delete_used_codes():
 @jwt_required()
 def update_user_points():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -213,7 +213,7 @@ def update_user_points():
 @jwt_required()
 def get_all_users():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -252,7 +252,7 @@ def get_all_users():
 @jwt_required()
 def get_user_details(user_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -272,7 +272,7 @@ def get_user_details(user_id):
 @jwt_required()
 def get_all_support_messages():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -306,7 +306,7 @@ def get_all_support_messages():
 @jwt_required()
 def respond_to_support_message(message_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -351,7 +351,7 @@ def respond_to_support_message(message_id):
 @jwt_required()
 def get_pending_withdrawals():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -395,7 +395,7 @@ def get_pending_withdrawals():
 @jwt_required()
 def approve_withdrawal(transaction_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -466,7 +466,7 @@ def approve_withdrawal(transaction_id):
 @jwt_required()
 def reject_withdrawal(transaction_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -567,7 +567,7 @@ def get_method_from_description(description):
 @jwt_required()
 def award_referral_bonus():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -626,7 +626,7 @@ def award_referral_bonus():
 @jwt_required()
 def get_dashboard_stats():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin

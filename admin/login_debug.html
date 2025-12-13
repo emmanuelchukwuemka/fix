@@ -67,6 +67,7 @@
             required 
             class="form-input w-full px-6 py-5 rounded-2xl"
             placeholder="Admin Email Address"
+            value="admin@myfigpoint.com"
           />
         </div>
 
@@ -78,6 +79,7 @@
             required 
             class="form-input w-full px-6 py-5 pr-14 rounded-2xl"
             placeholder="Admin Password"
+            value="MyFigPoint2025"
           />
           <button type="button" onclick="togglePassword()" class="absolute right-5 top-5 text-text hover:text-primary">
             <i class="fas fa-eye" id="eyeIcon"></i>
@@ -95,6 +97,12 @@
           Admin Sign In
         </button>
       </form>
+
+      <!-- Debug Info -->
+      <div id="debugInfo" class="mt-4 p-4 bg-yellow-100 text-yellow-800 rounded-lg hidden">
+        <h3 class="font-bold">Debug Information:</h3>
+        <pre id="debugContent" class="text-xs"></pre>
+      </div>
 
       <!-- Theme Toggle -->
       <div class="flex justify-center mt-6">
@@ -137,8 +145,15 @@
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       
+      // Show debug info
+      const debugInfo = document.getElementById('debugInfo');
+      const debugContent = document.getElementById('debugContent');
+      debugInfo.classList.remove('hidden');
+      debugContent.textContent = `Attempting login with:\nEmail: ${email}\nPassword: ${'*'.repeat(password.length)}`;
+      
       // Simple validation
       if (!email || !password) {
+        debugContent.textContent += '\n\nError: Please fill in all fields';
         alert('Please fill in all fields');
         button.innerHTML = originalText;
         button.disabled = false;
@@ -146,6 +161,8 @@
       }
       
       // Send login request to backend
+      debugContent.textContent += '\n\nSending request to /api/auth/login';
+      
       fetch('/api/auth/login', {
         method: 'POST',
         headers: {
@@ -153,11 +170,17 @@
         },
         body: JSON.stringify({ email, password })
       })
-      .then(response => response.json())
+      .then(response => {
+        debugContent.textContent += `\n\nResponse status: ${response.status}`;
+        return response.json();
+      })
       .then(data => {
+        debugContent.textContent += `\n\nResponse data: ${JSON.stringify(data, null, 2)}`;
+        
         if (data.access_token) {
           // Check if user is admin
           if (data.user && data.user.role === 'admin') {
+            debugContent.textContent += '\n\nStoring token and redirecting to dashboard';
             localStorage.setItem('access_token', data.access_token);
             // Store user data
             if (data.user) {
@@ -168,17 +191,20 @@
             // Redirect to admin dashboard
             window.location.href = '/admin/dashboard';
           } else {
+            debugContent.textContent += '\n\nError: Access denied. Admin privileges required.';
             alert('Access denied. Admin privileges required.');
             button.innerHTML = originalText;
             button.disabled = false;
           }
         } else {
+          debugContent.textContent += '\n\nError: ' + (data.message || 'Invalid credentials');
           alert('Login failed: ' + (data.message || 'Invalid credentials'));
           button.innerHTML = originalText;
           button.disabled = false;
         }
       })
       .catch(error => {
+        debugContent.textContent += `\n\nError: ${error}`;
         console.error('Error:', error);
         alert('Login failed. Please try again.');
         button.innerHTML = originalText;

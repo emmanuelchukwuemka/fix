@@ -69,74 +69,54 @@ def create_app():
         return send_from_directory(project_root, 'admin/login.html')
     
     @app.route('/admin/dashboard')
-    @admin_required
     def admin_dashboard():
         # Serve the actual admin dashboard
         return send_from_directory(project_root, 'admin/index.html')
     
     @app.route('/admin/tasks')
-    @admin_required
     def admin_tasks():
         # Serve the admin tasks page
         return send_from_directory(project_root, 'admin/tasks.html')
     
     @app.route('/admin/referrals')
-    @admin_required
     def admin_referrals():
         # Serve the admin referrals page
         return send_from_directory(project_root, 'admin/referrals.html')
     
     @app.route('/admin/withdrawals')
-    @admin_required
     def admin_withdrawals():
         # Serve the admin withdrawals page
         return send_from_directory(project_root, 'admin/withdrawals.html')
     
     @app.route('/admin/activities')
-    @admin_required
     def admin_activities():
         # Serve the admin activities page
         return send_from_directory(project_root, 'admin/activities.html')
     
     @app.route('/admin/codes')
-    @admin_required
     def admin_codes():
         # Serve the admin codes page
         return send_from_directory(project_root, 'admin/codes.html')
     
     @app.route('/admin/support')
-    @admin_required
     def admin_support():
         # Serve the admin support page
         return send_from_directory(project_root, 'admin/support.html')
     
     @app.route('/admin/profiles')
-    @admin_required
     def admin_profiles():
         # Serve the admin profiles page
         return send_from_directory(project_root, 'admin/profiles.html')
     
     @app.route('/admin/users')
-    @admin_required
     def admin_users():
         # Serve the admin users page
         return send_from_directory(project_root, 'admin/users.html')
     
     @app.route('/admin/partners')
-    @admin_required
     def admin_partners():
         # Serve the admin partners page
         return send_from_directory(project_root, 'admin/partners.html')
-    
-    @app.route('/admin/<path:filename>')
-    def serve_admin_files(filename):
-        # Allow access to login page without authentication
-        if filename == 'login.html':
-            return send_from_directory(os.path.join(project_root, 'admin'), filename)
-            
-        # For all other admin files, redirect to the login page
-        # In a real implementation, you would check for a valid JWT token and admin role here
-        return send_from_directory(project_root, 'admin/login.html')
     
     # Serve frontend files
     @app.route('/frontend/')

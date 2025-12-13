@@ -34,7 +34,7 @@
     
     // Redirect to login if not authenticated or not admin
     if (!token || userRole !== 'admin') {
-      window.location.href = '/admin/';
+      window.location.href = '/admin/login.html';
     }
   </script>
 
@@ -62,45 +62,45 @@
     </div>
 
     <nav class="p-4 space-y-2">
-      <a href="/admin/" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/dashboard" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-home"></i>
         <span>Dashboard</span>
       </a>
-      <a href="/admin/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/tasks" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-tasks"></i>
         <span>Earn Points</span>
       </a>
-      <a href="/admin/referrals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/referrals" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-users"></i>
         <span>Refer & Earn</span>
       </a>
-      <a href="/admin/withdrawals.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/withdrawals" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-wallet"></i>
         <span>Wallet</span>
       </a>
-      <a href="/admin/activities.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/activities" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-history"></i>
         <span>Transaction History</span>
       </a>
-      <a href="/admin/codes.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/codes" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-gift"></i>
         <span>Redeem Code</span>
       </a>
-      <a href="/admin/support.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/support" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-headset"></i>
         <span>Support Center</span>
       </a>
-      <a href="/admin/" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="/admin/profiles" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-user-shield"></i>
         <span>Admin Panel</span>
       </a>
-      <a href="/admin/tasks.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/tasks" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-clipboard-check"></i>
         <span>Task Review</span>
       </a>
-      <a href="/admin/profiles.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/users" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-user-cog"></i>
-        <span>Profile & Settings</span>
+        <span>User Management</span>
       </a>
     </nav>
 
@@ -672,6 +672,15 @@
         alert('User account suspended');
         closeModal('userDetailsModal');
       }
+    }
+
+    // Logout function
+    function logout() {
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userRole');
+      window.location.href = '/admin/login.html';
     }
 
     // Close modals when clicking outside

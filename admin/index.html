@@ -34,7 +34,7 @@
     
     // Redirect to login if not authenticated or not admin
     if (!token || userRole !== 'admin') {
-      window.location.href = '/admin/';
+      window.location.href = '/admin/login.html';
     }
   </script>
   
@@ -854,12 +854,12 @@
       localStorage.removeItem('userName');
       localStorage.removeItem('userEmail');
       localStorage.removeItem('userRole');
-      window.location.href = '/admin/';
+      window.location.href = '/admin/login.html';
     }
 
     // Navigation functions (these would connect to the existing pages)
     function showUserManagement() {
-      window.location.href = 'users.html';
+      window.location.href = '/admin/users';
     }
 
     function showAdjustPoints() {
@@ -867,7 +867,7 @@
     }
 
     function showWithdrawalApproval() {
-      window.location.href = 'withdrawals.html';
+      window.location.href = '/admin/withdrawals';
     }
 
     function showGenerateCodes() {
@@ -875,91 +875,91 @@
     }
 
     function showManageCodes() {
-      window.location.href = 'codes.html';
+      window.location.href = '/admin/codes';
     }
 
     function showCodeUsage() {
-      window.location.href = 'codes.html#usage';
+      window.location.href = '/admin/codes#usage';
     }
 
     function showSupportMessages() {
-      window.location.href = 'support.html';
+      window.location.href = '/admin/support';
     }
 
     function showComplaints() {
-      window.location.href = 'support.html#complaints';
+      window.location.href = '/admin/support#complaints';
     }
 
     function showConversationHistory() {
-      window.location.href = 'support.html#history';
+      window.location.href = '/admin/support#history';
     }
 
     function showUserProfile() {
-      window.location.href = 'profiles.html';
+      window.location.href = '/admin/profiles';
     }
 
     function showBankDetails() {
-      window.location.href = 'profiles.html#bank-details';
+      window.location.href = '/admin/profiles#bank-details';
     }
 
     function showActivityLogs() {
-      window.location.href = 'activities.html';
+      window.location.href = '/admin/activities';
     }
 
     function awardReferralBonus() {
-      window.location.href = 'referrals.html#award-bonus';
+      window.location.href = '/admin/referrals#award-bonus';
     }
 
     function viewReferralTree() {
-      window.location.href = 'referrals.html#tree';
+      window.location.href = '/admin/referrals#tree';
     }
 
     function manageEarnPoints() {
-      window.location.href = 'tasks.html';
+      window.location.href = '/admin/tasks';
     }
 
     function manageReferEarn() {
-      window.location.href = 'referrals.html';
+      window.location.href = '/admin/referrals';
     }
 
     function manageWallet() {
-      window.location.href = 'withdrawals.html';
+      window.location.href = '/admin/withdrawals';
     }
 
     function manageTransactions() {
-      window.location.href = '../transactions.html';
+      window.location.href = '/transactions.html';
     }
 
     function manageRedeemCodes() {
-      window.location.href = 'codes.html';
+      window.location.href = '/admin/codes';
     }
 
     function manageSupportCenter() {
-      window.location.href = 'support.html';
+      window.location.href = '/admin/support';
     }
 
     function createNewTask() {
-      window.location.href = 'tasks.html#create-task';
+      window.location.href = '/admin/tasks#create-task';
     }
 
     function assignRewards() {
-      window.location.href = 'tasks.html#assign-rewards';
+      window.location.href = '/admin/tasks#assign-rewards';
     }
 
     function viewAllActivities() {
-      window.location.href = 'activities.html';
+      window.location.href = '/admin/activities';
     }
 
     function approvePartners() {
-      window.location.href = 'partners.html#approvals';
+      window.location.href = '/admin/partners#approvals';
     }
 
     function managePartnerCodes() {
-      window.location.href = 'partners.html#codes';
+      window.location.href = '/admin/partners#codes';
     }
 
     function viewPartnerStats() {
-      window.location.href = 'partners.html#statistics';
+      window.location.href = '/admin/partners#statistics';
     }
 
     // Modal functions
@@ -1007,6 +1007,9 @@
     }
     
     function loadDashboardStats() {
+      // Get token from localStorage
+      const token = localStorage.getItem('access_token');
+      
       // Fetch dashboard statistics from the API
       fetch('/api/admin/dashboard/stats', {
         headers: {

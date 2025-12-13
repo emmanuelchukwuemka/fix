@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login Test</title>
+</head>
+<body>
+    <h1>Admin Login Test</h1>
+    <form id="loginForm">
+        <div>
+            <label>Email:</label>
+            <input type="email" id="email" value="admin@myfigpoint.com" required>
+        </div>
+        <div>
+            <label>Password:</label>
+            <input type="password" id="password" value="MyFigPoint2025" required>
+        </div>
+        <button type="submit">Login</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                
+                if (data.access_token) {
+                    // Store token and user data
+                    localStorage.setItem('access_token', data.access_token);
+                    localStorage.setItem('userName', data.user.full_name);
+                    localStorage.setItem('userEmail', data.user.email);
+                    localStorage.setItem('userRole', data.user.role);
+                    
+                    // Check if user is admin
+                    if (data.user.role === 'admin') {
+                        // Redirect to admin dashboard
+                        window.location.href = '/admin/dashboard';
+                    } else {
+                        alert('Access denied. Admin privileges required.');
+                    }
+                } else {
+                    alert('Login failed: ' + (data.message || 'Invalid credentials'));
+                }
+            })
+            .catch(error => {
+                document.getElementById('result').innerHTML = '<p>Error: ' + error + '</p>';
+                alert('Login failed. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>

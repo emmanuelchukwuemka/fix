@@ -34,7 +34,7 @@
     
     // Redirect to login if not authenticated or not admin
     if (!token || userRole !== 'admin') {
-      window.location.href = '/admin/';
+      window.location.href = '/admin/login.html';
     }
   </script>
 
@@ -463,7 +463,7 @@
     
     // Redirect to login if not authenticated or not admin
     if (!token || userRole !== 'admin') {
-      window.location.href = '/admin/';
+      window.location.href = '/admin/login.html';
     }
     
     // Load admin info
@@ -496,7 +496,7 @@
       localStorage.removeItem('userName');
       localStorage.removeItem('userEmail');
       localStorage.removeItem('userRole');
-      window.location.href = '/admin/';
+      window.location.href = '/admin/login.html';
     }
 
     function loadPartners(page = 1) {

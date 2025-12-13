@@ -1,4 +1,5 @@
-from backend.app import create_app, db, bcrypt
+from backend.app import create_app
+from backend.extensions import db, bcrypt
 from backend.models.user import User, UserRole
 from backend.models.reward_code import RewardCode
 from backend.models.task import Task
