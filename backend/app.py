@@ -16,7 +16,13 @@ def create_app():
     frontend_folder = os.path.join(project_root, 'frontend')
     static_folder = os.path.join(project_root, 'assets')
     
-    database_url = os.environ.get('DATABASE_URL') or 'sqlite:///myfigpoint.db'
+    # Use absolute path for database in instance folder
+    instance_path = os.path.join(project_root, 'instance')
+    if not os.path.exists(instance_path):
+        os.makedirs(instance_path)
+    
+    db_path = os.path.join(instance_path, 'myfigpoint.db')
+    database_url = os.environ.get('DATABASE_URL') or f'sqlite:///{db_path}'
     
     # Handle different deployment environments
     if os.environ.get('VERCEL') == '1':

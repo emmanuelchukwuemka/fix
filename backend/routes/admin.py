@@ -3,7 +3,7 @@ from backend.extensions import db
 from backend.models.user import User, UserRole
 from backend.models.reward_code import RewardCode
 from backend.models.transaction import Transaction, TransactionType, TransactionStatus
-from backend.models.support_message import SupportMessage, MessageStatus
+from backend.models.support_message import SupportMessage, MessageStatus, MessageType
 from backend.utils.helpers import generate_reward_code, generate_batch_id
 from backend.utils.emailer import Emailer
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -102,9 +102,9 @@ def export_codes(batch_id):
     except Exception as e:
         return jsonify({'message': 'Failed to export codes', 'error': str(e)}), 500
 
-@admin_bp.route('/codes/used', methods=['GET'])
+@admin_bp.route('/codes', methods=['GET'])
 @jwt_required()
-def get_used_codes():
+def get_all_codes():
     try:
         current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
@@ -115,10 +115,22 @@ def get_used_codes():
         
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 50, type=int)
+        search = request.args.get('search', '')
+        status = request.args.get('status', 'all') # all, available, used
         
-        codes = RewardCode.query.filter_by(is_used=True).order_by(
-            RewardCode.used_at.desc()
-        ).paginate(page=page, per_page=per_page, error_out=False)
+        query = RewardCode.query
+        
+        if search:
+            query = query.filter(RewardCode.code.ilike(f'%{search}%'))
+            
+        if status == 'available':
+            query = query.filter_by(is_used=False)
+        elif status == 'used':
+            query = query.filter_by(is_used=True)
+            
+        codes = query.order_by(RewardCode.created_at.desc()).paginate(
+            page=page, per_page=per_page, error_out=False
+        )
         
         return jsonify({
             'codes': [code.to_dict() for code in codes.items],
@@ -128,11 +140,11 @@ def get_used_codes():
         }), 200
         
     except Exception as e:
-        return jsonify({'message': 'Failed to fetch used codes', 'error': str(e)}), 500
+        return jsonify({'message': 'Failed to fetch codes', 'error': str(e)}), 500
 
-@admin_bp.route('/codes/used/delete', methods=['DELETE'])
+@admin_bp.route('/codes/<int:code_id>/delete', methods=['DELETE'])
 @jwt_required()
-def delete_used_codes():
+def delete_single_code(code_id):
     try:
         current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
@@ -141,27 +153,161 @@ def delete_used_codes():
         if user.role != UserRole.ADMIN:
             return jsonify({'message': 'Access denied'}), 403
         
+        code = RewardCode.query.get(code_id)
+        if not code:
+            return jsonify({'message': 'Code not found'}), 404
+            
+        db.session.delete(code)
+        db.session.commit()
+        
+        return jsonify({'message': 'Code deleted successfully'}), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to delete code', 'error': str(e)}), 500
+
+@admin_bp.route('/support-messages', methods=['GET'])
+@jwt_required()
+def get_all_support_messages():
+    try:
+        current_user_id = int(get_jwt_identity())
+        admin_user = User.query.get(current_user_id)
+        
+        # Check if user is admin
+        if admin_user.role != UserRole.ADMIN:
+            return jsonify({'message': 'Access denied'}), 403
+        
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 20, type=int)
+        status = request.args.get('status', 'all')
+        
+        query = SupportMessage.query
+        
+        if status != 'all':
+            query = query.filter_by(status=MessageStatus(status))
+            
+        messages = query.order_by(SupportMessage.created_at.desc()).paginate(
+            page=page, per_page=per_page, error_out=False
+        )
+        
+        # Build user mapping to avoid N+1 queries
+        user_ids = [msg.user_id for msg in messages.items]
+        users = User.query.filter(User.id.in_(user_ids)).all()
+        user_map = {user.id: user.to_dict() for user in users}
+        
+        result = []
+        for msg in messages.items:
+            msg_data = msg.to_dict()
+            msg_data['user'] = user_map.get(msg.user_id)
+            result.append(msg_data)
+        
+        return jsonify({
+            'messages': result,
+            'total': messages.total,
+            'pages': messages.pages,
+            'current_page': page
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to fetch support messages', 'error': str(e)}), 500
+
+@admin_bp.route('/support-messages/<int:message_id>/respond', methods=['POST'])
+@jwt_required()
+def respond_to_support_message(message_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        admin_user = User.query.get(current_user_id)
+        
+        # Check if user is admin
+        if admin_user.role != UserRole.ADMIN:
+            return jsonify({'message': 'Access denied'}), 403
+        
         data = request.get_json()
-        code_ids = data.get('code_ids', [])
+        response_text = data.get('response')
         
-        if not code_ids:
-            return jsonify({'message': 'No code IDs provided'}), 400
-        
-        # Delete used codes
-        deleted_count = RewardCode.query.filter(
-            RewardCode.id.in_(code_ids),
-            RewardCode.is_used == True
-        ).delete(synchronize_session=False)
+        if not response_text:
+            return jsonify({'message': 'Response text is required'}), 400
+            
+        message = SupportMessage.query.get(message_id)
+        if not message:
+            return jsonify({'message': 'Support message not found'}), 404
+            
+        message.response = response_text
+        message.status = MessageStatus.REPLIED
+        message.updated_at = db.func.current_timestamp()
         
         db.session.commit()
         
         return jsonify({
-            'message': f'Successfully deleted {deleted_count} used codes',
-            'deleted_count': deleted_count
+            'message': 'Response sent successfully',
+            'support_message': message.to_dict()
         }), 200
         
     except Exception as e:
-        return jsonify({'message': 'Failed to delete used codes', 'error': str(e)}), 500
+        return jsonify({'message': 'Failed to respond to support message', 'error': str(e)}), 500
+
+@admin_bp.route('/activities/recent', methods=['GET'])
+@jwt_required()
+def get_recent_activities():
+    try:
+        current_user_id = int(get_jwt_identity())
+        admin_user = User.query.get(current_user_id)
+        
+        # Check if user is admin
+        if admin_user.role != UserRole.ADMIN:
+            return jsonify({'message': 'Access denied'}), 403
+            
+        limit = request.args.get('limit', 20, type=int)
+        
+        # Combine different types of activities
+        activities = []
+        
+        # 1. New user registrations
+        new_users = User.query.order_by(User.created_at.desc()).limit(limit).all()
+        for user in new_users:
+            activities.append({
+                'type': 'user_registration',
+                'user_name': user.full_name,
+                'user_id': user.id,
+                'timestamp': user.created_at.isoformat(),
+                'referral_code': user.referral_code,
+                'points': 0,
+                'cash_value': 0
+            })
+            
+        # 2. Recent transactions (Task completions, withdrawals, redemptions)
+        transactions = Transaction.query.order_by(Transaction.created_at.desc()).limit(limit).all()
+        for tx in transactions:
+            user = tx.user
+            act_type = 'unknown'
+            if tx.type == TransactionType.EARNING:
+                act_type = 'task_completion'
+            elif tx.type == TransactionType.CODE_REDEMPTION:
+                act_type = 'code_redemption'
+            elif tx.type == TransactionType.POINT_WITHDRAWAL:
+                act_type = 'withdrawal_request'
+            elif tx.type == TransactionType.REFERRAL_BONUS:
+                act_type = 'referral_bonus'
+                
+            activities.append({
+                'type': act_type,
+                'user_name': user.full_name if user else 'Unknown',
+                'user_id': tx.user_id,
+                'timestamp': tx.created_at.isoformat(),
+                'points': abs(tx.points_amount or 0),
+                'cash_value': abs(tx.amount or 0),
+                'task_title': tx.description,
+                'code': tx.reference_id if tx.type == TransactionType.CODE_REDEMPTION else None
+            })
+            
+        # Sort combined activities by timestamp
+        activities.sort(key=lambda x: x['timestamp'], reverse=True)
+        
+        return jsonify({
+            'activities': activities[:limit]
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to fetch recent activities', 'error': str(e)}), 500
 
 @admin_bp.route('/users/points/update', methods=['POST'])
 @jwt_required()
@@ -335,85 +481,6 @@ def verify_user(user_id):
     except Exception as e:
         return jsonify({'message': 'Failed to verify user', 'error': str(e)}), 500
 
-@admin_bp.route('/support-messages', methods=['GET'])
-@jwt_required()
-def get_all_support_messages():
-    try:
-        current_user_id = int(get_jwt_identity())
-        admin_user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
-        
-        page = request.args.get('page', 1, type=int)
-        per_page = request.args.get('per_page', 20, type=int)
-        status = request.args.get('status', '')
-        
-        query = SupportMessage.query
-        
-        if status:
-            query = query.filter_by(status=MessageStatus(status))
-        
-        messages = query.order_by(SupportMessage.created_at.desc()).paginate(
-            page=page, per_page=per_page, error_out=False
-        )
-        
-        return jsonify({
-            'messages': [msg.to_dict() for msg in messages.items],
-            'total': messages.total,
-            'pages': messages.pages,
-            'current_page': page
-        }), 200
-        
-    except Exception as e:
-        return jsonify({'message': 'Failed to fetch support messages', 'error': str(e)}), 500
-
-@admin_bp.route('/support-messages/<int:message_id>/respond', methods=['POST'])
-@jwt_required()
-def respond_to_support_message(message_id):
-    try:
-        current_user_id = int(get_jwt_identity())
-        admin_user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
-        
-        message = SupportMessage.query.get(message_id)
-        if not message:
-            return jsonify({'message': 'Support message not found'}), 404
-        
-        data = request.get_json()
-        response_text = data.get('response', '').strip()
-        
-        if not response_text:
-            return jsonify({'message': 'Response text is required'}), 400
-        
-        # Create response message
-        response_msg = SupportMessage(
-            user_id=message.user_id,
-            subject=f"Re: {message.subject}",
-            message=response_text,
-            message_type=MessageType.SUPPORT_TO_USER,
-            status=MessageStatus.REPLIED
-        )
-        
-        # Update original message status
-        message.response = response_text
-        message.status = MessageStatus.REPLIED
-        
-        db.session.add(response_msg)
-        db.session.commit()
-        
-        return jsonify({
-            'message': 'Response sent successfully',
-            'response_message': response_msg.to_dict()
-        }), 200
-        
-    except Exception as e:
-        return jsonify({'message': 'Failed to respond to support message', 'error': str(e)}), 500
-
 @admin_bp.route('/withdrawals', methods=['GET'])
 @jwt_required()
 def get_pending_withdrawals():
@@ -502,10 +569,6 @@ def approve_withdrawal(transaction_id):
         if admin_user.role != UserRole.ADMIN:
             return jsonify({'message': 'Access denied'}), 403
         
-        # Validate transaction ID
-        if not isinstance(transaction_id, int) or transaction_id <= 0:
-            return jsonify({'message': 'Invalid transaction ID'}), 400
-        
         # Get the transaction
         transaction = Transaction.query.get(transaction_id)
         if not transaction:
@@ -530,7 +593,7 @@ def approve_withdrawal(transaction_id):
         
         # Send email notification
         emailer = Emailer()
-        email_sent = emailer.send_withdrawal_approved_notification(
+        emailer.send_withdrawal_approved_notification(
             user_email=user.email,
             user_name=user.full_name,
             points=abs(transaction.points_amount),
@@ -538,29 +601,13 @@ def approve_withdrawal(transaction_id):
             method=get_method_from_description(transaction.description)
         )
         
-        # Log email sending status (for debugging)
-        if not email_sent:
-            print(f"Warning: Failed to send withdrawal approval email to {user.email}")
-        
         return jsonify({
             'message': 'Withdrawal approved successfully',
             'transaction': transaction.to_dict()
         }), 200
         
     except Exception as e:
-        # Log the error for debugging
-        print(f"Error approving withdrawal: {str(e)}")
-        
-        # Attempt to rollback any changes if session is still active
-        try:
-            db.session.rollback()
-        except:
-            pass
-            
-        return jsonify({
-            'message': 'Failed to approve withdrawal. Please try again later.',
-            'error': 'An internal error occurred while processing your request'
-        }), 500
+        return jsonify({'message': 'Failed to approve withdrawal', 'error': str(e)}), 500
 
 @admin_bp.route('/withdrawals/<int:transaction_id>/reject', methods=['POST'])
 @jwt_required()
@@ -572,10 +619,6 @@ def reject_withdrawal(transaction_id):
         # Check if user is admin
         if admin_user.role != UserRole.ADMIN:
             return jsonify({'message': 'Access denied'}), 403
-        
-        # Validate transaction ID
-        if not isinstance(transaction_id, int) or transaction_id <= 0:
-            return jsonify({'message': 'Invalid transaction ID'}), 400
         
         # Get the transaction
         transaction = Transaction.query.get(transaction_id)
@@ -593,27 +636,10 @@ def reject_withdrawal(transaction_id):
         if not user:
             return jsonify({'message': 'User not found'}), 404
         
-        # Store original values for rollback if needed
-        original_balance = user.points_balance
-        original_withdrawn_points = user.total_points_withdrawn
-        original_withdrawn_amount = user.total_withdrawn
-        
-        # Validate transaction amounts
-        if not isinstance(transaction.points_amount, (int, float)) or not isinstance(transaction.amount, (int, float)):
-            return jsonify({'message': 'Invalid transaction amounts'}), 400
-        
         # Refund points to user
         user.points_balance -= transaction.points_amount  # points_amount is negative for withdrawals
-        user.total_points_withdrawn += transaction.points_amount  # Add back the withdrawn points
-        user.total_withdrawn += transaction.amount  # amount is negative for withdrawals
-        
-        # Validate that the user's balance is not negative after refund
-        if user.points_balance < 0:
-            # Rollback changes
-            user.points_balance = original_balance
-            user.total_points_withdrawn = original_withdrawn_points
-            user.total_withdrawn = original_withdrawn_amount
-            return jsonify({'message': 'Cannot process refund: Invalid user balance'}), 400
+        user.total_points_withdrawn += transaction.points_amount
+        user.total_withdrawn += transaction.amount
         
         # Update transaction status to failed
         transaction.status = TransactionStatus.FAILED
@@ -623,7 +649,7 @@ def reject_withdrawal(transaction_id):
         
         # Send email notification
         emailer = Emailer()
-        email_sent = emailer.send_withdrawal_rejected_notification(
+        emailer.send_withdrawal_rejected_notification(
             user_email=user.email,
             user_name=user.full_name,
             points=abs(transaction.points_amount),
@@ -632,36 +658,19 @@ def reject_withdrawal(transaction_id):
             reason="Administrative review"
         )
         
-        # Log email sending status (for debugging)
-        if not email_sent:
-            print(f"Warning: Failed to send withdrawal rejection email to {user.email}")
-        
         return jsonify({
             'message': 'Withdrawal rejected and points refunded',
             'transaction': transaction.to_dict()
         }), 200
         
     except Exception as e:
-        # Log the error for debugging
-        print(f"Error rejecting withdrawal: {str(e)}")
-        
-        # Attempt to rollback any changes if session is still active
-        try:
-            db.session.rollback()
-        except:
-            pass
-            
-        return jsonify({
-            'message': 'Failed to reject withdrawal. Please try again later.',
-            'error': 'An internal error occurred while processing your request'
-        }), 500
+        return jsonify({'message': 'Failed to reject withdrawal', 'error': str(e)}), 500
 
 def get_method_from_description(description):
     """Extract payment method from transaction description"""
     import re
     match = re.search(r'via (\w+)', description)
     return match.group(1) if match else 'unknown'
-
 
 @admin_bp.route('/referrals/award-bonus', methods=['POST'])
 @jwt_required()
@@ -682,9 +691,6 @@ def award_referral_bonus():
         
         if not user_id:
             return jsonify({'message': 'User ID is required'}), 400
-            
-        if points <= 0 and amount <= 0:
-            return jsonify({'message': 'Either points or amount must be greater than 0'}), 400
         
         user = User.query.get(user_id)
         if not user:
@@ -714,8 +720,6 @@ def award_referral_bonus():
         return jsonify({
             'message': f'Successfully awarded referral bonus to {user.full_name}',
             'user_id': user_id,
-            'points_awarded': points,
-            'amount_awarded': amount,
             'new_balance': user.points_balance
         }), 200
         
@@ -742,9 +746,9 @@ def get_dashboard_stats():
             status=TransactionStatus.PENDING
         ).count()
         
-        # Get active tasks (assuming tasks are stored in a separate table)
-        # For now, we'll use a placeholder value
-        active_tasks = 156
+        # Get active tasks
+        from backend.models.task import Task
+        active_tasks = Task.query.count()
         
         # Get pending support messages
         pending_support = SupportMessage.query.filter_by(
@@ -754,31 +758,33 @@ def get_dashboard_stats():
         # Get platform earnings (sum of all completed transactions)
         platform_earnings = db.session.query(db.func.sum(Transaction.amount)).filter(
             Transaction.status == TransactionStatus.COMPLETED,
-            Transaction.type != TransactionType.POINT_WITHDRAWAL
+            Transaction.type != TransactionStatus.FAILED
         ).scalar() or 0.0
         
         # Get daily active users (placeholder)
-        daily_active_users = 1248
+        daily_active_users = User.query.count() 
         
-        # Get tasks completed today (placeholder)
-        tasks_completed_today = 342
+        # Get tasks completed today
+        from backend.models.task import UserTask
+        from datetime import datetime, time
+        today_start = datetime.combine(datetime.utcnow().date(), time.min)
+        tasks_completed_today = UserTask.query.filter(
+            UserTask.status == 'completed',
+            UserTask.updated_at >= today_start
+        ).count()
         
-        # Get total referrals (users with referred_by not null)
+        # Get total referrals
         total_referrals = User.query.filter(User.referred_by.isnot(None)).count()
         
-        # Get referral earnings (sum of referral bonus transactions)
+        # Get referral earnings
         referral_earnings = db.session.query(db.func.sum(Transaction.amount)).filter(
             Transaction.type == TransactionType.REFERRAL_BONUS,
             Transaction.status == TransactionStatus.COMPLETED
         ).scalar() or 0.0
         
-        # Get total partners
+        # Get partners count
         total_partners = User.query.filter_by(role=UserRole.PARTNER).count()
-        
-        # Get pending partner approvals
         pending_approvals = User.query.filter_by(role=UserRole.PARTNER, is_approved=False).count()
-        
-        # Get approved partners
         approved_partners = User.query.filter_by(role=UserRole.PARTNER, is_approved=True).count()
         
         return jsonify({

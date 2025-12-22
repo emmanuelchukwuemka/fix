@@ -481,46 +481,13 @@
 
           <div>
             <h3 class="text-xl font-bold mb-4">Recent Activities</h3>
-            <div class="space-y-3">
+            <div class="space-y-3" id="recentActivitiesContainer">
               <div class="flex items-start gap-3 p-3 bg-card rounded-xl border border-border">
                 <div class="w-10 h-10 bg-green-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                   <i class="fas fa-check text-green-500"></i>
                 </div>
                 <div>
-                  <p class="font-medium">User John completed a survey task</p>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">2 minutes ago</p>
-                </div>
-              </div>
-
-              <div class="flex items-start gap-3 p-3 bg-card rounded-xl border border-border">
-                <div class="w-10 h-10 bg-blue-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                  <i class="fas fa-user-plus text-blue-500"></i>
-                </div>
-                <div>
-                  <p class="font-medium">New user registered via referral</p>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">15 minutes ago</p>
-                </div>
-              </div>
-
-              <div class="flex items-start gap-3 p-3 bg-card rounded-xl border border-border">
-                <div
-                  class="w-10 h-10 bg-purple-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                  <i class="fas fa-gift text-purple-500"></i>
-                </div>
-                <div>
-                  <p class="font-medium">User Sarah redeemed a reward code</p>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">28 minutes ago</p>
-                </div>
-              </div>
-
-              <div class="flex items-start gap-3 p-3 bg-card rounded-xl border border-border">
-                <div
-                  class="w-10 h-10 bg-yellow-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                  <i class="fas fa-money-bill-wave text-yellow-500"></i>
-                </div>
-                <div>
-                  <p class="font-medium">Withdrawal request submitted</p>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">32 minutes ago</p>
+                  <p class="font-medium">Loading activities...</p>
                 </div>
               </div>
             </div>
@@ -1161,6 +1128,7 @@
 
     document.addEventListener('DOMContentLoaded', function () {
       loadDashboardStats();
+      loadRecentActivities();
       loadAdminInfo();
       populateUserDropdown();
     });
@@ -1201,34 +1169,99 @@
 
             // Update other stats if available
             if (stats.platform_earnings !== undefined) {
-              document.querySelector('[data-stat="platformEarnings"]').textContent = `$${stats.platform_earnings.toFixed(2)}`;
+              const el = document.querySelector('[data-stat="platformEarnings"]');
+              if (el) el.textContent = `$${stats.platform_earnings.toFixed(2)}`;
             }
             if (stats.daily_active_users !== undefined) {
-              document.querySelector('[data-stat="dailyActiveUsers"]').textContent = stats.daily_active_users.toLocaleString();
+              const el = document.querySelector('[data-stat="dailyActiveUsers"]');
+              if (el) el.textContent = stats.daily_active_users.toLocaleString();
             }
             if (stats.tasks_completed_today !== undefined) {
-              document.querySelector('[data-stat="tasksCompletedToday"]').textContent = stats.tasks_completed_today;
+              const el = document.querySelector('[data-stat="tasksCompletedToday"]');
+              if (el) el.textContent = stats.tasks_completed_today;
             }
             if (stats.total_referrals !== undefined) {
-              document.querySelector('[data-stat="totalReferrals"]').textContent = stats.total_referrals.toLocaleString();
+              const el = document.querySelector('[data-stat="totalReferrals"]');
+              if (el) el.textContent = stats.total_referrals.toLocaleString();
             }
             if (stats.referral_earnings !== undefined) {
-              document.querySelector('[data-stat="referralEarnings"]').textContent = `$${stats.referral_earnings.toFixed(2)}`;
+              const el = document.querySelector('[data-stat="referralEarnings"]');
+              if (el) el.textContent = `$${stats.referral_earnings.toFixed(2)}`;
             }
             if (stats.total_partners !== undefined) {
-              document.querySelector('[data-stat="totalPartners"]').textContent = stats.total_partners;
+              const el = document.querySelector('[data-stat="totalPartners"]');
+              if (el) el.textContent = stats.total_partners;
             }
             if (stats.pending_approvals !== undefined) {
-              document.querySelector('[data-stat="pendingApprovals"]').textContent = stats.pending_approvals;
+              const el = document.querySelector('[data-stat="pendingApprovals"]');
+              if (el) el.textContent = stats.pending_approvals;
             }
             if (stats.approved_partners !== undefined) {
-              document.querySelector('[data-stat="approvedPartners"]').textContent = stats.approved_partners;
+              const el = document.querySelector('[data-stat="approvedPartners"]');
+              if (el) el.textContent = stats.approved_partners;
             }
           }
         })
         .catch(error => {
           console.error('Error loading dashboard stats:', error);
         });
+    }
+
+    function loadRecentActivities() {
+      const token = localStorage.getItem('access_token');
+      const container = document.getElementById('recentActivitiesContainer');
+      if (!container) return;
+
+      fetch('/api/admin/activities/recent?limit=5', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.activities && data.activities.length > 0) {
+            container.innerHTML = '';
+            data.activities.forEach(activity => {
+              let iconClass = 'fa-info-circle text-gray-500';
+              let bgColor = 'bg-gray-600/20';
+              let title = activity.type.replace(/_/g, ' ');
+
+              if (activity.type === 'user_registration') {
+                iconClass = 'fa-user-plus text-blue-500';
+                bgColor = 'bg-blue-600/20';
+                title = `New user: ${activity.user_name}`;
+              } else if (activity.type === 'task_completion') {
+                iconClass = 'fa-check text-green-500';
+                bgColor = 'bg-green-600/20';
+                title = `${activity.user_name} completed task`;
+              } else if (activity.type === 'code_redemption') {
+                iconClass = 'fa-gift text-purple-500';
+                bgColor = 'bg-purple-600/20';
+                title = `${activity.user_name} redeemed code`;
+              } else if (activity.type === 'withdrawal_request') {
+                iconClass = 'fa-money-bill-wave text-yellow-500';
+                bgColor = 'bg-yellow-600/20';
+                title = `Withdrawal from ${activity.user_name}`;
+              }
+
+              const div = document.createElement('div');
+              div.className = 'flex items-start gap-3 p-3 bg-card rounded-xl border border-border';
+              div.innerHTML = `
+                <div class="w-10 h-10 ${bgColor} rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <i class="fas ${iconClass}"></i>
+                </div>
+                <div>
+                  <p class="font-medium">${title}</p>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">${new Date(activity.timestamp).toLocaleString()}</p>
+                </div>
+            `;
+              container.appendChild(div);
+            });
+          } else {
+            container.innerHTML = '<p class="text-center py-4 text-gray-500">No recent activities</p>';
+          }
+        })
+        .catch(error => console.error('Error loading recent activities:', error));
     }
   </script>
   <script src="../assets/js/theme.js"></script>

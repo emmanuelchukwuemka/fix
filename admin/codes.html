@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +8,8 @@
 
   <!-- Tailwind + Inter Font -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -31,7 +33,7 @@
     // Check if user is authenticated
     const token = localStorage.getItem('access_token');
     const userRole = localStorage.getItem('userRole');
-    
+
     // Redirect to login if not authenticated or not admin
     if (!token || userRole !== 'admin') {
       window.location.href = '/admin/';
@@ -45,12 +47,17 @@
 
   <!-- Animated Background -->
   <div class="absolute inset-0 -z-10">
-    <div class="absolute top-10 left-10 w-96 h-96 bg-primary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse"></div>
-    <div class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse"></div>
+    <div
+      class="absolute top-10 left-10 w-96 h-96 bg-primary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse">
+    </div>
+    <div
+      class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse">
+    </div>
   </div>
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+  <aside id="sidebar"
+    class="fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
     <div class="p-6 border-b border-border">
       <div class="flex items-center gap-3">
         <img src="../assets/logo.png" alt="MyFigPoint Logo" class="w-12 h-12 rounded-full object-contain">
@@ -90,7 +97,8 @@
         <i class="fas fa-headset"></i>
         <span>Support Center</span>
       </a>
-      <a href="/admin/profiles" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="/admin/profiles"
+        class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-user-shield"></i>
         <span>Admin Panel</span>
       </a>
@@ -106,13 +114,15 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin"
+          class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
           <p class="font-semibold">Admin User</p>
           <p class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
         </div>
       </div>
-      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+      <a href="#" onclick="logout()"
+        class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
         Logout
       </a>
     </div>
@@ -129,10 +139,12 @@
           Reward Code Management
         </h1>
         <div class="flex items-center gap-4">
-          <button onclick="generateNewCodes()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
+          <button onclick="generateNewCodes()"
+            class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
             <i class="fas fa-plus"></i> Generate Codes
           </button>
-          <button onclick="refreshCodes()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
+          <button onclick="refreshCodes()"
+            class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
             <i class="fas fa-sync-alt"></i> Refresh
           </button>
         </div>
@@ -142,7 +154,8 @@
     <main class="p-6 lg:p-10 max-w-7xl mx-auto">
       <!-- Stats Overview -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="card rounded-2xl p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 border border-green-500/30">
+        <div
+          class="card rounded-2xl p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 border border-green-500/30">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Total Codes</p>
@@ -153,7 +166,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="card rounded-2xl p-6 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-blue-500/30">
           <div class="flex items-center justify-between">
             <div>
@@ -165,8 +178,9 @@
             </div>
           </div>
         </div>
-        
-        <div class="card rounded-2xl p-6 bg-gradient-to-br from-yellow-600/20 to-amber-600/20 border border-yellow-500/30">
+
+        <div
+          class="card rounded-2xl p-6 bg-gradient-to-br from-yellow-600/20 to-amber-600/20 border border-yellow-500/30">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Available Codes</p>
@@ -177,8 +191,9 @@
             </div>
           </div>
         </div>
-        
-        <div class="card rounded-2xl p-6 bg-gradient-to-br from-purple-600/20 to-pink-600/20 border border-purple-500/30">
+
+        <div
+          class="card rounded-2xl p-6 bg-gradient-to-br from-purple-600/20 to-pink-600/20 border border-purple-500/30">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Batches</p>
@@ -197,11 +212,12 @@
           <div>
             <label class="block text-sm font-bold mb-2">Search Codes</label>
             <div class="relative">
-              <input type="text" id="codeSearch" class="form-input w-full px-4 py-3 rounded-2xl pl-10" placeholder="Code or batch ID...">
+              <input type="text" id="codeSearch" class="form-input w-full px-4 py-3 rounded-2xl pl-10"
+                placeholder="Code or batch ID...">
               <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
             </div>
           </div>
-          
+
           <div>
             <label class="block text-sm font-bold mb-2">Status</label>
             <select class="form-input w-full px-4 py-3 rounded-2xl" id="statusFilter">
@@ -210,7 +226,7 @@
               <option value="used">Used</option>
             </select>
           </div>
-          
+
           <div>
             <label class="block text-sm font-bold mb-2">Batch</label>
             <select class="form-input w-full px-4 py-3 rounded-2xl" id="batchFilter">
@@ -220,14 +236,15 @@
               <option value="batch-003">Batch 003</option>
             </select>
           </div>
-          
+
           <div>
             <label class="block text-sm font-bold mb-2">Date Range</label>
             <input type="date" class="form-input w-full px-4 py-3 rounded-2xl" id="dateFrom">
           </div>
-          
+
           <div class="flex items-end">
-            <button onclick="applyFilters()" class="w-full bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
+            <button onclick="applyFilters()"
+              class="w-full bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
               Apply Filters
             </button>
           </div>
@@ -242,7 +259,7 @@
             <p class="text-lg font-bold">Total Codes: <span id="totalCodesCount">12,450</span></p>
           </div>
         </div>
-        
+
         <div class="overflow-x-auto">
           <table class="w-full">
             <thead>
@@ -267,18 +284,23 @@
             </tbody>
           </table>
         </div>
-        
+
         <!-- Pagination -->
         <div class="flex items-center justify-between mt-8">
           <p class="text-gray-600 dark:text-gray-400">Showing 1 to 3 of 12,450 codes</p>
           <div class="flex gap-2">
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
               <i class="fas fa-chevron-left"></i>
             </button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">2</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">3</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">2</button>
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">3</button>
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
               <i class="fas fa-chevron-right"></i>
             </button>
           </div>
@@ -299,32 +321,37 @@
           <i class="fas fa-times text-2xl"></i>
         </button>
       </div>
-      
+
       <form id="generateCodesForm" class="space-y-6">
         <div>
           <label class="block text-lg font-bold mb-2">Number of Codes</label>
-          <input type="number" min="1" max="10000" class="form-input w-full px-4 py-3 rounded-2xl" id="codeCount" value="100" placeholder="Enter number of codes to generate">
+          <input type="number" min="1" max="10000" class="form-input w-full px-4 py-3 rounded-2xl" id="codeCount"
+            value="100" placeholder="Enter number of codes to generate">
         </div>
-        
+
         <div>
           <label class="block text-lg font-bold mb-2">Point Value per Code</label>
           <div class="relative">
             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">$</span>
-            <input type="number" step="0.01" min="0.01" class="form-input w-full pl-10 pr-4 py-3 rounded-2xl" id="pointValue" value="0.30" placeholder="Enter point value">
+            <input type="number" step="0.01" min="0.01" class="form-input w-full pl-10 pr-4 py-3 rounded-2xl"
+              id="pointValue" value="0.30" placeholder="Enter point value">
           </div>
           <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Each code will be worth $0.30 USD per point</p>
         </div>
-        
+
         <div>
           <label class="block text-lg font-bold mb-2">Batch Description (Optional)</label>
-          <input type="text" class="form-input w-full px-4 py-3 rounded-2xl" id="batchDescription" placeholder="Enter description for this batch">
+          <input type="text" class="form-input w-full px-4 py-3 rounded-2xl" id="batchDescription"
+            placeholder="Enter description for this batch">
         </div>
-        
+
         <div class="flex gap-4 pt-4">
-          <button type="button" onclick="closeModal('generateCodesModal')" class="flex-1 py-3 rounded-2xl border border-border font-bold hover:bg-card/80 transition">
+          <button type="button" onclick="closeModal('generateCodesModal')"
+            class="flex-1 py-3 rounded-2xl border border-border font-bold hover:bg-card/80 transition">
             Cancel
           </button>
-          <button type="submit" class="flex-1 py-3 rounded-2xl bg-primary hover:bg-orange-700 text-white font-bold transition">
+          <button type="submit"
+            class="flex-1 py-3 rounded-2xl bg-primary hover:bg-orange-700 text-white font-bold transition">
             Generate Codes
           </button>
         </div>
@@ -341,7 +368,7 @@
           <i class="fas fa-times text-2xl"></i>
         </button>
       </div>
-      
+
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Code Info -->
         <div>
@@ -360,18 +387,18 @@
               </div>
             </div>
           </div>
-          
+
           <div class="space-y-4">
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Batch ID</p>
               <p class="font-bold">BATCH-001</p>
             </div>
-            
+
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Created</p>
               <p class="font-bold">December 10, 2024</p>
             </div>
-            
+
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Status</p>
               <p class="font-bold">
@@ -380,11 +407,11 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Usage Details -->
         <div>
           <h3 class="text-xl font-bold mb-4">Usage Information</h3>
-          
+
           <div class="p-6 bg-card border border-border rounded-2xl mb-6">
             <div class="flex items-center gap-4 mb-4">
               <div class="w-12 h-12 bg-green-600/20 rounded-xl flex items-center justify-center">
@@ -395,25 +422,27 @@
                 <p class="text-sm text-gray-600 dark:text-gray-400">john.smith@example.com</p>
               </div>
             </div>
-            
+
             <div class="grid grid-cols-2 gap-4 mt-6">
               <div>
                 <p class="text-sm text-gray-600 dark:text-gray-400">Redeemed On</p>
                 <p class="font-bold">December 11, 2024</p>
               </div>
-              
+
               <div>
                 <p class="text-sm text-gray-600 dark:text-gray-400">Time</p>
                 <p class="font-bold">2:45 PM</p>
               </div>
             </div>
           </div>
-          
+
           <div class="flex flex-wrap gap-4">
-            <button onclick="exportCode()" class="flex-1 bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
+            <button onclick="exportCode()"
+              class="flex-1 bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
               <i class="fas fa-download mr-2"></i> Export Code
             </button>
-            <button onclick="deleteCodeConfirm()" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold">
+            <button onclick="deleteCodeConfirm()"
+              class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold">
               <i class="fas fa-trash mr-2"></i> Delete Code
             </button>
           </div>
@@ -425,7 +454,7 @@
   <script>
     // Global variables
     let currentPage = 1;
-    
+
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('overlay').classList.toggle('hidden');
@@ -445,23 +474,23 @@
         window.location.href = '../frontend/login.html';
         return;
       }
-      
+
       // Get filter values
       const searchQuery = document.getElementById('codeSearch').value;
       const statusFilter = document.getElementById('statusFilter').value;
       const batchFilter = document.getElementById('batchFilter').value;
       const dateFrom = document.getElementById('dateFrom').value;
-      
+
       // Build query parameters
       const params = new URLSearchParams();
       params.append('page', currentPage);
       params.append('per_page', 20);
-      
+
       if (searchQuery) params.append('search', searchQuery);
       if (statusFilter) params.append('used_only', statusFilter === 'used');
       if (batchFilter) params.append('batch_id', batchFilter);
       if (dateFrom) params.append('date_from', dateFrom);
-      
+
       // Show loading state
       document.getElementById('codesTableBody').innerHTML = `
         <tr>
@@ -471,27 +500,27 @@
           </td>
         </tr>
       `;
-      
-      fetch(`/api/admin/codes/all?${params.toString()}`, {
+
+      fetch(`/api/admin/codes?${params.toString()}`, {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.codes) {
-          // Update total codes count
-          document.getElementById('totalCodesCount').textContent = data.total.toLocaleString();
-          
-          // Render codes
-          renderCodes(data.codes);
-        } else {
-          throw new Error(data.message || 'Failed to load codes');
-        }
-      })
-      .catch(error => {
-        console.error('Error loading codes:', error);
-        document.getElementById('codesTableBody').innerHTML = `
+        .then(response => response.json())
+        .then(data => {
+          if (data.codes) {
+            // Update total codes count
+            document.getElementById('totalCodesCount').textContent = data.total.toLocaleString();
+
+            // Render codes
+            renderCodes(data.codes);
+          } else {
+            throw new Error(data.message || 'Failed to load codes');
+          }
+        })
+        .catch(error => {
+          console.error('Error loading codes:', error);
+          document.getElementById('codesTableBody').innerHTML = `
           <tr>
             <td colspan="7" class="text-center py-10">
               <i class="fas fa-exclamation-triangle text-4xl text-red-500"></i>
@@ -502,12 +531,12 @@
             </td>
           </tr>
         `;
-      });
+        });
     }
-    
+
     function renderCodes(codes) {
       const tbody = document.getElementById('codesTableBody');
-      
+
       if (codes.length === 0) {
         tbody.innerHTML = `
           <tr>
@@ -519,25 +548,25 @@
         `;
         return;
       }
-      
+
       tbody.innerHTML = '';
-      
+
       codes.forEach(code => {
         const row = document.createElement('tr');
         row.className = 'border-b border-border hover:bg-card/50';
-        
+
         // Format dates
         const createdDate = new Date(code.created_at);
         const formattedDate = createdDate.toLocaleDateString();
-        
+
         // Calculate USD value (assuming 1 point = $0.30)
         const usdValue = code.point_value * 0.30;
-        
+
         // Determine status badge
-        const statusBadge = code.is_used 
+        const statusBadge = code.is_used
           ? '<span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Used</span>'
           : '<span class="bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold">Available</span>';
-        
+
         row.innerHTML = `
           <td class="py-4 font-mono font-bold">${code.code}</td>
           <td class="py-4">${code.point_value.toFixed(2)} pts</td>
@@ -556,7 +585,7 @@
             </button>
           </td>
         `;
-        
+
         tbody.appendChild(row);
       });
     }
@@ -586,26 +615,26 @@
           window.location.href = '../frontend/login.html';
           return;
         }
-        
+
         fetch(`/api/admin/codes/${codeId}/delete`, {
           method: 'DELETE',
           headers: {
             'Authorization': 'Bearer ' + token
           }
         })
-        .then(response => response.json())
-        .then(data => {
-          if (data.message && data.message.includes('success')) {
-            alert('Code deleted successfully');
-            loadCodes(); // Refresh the list
-          } else {
-            alert('Failed to delete code: ' + (data.message || 'Unknown error'));
-          }
-        })
-        .catch(error => {
-          console.error('Error deleting code:', error);
-          alert('Failed to delete code. Please try again.');
-        });
+          .then(response => response.json())
+          .then(data => {
+            if (data.message && data.message.includes('success')) {
+              alert('Code deleted successfully');
+              loadCodes(); // Refresh the list
+            } else {
+              alert('Failed to delete code: ' + (data.message || 'Unknown error'));
+            }
+          })
+          .catch(error => {
+            console.error('Error deleting code:', error);
+            alert('Failed to delete code. Please try again.');
+          });
       }
     }
 
@@ -626,26 +655,26 @@
     }
 
     // Form submission for generating codes
-    document.getElementById('generateCodesForm').addEventListener('submit', function(e) {
+    document.getElementById('generateCodesForm').addEventListener('submit', function (e) {
       e.preventDefault();
-      
+
       const token = localStorage.getItem('access_token');
       if (!token) {
         window.location.href = '../frontend/login.html';
         return;
       }
-      
+
       const formData = {
         count: parseInt(document.getElementById('codeCount').value),
         point_value: parseFloat(document.getElementById('pointValue').value)
       };
-      
+
       // Show loading state
       const submitButton = this.querySelector('button[type="submit"]');
       const originalText = submitButton.innerHTML;
       submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Generating...';
       submitButton.disabled = true;
-      
+
       fetch('/api/admin/codes/generate', {
         method: 'POST',
         headers: {
@@ -654,44 +683,45 @@
         },
         body: JSON.stringify(formData)
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.message && data.message.includes('success')) {
-          alert(`Successfully generated ${data.total_generated} codes!`);
-          closeModal('generateCodesModal');
-          loadCodes(); // Refresh the list
-        } else {
-          alert('Failed to generate codes: ' + (data.message || 'Unknown error'));
-        }
-      })
-      .catch(error => {
-        console.error('Error generating codes:', error);
-        alert('Failed to generate codes. Please try again.');
-      })
-      .finally(() => {
-        // Reset button
-        submitButton.innerHTML = originalText;
-        submitButton.disabled = false;
-      });
+        .then(response => response.json())
+        .then(data => {
+          if (data.message && data.message.includes('success')) {
+            alert(`Successfully generated ${data.total_generated} codes!`);
+            closeModal('generateCodesModal');
+            loadCodes(); // Refresh the list
+          } else {
+            alert('Failed to generate codes: ' + (data.message || 'Unknown error'));
+          }
+        })
+        .catch(error => {
+          console.error('Error generating codes:', error);
+          alert('Failed to generate codes. Please try again.');
+        })
+        .finally(() => {
+          // Reset button
+          submitButton.innerHTML = originalText;
+          submitButton.disabled = false;
+        });
     });
 
     // Close modals when clicking outside
-    window.onclick = function(event) {
+    window.onclick = function (event) {
       if (event.target.classList.contains('fixed') && event.target.classList.contains('inset-0')) {
         event.target.classList.add('hidden');
       }
     }
-    
+
     // Load codes when page loads
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       loadCodes();
     });
   </script>
   <script src="../assets/js/theme.js"></script>
-  
+
   <!-- Fixed Theme Toggle Button -->
   <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
     <i class="fas fa-moon"></i>
   </button>
 </body>
+
 </html>
