@@ -7,6 +7,7 @@ from backend.models.reward_code import RewardCode
 from backend.utils.decorators import partner_restricted
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import re
+from backend.models.notification import Notification, NotificationType
 
 tasks_bp = Blueprint('tasks', __name__)
 

@@ -28,6 +28,9 @@ class User(db.Model):
     total_withdrawn = db.Column(db.Float, default=0.0)
     daily_code_requirement = db.Column(db.Integer, default=5)  # 5 or 10 codes per day
     is_approved = db.Column(db.Boolean, default=False)  # For partner account approval
+    is_suspended = db.Column(db.Boolean, default=False)  # For account suspension
+    is_verified = db.Column(db.Boolean, default=False)  # For verified status
+    verification_pending = db.Column(db.Boolean, default=False)  # For pending verification
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
@@ -58,6 +61,9 @@ class User(db.Model):
             'total_withdrawn': self.total_withdrawn,
             'daily_code_requirement': self.daily_code_requirement,
             'is_approved': self.is_approved,
+            'is_suspended': self.is_suspended,
+            'is_verified': self.is_verified,
+            'verification_pending': self.verification_pending,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None
         }

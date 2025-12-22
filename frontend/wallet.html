@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +8,8 @@
 
   <!-- Tailwind + Inter Font -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -30,25 +32,29 @@
 
 <body class="bg-background text-text min-h-screen flex relative overflow-auto">
   <!-- Theme Toggle Button -->
-  <button id="themeToggle" class="theme-toggle">
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
     <i class="fas fa-moon"></i>
   </button>
 
-
   <!-- Animated Background -->
   <div class="absolute inset-0 -z-10">
-    <div class="absolute top-10 left-10 w-96 h-96 bg-primary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse"></div>
-    <div class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse delay-1000"></div>
+    <div
+      class="absolute top-10 left-10 w-96 h-96 bg-primary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse">
+    </div>
+    <div
+      class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse delay-1000">
+    </div>
   </div>
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
+  <aside id="sidebar"
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
     <div class="flex items-center justify-between p-6 border-b border-border">
       <div class="flex flex-col items-center">
         <img src="assets/logo.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
         <p class="text-primary font-bold mt-1 text-xs">MyFigPoint</p>
       </div>
-      <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
+      <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text" aria-label="Close sidebar">
         <i class="fas fa-times text-xl"></i>
       </button>
     </div>
@@ -66,7 +72,8 @@
         <i class="fas fa-users"></i>
         <span>Refer & Earn</span>
       </a>
-      <a href="wallet.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="wallet.html"
+        class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-wallet"></i>
         <span>Wallet</span>
       </a>
@@ -90,13 +97,15 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <img id="sidebarAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=User" alt="User"
+          class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
-          <p class="font-semibold">John Doe</p>
-          <p class="text-sm text-gray-600 dark:text-gray-400">john@example.com</p>
+          <p id="sidebarUserName" class="font-semibold">Loading...</p>
+          <p id="sidebarUserEmail" class="text-sm text-gray-600 dark:text-gray-400">Loading...</p>
         </div>
       </div>
-      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+      <a href="#" onclick="logout()"
+        class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
         Logout
       </a>
     </div>
@@ -106,18 +115,16 @@
   <div class="flex-1 lg:ml-64">
     <header class="bg-card backdrop-blur-xl border-b border-border sticky top-0 z-40">
       <div class="flex items-center justify-between px-3 py-1.5">
-        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
+        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text" aria-label="Open sidebar">
           <i class="fas fa-bars text-xl"></i>
         </button>
         <div>
-          <h1 class="text-2xl md:text-4xl font-black text-primary">
-            Transaction History
-          </h1>
-          <p class="text-gray-600 dark:text-gray-400 mt-2 text-sm md:text-base">Track every dollar earned & withdrawn</p>
+          <h1 class="text-lg font-bold">Earn Points</h1>
+          <p class="text-gray-600 dark:text-gray-400 text-xs">Complete tasks below and watch your balance grow!</p>
         </div>
         <div class="text-right">
-          <p class="text-lg md:text-2xl font-bold">Total Balance</p>
-          <p class="text-3xl md:text-5xl font-bold text-green-400">$2,850.<span class="text-xl md:text-3xl">75</span></p>
+          <p id="topPointsBalance" class="text-xl font-bold text-primary">0 pts</p>
+          <p id="topTotalEarned" class="text-xs text-gray-600 dark:text-gray-400">$0.00 earned</p>
         </div>
       </div>
     </header>
@@ -149,85 +156,98 @@
       </div>
 
       <!-- Withdraw Funds Section -->
-      <div class="card rounded-3xl p-8 mb-10 shadow-2xl bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/30">
+      <div
+        class="card rounded-3xl p-8 mb-10 shadow-2xl bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/30">
         <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
           <i class="fas fa-money-bill-transfer text-primary"></i> Withdraw Reward
         </h2>
-        
+
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <!-- Withdrawal Form -->
           <div>
             <form id="walletWithdrawForm" class="space-y-6">
               <div>
-                <label class="block text-lg font-bold mb-3">Withdrawal Method</label>
-                <select id="withdrawalMethod" class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
+                <label for="withdrawalMethod" class="block text-lg font-bold mb-3">Withdrawal Method</label>
+                <select id="withdrawalMethod" title="Select Withdrawal Method"
+                  class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
                   <option value="bank">Bank Transfer</option>
                   <option value="gift">Gift Card</option>
                 </select>
               </div>
-              
+
               <div>
-                <label class="block text-lg font-bold mb-3">Points to Withdraw</label>
-                <input type="number" id="withdrawPoints" min="50" placeholder="Min: 50 pts" class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" />
+                <label for="withdrawPoints" class="block text-lg font-bold mb-3">Points to Withdraw</label>
+                <input type="number" id="withdrawPoints" min="50" placeholder="Min: 50 pts" title="Points to Withdraw"
+                  class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" />
                 <p class="text-right mt-2 text-green-400 font-bold" id="withdrawUsdValue">$0.00 USD</p>
               </div>
-              
+
               <div id="bankDetailsSection">
                 <label class="block text-lg font-bold mb-3">Banking Details</label>
                 <div class="space-y-4">
-                  <input type="text" id="bankName" placeholder="Bank Name" class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" />
-                  <input type="text" id="accountHolderName" placeholder="Account Holder Name" class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" />
-                  <input type="text" id="accountNumber" placeholder="Account Number" class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" />
-                  <input type="text" id="routingNumber" placeholder="Routing Number (optional)" class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" />
+                  <input type="text" id="bankName" placeholder="Bank Name" title="Bank Name"
+                    class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" />
+                  <input type="text" id="accountHolderName" placeholder="Account Holder Name"
+                    title="Account Holder Name"
+                    class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" />
+                  <input type="text" id="accountNumber" placeholder="Account Number" title="Account Number"
+                    class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" />
+                  <input type="text" id="routingNumber" placeholder="Routing Number (optional)" title="Routing Number"
+                    class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" />
                 </div>
               </div>
-              
+
               <div class="flex items-center">
                 <input type="checkbox" id="saveBankDetails" class="w-5 h-5 text-primary rounded focus:ring-primary">
                 <label for="saveBankDetails" class="ml-2">Save these banking details for future withdrawals</label>
               </div>
-              
-              <button type="submit" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 py-4 rounded-xl font-bold transition transform hover:scale-105 shadow-lg">
+
+              <button type="submit"
+                class="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 py-4 rounded-xl font-bold transition transform hover:scale-105 shadow-lg">
                 <i class="fas fa-paper-plane mr-2"></i> Request Withdrawal
               </button>
             </form>
           </div>
-          
+
           <!-- Withdrawal Info -->
           <div>
             <div class="bg-card/50 border border-border rounded-2xl p-6 h-full">
               <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
                 <i class="fas fa-info-circle text-primary"></i> Withdrawal Information
               </h3>
-              
+
               <div class="space-y-4">
                 <div class="flex items-start gap-3">
                   <i class="fas fa-shield-alt text-green-400 mt-1"></i>
                   <div>
                     <h4 class="font-bold">Secure Processing</h4>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">All withdrawals are processed securely within 1-3 business days.</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">All withdrawals are processed securely within
+                      1-3 business days.</p>
                   </div>
                 </div>
-                
+
                 <div class="flex items-start gap-3">
                   <i class="fas fa-percent text-yellow-400 mt-1"></i>
                   <div>
                     <h4 class="font-bold">Fee Structure</h4>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Standard fee of 2% applies. Reduced fees for Silver+ tier members.</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Standard fee of 2% applies. Reduced fees for
+                      Silver+ tier members.</p>
                   </div>
                 </div>
-                
+
                 <div class="flex items-start gap-3">
                   <i class="fas fa-star text-purple-400 mt-1"></i>
                   <div>
                     <h4 class="font-bold">Tier Benefits</h4>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Higher tiers enjoy faster processing and lower fees.</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Higher tiers enjoy faster processing and lower
+                      fees.</p>
                   </div>
                 </div>
-                
+
                 <div class="mt-6 p-4 bg-primary/10 rounded-xl border border-primary/30">
                   <h4 class="font-bold mb-2">Important Notice</h4>
-                  <p class="text-sm">Withdrawal requests are reviewed by our team. You'll receive an email notification once your request is processed.</p>
+                  <p class="text-sm">Withdrawal requests are reviewed by our team. You'll receive an email notification
+                    once your request is processed.</p>
                 </div>
               </div>
             </div>
@@ -241,20 +261,24 @@
           <i class="fas fa-filter text-primary"></i> Filter Transactions
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <input type="date" id="filterDate" class="bg-card border border-border rounded-2xl px-6 py-4 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/30 transition" />
-          <select id="filterType" class="bg-card border border-border rounded-2xl px-6 py-4 focus:outline-none focus:border-primary">
+          <input type="date" id="filterDate"
+            class="bg-card border border-border rounded-2xl px-6 py-4 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/30 transition" />
+          <select id="filterType"
+            class="bg-card border border-border rounded-2xl px-6 py-4 focus:outline-none focus:border-primary">
             <option value="">All Types</option>
             <option value="earning">Earnings</option>
             <option value="withdrawal">Withdrawals</option>
             <option value="bonus">Bonuses</option>
           </select>
-          <select id="filterStatus" class="bg-card border border-border rounded-2xl px-6 py-4 focus:outline-none focus:border-primary">
+          <select id="filterStatus"
+            class="bg-card border border-border rounded-2xl px-6 py-4 focus:outline-none focus:border-primary">
             <option value="">All Status</option>
             <option value="completed">Completed</option>
             <option value="pending">Pending</option>
             <option value="failed">Failed</option>
           </select>
-          <button onclick="applyFilters()" class="bg-primary hover:bg-orange-700 px-8 py-4 rounded-2xl font-bold transition shadow-xl">
+          <button onclick="applyFilters()"
+            class="bg-primary hover:bg-orange-700 px-8 py-4 rounded-2xl font-bold transition shadow-xl">
             <i class="fas fa-search mr-2"></i> Apply Filter
           </button>
         </div>
@@ -262,72 +286,21 @@
 
       <!-- Export Buttons -->
       <div class="flex justify-end gap-4 mb-8">
-        <button onclick="exportCSV()" class="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 px-8 py-4 rounded-2xl font-bold shadow-xl flex items-center gap-3">
+        <button onclick="exportCSV()"
+          class="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 px-8 py-4 rounded-2xl font-bold shadow-xl flex items-center gap-3">
           <i class="fas fa-file-csv text-2xl"></i> Export CSV
         </button>
-        <button onclick="exportPDF()" class="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 px-8 py-4 rounded-2xl font-bold shadow-xl flex items-center gap-3">
+        <button onclick="exportPDF()"
+          class="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 px-8 py-4 rounded-2xl font-bold shadow-xl flex items-center gap-3">
           <i class="fas fa-file-pdf text-2xl"></i> Export PDF
         </button>
       </div>
 
       <!-- Transactions List -->
       <div id="transactionsContainer" class="space-y-6">
-        <!-- Sample Transaction -->
-        <div class="transaction-card card rounded-3xl p-8 hover:border-primary transition-all slide-in">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-6">
-              <div class="w-16 h-16 bg-green-600/20 rounded-2xl flex items-center justify-center">
-                <i class="fas fa-arrow-down text-green-400 text-3xl"></i>
-              </div>
-              <div>
-                <h3 class="text-2xl font-bold">Task Completed</h3>
-                <p class="text-gray-600 dark:text-gray-400">Health & Wellness Survey</p>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Jun 15, 2025 • 02:34 PM</p>
-              </div>
-            </div>
-            <div class="text-right">
-              <p class="text-4xl font-bold text-green-400">+$50.00</p>
-              <span class="bg-green-600/20 text-green-400 px-4 py-2 rounded-full text-sm font-bold">Completed</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="transaction-card card rounded-3xl p-8 hover:border-yellow-500 transition-all">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-6">
-              <div class="w-16 h-16 bg-yellow-600/20 rounded-2xl flex items-center justify-center">
-                <i class="fas fa-gift text-yellow-400 text-3xl"></i>
-              </div>
-              <div>
-                <h3 class="text-2xl font-bold">Referral Bonus</h3>
-                <p class="text-gray-600 dark:text-gray-400">Jane Doe joined via your link</p>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Jun 14, 2025 • 11:20 AM</p>
-              </div>
-            </div>
-            <div class="text-right">
-              <p class="text-4xl font-bold text-yellow-400">+$25.00</p>
-              <span class="bg-yellow-600/20 text-yellow-400 px-4 py-2 rounded-full text-sm font-bold">Instant</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="transaction-card card rounded-3xl p-8 hover:border-red-500 transition-all">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-6">
-              <div class="w-16 h-16 bg-red-600/20 rounded-2xl flex items-center justify-center">
-                <i class="fas fa-arrow-up text-red-400 text-3xl"></i>
-              </div>
-              <div>
-                <h3 class="text-2xl font-bold">Withdrawal Request</h3>
-                <p class="text-gray-600 dark:text-gray-400">Bank Transfer • Account ending **4321</p>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Jun 10, 2025 • 09:15 AM</p>
-              </div>
-            </div>
-            <div class="text-right">
-              <p class="text-4xl font-bold text-red-400">-$100.00</p>
-              <span class="bg-orange-600/20 text-orange-400 px-4 py-2 rounded-full text-sm font-bold">Pending</span>
-            </div>
-          </div>
+        <div class="text-center py-12 text-gray-500">
+          <i class="fas fa-spinner fa-spin text-4xl mb-4 text-primary"></i>
+          <p>Loading withdrawal history...</p>
         </div>
       </div>
 
@@ -348,12 +321,8 @@
       document.getElementById('overlay').classList.toggle('hidden');
     }
 
-    // Sample data
-    const transactions = [
-      { date: "2025-06-15", type: "earning", desc: "Health & Wellness Survey", amount: 50.00, status: "completed" },
-      { date: "2025-06-14", type: "bonus", desc: "Referral: Jane Doe", amount: 25.00, status: "instant" },
-      { date: "2025-06-10", type: "withdrawal", desc: "Bank Transfer", amount: -100.00, status: "pending" }
-    ];
+    // Global transactions array for export
+    const transactions = [];
 
     // Filter function
     function applyFilters() {
@@ -411,51 +380,53 @@
       doc.save('MyFigPoint_Transactions.pdf');
       confetti({ particleCount: 150, spread: 90 });
     }
-    
+
     // Fetch transactions when page loads
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       const token = localStorage.getItem('access_token');
       if (!token) {
         window.location.href = 'login.html';
         return;
       }
-      
-      fetch('/api/transactions/', {
+
+      // Load user info
+      const savedName = localStorage.getItem('userName');
+      const savedEmail = localStorage.getItem('userEmail');
+      if (savedName) document.getElementById('sidebarUserName').textContent = savedName;
+      if (savedEmail) document.getElementById('sidebarUserEmail').textContent = savedEmail;
+
+      // Fetch Points Balance
+      fetch('/api/points/balance', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      })
+        .then(response => response.json())
+        .then(data => {
+          const balance = data.points_balance || 0;
+          document.getElementById('topPointsBalance').innerHTML = balance.toLocaleString() + ' pts';
+        });
+
+      fetch('/api/transactions/?type=withdrawal', {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.transactions && data.transactions.length > 0) {
-          // Clear existing transactions
+        .then(response => response.json())
+        .then(data => {
           const container = document.getElementById('transactionsContainer');
           container.innerHTML = '';
-          
-          // Add transactions
-          data.transactions.forEach(transaction => {
-            const card = document.createElement('div');
-            card.className = 'transaction-card card rounded-3xl p-8 hover:border-primary transition-all slide-in';
-            
-            let iconClass = 'fa-arrow-down text-green-400';
-            let bgColor = 'bg-green-600/20';
-            let amountClass = 'text-green-400';
-            let amountPrefix = '+';
-            
-            if (transaction.amount < 0) {
-              iconClass = 'fa-arrow-up text-red-400';
-              bgColor = 'bg-red-600/20';
-              amountClass = 'text-red-400';
-              amountPrefix = '';
-            } else if (transaction.type === 'referral_bonus') {
-              iconClass = 'fa-gift text-yellow-400';
-              bgColor = 'bg-yellow-600/20';
-              amountClass = 'text-yellow-400';
-            }
-            
-            const date = new Date(transaction.created_at);
-            
-            card.innerHTML = `
+
+          if (data.transactions && data.transactions.length > 0) {
+            data.transactions.forEach(transaction => {
+              const card = document.createElement('div');
+              card.className = 'transaction-card card rounded-3xl p-8 hover:border-primary transition-all slide-in';
+
+              let iconClass = 'fa-arrow-up text-red-400';
+              let bgColor = 'bg-red-600/20';
+              let amountClass = 'text-red-400';
+
+              const date = new Date(transaction.created_at);
+
+              card.innerHTML = `
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-6">
                   <div class="w-16 h-16 ${bgColor} rounded-2xl flex items-center justify-center">
@@ -464,81 +435,76 @@
                   <div>
                     <h3 class="text-2xl font-bold">${transaction.description || transaction.type}</h3>
                     <p class="text-gray-400">${transaction.type}</p>
-                    <p class="text-sm text-gray-500 mt-2">${date.toLocaleDateString()} • ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>
+                    <p class="text-sm text-gray-500 mt-2">${date.toLocaleDateString()} • ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                   </div>
                 </div>
                 <div class="text-right">
-                  <p class="text-4xl font-bold ${amountClass}">${amountPrefix}$${Math.abs(transaction.amount).toFixed(2)}</p>
-                  <span class="bg-green-600/20 text-green-400 px-4 py-2 rounded-full text-sm font-bold">${transaction.status}</span>
+                  <p class="text-4xl font-bold ${amountClass}">-$${Math.abs(transaction.amount).toFixed(2)}</p>
+                  <span class="bg-gray-600/20 text-gray-400 px-4 py-2 rounded-full text-sm font-bold">${transaction.status}</span>
                 </div>
               </div>
             `;
-            container.appendChild(card);
-          });
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching transactions:', error);
-        if (error.message && error.message.includes('401')) {
-          localStorage.removeItem('access_token');
-          window.location.href = 'login.html';
-        }
-      });
+              container.appendChild(card);
+            });
+          } else {
+            container.innerHTML = '<div class="text-center py-12 text-gray-500"><p>No withdrawal history found.</p></div>';
+          }
+        });
     });
-    
+
     // Logout function
     function logout() {
       localStorage.removeItem('access_token');
       window.location.href = 'login.html';
     }
-    
+
     // Update USD value when points change
-    document.getElementById('withdrawPoints').addEventListener('input', function() {
+    document.getElementById('withdrawPoints').addEventListener('input', function () {
       const points = parseFloat(this.value) || 0;
       const usd = (points * 0.1).toFixed(2); // 10 pts = $1
       document.getElementById('withdrawUsdValue').textContent = `$${usd} USD`;
     });
-    
+
     // Handle withdrawal form submission
-    document.getElementById('walletWithdrawForm').addEventListener('submit', function(e) {
+    document.getElementById('walletWithdrawForm').addEventListener('submit', function (e) {
       e.preventDefault();
-      
+
       const points = document.getElementById('withdrawPoints').value;
       if (!points || points < 50) {
         alert('Minimum withdrawal is 50 points');
         return;
       }
-      
+
       const method = document.getElementById('withdrawalMethod').value;
-      
+
       // Validate banking details if bank transfer is selected
       if (method === 'bank') {
         const bankName = document.getElementById('bankName').value;
         const accountHolderName = document.getElementById('accountHolderName').value;
         const accountNumber = document.getElementById('accountNumber').value;
-        
+
         if (!bankName || !accountHolderName || !accountNumber) {
           alert('Please fill in all required banking details');
           return;
         }
       }
-      
+
       const token = localStorage.getItem('access_token');
       if (!token) {
         alert('Please log in to withdraw points');
         window.location.href = 'login.html';
         return;
       }
-      
+
       // Show loading state
       const submitButton = this.querySelector('button[type="submit"]');
       const originalText = submitButton.innerHTML;
       submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
       submitButton.disabled = true;
-      
+
       // Prepare request data based on selected method
       const requestData = { points: parseInt(points) };
-      
+
       if (method === 'bank') {
         requestData.method = 'bank';
         requestData.bank_name = document.getElementById('bankName').value;
@@ -548,7 +514,7 @@
       } else if (method === 'gift') {
         requestData.method = 'gift_card';
       }
-      
+
       // Send withdrawal request
       fetch('/api/points/withdraw', {
         method: 'POST',
@@ -558,41 +524,37 @@
         },
         body: JSON.stringify(requestData)
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.message && data.message.includes('successfully')) {
-          // Show success message
-          alert(data.message);
-          
-          // Reset form
-          document.getElementById('walletWithdrawForm').reset();
-          document.getElementById('withdrawUsdValue').textContent = '$0.00 USD';
-          
-          // Refresh transactions
-          location.reload();
-        } else {
-          alert('Withdrawal failed: ' + (data.message || 'Unknown error'));
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Withdrawal failed. Please try again.');
-      })
-      .finally(() => {
-        // Reset button
-        submitButton.innerHTML = originalText;
-        submitButton.disabled = false;
-      });
+        .then(response => response.json())
+        .then(data => {
+          if (data.message && data.message.includes('successfully')) {
+            // Show success message
+            alert(data.message);
+
+            // Reset form
+            document.getElementById('walletWithdrawForm').reset();
+            document.getElementById('withdrawUsdValue').textContent = '$0.00 USD';
+
+            // Refresh transactions
+            location.reload();
+          } else {
+            alert('Withdrawal failed: ' + (data.message || 'Unknown error'));
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Withdrawal failed. Please try again.');
+        })
+        .finally(() => {
+          // Reset button
+          submitButton.innerHTML = originalText;
+          submitButton.disabled = false;
+        });
     });
-  
-    
+
+
 
   </script>
   <script src="assets/js/theme.js"></script>
-  
-  <!-- Fixed Theme Toggle Button -->
-  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
-    <i class="fas fa-moon"></i>
-  </button>
 </body>
+
 </html>

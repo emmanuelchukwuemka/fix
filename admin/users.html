@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +8,8 @@
 
   <!-- Tailwind + Inter Font -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -31,7 +33,7 @@
     // Check if user is authenticated
     const token = localStorage.getItem('access_token');
     const userRole = localStorage.getItem('userRole');
-    
+
     // Redirect to login if not authenticated or not admin
     if (!token || userRole !== 'admin') {
       window.location.href = '/admin/login.html';
@@ -45,12 +47,17 @@
 
   <!-- Animated Background -->
   <div class="absolute inset-0 -z-10">
-    <div class="absolute top-10 left-10 w-96 h-96 bg-primary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse"></div>
-    <div class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse"></div>
+    <div
+      class="absolute top-10 left-10 w-96 h-96 bg-primary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse">
+    </div>
+    <div
+      class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse">
+    </div>
   </div>
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+  <aside id="sidebar"
+    class="fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
     <div class="p-6 border-b border-border">
       <div class="flex items-center gap-3">
         <img src="../assets/logo.png" alt="MyFigPoint Logo" class="w-12 h-12 rounded-full object-contain">
@@ -90,7 +97,8 @@
         <i class="fas fa-headset"></i>
         <span>Support Center</span>
       </a>
-      <a href="/admin/profiles" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="/admin/profiles"
+        class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-user-shield"></i>
         <span>Admin Panel</span>
       </a>
@@ -106,13 +114,15 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin"
+          class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
           <p class="font-semibold">Admin User</p>
           <p class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
         </div>
       </div>
-      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+      <a href="#" onclick="logout()"
+        class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
         Logout
       </a>
     </div>
@@ -129,7 +139,8 @@
           User Management
         </h1>
         <div class="flex items-center gap-4">
-          <button onclick="refreshUsers()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
+          <button onclick="refreshUsers()"
+            class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
             <i class="fas fa-sync-alt"></i> Refresh
           </button>
         </div>
@@ -143,11 +154,12 @@
           <div>
             <label class="block text-sm font-bold mb-2">Search Users</label>
             <div class="relative">
-              <input type="text" id="userSearch" class="form-input w-full px-4 py-3 rounded-2xl pl-10" placeholder="Name, email, or referral code...">
+              <input type="text" id="userSearch" class="form-input w-full px-4 py-3 rounded-2xl pl-10"
+                placeholder="Name, email, or referral code...">
               <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
             </div>
           </div>
-          
+
           <div>
             <label class="block text-sm font-bold mb-2">Role</label>
             <select class="form-input w-full px-4 py-3 rounded-2xl" id="roleFilter">
@@ -157,7 +169,7 @@
               <option value="admin">Admin</option>
             </select>
           </div>
-          
+
           <div>
             <label class="block text-sm font-bold mb-2">Status</label>
             <select class="form-input w-full px-4 py-3 rounded-2xl" id="statusFilter">
@@ -166,9 +178,10 @@
               <option value="suspended">Suspended</option>
             </select>
           </div>
-          
+
           <div class="flex items-end">
-            <button onclick="applyFilters()" class="w-full bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
+            <button onclick="applyFilters()"
+              class="w-full bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
               Apply Filters
             </button>
           </div>
@@ -183,7 +196,7 @@
             <p class="text-lg font-bold">Total Users: <span id="totalUsersCount">1,247</span></p>
           </div>
         </div>
-        
+
         <div class="overflow-x-auto">
           <table class="w-full">
             <thead>
@@ -207,18 +220,23 @@
             </tbody>
           </table>
         </div>
-        
+
         <!-- Pagination -->
         <div class="flex items-center justify-between mt-8">
           <p class="text-gray-600 dark:text-gray-400">Showing 1 to 3 of 1,247 users</p>
           <div class="flex gap-2">
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
               <i class="fas fa-chevron-left"></i>
             </button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">2</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">3</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">2</button>
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">3</button>
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
               <i class="fas fa-chevron-right"></i>
             </button>
           </div>
@@ -239,61 +257,65 @@
           <i class="fas fa-times text-2xl"></i>
         </button>
       </div>
-      
+
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <!-- User Info -->
         <div class="md:col-span-1">
           <div class="text-center mb-6">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" class="w-24 h-24 rounded-full mx-auto mb-4" alt="User">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" class="w-24 h-24 rounded-full mx-auto mb-4"
+              alt="User">
             <h3 class="text-xl font-bold">John Smith</h3>
             <p class="text-gray-600 dark:text-gray-400">john.smith@example.com</p>
             <div class="mt-3">
               <span class="bg-blue-600/20 text-blue-500 px-3 py-1 rounded-full text-sm font-bold">User</span>
             </div>
           </div>
-          
+
           <div class="space-y-4">
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Member Since</p>
               <p class="font-bold">January 15, 2024</p>
             </div>
-            
+
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Last Login</p>
               <p class="font-bold">-</p>
             </div>
-            
+
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Referral Code</p>
               <p class="font-bold">-</p>
             </div>
           </div>
         </div>
-        
+
         <!-- User Stats -->
         <div class="md:col-span-2">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div class="p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 rounded-2xl border border-green-500/30">
+            <div
+              class="p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 rounded-2xl border border-green-500/30">
               <p class="text-gray-600 dark:text-gray-400">Points Balance</p>
               <p class="text-3xl font-bold mt-2">1,250.75 pts</p>
             </div>
-            
+
             <div class="p-6 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 rounded-2xl border border-blue-500/30">
               <p class="text-gray-600 dark:text-gray-400">Total Earned</p>
               <p class="text-3xl font-bold mt-2">$375.23</p>
             </div>
-            
-            <div class="p-6 bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-2xl border border-purple-500/30">
+
+            <div
+              class="p-6 bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-2xl border border-purple-500/30">
               <p class="text-gray-600 dark:text-gray-400">Referrals</p>
               <p class="text-3xl font-bold mt-2">12</p>
             </div>
-            
-            <div class="p-6 bg-gradient-to-br from-yellow-600/20 to-amber-600/20 rounded-2xl border border-yellow-500/30">
+
+            <div
+              class="p-6 bg-gradient-to-br from-yellow-600/20 to-amber-600/20 rounded-2xl border border-yellow-500/30">
               <p class="text-gray-600 dark:text-gray-400">Tasks Completed</p>
               <p class="text-3xl font-bold mt-2">42</p>
             </div>
           </div>
-          
+
           <!-- Banking Details -->
           <div class="mb-8">
             <h3 class="text-xl font-bold mb-4">Banking Details</h3>
@@ -303,17 +325,17 @@
                   <p class="text-sm text-gray-600 dark:text-gray-400">Bank Name</p>
                   <p class="font-bold">First National Bank</p>
                 </div>
-                
+
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Account Holder</p>
                   <p class="font-bold">John Smith</p>
                 </div>
-                
+
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Account Number</p>
                   <p class="font-bold">**** **** **** 4829</p>
                 </div>
-                
+
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Routing Number</p>
                   <p class="font-bold">**** **** 1234</p>
@@ -321,19 +343,23 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Actions -->
           <div class="flex flex-wrap gap-4">
-            <button onclick="adjustUserPoints()" class="flex-1 bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
+            <button onclick="adjustUserPoints()"
+              class="flex-1 bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
               <i class="fas fa-coins mr-2"></i> Adjust Points
             </button>
-            <button onclick="sendMessage()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl font-bold">
+            <button onclick="sendMessage()"
+              class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl font-bold">
               <i class="fas fa-envelope mr-2"></i> Send Message
             </button>
-            <button onclick="resetPassword()" class="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white py-3 rounded-2xl font-bold">
+            <button onclick="resetPassword()"
+              class="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white py-3 rounded-2xl font-bold">
               <i class="fas fa-key mr-2"></i> Reset Password
             </button>
-            <button onclick="suspendUserConfirm()" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold">
+            <button onclick="suspendUserConfirm()"
+              class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold">
               <i class="fas fa-ban mr-2"></i> Suspend Account
             </button>
           </div>
@@ -345,7 +371,7 @@
   <script>
     // Global variables
     let currentPage = 1;
-    
+
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('overlay').classList.toggle('hidden');
@@ -365,21 +391,21 @@
         window.location.href = '../frontend/login.html';
         return;
       }
-      
+
       // Get filter values
       const searchQuery = document.getElementById('userSearch').value;
       const roleFilter = document.getElementById('roleFilter').value;
       const statusFilter = document.getElementById('statusFilter').value;
-      
+
       // Build query parameters
       const params = new URLSearchParams();
       params.append('page', currentPage);
       params.append('per_page', 20);
-      
+
       if (searchQuery) params.append('search', searchQuery);
       if (roleFilter) params.append('role', roleFilter);
       if (statusFilter) params.append('status', statusFilter);
-      
+
       // Show loading state
       document.getElementById('usersTableBody').innerHTML = `
         <tr>
@@ -389,27 +415,27 @@
           </td>
         </tr>
       `;
-      
+
       fetch(`/api/admin/users?${params.toString()}`, {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.users) {
-          // Update total users count
-          document.getElementById('totalUsersCount').textContent = data.total.toLocaleString();
-          
-          // Render users
-          renderUsers(data.users);
-        } else {
-          throw new Error(data.message || 'Failed to load users');
-        }
-      })
-      .catch(error => {
-        console.error('Error loading users:', error);
-        document.getElementById('usersTableBody').innerHTML = `
+        .then(response => response.json())
+        .then(data => {
+          if (data.users) {
+            // Update total users count
+            document.getElementById('totalUsersCount').textContent = data.total.toLocaleString();
+
+            // Render users
+            renderUsers(data.users);
+          } else {
+            throw new Error(data.message || 'Failed to load users');
+          }
+        })
+        .catch(error => {
+          console.error('Error loading users:', error);
+          document.getElementById('usersTableBody').innerHTML = `
           <tr>
             <td colspan="6" class="text-center py-10">
               <i class="fas fa-exclamation-triangle text-4xl text-red-500"></i>
@@ -420,12 +446,12 @@
             </td>
           </tr>
         `;
-      });
+        });
     }
-    
+
     function renderUsers(users) {
       const tbody = document.getElementById('usersTableBody');
-      
+
       if (users.length === 0) {
         tbody.innerHTML = `
           <tr>
@@ -437,20 +463,20 @@
         `;
         return;
       }
-      
+
       tbody.innerHTML = '';
-      
+
       users.forEach(user => {
         const row = document.createElement('tr');
         row.className = 'border-b border-border hover:bg-card/50';
-        
+
         // Format join date
         const joinDate = new Date(user.created_at);
         const formattedDate = joinDate.toLocaleDateString();
-        
+
         // Determine role badge
         let roleBadge = '';
-        switch(user.role) {
+        switch (user.role) {
           case 'admin':
             roleBadge = '<span class="bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold">Admin</span>';
             break;
@@ -460,7 +486,7 @@
           default:
             roleBadge = '<span class="bg-blue-600/20 text-blue-500 px-3 py-1 rounded-full text-sm font-bold">User</span>';
         }
-        
+
         row.innerHTML = `
           <td class="py-4">
             <div class="flex items-center gap-3">
@@ -489,7 +515,7 @@
             </button>
           </td>
         `;
-        
+
         tbody.appendChild(row);
       });
     }
@@ -509,41 +535,41 @@
         window.location.href = '../frontend/login.html';
         return;
       }
-      
+
       fetch(`/api/admin/users/${userId}/details`, {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.user) {
-          populateUserDetails(data.user);
-          document.getElementById('userDetailsModal').classList.remove('hidden');
-        } else {
-          alert('Failed to load user details: ' + (data.message || 'Unknown error'));
-        }
-      })
-      .catch(error => {
-        console.error('Error loading user details:', error);
-        alert('Failed to load user details. Please try again.');
-      });
+        .then(response => response.json())
+        .then(data => {
+          if (data.user) {
+            populateUserDetails(data.user);
+            document.getElementById('userDetailsModal').classList.remove('hidden');
+          } else {
+            alert('Failed to load user details: ' + (data.message || 'Unknown error'));
+          }
+        })
+        .catch(error => {
+          console.error('Error loading user details:', error);
+          alert('Failed to load user details. Please try again.');
+        });
     }
-    
+
     function populateUserDetails(user) {
       // Update user info section
       document.querySelector('#userDetailsModal .text-xl.font-bold').textContent = user.full_name;
       document.querySelector('#userDetailsModal .text-gray-600.dark\:text-gray-400').textContent = user.email;
-      
+
       // Update avatar
       document.querySelector('#userDetailsModal img').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`;
-      
+
       // Update role badge
       const roleElement = document.querySelector('#userDetailsModal .bg-blue-600\/20');
       if (roleElement) {
         let roleClass = '';
         let roleText = '';
-        switch(user.role) {
+        switch (user.role) {
           case 'admin':
             roleClass = 'bg-red-600/20 text-red-500';
             roleText = 'Admin';
@@ -559,18 +585,18 @@
         roleElement.className = `px-3 py-1 rounded-full text-sm font-bold ${roleClass}`;
         roleElement.textContent = roleText;
       }
-      
+
       // Update member since
       const joinDate = new Date(user.created_at);
       document.querySelectorAll('#userDetailsModal .p-4.bg-card')[0].querySelector('.font-bold').textContent = joinDate.toLocaleDateString();
-      
+
       // Update referral code
       document.querySelectorAll('#userDetailsModal .p-4.bg-card')[2].querySelector('.font-bold').textContent = user.referral_code || 'N/A';
-      
+
       // Update stats
       document.querySelectorAll('#userDetailsModal .text-3xl.font-bold')[0].textContent = `${user.points_balance.toFixed(2)} pts`;
       document.querySelectorAll('#userDetailsModal .text-3xl.font-bold')[1].textContent = `$${user.total_earnings.toFixed(2)}`;
-      
+
       // Update banking details
       if (user.bank_name) {
         document.querySelectorAll('#userDetailsModal .font-bold')[6].textContent = user.bank_name;
@@ -583,7 +609,7 @@
         const maskedAccount = user.account_number.replace(/.(?=.{4})/g, '*');
         document.querySelectorAll('#userDetailsModal .font-bold')[8].textContent = maskedAccount;
       }
-      
+
       // Store user ID for actions
       let userIdElement = document.getElementById('detailUserId');
       if (!userIdElement) {
@@ -599,9 +625,22 @@
       alert('Edit user functionality would open here');
     }
 
-    function suspendUser(userId) {
-      if (confirm('Are you sure you want to suspend this user?')) {
-        alert('User suspended successfully');
+    function suspendUser(userId, currentStatus) {
+      const action = currentStatus ? 'unsuspend' : 'suspend';
+      if (confirm(`Are you sure you want to ${action} this user?`)) {
+        const token = localStorage.getItem('access_token');
+        fetch(`/api/admin/users/${userId}/${action}`, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        })
+          .then(response => response.json())
+          .then(data => {
+            alert(data.message);
+            loadUsers();
+          })
+          .catch(error => console.error(`Error ${action}ing user:`, error));
       }
     }
 
@@ -612,15 +651,15 @@
     function adjustUserPoints() {
       const userId = document.getElementById('detailUserId').textContent;
       const points = prompt('Enter points to add/subtract (use negative number to subtract):');
-      
+
       if (points === null) return; // User cancelled
-      
+
       const token = localStorage.getItem('access_token');
       if (!token) {
         window.location.href = '../frontend/login.html';
         return;
       }
-      
+
       fetch(`/api/admin/users/points/update`, {
         method: 'POST',
         headers: {
@@ -633,20 +672,20 @@
           operation: points >= 0 ? 'add' : 'subtract'
         })
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.message && data.message.includes('success')) {
-          alert(`Successfully ${points >= 0 ? 'added' : 'subtracted'} ${Math.abs(points)} points!`);
-          // Refresh user details
-          viewUserDetails(userId);
-        } else {
-          alert('Failed to adjust points: ' + (data.message || 'Unknown error'));
-        }
-      })
-      .catch(error => {
-        console.error('Error adjusting points:', error);
-        alert('Failed to adjust points. Please try again.');
-      });
+        .then(response => response.json())
+        .then(data => {
+          if (data.message && data.message.includes('success')) {
+            alert(`Successfully ${points >= 0 ? 'added' : 'subtracted'} ${Math.abs(points)} points!`);
+            // Refresh user details
+            viewUserDetails(userId);
+          } else {
+            alert('Failed to adjust points: ' + (data.message || 'Unknown error'));
+          }
+        })
+        .catch(error => {
+          console.error('Error adjusting points:', error);
+          alert('Failed to adjust points. Please try again.');
+        });
     }
 
     function sendMessage() {
@@ -661,16 +700,34 @@
 
     function suspendUserConfirm() {
       const userId = document.getElementById('detailUserId').textContent;
-      if (confirm('Are you sure you want to suspend this user account?')) {
+      const isSuspended = document.querySelector('#userDetailsModal .bg-red-600\/20') !== null &&
+        document.querySelector('#userDetailsModal .bg-red-600\/20').textContent === 'Suspended';
+
+      const action = isSuspended ? 'unsuspend' : 'suspend';
+
+      if (confirm(`Are you sure you want to ${action} this user account?`)) {
         const token = localStorage.getItem('access_token');
         if (!token) {
           window.location.href = '../frontend/login.html';
           return;
         }
-        
-        // For now, we'll just show a success message since there's no specific suspend endpoint
-        alert('User account suspended');
-        closeModal('userDetailsModal');
+
+        fetch(`/api/admin/users/${userId}/${action}`, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        })
+          .then(response => response.json())
+          .then(data => {
+            alert(data.message);
+            closeModal('userDetailsModal');
+            loadUsers();
+          })
+          .catch(error => {
+            console.error(`Error ${action}ing user:`, error);
+            alert(`Failed to ${action} user account`);
+          });
       }
     }
 
@@ -684,22 +741,23 @@
     }
 
     // Close modals when clicking outside
-    window.onclick = function(event) {
+    window.onclick = function (event) {
       if (event.target.classList.contains('fixed') && event.target.classList.contains('inset-0')) {
         event.target.classList.add('hidden');
       }
     }
-    
+
     // Load users when page loads
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       loadUsers();
     });
   </script>
   <script src="../assets/js/theme.js"></script>
-  
+
   <!-- Fixed Theme Toggle Button -->
   <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
     <i class="fas fa-moon"></i>
   </button>
 </body>
+
 </html>

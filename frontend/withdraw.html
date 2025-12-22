@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +8,8 @@
 
   <!-- Tailwind + Inter -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -35,12 +37,17 @@
 
   <!-- Animated Background -->
   <div class="absolute inset-0 -z-10 overflow-hidden">
-    <div class="absolute top-0 left-0 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply blur-3xl opacity-50 animate-pulse"></div>
-    <div class="absolute bottom-0 right-0 w-96 h-96 bg-indigo-600 rounded-full mix-blend-multiply blur-3xl opacity-50 animate-pulse delay-1000"></div>
+    <div
+      class="absolute top-0 left-0 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply blur-3xl opacity-50 animate-pulse">
+    </div>
+    <div
+      class="absolute bottom-0 right-0 w-96 h-96 bg-indigo-600 rounded-full mix-blend-multiply blur-3xl opacity-50 animate-pulse delay-1000">
+    </div>
   </div>
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
+  <aside id="sidebar"
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
     <div class="flex items-center justify-between p-6 border-b border-border">
       <img src="assets/logo.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
       <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
@@ -61,7 +68,8 @@
         <i class="fas fa-users"></i>
         <span>Refer & Earn</span>
       </a>
-      <a href="wallet.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="wallet.html"
+        class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-wallet"></i>
         <span>Wallet</span>
       </a>
@@ -85,13 +93,15 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User"
+          class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
           <p class="font-semibold">John Doe</p>
           <p class="text-sm text-gray-600 dark:text-gray-400">john@example.com</p>
         </div>
       </div>
-      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+      <a href="#" onclick="logout()"
+        class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
         Logout
       </a>
     </div>
@@ -125,8 +135,9 @@
         <div class="text-center">
           <div class="relative inline-block">
             <svg class="w-32 h-32 transform -rotate-90">
-              <circle cx="64" cy="64" r="56" stroke="#374151" stroke-width="12" fill="none"/>
-              <circle cx="64" cy="64" r="56" stroke="#10b981" stroke-width="12" fill="none" stroke-dasharray="352" stroke-dashoffset="100" class="animate-progress"/>
+              <circle cx="64" cy="64" r="56" stroke="#374151" stroke-width="12" fill="none" />
+              <circle cx="64" cy="64" r="56" stroke="#10b981" stroke-width="12" fill="none" stroke-dasharray="352"
+                stroke-dashoffset="100" class="animate-progress" />
             </svg>
             <div class="absolute inset-0 flex items-center justify-center">
               <div>
@@ -163,10 +174,12 @@
 
         <!-- Method Tabs -->
         <div class="grid grid-cols-2 gap-4 mb-10">
-          <button onclick="selectMethod('bank')" class="method-btn active bg-gradient-to-r from-indigo-600 to-purple-600 p-6 rounded-2xl font-bold text-xl shadow-xl">
+          <button onclick="selectMethod('bank')"
+            class="method-btn active bg-gradient-to-r from-indigo-600 to-purple-600 p-6 rounded-2xl font-bold text-xl shadow-xl">
             <i class="fas fa-university text-3xl mb-3 block"></i> Bank Transfer
           </button>
-          <button onclick="selectMethod('gift')" class="method-btn bg-gray-700/50 p-6 rounded-2xl font-bold text-xl hover:bg-indigo-600/50 transition">
+          <button onclick="selectMethod('gift')"
+            class="method-btn bg-gray-700/50 p-6 rounded-2xl font-bold text-xl hover:bg-indigo-600/50 transition">
             <i class="fas fa-gift text-3xl mb-3 block"></i> Gift Cards
           </button>
         </div>
@@ -174,41 +187,53 @@
         <form id="withdrawForm" class="space-y-8">
           <!-- Banking Details Section -->
           <div class="bg-gray-700/50 rounded-2xl p-6 mb-8">
-            <h3 class="text-2xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-university text-yellow-400"></i> Banking Details</h3>
-            <p class="text-gray-300 mb-6">Please enter your banking information before withdrawing funds. This information will be securely stored for future withdrawals.</p>
-            
+            <h3 class="text-2xl font-bold mb-6 flex items-center gap-3"><i
+                class="fas fa-university text-yellow-400"></i> Banking Details</h3>
+            <p class="text-gray-300 mb-6">Please enter your banking information before withdrawing funds. This
+              information will be securely stored for future withdrawals.</p>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label class="block text-lg font-bold mb-3">Bank Name *</label>
-                <input type="text" id="bankName" placeholder="e.g., Chase Bank" class="w-full bg-gray-800 border border-gray-600 rounded-xl px-6 py-4 text-lg focus:outline-none focus:border-yellow-500 transition" required />
+                <input type="text" id="bankName" placeholder="e.g., Chase Bank"
+                  class="w-full bg-gray-800 border border-gray-600 rounded-xl px-6 py-4 text-lg focus:outline-none focus:border-yellow-500 transition"
+                  required />
               </div>
-              
+
               <div>
                 <label class="block text-lg font-bold mb-3">Account Holder Name *</label>
-                <input type="text" id="accountHolderName" placeholder="e.g., John Doe" class="w-full bg-gray-800 border border-gray-600 rounded-xl px-6 py-4 text-lg focus:outline-none focus:border-yellow-500 transition" required />
+                <input type="text" id="accountHolderName" placeholder="e.g., John Doe"
+                  class="w-full bg-gray-800 border border-gray-600 rounded-xl px-6 py-4 text-lg focus:outline-none focus:border-yellow-500 transition"
+                  required />
               </div>
-              
+
               <div>
                 <label class="block text-lg font-bold mb-3">Account Number *</label>
-                <input type="text" id="accountNumber" placeholder="••••••••4321" class="w-full bg-gray-800 border border-gray-600 rounded-xl px-6 py-4 text-lg focus:outline-none focus:border-yellow-500 transition" required />
+                <input type="text" id="accountNumber" placeholder="Account Number"
+                  class="w-full bg-gray-800 border border-gray-600 rounded-xl px-6 py-4 text-lg focus:outline-none focus:border-yellow-500 transition"
+                  required />
               </div>
-              
+
               <div>
                 <label class="block text-lg font-bold mb-3">Routing Number</label>
-                <input type="text" id="routingNumber" placeholder="e.g., 021000021" class="w-full bg-gray-800 border border-gray-600 rounded-xl px-6 py-4 text-lg focus:outline-none focus:border-yellow-500 transition" />
+                <input type="text" id="routingNumber" placeholder="e.g., 021000021"
+                  class="w-full bg-gray-800 border border-gray-600 rounded-xl px-6 py-4 text-lg focus:outline-none focus:border-yellow-500 transition" />
               </div>
             </div>
-            
+
             <div class="mt-6 flex items-center">
               <input type="checkbox" id="saveBankDetails" class="w-5 h-5 text-yellow-500 rounded focus:ring-yellow-400">
-              <label for="saveBankDetails" class="ml-2 text-lg">Save these banking details for future withdrawals</label>
+              <label for="saveBankDetails" class="ml-2 text-lg">Save these banking details for future
+                withdrawals</label>
             </div>
           </div>
-          
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <label class="block text-xl font-bold mb-4">Points to Withdraw</label>
-              <input type="number" id="points" min="500" placeholder="Min: 500 pts" class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl px-8 py-6 text-2xl focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/30 transition" oninput="updateUSD()" />
+              <input type="number" id="points" min="500" placeholder="Min: 500 pts"
+                class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl px-8 py-6 text-2xl focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/30 transition"
+                oninput="updateUSD()" />
               <p class="text-right mt-3 text-3xl font-bold text-green-400" id="usdValue">$0.00 USD</p>
             </div>
 
@@ -217,11 +242,12 @@
               <div id="bankDetails">
                 <p class="text-gray-300 mb-4">Your banking details will be used for this withdrawal.</p>
               </div>
-              
+
               <!-- Gift Card Details -->
               <div id="giftCardDetails" class="hidden">
                 <label class="block text-xl font-bold mb-4">Gift Card Type</label>
-                <select id="giftCardType" class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl px-8 py-6 text-xl focus:outline-none focus:border-indigo-500 transition">
+                <select id="giftCardType"
+                  class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl px-8 py-6 text-xl focus:outline-none focus:border-indigo-500 transition">
                   <option value="amazon">Amazon</option>
                   <option value="steam">Steam</option>
                   <option value="google_play">Google Play</option>
@@ -232,7 +258,8 @@
           </div>
 
           <div class="text-center">
-            <button type="submit" class="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 px-16 py-8 rounded-3xl font-bold text-3xl shadow-2xl transform hover:scale-105 transition duration-300">
+            <button type="submit"
+              class="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 px-16 py-8 rounded-3xl font-bold text-3xl shadow-2xl transform hover:scale-105 transition duration-300">
               <i class="fas fa-paper-plane mr-4"></i>
               Request Withdrawal
             </button>
@@ -253,7 +280,7 @@
   <script>
     // Track current selected method
     let currentMethod = 'bank';
-    
+
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('overlay').classList.toggle('hidden');
@@ -263,14 +290,14 @@
       // Update UI
       document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active', 'bg-gradient-to-r', 'from-indigo-600', 'to-purple-600'));
       event.target.closest('button').classList.add('active', 'bg-gradient-to-r', 'from-indigo-600', 'to-purple-600');
-      
+
       // Update current method
       currentMethod = method;
-      
+
       // Show/hide method-specific details
       document.getElementById('bankDetails').classList.toggle('hidden', method !== 'bank');
       document.getElementById('giftCardDetails').classList.toggle('hidden', method !== 'gift');
-      
+
       // Show/hide banking details section based on method
       const bankingDetailsSection = document.querySelector('.bg-gray-700/50.rounded-2xl.p-6.mb-8');
       if (bankingDetailsSection) {
@@ -284,26 +311,26 @@
       document.getElementById('usdValue').textContent = `$${usd} USD`;
     }
 
-    document.getElementById('withdrawForm').addEventListener('submit', function(e) {
+    document.getElementById('withdrawForm').addEventListener('submit', function (e) {
       e.preventDefault();
       const points = document.getElementById('points').value;
       if (!points || points < 500) {
         alert('Minimum withdrawal is 500 points');
         return;
       }
-      
+
       // Validate banking details if bank transfer is selected
       if (currentMethod === 'bank') {
         const bankName = document.getElementById('bankName').value;
         const accountHolderName = document.getElementById('accountHolderName').value;
         const accountNumber = document.getElementById('accountNumber').value;
-        
+
         if (!bankName || !accountHolderName || !accountNumber) {
           alert('Please fill in all required banking details');
           return;
         }
       }
-      
+
       const token = localStorage.getItem('access_token');
       if (!token) {
         alert('Please log in to withdraw points');
@@ -319,14 +346,14 @@
 
       // Prepare request data based on selected method
       const requestData = { points: parseInt(points) };
-      
+
       if (currentMethod === 'bank') {
         requestData.method = 'bank';
         requestData.bank_name = document.getElementById('bankName').value;
         requestData.account_holder_name = document.getElementById('accountHolderName').value;
         requestData.account_number = document.getElementById('accountNumber').value;
         requestData.routing_number = document.getElementById('routingNumber').value;
-        
+
         // Save banking details if checkbox is checked
         if (document.getElementById('saveBankDetails').checked) {
           saveBankDetails(token).then(success => {
@@ -347,24 +374,24 @@
       }
 
       // Save banking details if checkbox is checked
-        if (currentMethod === 'bank' && document.getElementById('saveBankDetails').checked) {
-          saveBankDetails(token).then(success => {
-            if (success) {
-              // Proceed with withdrawal after saving details
-              processWithdrawal(requestData, token, submitButton, originalText);
-            } else {
-              // Reset button if saving failed
-              submitButton.innerHTML = originalText;
-              submitButton.disabled = false;
-            }
-          });
-          return; // Don't proceed with withdrawal immediately
-        } else {
-          // Process withdrawal immediately
-          processWithdrawal(requestData, token, submitButton, originalText);
-        }
+      if (currentMethod === 'bank' && document.getElementById('saveBankDetails').checked) {
+        saveBankDetails(token).then(success => {
+          if (success) {
+            // Proceed with withdrawal after saving details
+            processWithdrawal(requestData, token, submitButton, originalText);
+          } else {
+            // Reset button if saving failed
+            submitButton.innerHTML = originalText;
+            submitButton.disabled = false;
+          }
+        });
+        return; // Don't proceed with withdrawal immediately
+      } else {
+        // Process withdrawal immediately
+        processWithdrawal(requestData, token, submitButton, originalText);
+      }
     });
-    
+
     // Process the actual withdrawal request
     function processWithdrawal(requestData, token, submitButton, originalText) {
       fetch('/api/points/withdraw', {
@@ -375,40 +402,40 @@
         },
         body: JSON.stringify(requestData)
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.message && data.message.includes('successfully')) {
-          confetti({
-            particleCount: 300,
-            spread: 100,
-            origin: { y: 0.6 },
-            colors: ['#10b981', '#34d399', '#6ee7b7']
-          });
+        .then(response => response.json())
+        .then(data => {
+          if (data.message && data.message.includes('successfully')) {
+            confetti({
+              particleCount: 300,
+              spread: 100,
+              origin: { y: 0.6 },
+              colors: ['#10b981', '#34d399', '#6ee7b7']
+            });
 
-          setTimeout(() => {
-            alert(data.message);
-            document.getElementById('withdrawForm').reset();
-            document.getElementById('usdValue').textContent = '$0.00 USD';
-            
-            // Update balance display
-            document.querySelector('header .text-right .text-6xl').innerHTML = data.new_balance.toFixed(2) + '<span class="text-4xl"> pts</span>';
-            document.querySelector('header .text-right .text-3xl').textContent = '$' + (data.new_balance * 0.1).toFixed(2) + ' USD';
-          }, 1000);
-        } else {
-          alert('Withdrawal failed: ' + (data.message || 'Unknown error'));
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Withdrawal failed. Please try again.');
-      })
-      .finally(() => {
-        // Reset button
-        submitButton.innerHTML = originalText;
-        submitButton.disabled = false;
-      });
+            setTimeout(() => {
+              alert(data.message);
+              document.getElementById('withdrawForm').reset();
+              document.getElementById('usdValue').textContent = '$0.00 USD';
+
+              // Update balance display
+              document.querySelector('header .text-right .text-6xl').innerHTML = data.new_balance.toFixed(2) + '<span class="text-4xl"> pts</span>';
+              document.querySelector('header .text-right .text-3xl').textContent = '$' + (data.new_balance * 0.1).toFixed(2) + ' USD';
+            }, 1000);
+          } else {
+            alert('Withdrawal failed: ' + (data.message || 'Unknown error'));
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Withdrawal failed. Please try again.');
+        })
+        .finally(() => {
+          // Reset button
+          submitButton.innerHTML = originalText;
+          submitButton.disabled = false;
+        });
     }
-    
+
     // Save banking details to user profile
     function saveBankDetails(token) {
       const bankData = {
@@ -416,7 +443,7 @@
         account_name: document.getElementById('accountHolderName').value,
         account_number: document.getElementById('accountNumber').value
       };
-      
+
       return fetch('/api/users/profile', {
         method: 'PUT',
         headers: {
@@ -425,31 +452,48 @@
         },
         body: JSON.stringify(bankData)
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.message && data.message.includes('success')) {
-          console.log('Banking details saved successfully');
-          // Show success message to user
-          const successMessage = document.createElement('div');
-          successMessage.className = 'mt-4 p-3 bg-green-600 text-white rounded-lg text-center';
-          successMessage.textContent = 'Banking details saved successfully!';
-          document.querySelector('#withdrawForm').prepend(successMessage);
-          
-          // Remove message after 3 seconds
-          setTimeout(() => {
-            if (successMessage.parentNode) {
-              successMessage.parentNode.removeChild(successMessage);
-            }
-          }, 3000);
-          return true;
-        } else {
-          console.error('Failed to save banking details:', data.message);
+        .then(response => response.json())
+        .then(data => {
+          if (data.message && data.message.includes('success')) {
+            console.log('Banking details saved successfully');
+            // Show success message to user
+            const successMessage = document.createElement('div');
+            successMessage.className = 'mt-4 p-3 bg-green-600 text-white rounded-lg text-center';
+            successMessage.textContent = 'Banking details saved successfully!';
+            document.querySelector('#withdrawForm').prepend(successMessage);
+
+            // Remove message after 3 seconds
+            setTimeout(() => {
+              if (successMessage.parentNode) {
+                successMessage.parentNode.removeChild(successMessage);
+              }
+            }, 3000);
+            return true;
+          } else {
+            console.error('Failed to save banking details:', data.message);
+            // Show error message to user
+            const errorMessage = document.createElement('div');
+            errorMessage.className = 'mt-4 p-3 bg-red-600 text-white rounded-lg text-center';
+            errorMessage.textContent = 'Failed to save banking details: ' + (data.message || 'Unknown error');
+            document.querySelector('#withdrawForm').prepend(errorMessage);
+
+            // Remove message after 3 seconds
+            setTimeout(() => {
+              if (errorMessage.parentNode) {
+                errorMessage.parentNode.removeChild(errorMessage);
+              }
+            }, 3000);
+            return false;
+          }
+        })
+        .catch(error => {
+          console.error('Error saving banking details:', error);
           // Show error message to user
           const errorMessage = document.createElement('div');
           errorMessage.className = 'mt-4 p-3 bg-red-600 text-white rounded-lg text-center';
-          errorMessage.textContent = 'Failed to save banking details: ' + (data.message || 'Unknown error');
+          errorMessage.textContent = 'Error saving banking details. Please try again.';
           document.querySelector('#withdrawForm').prepend(errorMessage);
-          
+
           // Remove message after 3 seconds
           setTimeout(() => {
             if (errorMessage.parentNode) {
@@ -457,70 +501,54 @@
             }
           }, 3000);
           return false;
-        }
-      })
-      .catch(error => {
-        console.error('Error saving banking details:', error);
-        // Show error message to user
-        const errorMessage = document.createElement('div');
-        errorMessage.className = 'mt-4 p-3 bg-red-600 text-white rounded-lg text-center';
-        errorMessage.textContent = 'Error saving banking details. Please try again.';
-        document.querySelector('#withdrawForm').prepend(errorMessage);
-        
-        // Remove message after 3 seconds
-        setTimeout(() => {
-          if (errorMessage.parentNode) {
-            errorMessage.parentNode.removeChild(errorMessage);
-          }
-        }, 3000);
-        return false;
-      });
+        });
     }
-    
+
     // Fetch user points balance when page loads
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       const token = localStorage.getItem('access_token');
       if (!token) {
         window.location.href = 'login.html';
         return;
       }
-      
+
       fetch('/api/points/balance', {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.points_balance !== undefined) {
-          // Update balance display
-          document.querySelector('header .text-right .text-6xl').innerHTML = data.points_balance.toFixed(2) + '<span class="text-4xl"> pts</span>';
-          document.querySelector('header .text-right .text-3xl').textContent = '$' + (data.points_balance * 0.1).toFixed(2) + ' USD';
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching points balance:', error);
-        if (error.message && error.message.includes('401')) {
-          localStorage.removeItem('access_token');
-          window.location.href = 'login.html';
-        }
-      });
+        .then(response => response.json())
+        .then(data => {
+          if (data.points_balance !== undefined) {
+            // Update balance display
+            document.querySelector('header .text-right .text-6xl').innerHTML = data.points_balance.toFixed(2) + '<span class="text-4xl"> pts</span>';
+            document.querySelector('header .text-right .text-3xl').textContent = '$' + (data.points_balance * 0.1).toFixed(2) + ' USD';
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching points balance:', error);
+          if (error.message && error.message.includes('401')) {
+            localStorage.removeItem('access_token');
+            window.location.href = 'login.html';
+          }
+        });
     });
-    
+
     // Logout function
     function logout() {
       localStorage.removeItem('access_token');
       window.location.href = 'login.html';
     }
-  
-    
+
+
 
   </script>
   <script src="assets/js/theme.js"></script>
-  
+
   <!-- Fixed Theme Toggle Button -->
   <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
     <i class="fas fa-moon"></i>
   </button>
 </body>
+
 </html>

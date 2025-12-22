@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -28,25 +29,30 @@
 
 <body class="bg-background text-text min-h-screen flex relative overflow-auto">
   <!-- Theme Toggle Button -->
-  <button id="themeToggle" class="theme-toggle">
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
     <i class="fas fa-moon"></i>
   </button>
 
 
   <!-- Animated Background -->
   <div class="absolute inset-0 -z-10 overflow-hidden">
-    <div class="absolute top-0 left-0 w-96 h-96 bg-purple-700 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-pulse"></div>
-    <div class="absolute bottom-0 right-0 w-96 h-96 bg-indigo-700 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-pulse delay-1000"></div>
+    <div
+      class="absolute top-0 left-0 w-96 h-96 bg-purple-700 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-pulse">
+    </div>
+    <div
+      class="absolute bottom-0 right-0 w-96 h-96 bg-indigo-700 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-pulse delay-1000">
+    </div>
   </div>
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
+  <aside id="sidebar"
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
     <div class="flex items-center justify-between p-6 border-b border-border">
       <div class="flex flex-col items-center">
         <img src="assets/logo.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
         <p class="text-primary font-bold mt-1 text-xs">MyFigPoint</p>
       </div>
-      <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
+      <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text" aria-label="Close sidebar">
         <i class="fas fa-times text-xl"></i>
       </button>
     </div>
@@ -60,7 +66,8 @@
         <i class="fas fa-tasks"></i>
         <span>Earn Points</span>
       </a>
-      <a href="referrals.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="referrals.html"
+        class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-users"></i>
         <span>Refer & Earn</span>
       </a>
@@ -88,13 +95,15 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <img id="sidebarAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=User" alt="User"
+          class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
-          <p class="font-semibold">John Doe</p>
-          <p class="text-sm text-gray-600 dark:text-gray-400">john@example.com</p>
+          <p id="sidebarUserName" class="font-semibold">Loading...</p>
+          <p id="sidebarUserEmail" class="text-sm text-gray-600 dark:text-gray-400">Loading...</p>
         </div>
       </div>
-      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+      <a href="#" onclick="logout()"
+        class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
         Logout
       </a>
     </div>
@@ -105,14 +114,15 @@
     <!-- Top Bar -->
     <header class="bg-card backdrop-blur-xl border-b border-border sticky top-0 z-40">
       <div class="flex items-center justify-between px-3 py-1.5">
-        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
+        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text" aria-label="Open sidebar">
           <i class="fas fa-bars text-xl"></i>
         </button>
         <div>
           <h1 class="text-2xl md:text-4xl font-bold text-primary">
             Refer Friends & Earn Big
           </h1>
-          <p class="text-gray-600 dark:text-gray-400 mt-2 text-sm md:text-base">Earn up to $50 + 500 pts per successful referral!</p>
+          <p class="text-gray-600 dark:text-gray-400 mt-2 text-sm md:text-base">Earn up to $50 + 500 pts per successful
+            referral!</p>
         </div>
       </div>
     </header>
@@ -124,17 +134,19 @@
         <div class="bg-primary rounded-3xl p-8 shadow-2xl text-center transform hover:scale-105 transition">
           <i class="fas fa-dollar-sign text-6xl mb-4 opacity-80"></i>
           <p class="text-orange-100 uppercase tracking-wider">Total Referral Cash</p>
-          <p class="text-5xl font-bold mt-4">$850.50</p>
+          <p id="statReferralCash" class="text-5xl font-bold mt-4">$0.00</p>
         </div>
-        <div class="bg-gradient-to-br from-indigo-600 to-blue-700 rounded-3xl p-8 shadow-2xl text-center transform hover:scale-105 transition">
+        <div
+          class="bg-gradient-to-br from-indigo-600 to-blue-700 rounded-3xl p-8 shadow-2xl text-center transform hover:scale-105 transition">
           <i class="fas fa-coins text-6xl mb-4 opacity-80"></i>
           <p class="text-indigo-100 uppercase tracking-wider">Referral Points</p>
-          <p class="text-5xl font-bold mt-4">1,275</p>
+          <p id="statReferralPoints" class="text-5xl font-bold mt-4">0</p>
         </div>
-        <div class="bg-gradient-to-br from-green-600 to-emerald-700 rounded-3xl p-8 shadow-2xl text-center transform hover:scale-105 transition">
+        <div
+          class="bg-gradient-to-br from-green-600 to-emerald-700 rounded-3xl p-8 shadow-2xl text-center transform hover:scale-105 transition">
           <i class="fas fa-users text-6xl mb-4 opacity-80"></i>
           <p class="text-green-100 uppercase tracking-wider">Active Referrals</p>
-          <p class="text-5xl font-bold mt-4">47</p>
+          <p id="statActiveReferrals" class="text-5xl font-bold mt-4">0</p>
         </div>
       </div>
 
@@ -144,42 +156,28 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           <div class="text-center lg:text-left">
             <div class="flex items-center gap-4 mb-6">
-              <input 
-                type="text" 
-                readonly 
-                value="https://myfigpoint.com/r/john2025" 
-                id="refLink"
-                class="flex-1 px-6 py-5 bg-card border border-border rounded-2xl text-lg font-mono focus:outline-none"
-              />
-              <button 
-                onclick="copyLink()" 
-                class="bg-primary hover:bg-orange-700 px-8 py-5 rounded-2xl font-bold text-lg transition shadow-lg transform hover:scale-105"
-              >
+              <input type="text" readonly value="Loading..." id="refLink" aria-label="Your Referral Link"
+                class="flex-1 px-6 py-5 bg-card border border-border rounded-2xl text-lg font-mono focus:outline-none" />
+              <button onclick="copyLink()"
+                class="bg-primary hover:bg-orange-700 px-8 py-5 rounded-2xl font-bold text-lg transition shadow-lg transform hover:scale-105">
                 <i class="fas fa-copy mr-2"></i> Copy
               </button>
             </div>
 
             <!-- Share Buttons -->
-            <div class="flex justify-center lg:justify-start gap-4">
-              <a href="https://wa.me/?text=Join%20MyFigPoint%20and%20earn%20real%20Reward!%20Use%20my%20link%3A%20https://myfigpoint.com/r/john2025" target="_blank" class="bg-green-600 hover:bg-green-700 p-4 rounded-xl transition">
-                <i class="fab fa-whatsapp text-2xl"></i>
-              </a>
-              <a href="https://t.me/share/url?url=https://myfigpoint.com/r/john2025&text=Start%20earning%20with%20MyFigPoint!" target="_blank" class="bg-blue-600 hover:bg-blue-700 p-4 rounded-xl transition">
-                <i class="fab fa-telegram text-2xl"></i>
-              </a>
-              <a href="https://twitter.com/intent/tweet?text=I'm%20earning%20real%20Reward%20with%20MyFigPoint!%20Join%20me%3A%20https://myfigpoint.com/r/john2025" target="_blank" class="bg-black hover:bg-gray-800 p-4 rounded-xl transition">
-                <i class="fab fa-twitter text-2xl"></i>
-              </a>
-              <a href="#" onclick="confetti(); return false;" class="bg-gradient-to-r from-primary to-orange-600 p-4 rounded-xl transition">
-                <i class="fas fa-magic text-2xl"></i>
-              </a>
+            <div id="shareButtons" class="flex justify-center lg:justify-start gap-4">
+              <!-- Dynamically updated -->
+              <p class="text-gray-500">Loading share links...</p>
             </div>
           </div>
 
           <!-- QR Code -->
           <div class="flex justify-center">
             <div class="bg-white p-6 rounded-3xl shadow-2xl">
-              <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://myfigpoint.com/r/john2025" alt="QR Code" class="w-48 h-48">
+              <img id="refQR" src="" alt="QR Code" class="w-48 h-48 hidden">
+              <div id="qrLoading" class="w-48 h-48 flex items-center justify-center text-gray-400">
+                <i class="fas fa-spinner fa-spin text-2xl"></i>
+              </div>
               <p class="text-gray-700 text-center mt-4 font-bold">Scan to Join</p>
             </div>
           </div>
@@ -193,23 +191,8 @@
           <h3 class="text-2xl font-bold mb-8 flex items-center gap-3">
             <i class="fas fa-user-plus text-green-400"></i> Recent Referrals
           </h3>
-          <div class="space-y-6">
-            <div class="flex items-center gap-4 p-4 bg-card rounded-2xl hover:bg-primary/10 transition">
-              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Jane" class="w-14 h-14 rounded-full ring-2 ring-green-500">
-              <div class="flex-1">
-                <p class="font-bold">Jane Doe</p>
-                <p class="text-sm text-gray-600 dark:text-gray-400">Joined 3 days ago • +$25 bonus</p>
-              </div>
-              <span class="text-green-400 font-bold">+$25</span>
-            </div>
-            <div class="flex items-center gap-4 p-4 bg-card rounded-2xl hover:bg-primary/10 transition">
-              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mark" class="w-14 h-14 rounded-full ring-2 ring-green-500">
-              <div class="flex-1">
-                <p class="font-bold">Mark Smith</p>
-                <p class="text-sm text-gray-600 dark:text-gray-400">Joined 1 week ago • +300 pts</p>
-              </div>
-              <span class="text-purple-400 font-bold">+300 pts</span>
-            </div>
+          <div id="recentReferralsList" class="space-y-6">
+            <p class="text-center text-gray-500 py-4">Loading referrals...</p>
           </div>
         </div>
 
@@ -218,38 +201,25 @@
           <h3 class="text-2xl font-bold mb-8 flex items-center gap-3">
             <i class="fas fa-bell text-yellow-400"></i> Latest Activity
           </h3>
-          <div class="space-y-5">
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 bg-green-600/20 rounded-full flex items-center justify-center flex-shrink-0">
-                <i class="fas fa-gift text-green-400"></i>
-              </div>
-              <div>
-                <p class="font-medium">Jane completed her first task!</p>
-                <p class="text-sm text-gray-600 dark:text-gray-400">You earned 150 points • 2h ago</p>
-              </div>
-            </div>
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 bg-purple-600/20 rounded-full flex items-center justify-center flex-shrink-0">
-                <i class="fas fa-dollar-sign text-purple-400"></i>
-              </div>
-              <div>
-                <p class="font-medium">Mark withdrew $50</p>
-                <p class="text-sm text-gray-600 dark:text-gray-400">You earned $5 commission • Yesterday</p>
-              </div>
-            </div>
+          <div id="referralActivityList" class="space-y-5">
+            <p class="text-center text-gray-500 py-4">Loading activity...</p>
           </div>
         </div>
       </div>
 
       <!-- Bonus Tier Progress -->
-      <div class="mt-12 bg-gradient-to-r from-primary/20 to-orange-600/20 border border-primary/30 rounded-3xl p-10 text-center">
+      <div
+        class="mt-12 bg-gradient-to-r from-primary/20 to-orange-600/20 border border-primary/30 rounded-3xl p-10 text-center">
         <h3 class="text-3xl font-bold mb-6">Next Bonus Tier: Diamond (100 Referrals)</h3>
         <div class="relative h-12 bg-gray-700 rounded-full overflow-hidden mb-6">
-          <div class="absolute inset-0 bg-gradient-to-r from-primary to-orange-600 h-full rounded-full flex items-center justify-end pr-8 text-xl font-bold" style="width: 47%">
+          <div
+            class="absolute inset-0 bg-gradient-to-r from-primary to-orange-600 h-full rounded-full flex items-center justify-end pr-8 text-xl font-bold"
+            style="width: 47%">
             47 / 100
           </div>
         </div>
-        <p class="text-xl text-gray-300">Unlock <strong class="text-primary">35% commission</strong> + <strong class="text-yellow-400">VIP Support</strong> at Diamond!</p>
+        <p class="text-xl text-gray-300">Unlock <strong class="text-primary">35% commission</strong> + <strong
+            class="text-yellow-400">VIP Support</strong> at Diamond!</p>
       </div>
     </main>
   </div>
@@ -267,7 +237,7 @@
       const link = document.getElementById('refLink');
       link.select();
       document.execCommand('copy');
-      
+
       confetti({
         particleCount: 100,
         spread: 70,
@@ -280,57 +250,134 @@
       btn.innerHTML = '<i class="fas fa-check mr-2"></i> Copied!';
       setTimeout(() => btn.innerHTML = original, 2000);
     }
-    
+
     // Fetch referral data when page loads
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       const token = localStorage.getItem('access_token');
       if (!token) {
         window.location.href = 'login.html';
         return;
       }
-      
+
+      // Load user info
+      const savedName = localStorage.getItem('userName');
+      const savedEmail = localStorage.getItem('userEmail');
+      if (savedName) document.getElementById('sidebarUserName').textContent = savedName;
+      if (savedEmail) document.getElementById('sidebarUserEmail').textContent = savedEmail;
+
       // Fetch referral stats
-      fetch('/api/referrals/stats', {
-        headers: {
-          'Authorization': 'Bearer ' + token
-        }
+      fetch('/api/auth/profile', {
+        headers: { 'Authorization': 'Bearer ' + token }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.referral_code) {
-          // Update referral link
-          const referralLink = `https://myfigpoint.com/register?ref=${data.referral_code}`;
-          document.getElementById('refLink').value = referralLink;
-          
-          // Update stats
-          document.querySelector('.grid .from-purple-600.to-pink-700 .text-5xl').textContent = '$' + (data.total_referral_earnings || 0).toFixed(2);
-          document.querySelector('.grid .from-indigo-600.to-blue-700 .text-5xl').textContent = (data.total_referral_points || 0).toFixed(0);
-          document.querySelector('.grid .from-green-600.to-emerald-700 .text-5xl').textContent = data.referred_users_count || 0;
+        .then(response => response.json())
+        .then(data => {
+          if (data.user) {
+            const code = data.user.referral_code || 'JOINNOW';
+            const refLink = `${window.location.origin}/register?ref=${code}`;
+            document.getElementById('refLink').value = refLink;
+
+            // Update QR
+            const qrImg = document.getElementById('refQR');
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(refLink)}`;
+            qrImg.onload = () => {
+              document.getElementById('qrLoading').classList.add('hidden');
+              qrImg.classList.remove('hidden');
+            };
+
+            // Update Share Buttons
+            const shareContainer = document.getElementById('shareButtons');
+            const text = encodeURIComponent("Join MyFigPoint and earn real rewards! Use my link: ");
+            shareContainer.innerHTML = `
+            <a href="https://wa.me/?text=${text}${encodeURIComponent(refLink)}" target="_blank" class="bg-green-600 hover:bg-green-700 p-4 rounded-xl transition">
+              <i class="fab fa-whatsapp text-2xl text-white"></i>
+            </a>
+            <a href="https://t.me/share/url?url=${encodeURIComponent(refLink)}&text=Start%20earning%20with%20MyFigPoint!" target="_blank" class="bg-blue-600 hover:bg-blue-700 p-4 rounded-xl transition">
+              <i class="fab fa-telegram text-2xl text-white"></i>
+            </a>
+            <a href="https://twitter.com/intent/tweet?text=I'm%20earning%20real%20rewards%20with%20MyFigPoint!%20Join%20me%3A%20${encodeURIComponent(refLink)}" target="_blank" class="bg-black hover:bg-gray-800 p-4 rounded-xl transition">
+              <i class="fab fa-twitter text-2xl text-white"></i>
+            </a>
+            <button onclick="confetti()" class="bg-gradient-to-r from-primary to-orange-600 p-4 rounded-xl transition">
+              <i class="fas fa-magic text-2xl text-white"></i>
+            </button>
+          `;
+
+            // Stats
+            document.getElementById('statActiveReferrals').textContent = data.user.referrals_count || 0;
+            document.getElementById('statReferralCash').textContent = '₦' + (data.user.total_referral_earnings || 0).toLocaleString();
+            document.getElementById('statReferralPoints').textContent = (data.user.total_referral_points || 0).toLocaleString();
+
+            // Bonus Tier Progress
+            updateTierProgress(data.user.referrals_count || 0);
+          }
+        });
+
+      function updateTierProgress(count) {
+        const tiers = [
+          { name: 'Bronze', req: 0, bonus: 5 },
+          { name: 'Silver', req: 10, bonus: 10 },
+          { name: 'Gold', req: 25, bonus: 20 },
+          { name: 'Platinum', req: 50, bonus: 30 },
+          { name: 'Diamond', req: 100, bonus: 35 }
+        ];
+
+        let nextTier = tiers.find(t => t.req > count) || tiers[tiers.length - 1];
+        let currentTier = [...tiers].reverse().find(t => t.req <= count) || tiers[0];
+
+        const progressHeader = document.querySelector('.mt-12 h3');
+        if (progressHeader) {
+          progressHeader.textContent = `Next Bonus Tier: ${nextTier.name} (${nextTier.req} Referrals)`;
         }
+
+        const bar = document.querySelector('.relative.h-12.bg-gray-700.rounded-full div');
+        if (bar) {
+          const percent = Math.min((count / nextTier.req) * 100, 100);
+          bar.style.width = percent + '%';
+          bar.textContent = `${count} / ${nextTier.req}`;
+        }
+
+        const subText = document.querySelector('.mt-12 p');
+        if (subText) {
+          subText.innerHTML = `Unlock <strong class="text-primary">${nextTier.bonus}% commission</strong> + <strong class="text-yellow-400">VIP Support</strong> at ${nextTier.name}!`;
+        }
+      }
+
+      // Fetch Referral List (Activity) - Using transactions endpoint filtered by referral
+      fetch('/api/transactions/?type=referral_bonus', {
+        headers: { 'Authorization': 'Bearer ' + token }
       })
-      .catch(error => {
-        console.error('Error fetching referral stats:', error);
-        if (error.message && error.message.includes('401')) {
-          localStorage.removeItem('access_token');
-          window.location.href = 'login.html';
-        }
-      });
+        .then(response => response.json())
+        .then(data => {
+          const list = document.getElementById('referralActivityList');
+          list.innerHTML = '';
+          if (data.transactions && data.transactions.length > 0) {
+            data.transactions.forEach(t => {
+              const item = document.createElement('div');
+              item.className = 'flex items-start gap-4';
+              item.innerHTML = `
+                  <div class="w-10 h-10 bg-green-600/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-gift text-green-400"></i>
+                  </div>
+                  <div>
+                    <p class="font-medium">${t.description}</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Received ${t.amount > 0 ? '$' + t.amount.toFixed(2) : t.points_amount + ' pts'}</p>
+                  </div>
+               `;
+              list.appendChild(item);
+            });
+          } else {
+            list.innerHTML = '<p class="text-center text-gray-500 py-4">No recent referral activity</p>';
+          }
+        });
     });
-    
+
     // Logout function
     function logout() {
       localStorage.removeItem('access_token');
       window.location.href = 'login.html';
     }
-  
-    
-
   </script>
   <script src="assets/js/theme.js"></script>
-  
-  <!-- Fixed Theme Toggle Button -->
-  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
-    <i class="fas fa-moon"></i>
-  </button>
 </body>
+
 </html>

@@ -79,10 +79,10 @@
 
     <div class="p-4 border-t border-border">
       <div class="flex items-center space-x-2">
-        <img id="sidebarAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-8 h-8 rounded-full ring-2 ring-primary">
+        <img id="sidebarAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=User" alt="User" class="w-8 h-8 rounded-full ring-2 ring-primary">
         <div>
-          <p id="sidebarUserName" class="font-semibold text-sm">John Doe</p>
-          <p id="sidebarUserEmail" class="text-xs text-gray-600 dark:text-gray-400">john@example.com</p>
+          <p id="sidebarUserName" class="font-semibold text-sm">Loading...</p>
+          <p id="sidebarUserEmail" class="text-xs text-gray-600 dark:text-gray-400">Loading...</p>
         </div>
       </div>
       <a href="#" onclick="logout()" class="mt-3 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-1.5 rounded text-xs font-medium transition">
@@ -99,7 +99,7 @@
         <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
           <i class="fas fa-bars text-xl"></i>
         </button>
-        <h1 class="text-lg font-bold">Welcome back, <span class="text-primary">John!</span></h1>
+        <h1 class="text-lg font-bold">Welcome back, <span id="headerUserName" class="text-primary text-xs">...</span></h1>
         <div class="flex items-center space-x-3">
           <button class="relative p-1.5 hover:bg-card rounded-lg" onclick="window.location.href='notifications.html'">
             <i class="fas fa-bell"></i>
@@ -112,12 +112,12 @@
     <main class="p-6 lg:p-10">
       <div class="flex justify-between items-center mb-8">
         <div>
-          <h1 class="text-3xl font-extrabold">Welcome back, <span class="text-primary">User</span>!</h1>
+          <h1 class="text-3xl font-extrabold">Welcome back, <span id="welcomeUserName" class="text-primary">User</span>!</h1>
           <p class="text-gray-600 dark:text-gray-400">Here's what's happening with your account today.</p>
         </div>
         <div class="text-right">
           <p class="text-sm text-gray-600 dark:text-gray-400">Current Balance</p>
-          <p class="text-3xl font-bold text-primary">3,450.75 pts</p>
+          <p id="topPointsBalance" class="text-3xl font-bold text-primary">0.00 pts</p>
         </div>
       </div>
 
@@ -131,19 +131,19 @@
         <div class="group bg-primary rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-orange-100 text-sm uppercase tracking-wider">Wallet Balance</p>
-              <p class="text-3xl font-bold mt-2">$1,250.50</p>
+              <p class="text-orange-100 text-sm uppercase tracking-wider">Total Earnings</p>
+              <p id="statTotalEarnings" class="text-3xl font-bold mt-2">$0.00</p>
             </div>
             <i class="fas fa-dollar-sign text-4xl opacity-50"></i>
           </div>
-          <p class="text-orange-100 text-sm mt-3">+12.5% from last month</p>
+          <p class="text-orange-100 text-sm mt-3">Refreshed just now</p>
         </div>
 
         <div class="group card rounded-2xl p-6 hover:border-primary transition-all">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400 text-sm uppercase tracking-wider">Points Balance</p>
-              <p class="text-3xl font-bold mt-2">3,450.75 pts</p>
+              <p id="statPointsBalance" class="text-3xl font-bold mt-2">0 pts</p>
             </div>
             <i class="fas fa-coins text-4xl text-yellow-500 opacity-70"></i>
           </div>
@@ -157,11 +157,11 @@
         <div class="group card rounded-2xl p-6 hover:border-primary transition-all">
           <div>
             <p class="text-gray-600 dark:text-gray-400 text-sm uppercase tracking-wider">Member Level</p>
-            <p class="text-2xl font-bold mt-2 text-primary">Silver Tier</p>
-            <div class="mt-3 bg-gray-700 rounded-full h-3">
-              <div class="bg-gradient-to-r from-primary to-orange-600 h-3 rounded-full w-3/4"></div>
+            <p id="statTierLevel" class="text-2xl font-bold mt-2 text-primary">None</p>
+            <div class="mt-3 bg-gray-700 rounded-full h-3 overflow-hidden">
+              <div id="tierProgressBar" class="bg-gradient-to-r from-primary to-orange-600 h-3 rounded-full w-0 transition-all duration-1000"></div>
             </div>
-            <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">750 pts to Gold</p>
+            <p id="tierNextLevelInfo" class="text-xs text-gray-600 dark:text-gray-400 mt-2">Loading tier info...</p>
           </div>
         </div>
       </div>
@@ -171,30 +171,12 @@
         <!-- Today's Tasks -->
         <div class="card rounded-2xl p-6">
           <h3 class="text-xl font-bold mb-5 flex items-center justify-between">
-            Today's Tasks
-            <span class="text-sm text-gray-600 dark:text-gray-400">3 / 8 Completed</span>
+            Recent Tasks
+            <span id="taskCompletionCount" class="text-sm text-gray-600 dark:text-gray-400">Loading...</span>
           </h3>
-          <ul class="space-y-4">
-            <li class="flex items-center justify-between p-4 bg-card rounded-lg hover:bg-primary/10 transition cursor-pointer">
-              <div class="flex items-center space-x-3">
-                <input type="checkbox" class="w-5 h-5 text-primary rounded" />
-                <span>Complete daily survey</span>
-              </div>
-              <span class="text-primary font-bold">+50 pts</span>
-            </li>
-            <li class="flex items-center justify-between p-4 bg-card rounded-lg hover:bg-primary/10 transition cursor-pointer">
-              <div class="flex items-center space-x-3">
-                <input type="checkbox" checked class="w-5 h-5 text-primary rounded" />
-                <span class="line-through text-gray-500">Watch video ad</span>
-              </div>
-              <span class="text-green-400 font-bold">+20 pts</span>
-            </li>
-            <li class="flex items-center justify-between p-4 bg-card rounded-lg hover:bg-primary/10 transition cursor-pointer">
-              <div class="flex items-center space-x-3">
-                <input type="checkbox" class="w-5 h-5 text-primary rounded" />
-                <span>Share referral link</span>
-              </div>
-              <span class="text-primary font-bold">+30 pts</span>
+          <ul id="dashboardTaskList" class="space-y-4">
+            <li class="text-center py-4 text-gray-500">
+              <i class="fas fa-spinner fa-spin mr-2"></i> Loading tasks...
             </li>
           </ul>
         </div>
@@ -206,22 +188,22 @@
             <div>
               <div class="flex justify-between mb-2">
                 <span class="text-gray-600 dark:text-gray-400">Total Earned</span>
-                <span class="font-bold">$560.75</span>
+                <span id="overviewTotalEarned" class="font-bold">$0.00</span>
               </div>
               <div class="flex justify-between mb-2">
-                <span class="text-gray-600 dark:text-gray-400">This Month</span>
-                <span class="text-green-400 font-bold">+$248.90</span>
+                <span class="text-gray-600 dark:text-gray-400">Referral Bonus</span>
+                <span id="overviewReferralEarned" class="text-green-400 font-bold">+$0.00</span>
               </div>
               <div class="flex justify-between mb-2">
-                <span class="text-gray-600 dark:text-gray-400">Pending</span>
-                <span class="text-yellow-400 font-bold">$120.00</span>
+                <span class="text-gray-600 dark:text-gray-400">Code Redemptions</span>
+                <span id="overviewCodesEarned" class="text-primary font-bold">0 pts</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-gray-600 dark:text-gray-400">Withdrawn</span>
-                <span class="font-bold">$320.85</span>
+                <span id="overviewWithdrawn" class="font-bold text-red-400">-$0.00</span>
               </div>
             </div>
-            <button class="w-full mt-6 bg-primary hover:bg-orange-700 py-3 rounded-xl font-semibold transition">
+            <button class="w-full mt-6 bg-primary hover:bg-orange-700 py-3 rounded-xl font-semibold transition" onclick="window.location.href='transactions.html'">
               View Full History
             </button>
           </div>
@@ -230,46 +212,9 @@
         <!-- Recent Activity -->
         <div class="card rounded-2xl p-6">
           <h3 class="text-xl font-bold mb-5">Recent Activity</h3>
-          <ul class="space-y-4">
-            <li class="flex items-start space-x-3">
-              <div class="mt-1 w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
-                <i class="fas fa-plus text-green-500"></i>
-              </div>
-              <div>
-                <p class="font-medium">Points Earned</p>
-                <p class="text-sm text-gray-600 dark:text-gray-400">+150 points from daily tasks</p>
-                <p class="text-xs text-gray-500">2 hours ago</p>
-              </div>
-            </li>
-            <li class="flex items-start space-x-3">
-              <div class="mt-1 w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center">
-                <i class="fas fa-user-plus text-blue-500"></i>
-              </div>
-              <div>
-                <p class="font-medium">Referral Bonus</p>
-                <p class="text-sm text-gray-600 dark:text-gray-400">+500 points for inviting friend</p>
-                <p class="text-xs text-gray-500">5 hours ago</p>
-              </div>
-            </li>
-            <li class="flex items-start space-x-3">
-              <div class="mt-1 w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center">
-                <i class="fas fa-gift text-purple-500"></i>
-              </div>
-              <div>
-                <p class="font-medium">Reward Redeemed</p>
-                <p class="text-sm text-gray-600 dark:text-gray-400">-$1,200 points for gift card</p>
-                <p class="text-xs text-gray-500">1 day ago</p>
-              </div>
-            </li>
-            <li class="flex items-start space-x-3">
-              <div class="mt-1 w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center">
-                <i class="fas fa-trophy text-yellow-500"></i>
-              </div>
-              <div>
-                <p class="font-medium">Tier Upgrade</p>
-                <p class="text-sm text-gray-600 dark:text-gray-400">Promoted to Silver Tier</p>
-                <p class="text-xs text-gray-500">2 days ago</p>
-              </div>
+          <ul id="dashboardActivityList" class="space-y-4">
+            <li class="text-center py-4 text-gray-500">
+              <i class="fas fa-spinner fa-spin mr-2"></i> Loading activity...
             </li>
           </ul>
         </div>
@@ -307,67 +252,156 @@
       
       if (savedName) {
         document.getElementById('sidebarUserName').textContent = savedName;
-        // Update welcome message
-        document.querySelector('h1 span').textContent = savedName.split(' ')[0] + '!';
+        document.getElementById('headerUserName').textContent = savedName.split(' ')[0] + '!';
+        document.getElementById('welcomeUserName').textContent = savedName.split(' ')[0];
       }
       
       if (savedEmail) {
         document.getElementById('sidebarUserEmail').textContent = savedEmail;
       }
       
-      // Fetch user profile from backend if not in localStorage
+      // Fetch data from backend
       const token = localStorage.getItem('access_token');
-      if (token && (!savedName || !savedEmail)) {
+      if (token) {
+        // Fetch User Profile
         fetch('/api/auth/profile', {
-          headers: {
-            'Authorization': 'Bearer ' + token
-          }
+          headers: { 'Authorization': 'Bearer ' + token }
         })
         .then(response => response.json())
         .then(data => {
           if (data.user) {
             document.getElementById('sidebarUserName').textContent = data.user.full_name;
             document.getElementById('sidebarUserEmail').textContent = data.user.email;
-            // Update welcome message
-            document.querySelector('h1 span').textContent = data.user.full_name.split(' ')[0] + '!';
-            // Save to localStorage for future visits
+            document.getElementById('headerUserName').textContent = data.user.full_name.split(' ')[0] + '!';
+            document.getElementById('welcomeUserName').textContent = data.user.full_name.split(' ')[0];
+            
             localStorage.setItem('userName', data.user.full_name);
             localStorage.setItem('userEmail', data.user.email);
+            
+            // Update total earnings from user object
+            document.getElementById('statTotalEarnings').textContent = '$' + (data.user.total_earnings || 0).toFixed(2);
+            document.getElementById('overviewTotalEarned').textContent = '$' + (data.user.total_earnings || 0).toFixed(2);
           }
+        });
+
+        // Fetch Points Balance & Tier
+        fetch('/api/points/balance', {
+          headers: { 'Authorization': 'Bearer ' + token }
         })
-        .catch(error => {
-          console.error('Error fetching profile:', error);
-        });
-      }
-      
-      // Fetch notifications
-      fetchNotifications();
-      
-      // Add event listeners to task checkboxes
-      const taskCheckboxes = document.querySelectorAll('#today-tasks input[type="checkbox"]');
-      taskCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-          if (this.checked) {
-            alert('Task completed! Points will be added to your account.');
+        .then(response => response.json())
+        .then(data => {
+          const balance = data.points_balance || 0;
+          document.getElementById('topPointsBalance').textContent = balance.toLocaleString() + ' pts';
+          document.getElementById('statPointsBalance').textContent = balance.toLocaleString() + ' pts';
+          document.getElementById('statTierLevel').textContent = data.tier_level || 'None';
+          
+          // Tier Logic (Simple version for display)
+          let nextTier = 'Bronze';
+          let req = 50;
+          let current = balance;
+          
+          if (data.tier_level === 'Bronze') { nextTier = 'Silver'; req = 500; }
+          else if (data.tier_level === 'Silver') { nextTier = 'Gold'; req = 8000; }
+          else if (data.tier_level === 'Gold') { nextTier = 'Platinum'; req = 15000; }
+          else if (data.tier_level === 'Platinum') { nextTier = 'Max'; req = balance; }
+          
+          const progress = Math.min(100, (current / req) * 100);
+          document.getElementById('tierProgressBar').style.width = progress + '%';
+          if (nextTier !== 'Max') {
+            document.getElementById('tierNextLevelInfo').textContent = `${(req - current).toLocaleString()} pts to ${nextTier}`;
+          } else {
+            document.getElementById('tierNextLevelInfo').textContent = 'Highest Tier Reached!';
           }
         });
-      });
-      
-      // Add event listener to "View Full History" button
-      const historyButton = document.querySelector('.card button');
-      if (historyButton) {
-        historyButton.addEventListener('click', function() {
-          window.location.href = 'transactions.html';
+
+        // Fetch Transaction Summary
+        fetch('/api/transactions/summary', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        })
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('overviewReferralEarned').textContent = '+$' + (data.total_referral_bonus || 0).toFixed(2);
+          document.getElementById('overviewCodesEarned').textContent = (data.total_code_redemption_points || 0).toLocaleString() + ' pts';
+          document.getElementById('overviewWithdrawn').textContent = '-$' + (data.total_withdrawn || 0).toFixed(2);
         });
+
+        // Fetch Recent Activity
+        fetch('/api/transactions/?per_page=4', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        })
+        .then(response => response.json())
+        .then(data => {
+          const list = document.getElementById('dashboardActivityList');
+          list.innerHTML = '';
+          if (data.transactions && data.transactions.length > 0) {
+            data.transactions.forEach(t => {
+              const date = new Date(t.created_at);
+              const timeAgo = Math.floor((new Date() - date) / 60000); // minutes
+              let timeStr = timeAgo < 60 ? `${timeAgo}m ago` : 
+                           timeAgo < 1440 ? `${Math.floor(timeAgo/60)}h ago` : 
+                           `${Math.floor(timeAgo/1440)}d ago`;
+              
+              const item = document.createElement('li');
+              item.className = 'flex items-start space-x-3';
+              
+              let colors = 'bg-blue-500/20 text-blue-500';
+              let icon = 'fa-info';
+              if (t.type === 'earning') { colors = 'bg-green-500/20 text-green-500'; icon = 'fa-plus'; }
+              if (t.type === 'point_withdrawal') { colors = 'bg-red-500/20 text-red-500'; icon = 'fa-arrow-up'; }
+              if (t.type === 'referral_bonus') { colors = 'bg-purple-500/20 text-purple-500'; icon = 'fa-user-plus'; }
+              
+              item.innerHTML = `
+                <div class="mt-1 w-8 h-8 rounded-full ${colors} flex items-center justify-center">
+                  <i class="fas ${icon}"></i>
+                </div>
+                <div>
+                  <p class="font-medium">${t.description}</p>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">${t.amount !== 0 ? '$'+t.amount.toFixed(2) : t.points_amount + ' pts'}</p>
+                  <p class="text-xs text-gray-500">${timeStr}</p>
+                </div>
+              `;
+              list.appendChild(item);
+            });
+          } else {
+            list.innerHTML = '<li class="text-center py-4 text-gray-500">No recent activity</li>';
+          }
+        });
+
+        // Fetch Tasks
+        fetch('/api/tasks/?per_page=3', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        })
+        .then(response => response.json())
+        .then(data => {
+          const list = document.getElementById('dashboardTaskList');
+          list.innerHTML = '';
+          if (data.tasks && data.tasks.length > 0) {
+            const completed = data.tasks.filter(t => t.user_status === 'completed').length;
+            document.getElementById('taskCompletionCount').textContent = `${completed} / ${data.tasks.length} Completed`;
+            
+            data.tasks.forEach(task => {
+              const item = document.createElement('li');
+              item.className = 'flex items-center justify-between p-4 bg-card rounded-lg hover:bg-primary/10 transition cursor-pointer';
+              item.onclick = () => window.location.href = 'tasks.html';
+              
+              const isComp = task.user_status === 'completed';
+              item.innerHTML = `
+                <div class="flex items-center space-x-3">
+                  <input type="checkbox" ${isComp ? 'checked' : ''} disabled class="w-5 h-5 text-primary rounded" />
+                  <span class="${isComp ? 'line-through text-gray-500' : ''}">${task.title}</span>
+                </div>
+                <span class="${isComp ? 'text-green-400' : 'text-primary'} font-bold">+${task.points_reward} pts</span>
+              `;
+              list.appendChild(item);
+            });
+          } else {
+            list.innerHTML = '<li class="text-center py-4 text-gray-500 text-sm">No tasks available</li>';
+            document.getElementById('taskCompletionCount').textContent = '0 / 0 Completed';
+          }
+        });
+      } else {
+        window.location.href = 'login.html';
       }
-      
-      // Add event listener to stats cards
-      const statsCards = document.querySelectorAll('.group.cursor-pointer');
-      statsCards.forEach(card => {
-        card.addEventListener('click', function() {
-          window.location.href = 'redeem.html';
-        });
-      });
     });
     
     // Function to fetch and display notifications

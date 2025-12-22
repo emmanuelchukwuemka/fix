@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +8,8 @@
 
   <!-- Tailwind + Inter Font -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -31,7 +33,7 @@
     // Check if user is authenticated
     const token = localStorage.getItem('access_token');
     const userRole = localStorage.getItem('userRole');
-    
+
     // Redirect to login if not authenticated or not admin
     if (!token || userRole !== 'admin') {
       window.location.href = '/admin/login.html';
@@ -45,12 +47,17 @@
 
   <!-- Animated Background -->
   <div class="absolute inset-0 -z-10">
-    <div class="absolute top-10 left-10 w-96 h-96 bg-primary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse"></div>
-    <div class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse"></div>
+    <div
+      class="absolute top-10 left-10 w-96 h-96 bg-primary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse">
+    </div>
+    <div
+      class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse">
+    </div>
   </div>
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+  <aside id="sidebar"
+    class="fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
     <div class="p-6 border-b border-border">
       <div class="flex items-center gap-3">
         <img src="../assets/logo.png" alt="MyFigPoint Logo" class="w-12 h-12 rounded-full object-contain">
@@ -90,7 +97,8 @@
         <i class="fas fa-headset"></i>
         <span>Support Center</span>
       </a>
-      <a href="/admin/users" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="/admin/users"
+        class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-user-shield"></i>
         <span>Admin Panel</span>
       </a>
@@ -106,13 +114,15 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img id="adminAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <img id="adminAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin"
+          class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
           <p id="adminName" class="font-semibold">Admin User</p>
           <p id="adminEmail" class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
         </div>
       </div>
-      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+      <a href="#" onclick="logout()"
+        class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
         Logout
       </a>
     </div>
@@ -129,10 +139,12 @@
           Partner Management
         </h1>
         <div class="flex items-center gap-4">
-          <button onclick="openPromoteUserModal()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
+          <button onclick="openPromoteUserModal()"
+            class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
             <i class="fas fa-user-plus"></i> Promote User
           </button>
-          <button onclick="loadPartners()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
+          <button onclick="loadPartners()"
+            class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
             <i class="fas fa-sync-alt"></i> Refresh
           </button>
         </div>
@@ -153,7 +165,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="card rounded-2xl p-6 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-blue-500/30">
           <div class="flex items-center justify-between">
             <div>
@@ -165,8 +177,9 @@
             </div>
           </div>
         </div>
-        
-        <div class="card rounded-2xl p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 border border-green-500/30">
+
+        <div
+          class="card rounded-2xl p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 border border-green-500/30">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Approved Partners</p>
@@ -177,8 +190,9 @@
             </div>
           </div>
         </div>
-        
-        <div class="card rounded-2xl p-6 bg-gradient-to-br from-purple-600/20 to-indigo-600/20 border border-purple-500/30">
+
+        <div
+          class="card rounded-2xl p-6 bg-gradient-to-br from-purple-600/20 to-indigo-600/20 border border-purple-500/30">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Partner Earnings</p>
@@ -197,11 +211,12 @@
           <div>
             <label class="block text-sm font-bold mb-2">Search Partners</label>
             <div class="relative">
-              <input type="text" id="partnerSearch" class="form-input w-full px-4 py-3 rounded-2xl pl-10" placeholder="Name or email...">
+              <input type="text" id="partnerSearch" class="form-input w-full px-4 py-3 rounded-2xl pl-10"
+                placeholder="Name or email...">
               <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
             </div>
           </div>
-          
+
           <div>
             <label class="block text-sm font-bold mb-2">Approval Status</label>
             <select class="form-input w-full px-4 py-3 rounded-2xl" id="approvalFilter">
@@ -210,7 +225,7 @@
               <option value="pending">Pending</option>
             </select>
           </div>
-          
+
           <div>
             <label class="block text-sm font-bold mb-2">Tier</label>
             <select class="form-input w-full px-4 py-3 rounded-2xl" id="tierFilter">
@@ -221,14 +236,15 @@
               <option value="platinum">Platinum</option>
             </select>
           </div>
-          
+
           <div>
             <label class="block text-sm font-bold mb-2">Date Joined</label>
             <input type="date" class="form-input w-full px-4 py-3 rounded-2xl" id="dateFrom">
           </div>
-          
+
           <div class="flex items-end">
-            <button onclick="applyFilters()" class="w-full bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
+            <button onclick="applyFilters()"
+              class="w-full bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
               Apply Filters
             </button>
           </div>
@@ -243,7 +259,7 @@
             <p class="text-lg font-bold">Total Partners: <span id="totalPartnersCount">0</span></p>
           </div>
         </div>
-        
+
         <div class="overflow-x-auto">
           <table class="w-full">
             <thead>
@@ -262,10 +278,11 @@
             </tbody>
           </table>
         </div>
-        
+
         <!-- Pagination -->
         <div class="flex items-center justify-between mt-8">
-          <p class="text-gray-600 dark:text-gray-400">Showing <span id="showingStart">0</span> to <span id="showingEnd">0</span> of <span id="totalCount">0</span> partners</p>
+          <p class="text-gray-600 dark:text-gray-400">Showing <span id="showingStart">0</span> to <span
+              id="showingEnd">0</span> of <span id="totalCount">0</span> partners</p>
           <div class="flex gap-2" id="paginationControls">
             <!-- Pagination buttons will be populated dynamically -->
           </div>
@@ -286,7 +303,7 @@
           <i class="fas fa-times text-2xl"></i>
         </button>
       </div>
-      
+
       <form id="promoteUserForm" class="space-y-6">
         <div>
           <label class="block text-lg font-bold mb-2">Select User</label>
@@ -297,63 +314,71 @@
             <option value="3">Mike Thompson (mike.t@example.com)</option>
           </select>
         </div>
-        
+
         <div>
           <label class="block text-lg font-bold mb-2">Partner Tier</label>
           <div class="grid grid-cols-2 gap-4">
             <label class="flex items-center gap-3 p-4 bg-card border border-border rounded-2xl cursor-pointer">
               <input type="radio" name="partnerTier" value="bronze" checked class="hidden peer">
-              <div class="w-6 h-6 rounded-full border-2 border-gray-400 peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center">
+              <div
+                class="w-6 h-6 rounded-full border-2 border-gray-400 peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center">
                 <i class="fas fa-check text-white text-xs"></i>
               </div>
               <span class="font-bold">Bronze</span>
             </label>
-            
+
             <label class="flex items-center gap-3 p-4 bg-card border border-border rounded-2xl cursor-pointer">
               <input type="radio" name="partnerTier" value="silver" class="hidden peer">
-              <div class="w-6 h-6 rounded-full border-2 border-gray-400 peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center">
+              <div
+                class="w-6 h-6 rounded-full border-2 border-gray-400 peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center">
                 <i class="fas fa-check text-white text-xs"></i>
               </div>
               <span class="font-bold">Silver</span>
             </label>
-            
+
             <label class="flex items-center gap-3 p-4 bg-card border border-border rounded-2xl cursor-pointer">
               <input type="radio" name="partnerTier" value="gold" class="hidden peer">
-              <div class="w-6 h-6 rounded-full border-2 border-gray-400 peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center">
+              <div
+                class="w-6 h-6 rounded-full border-2 border-gray-400 peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center">
                 <i class="fas fa-check text-white text-xs"></i>
               </div>
               <span class="font-bold">Gold</span>
             </label>
-            
+
             <label class="flex items-center gap-3 p-4 bg-card border border-border rounded-2xl cursor-pointer">
               <input type="radio" name="partnerTier" value="platinum" class="hidden peer">
-              <div class="w-6 h-6 rounded-full border-2 border-gray-400 peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center">
+              <div
+                class="w-6 h-6 rounded-full border-2 border-gray-400 peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center">
                 <i class="fas fa-check text-white text-xs"></i>
               </div>
               <span class="font-bold">Platinum</span>
             </label>
           </div>
         </div>
-        
+
         <div>
           <label class="block text-lg font-bold mb-2">Commission Rate</label>
           <div class="relative">
             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">%</span>
-            <input type="number" step="0.1" min="0" class="form-input w-full pl-10 pr-4 py-3 rounded-2xl" id="commissionRate" value="5.0" placeholder="Enter commission rate">
+            <input type="number" step="0.1" min="0" class="form-input w-full pl-10 pr-4 py-3 rounded-2xl"
+              id="commissionRate" value="5.0" placeholder="Enter commission rate">
           </div>
           <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Percentage of referral earnings for this partner</p>
         </div>
-        
+
         <div>
           <label class="block text-lg font-bold mb-2">Notes (Optional)</label>
-          <textarea class="form-input w-full px-4 py-3 rounded-2xl" id="promotionNotes" rows="3" placeholder="Enter notes about this promotion"></textarea>
+          <textarea class="form-input w-full px-4 py-3 rounded-2xl" id="promotionNotes" rows="3"
+            placeholder="Enter notes about this promotion"></textarea>
         </div>
-        
+
         <div class="flex gap-4 pt-4">
-          <button type="button" onclick="closeModal('promoteUserModal')" class="flex-1 py-3 rounded-2xl border border-border font-bold hover:bg-card/80 transition">
+          <button type="button" onclick="closeModal('promoteUserModal')"
+            class="flex-1 py-3 rounded-2xl border border-border font-bold hover:bg-card/80 transition">
             Cancel
           </button>
-          <button type="submit" class="flex-1 py-3 rounded-2xl bg-primary hover:bg-orange-700 text-white font-bold transition">
+          <button type="submit"
+            class="flex-1 py-3 rounded-2xl bg-primary hover:bg-orange-700 text-white font-bold transition">
             Promote to Partner
           </button>
         </div>
@@ -370,30 +395,31 @@
           <i class="fas fa-times text-2xl"></i>
         </button>
       </div>
-      
+
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <!-- Partner Info -->
         <div class="md:col-span-1">
           <div class="text-center mb-6">
-            <img id="partnerAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Partner" class="w-24 h-24 rounded-full mx-auto mb-4" alt="User">
+            <img id="partnerAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Partner"
+              class="w-24 h-24 rounded-full mx-auto mb-4" alt="User">
             <h3 id="partnerName" class="text-xl font-bold">-</h3>
             <p id="partnerEmail" class="text-gray-600 dark:text-gray-400">-</p>
             <div class="mt-3">
               <span id="partnerTier" class="px-3 py-1 rounded-full text-sm font-bold">-</span>
             </div>
           </div>
-          
+
           <div class="space-y-4">
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Member Since</p>
               <p id="memberSince" class="font-bold">-</p>
             </div>
-            
+
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Commission Rate</p>
               <p id="commissionRateDisplay" class="font-bold">-</p>
             </div>
-            
+
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Approval Status</p>
               <p class="font-bold">
@@ -402,7 +428,7 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Partner Stats -->
         <div class="md:col-span-2">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -410,23 +436,25 @@
               <p class="text-gray-600 dark:text-gray-400">Referred Users</p>
               <p id="referredUsers" class="text-3xl font-bold mt-2">0</p>
             </div>
-            
-            <div class="p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 rounded-2xl border border-green-500/30">
+
+            <div
+              class="p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 rounded-2xl border border-green-500/30">
               <p class="text-gray-600 dark:text-gray-400">Total Earnings</p>
               <p id="totalEarnings" class="text-3xl font-bold mt-2">$0.00</p>
             </div>
-            
+
             <div class="p-6 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 rounded-2xl border border-blue-500/30">
               <p class="text-gray-600 dark:text-gray-400">Pending Approvals</p>
               <p id="pendingApprovals" class="text-3xl font-bold mt-2">0</p>
             </div>
-            
-            <div class="p-6 bg-gradient-to-br from-purple-600/20 to-indigo-600/20 rounded-2xl border border-purple-500/30">
+
+            <div
+              class="p-6 bg-gradient-to-br from-purple-600/20 to-indigo-600/20 rounded-2xl border border-purple-500/30">
               <p class="text-gray-600 dark:text-gray-400">Conversion Rate</p>
               <p id="conversionRate" class="text-3xl font-bold mt-2">0%</p>
             </div>
           </div>
-          
+
           <!-- Recent Activity -->
           <div class="mb-8">
             <h3 class="text-xl font-bold mb-4">Recent Activity</h3>
@@ -434,16 +462,19 @@
               <!-- Activities will be populated dynamically -->
             </div>
           </div>
-          
+
           <!-- Actions -->
           <div class="flex flex-wrap gap-4">
-            <button onclick="generatePartnerCodes()" class="flex-1 bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
+            <button onclick="generatePartnerCodes()"
+              class="flex-1 bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
               <i class="fas fa-qrcode mr-2"></i> Generate Codes
             </button>
-            <button onclick="sendMessage()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl font-bold">
+            <button onclick="sendMessage()"
+              class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl font-bold">
               <i class="fas fa-envelope mr-2"></i> Send Message
             </button>
-            <button onclick="demotePartnerConfirm()" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold">
+            <button onclick="demotePartnerConfirm()"
+              class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold">
               <i class="fas fa-user-minus mr-2"></i> Demote Partner
             </button>
           </div>
@@ -460,32 +491,32 @@
     let totalCount = 0;
     let currentDetailPartner = null;
     let allUsers = []; // For the promote user dropdown
-    
+
     // Redirect to login if not authenticated or not admin
     if (!token || userRole !== 'admin') {
       window.location.href = '/admin/login.html';
     }
-    
+
     // Load admin info
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       loadAdminInfo();
       loadPartners();
       loadAllUsers(); // Load users for the promote dropdown
     });
-    
+
     function loadAdminInfo() {
       const userName = localStorage.getItem('userName');
       const userEmail = localStorage.getItem('userEmail');
-      
+
       if (userName) {
         document.getElementById('adminName').textContent = userName;
       }
-      
+
       if (userEmail) {
         document.getElementById('adminEmail').textContent = userEmail;
       }
     }
-    
+
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('overlay').classList.toggle('hidden');
@@ -503,20 +534,20 @@
       // Show loading indicator
       const tableBody = document.getElementById('partnersTableBody');
       tableBody.innerHTML = '<tr><td colspan="7" class="py-4 text-center">Loading...</td></tr>';
-      
+
       // Get filter values
       const searchFilter = document.getElementById('partnerSearch').value;
       const approvalFilter = document.getElementById('approvalFilter').value;
-      
+
       // Build query parameters
       const params = new URLSearchParams();
       params.set('page', page);
       params.set('per_page', 20);
-      
+
       if (searchFilter) {
         params.set('search', searchFilter);
       }
-      
+
       // Make API request to get partners
       fetch(`/api/partners/admin/list?${params.toString()}`, {
         headers: {
@@ -524,49 +555,49 @@
           'Content-Type': 'application/json'
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.partners) {
-          currentPartners = data.partners;
-          currentPage = data.current_page || 1;
-          totalPages = data.pages || 1;
-          totalCount = data.total || 0;
-          
-          renderPartnersTable();
-          updateStats(data);
-          updatePagination();
-        } else {
-          tableBody.innerHTML = '<tr><td colspan="7" class="py-4 text-center">No partners found</td></tr>';
-        }
-      })
-      .catch(error => {
-        console.error('Error loading partners:', error);
-        tableBody.innerHTML = '<tr><td colspan="7" class="py-4 text-center text-red-500">Error loading partners</td></tr>';
-      });
+        .then(response => response.json())
+        .then(data => {
+          if (data.partners) {
+            currentPartners = data.partners;
+            currentPage = data.current_page || 1;
+            totalPages = data.pages || 1;
+            totalCount = data.total || 0;
+
+            renderPartnersTable();
+            updateStats(data);
+            updatePagination();
+          } else {
+            tableBody.innerHTML = '<tr><td colspan="7" class="py-4 text-center">No partners found</td></tr>';
+          }
+        })
+        .catch(error => {
+          console.error('Error loading partners:', error);
+          tableBody.innerHTML = '<tr><td colspan="7" class="py-4 text-center text-red-500">Error loading partners</td></tr>';
+        });
     }
 
     function renderPartnersTable() {
       const tableBody = document.getElementById('partnersTableBody');
-      
+
       if (currentPartners.length === 0) {
         tableBody.innerHTML = '<tr><td colspan="7" class="py-4 text-center">No partners found</td></tr>';
         return;
       }
-      
+
       tableBody.innerHTML = '';
-      
+
       currentPartners.forEach(partner => {
         const row = document.createElement('tr');
         row.className = 'border-b border-border hover:bg-card/50';
-        
+
         // Format date
         const joinedDate = new Date(partner.created_at);
-        const formattedDate = joinedDate.toLocaleDateString('en-US', { 
-          month: 'short', 
-          day: 'numeric', 
-          year: 'numeric' 
+        const formattedDate = joinedDate.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
         });
-        
+
         // Format status
         let statusClass = '';
         let statusText = '';
@@ -577,7 +608,7 @@
           statusClass = 'bg-yellow-600/20 text-yellow-500';
           statusText = 'Pending';
         }
-        
+
         // Determine tier (simple implementation)
         let tierClass = 'bg-blue-600/20 text-blue-500';
         let tierText = 'Bronze';
@@ -591,7 +622,7 @@
           tierClass = 'bg-gray-600/20 text-gray-500';
           tierText = 'Silver';
         }
-        
+
         row.innerHTML = `
           <td class="py-4">
             <div class="flex items-center gap-3">
@@ -629,7 +660,7 @@
             `}
           </td>
         `;
-        
+
         tableBody.appendChild(row);
       });
     }
@@ -638,19 +669,19 @@
       // Update stats overview
       document.getElementById('totalPartners').textContent = totalCount;
       document.getElementById('totalPartnersCount').textContent = totalCount;
-      
+
       // Count pending approvals
-      const pendingCount = data.partners ? 
+      const pendingCount = data.partners ?
         data.partners.filter(p => p.approval_status === 'pending').length : 0;
       document.getElementById('pendingApproval').textContent = pendingCount;
-      
+
       // Count approved partners
-      const approvedCount = data.partners ? 
+      const approvedCount = data.partners ?
         data.partners.filter(p => p.approval_status === 'approved').length : 0;
       document.getElementById('approvedPartners').textContent = approvedCount;
-      
+
       // Calculate total earnings
-      const totalEarnings = data.partners ? 
+      const totalEarnings = data.partners ?
         data.partners.reduce((sum, partner) => sum + (partner.total_earnings || 0), 0) : 0;
       document.getElementById('partnerEarnings').textContent = `$${totalEarnings.toFixed(2)}`;
     }
@@ -658,14 +689,14 @@
     function updatePagination() {
       const showingStart = ((currentPage - 1) * 20) + 1;
       const showingEnd = Math.min(showingStart + 19, totalCount);
-      
+
       document.getElementById('showingStart').textContent = showingStart;
       document.getElementById('showingEnd').textContent = showingEnd;
       document.getElementById('totalCount').textContent = totalCount;
-      
+
       const paginationControls = document.getElementById('paginationControls');
       paginationControls.innerHTML = '';
-      
+
       // Previous button
       const prevButton = document.createElement('button');
       prevButton.className = 'w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80';
@@ -673,13 +704,13 @@
       prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
       prevButton.onclick = () => loadPartners(currentPage - 1);
       paginationControls.appendChild(prevButton);
-      
+
       // Page buttons (simplified to show current page only)
       const pageButton = document.createElement('button');
       pageButton.className = 'w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold';
       pageButton.textContent = currentPage;
       paginationControls.appendChild(pageButton);
-      
+
       // Next button
       const nextButton = document.createElement('button');
       nextButton.className = 'w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80';
@@ -700,40 +731,55 @@
     }
 
     function loadAllUsers() {
-      // Make API request to get all users (we'll need to implement this endpoint)
-      // For now, we'll use a simplified approach
-      
-      // In a real implementation, you would fetch users from the API
-      // For demonstration, we'll populate with sample data
       const userSelect = document.getElementById('userSelect');
-      userSelect.innerHTML = '<option value="">Select a user...</option>';
-      
-      // Sample users (in a real implementation, these would come from the API)
-      const sampleUsers = [
-        { id: 1, full_name: 'John Smith', email: 'john.smith@example.com' },
-        { id: 2, full_name: 'Sarah Johnson', email: 'sarah.j@example.com' },
-        { id: 3, full_name: 'Mike Thompson', email: 'mike.t@example.com' }
-      ];
-      
-      sampleUsers.forEach(user => {
-        const option = document.createElement('option');
-        option.value = user.id;
-        option.textContent = `${user.full_name} (${user.email})`;
-        userSelect.appendChild(option);
-      });
+      userSelect.innerHTML = '<option value="">Loading users...</option>';
+
+      const token = localStorage.getItem('access_token');
+
+      fetch('/api/admin/users?per_page=100', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.users) {
+            userSelect.innerHTML = '<option value="">Select a user...</option>';
+            // Filter to only show regular users (not partners or admins)
+            const regularUsers = data.users.filter(u => u.role === 'user');
+
+            if (regularUsers.length === 0) {
+              userSelect.innerHTML = '<option value="">No regular users available</option>';
+              return;
+            }
+
+            regularUsers.forEach(user => {
+              const option = document.createElement('option');
+              option.value = user.id;
+              option.textContent = `${user.full_name} (${user.email})`;
+              userSelect.appendChild(option);
+            });
+          } else {
+            userSelect.innerHTML = '<option value="">Failed to load users</option>';
+          }
+        })
+        .catch(error => {
+          console.error('Error loading users:', error);
+          userSelect.innerHTML = '<option value="">Error loading users</option>';
+        });
     }
 
     function viewPartnerDetails(partnerId) {
       const partner = currentPartners.find(p => p.id === partnerId);
       if (!partner) return;
-      
+
       currentDetailPartner = partner;
-      
+
       // Populate modal with data
       document.getElementById('partnerName').textContent = partner.full_name || 'N/A';
       document.getElementById('partnerEmail').textContent = partner.email || 'N/A';
       document.getElementById('partnerAvatar').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(partner.full_name || partner.email)}`;
-      
+
       // Tier (simple implementation)
       let tierClass = 'bg-blue-600/20 text-blue-500';
       let tierText = 'Bronze';
@@ -750,20 +796,20 @@
       const tierSpan = document.getElementById('partnerTier');
       tierSpan.className = `${tierClass} px-3 py-1 rounded-full text-sm font-bold`;
       tierSpan.textContent = tierText;
-      
+
       // Member since
       if (partner.created_at) {
         const memberSince = new Date(partner.created_at);
-        document.getElementById('memberSince').textContent = memberSince.toLocaleDateString('en-US', { 
-          month: 'long', 
-          day: 'numeric', 
-          year: 'numeric' 
+        document.getElementById('memberSince').textContent = memberSince.toLocaleDateString('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric'
         });
       }
-      
+
       // Commission rate (simple implementation)
       document.getElementById('commissionRateDisplay').textContent = '5.0%';
-      
+
       // Approval status
       let statusClass = '';
       let statusText = '';
@@ -777,13 +823,13 @@
       const statusSpan = document.getElementById('approvalStatusDisplay');
       statusSpan.className = `${statusClass} px-3 py-1 rounded-full text-sm font-bold`;
       statusSpan.textContent = statusText;
-      
+
       // Stats
       document.getElementById('referredUsers').textContent = partner.referred_users_count || 0;
       document.getElementById('totalEarnings').textContent = `$${(partner.total_earnings || 0).toFixed(2)}`;
       document.getElementById('pendingApprovals').textContent = '0'; // Would need separate API call
       document.getElementById('conversionRate').textContent = '0%'; // Would need calculation
-      
+
       // Recent activity (sample data)
       const recentActivity = document.getElementById('recentActivity');
       recentActivity.innerHTML = `
@@ -797,7 +843,7 @@
           </div>
         </div>
       `;
-      
+
       // Show modal
       document.getElementById('partnerDetailsModal').classList.remove('hidden');
     }
@@ -813,24 +859,24 @@
           },
           body: JSON.stringify({ user_id: partnerId })
         })
-        .then(response => response.json())
-        .then(data => {
-          if (data.message) {
-            alert(data.message);
-            if (data.message.includes('successfully')) {
+          .then(response => response.json())
+          .then(data => {
+            if (data.message) {
+              alert(data.message);
+              if (data.message.includes('successfully')) {
+                // Reload partners
+                loadPartners(currentPage);
+              }
+            } else {
+              alert('Partner approved successfully');
               // Reload partners
               loadPartners(currentPage);
             }
-          } else {
-            alert('Partner approved successfully');
-            // Reload partners
-            loadPartners(currentPage);
-          }
-        })
-        .catch(error => {
-          console.error('Error approving partner:', error);
-          alert('Error approving partner');
-        });
+          })
+          .catch(error => {
+            console.error('Error approving partner:', error);
+            alert('Error approving partner');
+          });
       }
     }
 
@@ -846,24 +892,24 @@
           },
           body: JSON.stringify({ user_id: partnerId })
         })
-        .then(response => response.json())
-        .then(data => {
-          if (data.message) {
-            alert(data.message);
-            if (data.message.includes('successfully')) {
+          .then(response => response.json())
+          .then(data => {
+            if (data.message) {
+              alert(data.message);
+              if (data.message.includes('successfully')) {
+                // Reload partners
+                loadPartners(currentPage);
+              }
+            } else {
+              alert('Partner denied successfully');
               // Reload partners
               loadPartners(currentPage);
             }
-          } else {
-            alert('Partner denied successfully');
-            // Reload partners
-            loadPartners(currentPage);
-          }
-        })
-        .catch(error => {
-          console.error('Error denying partner:', error);
-          alert('Error denying partner');
-        });
+          })
+          .catch(error => {
+            console.error('Error denying partner:', error);
+            alert('Error denying partner');
+          });
       }
     }
 
@@ -878,24 +924,24 @@
           },
           body: JSON.stringify({ user_id: partnerId })
         })
-        .then(response => response.json())
-        .then(data => {
-          if (data.message) {
-            alert(data.message);
-            if (data.message.includes('successfully')) {
+          .then(response => response.json())
+          .then(data => {
+            if (data.message) {
+              alert(data.message);
+              if (data.message.includes('successfully')) {
+                // Reload partners
+                loadPartners(currentPage);
+              }
+            } else {
+              alert('Partner demoted successfully');
               // Reload partners
               loadPartners(currentPage);
             }
-          } else {
-            alert('Partner demoted successfully');
-            // Reload partners
-            loadPartners(currentPage);
-          }
-        })
-        .catch(error => {
-          console.error('Error demoting partner:', error);
-          alert('Error demoting partner');
-        });
+          })
+          .catch(error => {
+            console.error('Error demoting partner:', error);
+            alert('Error demoting partner');
+          });
       }
     }
 
@@ -919,15 +965,15 @@
     }
 
     // Form submission
-    document.getElementById('promoteUserForm').addEventListener('submit', function(e) {
+    document.getElementById('promoteUserForm').addEventListener('submit', function (e) {
       e.preventDefault();
-      
+
       const userId = document.getElementById('userSelect').value;
       if (!userId) {
         alert('Please select a user to promote');
         return;
       }
-      
+
       // Make API request to promote user to partner
       fetch('/api/partners/admin/promote', {
         method: 'POST',
@@ -937,42 +983,43 @@
         },
         body: JSON.stringify({ user_id: userId })
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.message) {
-          alert(data.message);
-          if (data.message.includes('successfully')) {
+        .then(response => response.json())
+        .then(data => {
+          if (data.message) {
+            alert(data.message);
+            if (data.message.includes('successfully')) {
+              // Reload partners
+              loadPartners(currentPage);
+              // Close modal
+              closeModal('promoteUserModal');
+            }
+          } else {
+            alert('User promoted to partner successfully');
             // Reload partners
             loadPartners(currentPage);
             // Close modal
             closeModal('promoteUserModal');
           }
-        } else {
-          alert('User promoted to partner successfully');
-          // Reload partners
-          loadPartners(currentPage);
-          // Close modal
-          closeModal('promoteUserModal');
-        }
-      })
-      .catch(error => {
-        console.error('Error promoting user:', error);
-        alert('Error promoting user to partner');
-      });
+        })
+        .catch(error => {
+          console.error('Error promoting user:', error);
+          alert('Error promoting user to partner');
+        });
     });
 
     // Close modals when clicking outside
-    window.onclick = function(event) {
+    window.onclick = function (event) {
       if (event.target.classList.contains('fixed') && event.target.classList.contains('inset-0')) {
         event.target.classList.add('hidden');
       }
     }
   </script>
   <script src="../assets/js/theme.js"></script>
-  
+
   <!-- Fixed Theme Toggle Button -->
   <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
     <i class="fas fa-moon"></i>
   </button>
 </body>
+
 </html>

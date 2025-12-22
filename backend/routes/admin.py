@@ -268,6 +268,73 @@ def get_user_details(user_id):
     except Exception as e:
         return jsonify({'message': 'Failed to fetch user details', 'error': str(e)}), 500
 
+@admin_bp.route('/users/<int:user_id>/suspend', methods=['POST'])
+@jwt_required()
+def suspend_user(user_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        admin_user = User.query.get(current_user_id)
+        
+        if admin_user.role != UserRole.ADMIN:
+            return jsonify({'message': 'Access denied'}), 403
+            
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+            
+        user.is_suspended = True
+        db.session.commit()
+        
+        return jsonify({'message': 'User suspended successfully'}), 200
+    except Exception as e:
+        return jsonify({'message': 'Failed to suspend user', 'error': str(e)}), 500
+
+@admin_bp.route('/users/<int:user_id>/unsuspend', methods=['POST'])
+@jwt_required()
+def unsuspend_user(user_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        admin_user = User.query.get(current_user_id)
+        
+        if admin_user.role != UserRole.ADMIN:
+            return jsonify({'message': 'Access denied'}), 403
+            
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+            
+        user.is_suspended = False
+        db.session.commit()
+        
+        return jsonify({'message': 'User unsuspended successfully'}), 200
+    except Exception as e:
+        return jsonify({'message': 'Failed to unsuspend user', 'error': str(e)}), 500
+
+@admin_bp.route('/users/<int:user_id>/verify', methods=['POST'])
+@jwt_required()
+def verify_user(user_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        admin_user = User.query.get(current_user_id)
+        
+        if admin_user.role != UserRole.ADMIN:
+            return jsonify({'message': 'Access denied'}), 403
+            
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+            
+        data = request.get_json()
+        is_verified = data.get('verified', True)
+        
+        user.is_verified = is_verified
+        user.verification_pending = False
+        db.session.commit()
+        
+        return jsonify({'message': f'User verification status updated to {is_verified}'}), 200
+    except Exception as e:
+        return jsonify({'message': 'Failed to verify user', 'error': str(e)}), 500
+
 @admin_bp.route('/support-messages', methods=['GET'])
 @jwt_required()
 def get_all_support_messages():
@@ -381,11 +448,44 @@ def get_pending_withdrawals():
                 'user': user.to_dict() if user else None
             })
         
+        # Calculate stats for the overview
+        from datetime import datetime, timedelta
+        today = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
+        week_ago = today - timedelta(days=7)
+        
+        pending_count = Transaction.query.filter_by(
+            type=TransactionType.POINT_WITHDRAWAL,
+            status=TransactionStatus.PENDING
+        ).count()
+        
+        today_approved = Transaction.query.filter(
+            Transaction.type == TransactionType.POINT_WITHDRAWAL,
+            Transaction.status == TransactionStatus.COMPLETED,
+            Transaction.updated_at >= today
+        ).count()
+        
+        week_approved_sum = db.session.query(db.func.sum(Transaction.amount)).filter(
+            Transaction.type == TransactionType.POINT_WITHDRAWAL,
+            Transaction.status == TransactionStatus.COMPLETED,
+            Transaction.updated_at >= week_ago
+        ).scalar() or 0.0
+        
+        rejected_count = Transaction.query.filter(
+            Transaction.type == TransactionType.POINT_WITHDRAWAL,
+            Transaction.status == TransactionStatus.FAILED
+        ).count()
+        
         return jsonify({
             'withdrawals': withdrawal_data,
             'total': withdrawals.total,
             'pages': withdrawals.pages,
-            'current_page': page
+            'current_page': page,
+            'stats': {
+                'pending': pending_count,
+                'today_approved': today_approved,
+                'week_total_amount': abs(week_approved_sum),
+                'rejected': rejected_count
+            }
         }), 200
         
     except Exception as e:

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -33,7 +34,8 @@
 
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
+  <aside id="sidebar"
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
     <div class="flex items-center justify-between p-6 border-b border-border">
       <div class="flex flex-col items-center">
         <img src="assets/logo.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
@@ -73,7 +75,8 @@
         <i class="fas fa-headset"></i>
         <span>Support Center</span>
       </a>
-      <a href="points.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="points.html"
+        class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-coins"></i>
         <span>Points History</span>
       </a>
@@ -85,13 +88,15 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User"
+          class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
           <p class="font-semibold">John Doe</p>
           <p class="text-sm text-gray-600 dark:text-gray-400">john@example.com</p>
         </div>
       </div>
-      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+      <a href="#" onclick="logout()"
+        class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
         Logout
       </a>
     </div>
@@ -108,7 +113,7 @@
         <h1 class="text-2xl font-bold text-primary">My Points</h1>
         <div class="text-right">
           <p class="text-sm text-gray-600 dark:text-gray-400">1 Point = $0.10</p>
-          <p class="text-lg font-medium text-green-400">Worth $345.08 today</p>
+          <p id="topUsdWorth" class="text-lg font-medium text-green-400">Loading...</p>
         </div>
       </div>
     </header>
@@ -120,21 +125,23 @@
         <div class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl p-8 shadow-2xl animate-count-up">
           <i class="fas fa-coins text-5xl mb-4 opacity-80"></i>
           <p class="text-indigo-100 text-sm uppercase tracking-wider">Total Points</p>
-          <p class="text-5xl font-bold mt-3">3,450.75</p>
+          <p id="statTotalPoints" class="text-5xl font-bold mt-3">0</p>
           <p class="text-indigo-200 text-sm mt-4">All-time balance</p>
         </div>
 
-        <div class="bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl p-8 shadow-2xl animate-count-up animation-delay-200">
+        <div
+          class="bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl p-8 shadow-2xl animate-count-up animation-delay-200">
           <i class="fas fa-plus-circle text-5xl mb-4 opacity-80"></i>
           <p class="text-green-100 text-sm uppercase tracking-wider">Points Earned</p>
-          <p class="text-5xl font-bold mt-3">4,000</p>
+          <p id="statPointsEarned" class="text-5xl font-bold mt-3">0</p>
           <p class="text-green-200 text-sm mt-4">From tasks & referrals</p>
         </div>
 
-        <div class="bg-gradient-to-br from-red-600 to-pink-600 rounded-2xl p-8 shadow-2xl animate-count-up animation-delay-400">
+        <div
+          class="bg-gradient-to-br from-red-600 to-pink-600 rounded-2xl p-8 shadow-2xl animate-count-up animation-delay-400">
           <i class="fas fa-minus-circle text-5xl mb-4 opacity-80"></i>
           <p class="text-red-100 text-sm uppercase tracking-wider">Points Used</p>
-          <p class="text-5xl font-bold mt-3">549.25</p>
+          <p id="statPointsUsed" class="text-5xl font-bold mt-3">0</p>
           <p class="text-red-200 text-sm mt-4">Redeemed or withdrawn</p>
         </div>
       </div>
@@ -145,16 +152,19 @@
           <i class="fas fa-trophy text-yellow-400"></i> Your Withdrawal Tier
         </h3>
         <div class="text-center mb-8">
-          <p class="text-4xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-            Silver Tier
+          <p id="tierName"
+            class="text-4xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+            Loading...
           </p>
-          <p class="text-gray-400 mt-2">You're in the top 15% of earners!</p>
+          <p class="text-gray-400 mt-2">Earn more points to unlock better tiers!</p>
         </div>
 
         <div class="relative">
           <div class="overflow-hidden h-10 rounded-full bg-gray-700">
-            <div class="h-full bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-end pr-6 text-white font-bold shadow-lg animate-pulse-glow" style="width: 68%">
-              3,450 / 8,000 pts
+            <div id="tierProgressBar"
+              class="h-full bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-end pr-6 text-white font-bold shadow-lg transition-all duration-1000"
+              style="width: 0%">
+              0 / 0 pts
             </div>
           </div>
           <div class="flex justify-between mt-4 text-sm text-gray-400">
@@ -170,60 +180,15 @@
       <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-6">
         <div class="flex items-center justify-between mb-6">
           <h3 class="text-xl font-bold">Points History</h3>
-          <select class="bg-gray-700 border border-gray-600 rounded-xl px-4 py-2 focus:outline-none focus:border-indigo-500">
+          <select
+            class="bg-gray-700 border border-gray-600 rounded-xl px-4 py-2 focus:outline-none focus:border-indigo-500">
             <option>Last 30 days</option>
             <option>All time</option>
           </select>
         </div>
 
-        <div class="space-y-4 max-h-96 overflow-y-auto">
-          <div class="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-indigo-600/20 transition">
-            <div class="flex items-center gap-4">
-              <div class="w-12 h-12 bg-green-600/20 rounded-full flex items-center justify-center">
-                <i class="fas fa-plus text-green-400"></i>
-              </div>
-              <div>
-                <p class="font-medium">Redeemed code <strong>ABCDE123</strong></p>
-                <p class="text-sm text-gray-400">Gift code redemption</p>
-              </div>
-            </div>
-            <div class="text-right">
-              <p class="text-green-400 font-bold">+150 pts</p>
-              <p class="text-xs text-gray-500">Jun 1, 2025</p>
-            </div>
-          </div>
-
-          <div class="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-indigo-600/20 transition">
-            <div class="flex items-center gap-4">
-              <div class="w-12 h-12 bg-purple-600/20 rounded-full flex items-center justify-center">
-                <i class="fas fa-check-circle text-purple-400"></i>
-              </div>
-              <div>
-                <p class="font-medium">Completed "Daily Survey"</p>
-                <p class="text-sm text-gray-400">Task completion</p>
-              </div>
-            </div>
-            <div class="text-right">
-              <p class="text-green-400 font-bold">+50 pts</p>
-              <p class="text-xs text-gray-500">Jun 2, 2025</p>
-            </div>
-          </div>
-
-          <div class="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-red-600/20 transition">
-            <div class="flex items-center gap-4">
-              <div class="w-12 h-12 bg-red-600/20 rounded-full flex items-center justify-center">
-                <i class="fas fa-minus text-red-400"></i>
-              </div>
-              <div>
-                <p class="font-medium">Withdrawn to PayPal</p>
-                <p class="text-sm text-gray-400">Cash withdrawal</p>
-              </div>
-            </div>
-            <div class="text-right">
-              <p class="text-red-400 font-bold">-200 pts</p>
-              <p class="text-xs text-gray-500">Jun 5, 2025</p>
-            </div>
-          </div>
+        <div id="pointsHistoryList" class="space-y-4 max-h-96 overflow-y-auto">
+          <p class="text-center text-gray-500 py-10">Loading history...</p>
         </div>
       </div>
     </main>
@@ -242,59 +207,64 @@
     document.querySelectorAll('.animate-count-up').forEach((el, i) => {
       el.style.animationDelay = `${i * 0.2}s`;
     });
-    
+
     // Fetch points data when page loads
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       const token = localStorage.getItem('access_token');
       if (!token) {
         window.location.href = 'login.html';
         return;
       }
-      
+
       fetch('/api/points/balance', {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.points_balance !== undefined) {
-          // Update points summary
-          document.querySelector('.grid .bg-gradient-to-br.from-indigo-600.to-purple-700 .text-5xl').textContent = data.points_balance.toFixed(2);
-          document.querySelector('.grid .bg-gradient-to-br.from-green-600.to-emerald-600 .text-5xl').textContent = data.total_points_earned.toFixed(2);
-          document.querySelector('.grid .bg-gradient-to-br.from-red-600.to-pink-600 .text-5xl').textContent = data.total_points_withdrawn.toFixed(2);
-          
-          // Update worth in USD
-          const usdWorth = data.points_balance * 0.1;
-          document.querySelector('header .text-right .text-lg').textContent = 'Worth $' + usdWorth.toFixed(2) + ' today';
-          
-          // Update tier progress
-          const tierLevel = data.tier_level || 'None';
-          document.querySelector('.text-4xl.font-bold.bg-gradient-to-r').textContent = tierLevel + ' Tier';
-          
-          // Update tier progress bar based on points
-          let progressWidth = '0%';
-          if (tierLevel === 'Bronze') {
-            progressWidth = (data.points_balance / 500 * 100) + '%';
-          } else if (tierLevel === 'Silver') {
-            progressWidth = (data.points_balance / 8000 * 100) + '%';
-          } else if (tierLevel === 'Gold') {
-            progressWidth = (data.points_balance / 15000 * 100) + '%';
+        .then(response => response.json())
+        .then(data => {
+          if (data.points_balance !== undefined) {
+            // Update points summary
+            document.getElementById('statTotalPoints').textContent = data.points_balance.toLocaleString();
+            document.getElementById('statPointsEarned').textContent = (data.total_points_earned || 0).toLocaleString();
+            document.getElementById('statPointsUsed').textContent = (data.total_points_withdrawn || 0).toLocaleString();
+
+            // Update worth in USD
+            const usdWorth = data.points_balance * 0.1;
+            document.getElementById('topUsdWorth').textContent = 'Worth $' + usdWorth.toFixed(2) + ' today';
+
+            // Update tier progress
+            const tierLevel = data.tier_level || 'None';
+            document.getElementById('tierName').textContent = tierLevel + ' Tier';
+
+            // Update tier progress bar based on points
+            let progressWidth = '0%';
+            let nextTierPoints = 500;
+            if (tierLevel === 'Bronze') {
+              nextTierPoints = 500;
+              progressWidth = Math.min(100, (data.points_balance / 500 * 100)) + '%';
+            } else if (tierLevel === 'Silver') {
+              nextTierPoints = 8000;
+              progressWidth = Math.min(100, (data.points_balance / 8000 * 100)) + '%';
+            } else if (tierLevel === 'Gold') {
+              nextTierPoints = 15000;
+              progressWidth = Math.min(100, (data.points_balance / 15000 * 100)) + '%';
+            }
+
+            const progressBar = document.getElementById('tierProgressBar');
+            progressBar.style.width = progressWidth;
+            progressBar.textContent = Math.floor(data.points_balance).toLocaleString() + ' / ' + nextTierPoints.toLocaleString() + ' pts';
           }
-          document.querySelector('.h-full.bg-gradient-to-r').style.width = progressWidth;
-          document.querySelector('.h-full.bg-gradient-to-r').textContent = data.points_balance.toFixed(0) + ' / ' + 
-            (tierLevel === 'Bronze' ? '500' : tierLevel === 'Silver' ? '8,000' : '15,000') + ' pts';
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching points data:', error);
-        if (error.message && error.message.includes('401')) {
-          localStorage.removeItem('access_token');
-          window.location.href = 'login.html';
-        }
-      });
+        })
+        .catch(error => {
+          console.error('Error fetching points data:', error);
+          if (error.message && error.message.includes('401')) {
+            localStorage.removeItem('access_token');
+            window.location.href = 'login.html';
+          }
+        });
     });
-    
+
     // Logout function
     function logout() {
       localStorage.removeItem('access_token');
@@ -303,14 +273,20 @@
   </script>
 
   <style>
-    .animation-delay-200 { animation-delay: 0.2s; }
-    .animation-delay-400 { animation-delay: 0.4s; }
+    .animation-delay-200 {
+      animation-delay: 0.2s;
+    }
+
+    .animation-delay-400 {
+      animation-delay: 0.4s;
+    }
   </style>
   <script src="assets/js/theme.js"></script>
-  
+
   <!-- Fixed Theme Toggle Button -->
   <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
     <i class="fas fa-moon"></i>
   </button>
 </body>
+
 </html>

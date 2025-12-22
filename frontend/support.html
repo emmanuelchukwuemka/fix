@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +8,8 @@
 
   <!-- Tailwind + Inter Font -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -33,7 +35,8 @@
 
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
+  <aside id="sidebar"
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
     <div class="flex items-center justify-between p-6 border-b border-border">
       <div class="flex flex-col items-center">
         <img src="assets/logo.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
@@ -69,7 +72,8 @@
         <i class="fas fa-gift"></i>
         <span>Redeem Code</span>
       </a>
-      <a href="support.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="support.html"
+        class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-headset"></i>
         <span>Support Center</span>
       </a>
@@ -81,13 +85,15 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User"
+          class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
           <p class="font-semibold">John Doe</p>
           <p class="text-sm text-gray-600 dark:text-gray-400">john@example.com</p>
         </div>
       </div>
-      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+      <a href="#" onclick="logout()"
+        class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
         Logout
       </a>
     </div>
@@ -119,13 +125,16 @@
     <main class="p-6 lg:p-10">
       <!-- Support Dashboard Tabs -->
       <div class="flex border-b border-border mb-8">
-        <button onclick="switchSupportTab('messages')" id="messages-tab" class="px-6 py-3 font-bold border-b-2 border-primary text-primary">
+        <button onclick="switchSupportTab('messages')" id="messages-tab"
+          class="px-6 py-3 font-bold border-b-2 border-primary text-primary">
           Support Messages
         </button>
-        <button onclick="switchSupportTab('tickets')" id="tickets-tab" class="px-6 py-3 font-bold text-gray-600 dark:text-gray-400 hover:text-primary">
+        <button onclick="switchSupportTab('tickets')" id="tickets-tab"
+          class="px-6 py-3 font-bold text-gray-600 dark:text-gray-400 hover:text-primary">
           Support Tickets
         </button>
-        <button onclick="switchSupportTab('analytics')" id="analytics-tab" class="px-6 py-3 font-bold text-gray-600 dark:text-gray-400 hover:text-primary">
+        <button onclick="switchSupportTab('analytics')" id="analytics-tab"
+          class="px-6 py-3 font-bold text-gray-600 dark:text-gray-400 hover:text-primary">
           Analytics
         </button>
       </div>
@@ -139,16 +148,18 @@
               <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
                 <i class="fas fa-envelope text-primary"></i> Support Messages
               </h2>
-              
+
               <div class="mb-4">
-                <input type="text" placeholder="Search messages..." class="w-full px-5 py-3 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
+                <input type="text" placeholder="Search messages..."
+                  class="w-full px-5 py-3 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
               </div>
-              
+
               <div class="space-y-4 max-h-[600px] overflow-y-auto">
                 <!-- Sample message -->
                 <div class="p-4 bg-card border border-border rounded-2xl hover:border-primary cursor-pointer">
                   <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-10 h-10 rounded-full" alt="User">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-10 h-10 rounded-full"
+                      alt="User">
                     <div class="flex-1">
                       <h3 class="font-bold">Sarah Johnson</h3>
                       <p class="text-sm text-gray-600 dark:text-gray-400 truncate">Issue with reward code redemption</p>
@@ -156,10 +167,11 @@
                     <span class="text-xs text-gray-500">10:30 AM</span>
                   </div>
                 </div>
-                
+
                 <div class="p-4 bg-card border border-border rounded-2xl hover:border-primary cursor-pointer">
                   <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mike" class="w-10 h-10 rounded-full" alt="User">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mike" class="w-10 h-10 rounded-full"
+                      alt="User">
                     <div class="flex-1">
                       <h3 class="font-bold">Mike Thompson</h3>
                       <p class="text-sm text-gray-600 dark:text-gray-400 truncate">Withdrawal not processed</p>
@@ -167,10 +179,11 @@
                     <span class="text-xs text-gray-500">Yesterday</span>
                   </div>
                 </div>
-                
+
                 <div class="p-4 bg-card border border-border rounded-2xl hover:border-primary cursor-pointer">
                   <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Emma" class="w-10 h-10 rounded-full" alt="User">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Emma" class="w-10 h-10 rounded-full"
+                      alt="User">
                     <div class="flex-1">
                       <h3 class="font-bold">Emma Wilson</h3>
                       <p class="text-sm text-gray-600 dark:text-gray-400 truncate">Task completion issue</p>
@@ -181,13 +194,14 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Message Detail -->
           <div class="lg:col-span-2">
             <div class="card rounded-3xl p-6">
               <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-4">
-                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-12 h-12 rounded-full" alt="User">
+                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-12 h-12 rounded-full"
+                    alt="User">
                   <div>
                     <h2 class="text-2xl font-bold">Sarah Johnson</h2>
                     <p class="text-gray-600 dark:text-gray-400">Issue with reward code redemption</p>
@@ -202,19 +216,21 @@
                   </button>
                 </div>
               </div>
-              
+
               <!-- Message Thread -->
               <div class="space-y-6 mb-8">
                 <div class="flex items-start gap-4">
-                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-10 h-10 rounded-full flex-shrink-0" alt="User">
+                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah"
+                    class="w-10 h-10 rounded-full flex-shrink-0" alt="User">
                   <div class="flex-1">
                     <div class="bg-gray-200 dark:bg-gray-700 rounded-3xl rounded-tl-none px-6 py-4">
-                      <p>Hello, I'm having trouble redeeming my reward code ABCDE123. It says "Invalid Code" but I'm sure I entered it correctly.</p>
+                      <p>Hello, I'm having trouble redeeming my reward code ABCDE123. It says "Invalid Code" but I'm
+                        sure I entered it correctly.</p>
                     </div>
                     <p class="text-xs text-gray-500 mt-2">Sarah Johnson • 10:30 AM</p>
                   </div>
                 </div>
-                
+
                 <div class="flex items-start gap-4 justify-end">
                   <div class="flex-1 text-right">
                     <div class="bg-primary rounded-3xl rounded-tr-none px-6 py-4 inline-block text-white max-w-lg">
@@ -222,13 +238,15 @@
                     </div>
                     <p class="text-xs text-gray-500 mt-2">You • Just now</p>
                   </div>
-                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" class="w-10 h-10 rounded-full flex-shrink-0" alt="Admin">
+                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin"
+                    class="w-10 h-10 rounded-full flex-shrink-0" alt="Admin">
                 </div>
               </div>
-              
+
               <!-- Reply Form -->
               <form class="border-t border-border pt-6">
-                <textarea rows="4" placeholder="Type your reply here..." class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition mb-4"></textarea>
+                <textarea rows="4" placeholder="Type your reply here..."
+                  class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition mb-4"></textarea>
                 <div class="flex justify-between items-center">
                   <div class="flex gap-2">
                     <button type="button" class="text-gray-600 dark:text-gray-400 hover:text-primary">
@@ -238,7 +256,8 @@
                       <i class="fas fa-image"></i>
                     </button>
                   </div>
-                  <button type="submit" class="bg-primary hover:bg-orange-700 px-6 py-3 rounded-xl font-bold transition">
+                  <button type="submit"
+                    class="bg-primary hover:bg-orange-700 px-6 py-3 rounded-xl font-bold transition">
                     <i class="fas fa-paper-plane mr-2"></i> Send Reply
                   </button>
                 </div>
@@ -254,7 +273,7 @@
           <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
             <i class="fas fa-ticket-alt text-purple-500"></i> Support Tickets
           </h2>
-          
+
           <div class="overflow-x-auto">
             <table class="w-full text-left">
               <thead class="border-b border-border">
@@ -289,7 +308,7 @@
                     </button>
                   </td>
                 </tr>
-                
+
                 <tr class="border-b border-border hover:bg-card/50">
                   <td class="py-4">#TKT-00123</td>
                   <td class="py-4">
@@ -298,10 +317,12 @@
                   </td>
                   <td class="py-4">Withdrawal not processed</td>
                   <td class="py-4">
-                    <span class="bg-green-600/20 text-green-400 px-3 py-1 rounded-full text-sm font-bold">Resolved</span>
+                    <span
+                      class="bg-green-600/20 text-green-400 px-3 py-1 rounded-full text-sm font-bold">Resolved</span>
                   </td>
                   <td class="py-4">
-                    <span class="bg-yellow-600/20 text-yellow-400 px-3 py-1 rounded-full text-sm font-bold">Medium</span>
+                    <span
+                      class="bg-yellow-600/20 text-yellow-400 px-3 py-1 rounded-full text-sm font-bold">Medium</span>
                   </td>
                   <td class="py-4">2025-06-14</td>
                   <td class="py-4">
@@ -310,7 +331,7 @@
                     </button>
                   </td>
                 </tr>
-                
+
                 <tr class="border-b border-border hover:bg-card/50">
                   <td class="py-4">#TKT-00122</td>
                   <td class="py-4">
@@ -319,7 +340,8 @@
                   </td>
                   <td class="py-4">Task completion issue</td>
                   <td class="py-4">
-                    <span class="bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full text-sm font-bold">In Progress</span>
+                    <span class="bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full text-sm font-bold">In
+                      Progress</span>
                   </td>
                   <td class="py-4">
                     <span class="bg-green-600/20 text-green-400 px-3 py-1 rounded-full text-sm font-bold">Low</span>
@@ -334,7 +356,7 @@
               </tbody>
             </table>
           </div>
-          
+
           <div class="flex justify-between items-center mt-8">
             <p>Showing 1 to 3 of 3 entries</p>
             <div class="flex gap-2">
@@ -363,7 +385,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="card rounded-2xl p-6">
             <div class="flex items-center justify-between">
               <div>
@@ -375,7 +397,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="card rounded-2xl p-6">
             <div class="flex items-center justify-between">
               <div>
@@ -387,7 +409,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="card rounded-2xl p-6">
             <div class="flex items-center justify-between">
               <div>
@@ -400,7 +422,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div class="card rounded-3xl p-8">
             <h3 class="text-xl font-bold mb-6">Tickets by Status</h3>
@@ -414,7 +436,7 @@
                   <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 16%"></div>
                 </div>
               </div>
-              
+
               <div>
                 <div class="flex justify-between mb-2">
                   <span>In Progress</span>
@@ -424,7 +446,7 @@
                   <div class="bg-blue-500 h-2.5 rounded-full" style="width: 5%"></div>
                 </div>
               </div>
-              
+
               <div>
                 <div class="flex justify-between mb-2">
                   <span>Resolved</span>
@@ -436,7 +458,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="card rounded-3xl p-8">
             <h3 class="text-xl font-bold mb-6">Tickets by Priority</h3>
             <div class="space-y-4">
@@ -449,7 +471,7 @@
                   <div class="bg-red-500 h-2.5 rounded-full" style="width: 6%"></div>
                 </div>
               </div>
-              
+
               <div>
                 <div class="flex justify-between mb-2">
                   <span>Medium</span>
@@ -459,7 +481,7 @@
                   <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 24%"></div>
                 </div>
               </div>
-              
+
               <div>
                 <div class="flex justify-between mb-2">
                   <span>Low</span>
@@ -491,37 +513,197 @@
         btn.classList.remove('text-primary', 'border-primary');
         btn.classList.add('text-gray-600', 'dark:text-gray-400');
       });
-      
+
       document.getElementById(`${tab}-tab`).classList.add('text-primary', 'border-primary');
       document.getElementById(`${tab}-tab`).classList.remove('text-gray-600', 'dark:text-gray-400');
-      
+
       // Update tab content
       document.querySelectorAll('[id$="-tab-content"]').forEach(content => {
         content.classList.add('hidden');
       });
-      
+
       document.getElementById(`${tab}-tab-content`).classList.remove('hidden');
     }
 
-    // Sample data
-    const messages = [
-      { id: 1, user: "Sarah Johnson", subject: "Issue with reward code redemption", time: "10:30 AM" },
-      { id: 2, user: "Mike Thompson", subject: "Withdrawal not processed", time: "Yesterday" },
-      { id: 3, user: "Emma Wilson", subject: "Task completion issue", time: "2 days ago" }
-    ];
+    let allMessages = [];
+
+    async function fetchMessages() {
+      const token = localStorage.getItem('access_token');
+      if (!token) return;
+
+      try {
+        const response = await fetch('/api/support/', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await response.json();
+        if (data.messages) {
+          allMessages = data.messages;
+          renderMessages(allMessages);
+        }
+      } catch (err) {
+        console.error('Error fetching messages:', err);
+      }
+    }
+
+    function renderMessages(messages) {
+      const list = document.querySelector('.space-y-4.max-h-\\[600px\\]');
+      if (!list) return;
+
+      if (messages.length === 0) {
+        list.innerHTML = '<p class="text-center text-gray-500 py-4">No support messages yet.</p>';
+        return;
+      }
+
+      list.innerHTML = messages.map(msg => `
+        <div onclick="viewMessageDetail(${msg.id})" class="p-4 bg-card border border-border rounded-2xl hover:border-primary cursor-pointer transition">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="flex-1">
+              <h3 class="font-bold truncate">${msg.subject}</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400 truncate">${msg.message}</p>
+            </div>
+            <span class="text-xs text-gray-500">${new Date(msg.created_at).toLocaleDateString()}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function viewMessageDetail(id) {
+      const msg = allMessages.find(m => m.id === id);
+      if (!msg) return;
+
+      const detailArea = document.querySelector('.lg\\:col-span-2 .card');
+      if (!detailArea) return;
+
+      detailArea.innerHTML = `
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xl">
+              <i class="fas fa-headset"></i>
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold">${msg.subject}</h2>
+              <p class="text-gray-600 dark:text-gray-400">Status: ${msg.status}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="space-y-6 mb-8 min-h-[300px]">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-gray-600/20 flex items-center justify-center text-gray-400">
+              <i class="fas fa-user font-bold"></i>
+            </div>
+            <div class="flex-1">
+              <div class="bg-gray-200 dark:bg-gray-700 rounded-3xl rounded-tl-none px-6 py-4">
+                <p>${msg.message}</p>
+              </div>
+              <p class="text-xs text-gray-500 mt-2">Sent on ${new Date(msg.created_at).toLocaleString()}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="border-t border-border pt-6">
+          <p class="text-sm text-gray-500 text-center italic">This is a ticket view. For live chat, please use WhatsApp support.</p>
+          <a href="https://wa.me/yournumber" class="mt-4 block bg-green-600 hover:bg-green-700 text-center py-3 rounded-xl font-bold transition">
+            <i class="fab fa-whatsapp mr-2"></i> WhatsApp for Quick Response
+          </a>
+        </div>
+      `;
+    }
+
+    async function handleSupportSubmit(e) {
+      e.preventDefault();
+      const subject = document.getElementById('supportSubject').value;
+      const message = document.getElementById('supportMessage').value;
+      const btn = e.target.querySelector('button');
+      const originalText = btn.innerHTML;
+
+      if (!subject || !message) {
+        alert('Please fill in both subject and message.');
+        return;
+      }
+
+      const token = localStorage.getItem('access_token');
+      if (!token) return;
+
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Sending...';
+      btn.disabled = true;
+
+      try {
+        const response = await fetch('/api/support/', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ subject, message })
+        });
+        const data = await response.json();
+        if (response.ok) {
+          alert('Message sent successfully!');
+          document.getElementById('supportSubject').value = '';
+          document.getElementById('supportMessage').value = '';
+          fetchMessages();
+        } else {
+          alert('Error: ' + data.message);
+        }
+      } catch (err) {
+        console.error('Submit error:', err);
+        alert('Failed to send message.');
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchMessages();
+
+      // Update form to act as "New Ticket"
+      const replyForm = document.querySelector('form');
+      if (replyForm) {
+        replyForm.innerHTML = `
+          <div class="mb-4">
+            <input type="text" id="supportSubject" placeholder="Ticket Subject" class="w-full px-5 py-3 bg-card border border-border rounded-xl focus:outline-none focus:border-primary transition">
+          </div>
+          <textarea id="supportMessage" rows="4" placeholder="Describe your issue..." class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary transition mb-4"></textarea>
+          <div class="flex justify-end">
+            <button type="submit" class="bg-primary hover:bg-orange-700 px-6 py-3 rounded-xl font-bold transition">
+              <i class="fas fa-paper-plane mr-2"></i> Open New Ticket
+            </button>
+          </div>
+        `;
+        replyForm.onsubmit = handleSupportSubmit;
+      }
+    });
   </script>
 
   <style>
-    .scrollbar-thin::-webkit-scrollbar { width: 8px; }
-    .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
-    .scrollbar-thin::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 4px; }
-    .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #818cf8; }
+    .scrollbar-thin::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .scrollbar-thin::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+      background: #6366f1;
+      border-radius: 4px;
+    }
+
+    .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+      background: #818cf8;
+    }
   </style>
   <script src="assets/js/theme.js"></script>
-  
+
   <!-- Fixed Theme Toggle Button -->
   <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
     <i class="fas fa-moon"></i>
   </button>
 </body>
+
 </html>

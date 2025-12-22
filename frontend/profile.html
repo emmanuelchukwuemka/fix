@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -33,7 +34,8 @@
 
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
+  <aside id="sidebar"
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
     <div class="flex items-center justify-between p-6 border-b border-border">
       <div class="flex flex-col items-center">
         <img src="assets/logo.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
@@ -73,7 +75,8 @@
         <i class="fas fa-headset"></i>
         <span>Support Center</span>
       </a>
-      <a href="profile.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="profile.html"
+        class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-user-cog"></i>
         <span>Profile & Settings</span>
       </a>
@@ -81,13 +84,15 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User"
+          class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
           <p class="font-semibold">John Doe</p>
           <p class="text-sm text-gray-600 dark:text-gray-400">john@example.com</p>
         </div>
       </div>
-      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+      <a href="#" onclick="logout()"
+        class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
         Logout
       </a>
     </div>
@@ -102,7 +107,8 @@
           <i class="fas fa-bars text-xl"></i>
         </button>
         <h1 class="text-2xl font-bold">Profile & Settings</h1>
-        <button onclick="saveProfile()" class="bg-primary hover:bg-orange-700 px-8 py-3 rounded-xl font-bold transition transform hover:scale-105 shadow-lg">
+        <button onclick="saveProfile()"
+          class="bg-primary hover:bg-orange-700 px-8 py-3 rounded-xl font-bold transition transform hover:scale-105 shadow-lg">
           Save Changes
         </button>
       </div>
@@ -111,10 +117,13 @@
     <main class="p-6 lg:p-10 max-w-6xl mx-auto">
 
       <!-- Profile Hero -->
-      <div class="bg-gradient-to-br from-primary/20 to-secondary/20 border border-primary/30 backdrop-blur-xl rounded-3xl p-10 text-center mb-10">
+      <div
+        class="bg-gradient-to-br from-primary/20 to-secondary/20 border border-primary/30 backdrop-blur-xl rounded-3xl p-10 text-center mb-10">
         <div class="relative inline-block">
-          <img id="avatarPreview" src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="Profile" class="w-40 h-40 rounded-full ring-8 ring-primary/50 shadow-2xl">
-          <label for="avatarUpload" class="absolute bottom-4 right-4 bg-primary hover:bg-orange-700 w-14 h-14 rounded-full flex items-center justify-center cursor-pointer shadow-2xl transition transform hover:scale-110">
+          <img id="avatarPreview" src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="Profile"
+            class="w-40 h-40 rounded-full ring-8 ring-primary/50 shadow-2xl">
+          <label for="avatarUpload"
+            class="absolute bottom-4 right-4 bg-primary hover:bg-orange-700 w-14 h-14 rounded-full flex items-center justify-center cursor-pointer shadow-2xl transition transform hover:scale-110">
             <i class="fas fa-camera text-xl"></i>
           </label>
           <input type="file" id="avatarUpload" accept="image/*" class="hidden" onchange="previewAvatar(event)">
@@ -123,11 +132,11 @@
         <p class="text-xl text-gray-600 dark:text-gray-400 mt-2">john.doe@example.com</p>
         <div class="flex justify-center gap-8 mt-6">
           <div class="text-center">
-            <p class="text-3xl font-bold text-green-400">Silver Tier</p>
+            <p id="profileTier" class="text-3xl font-bold text-green-400">Loading...</p>
             <p class="text-sm text-gray-600 dark:text-gray-400">Withdrawal Level</p>
           </div>
           <div class="text-center">
-            <p class="text-3xl font-bold text-yellow-400">Security: 94%</p>
+            <p class="text-3xl font-bold text-yellow-400">Security: 100%</p>
             <p class="text-sm text-gray-600 dark:text-gray-400">Very Strong</p>
           </div>
         </div>
@@ -137,31 +146,46 @@
 
         <!-- Personal Info -->
         <div class="card rounded-2xl p-8">
-          <h3 class="text-xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-id-card text-primary"></i> Personal Information</h3>
+          <h3 class="text-xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-id-card text-primary"></i>
+            Personal Information</h3>
           <div class="space-y-6">
             <div class="relative">
-              <input type="text" value="John Doe" class="peer w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
-              <label class="absolute left-5 -top-2.5 bg-card px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-focus:text-primary">Full Name</label>
+              <input type="text" value="John Doe"
+                class="peer w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
+              <label
+                class="absolute left-5 -top-2.5 bg-card px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-focus:text-primary">Full
+                Name</label>
             </div>
             <div class="relative">
-              <input type="email" value="john.doe@example.com" class="peer w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
-              <label class="absolute left-5 -top-2.5 bg-card px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-focus:text-primary">Email Address</label>
+              <input type="email" value="john.doe@example.com"
+                class="peer w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
+              <label
+                class="absolute left-5 -top-2.5 bg-card px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-focus:text-primary">Email
+                Address</label>
             </div>
             <div class="relative">
-              <input type="tel" value="+1234567890" class="peer w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
-              <label class="absolute left-5 -top-2.5 bg-card px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-focus:text-primary">Phone Number</label>
+              <input type="tel" id="profilePhone" value="" placeholder="Enter phone number"
+                class="peer w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
+              <label
+                class="absolute left-5 -top-2.5 bg-card px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-focus:text-primary">Phone
+                Number</label>
             </div>
           </div>
         </div>
 
         <!-- Security -->
         <div class="card rounded-2xl p-8">
-          <h3 class="text-xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-shield-alt text-green-400"></i> Security</h3>
+          <h3 class="text-xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-shield-alt text-green-400"></i>
+            Security</h3>
           <div class="space-y-6">
             <div class="relative">
-              <input type="password" id="password" placeholder="••••••••" class="peer w-full px-5 py-4 pr-12 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
-              <label class="absolute left-5 -top-2.5 bg-card px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-focus:text-primary">New Password</label>
-              <button type="button" onclick="togglePass()" class="absolute right-4 top-4 text-gray-600 dark:text-gray-400 hover:text-text">
+              <input type="password" id="password" placeholder="••••••••"
+                class="peer w-full px-5 py-4 pr-12 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
+              <label
+                class="absolute left-5 -top-2.5 bg-card px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-focus:text-primary">New
+                Password</label>
+              <button type="button" onclick="togglePass()"
+                class="absolute right-4 top-4 text-gray-600 dark:text-gray-400 hover:text-text">
                 <i class="fas fa-eye" id="eyeIcon"></i>
               </button>
             </div>
@@ -170,14 +194,18 @@
                 <span>Two-Factor Authentication</span>
                 <label class="relative inline-flex items-center cursor-pointer">
                   <input type="checkbox" checked class="sr-only peer">
-                  <div class="w-14 h-7 bg-card border border-border peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-primary after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
+                  <div
+                    class="w-14 h-7 bg-card border border-border peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-primary after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary">
+                  </div>
                 </label>
               </div>
               <div class="flex items-center justify-between">
                 <span>Login Alerts</span>
                 <label class="relative inline-flex items-center cursor-pointer">
                   <input type="checkbox" checked class="sr-only peer">
-                  <div class="w-14 h-7 bg-card border border-border peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-primary after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
+                  <div
+                    class="w-14 h-7 bg-card border border-border peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-primary after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary">
+                  </div>
                 </label>
               </div>
             </div>
@@ -186,14 +214,16 @@
 
         <!-- Withdrawal Settings -->
         <div class="card rounded-2xl p-8">
-          <h3 class="text-xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-university text-yellow-400"></i> Withdrawal Methods</h3>
+          <h3 class="text-xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-university text-yellow-400"></i>
+            Withdrawal Methods</h3>
           <div class="space-y-4">
-            <select class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-yellow-500">
-              <option>Mobile Transfer - ****1234</option>
-              <option>Bank Transfer - ****5678</option>
-              <option>Add New Method +</option>
+            <select id="withdrawalMethodList"
+              class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-yellow-500">
+              <option value="">No methods added</option>
+              <option value="add">Add New Method +</option>
             </select>
-            <button class="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 py-4 rounded-xl font-bold transition transform hover:scale-105">
+            <button
+              class="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 py-4 rounded-xl font-bold transition transform hover:scale-105">
               Add Withdrawal Method
             </button>
           </div>
@@ -201,13 +231,16 @@
 
         <!-- Settings -->
         <div class="card rounded-2xl p-8">
-          <h3 class="text-xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-cog text-primary"></i> Settings</h3>
+          <h3 class="text-xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-cog text-primary"></i> Settings
+          </h3>
           <div class="space-y-6">
             <div class="flex items-center justify-between">
               <span>Dark Mode</span>
               <label class="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" checked class="sr-only peer">
-                <div class="w-14 h-7 bg-card border border-border peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-primary after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
+                <div
+                  class="w-14 h-7 bg-card border border-border peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-primary after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary">
+                </div>
               </label>
             </div>
           </div>
@@ -215,11 +248,13 @@
 
         <!-- Notifications -->
         <div class="card rounded-2xl p-8">
-          <h3 class="text-xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-bell text-yellow-400"></i> Notifications</h3>
+          <h3 class="text-xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-bell text-yellow-400"></i>
+            Notifications</h3>
           <div class="space-y-6">
             <div>
               <label class="block text-sm mb-3">Notification Preferences</label>
-              <select class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-purple-500">
+              <select
+                class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-purple-500">
                 <option>All Notifications</option>
                 <option>Important Only</option>
                 <option>Email Only</option>
@@ -233,7 +268,8 @@
   </div>
 
   <!-- Success Toast -->
-  <div id="toast" class="hidden fixed bottom-8 right-8 bg-green-600 text-white px-8 py-5 rounded-2xl shadow-2xl flex items-center gap-4 animate-success-pulse">
+  <div id="toast"
+    class="hidden fixed bottom-8 right-8 bg-green-600 text-white px-8 py-5 rounded-2xl shadow-2xl flex items-center gap-4 animate-success-pulse">
     <i class="fas fa-check-circle text-3xl"></i>
     <div>
       <p class="font-bold text-lg">Profile Updated Successfully!</p>
@@ -278,83 +314,115 @@
 
     function saveProfile() {
       const btn = document.querySelector('button[onclick="saveProfile()"]');
+      const originalText = btn.innerHTML;
       btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Saving...';
       btn.disabled = true;
 
       // Get user info from form
       const fullName = document.querySelector('input[type="text"]').value;
       const email = document.querySelector('input[type="email"]').value;
-      const phone = document.querySelectorAll('input[type="tel"]')[0].value;
-      
-      // Save to localStorage
-      localStorage.setItem('userName', fullName);
-      localStorage.setItem('userEmail', email);
-      
-      // Also save avatar if it exists
-      const avatarPreview = document.getElementById('avatarPreview');
-      if (avatarPreview.src && avatarPreview.src.startsWith('data:image')) {
-        localStorage.setItem('userAvatar', avatarPreview.src);
+      const phone = document.getElementById('profilePhone').value;
+
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        window.location.href = 'login.html';
+        return;
       }
+
+      // Prepare data for update
+      const updateData = {
+        full_name: fullName,
+        phone: phone
+      };
 
       // Send update request to backend
-      const token = localStorage.getItem('access_token');
-      if (token) {
-        // In a real implementation, you would send a PUT request to update the user profile
-        // For now, we'll just simulate the success
-        setTimeout(() => {
-          document.getElementById('toast').classList.remove('hidden');
-          btn.innerHTML = 'Save Changes';
+      fetch('/api/users/profile', {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateData)
+      })
+        .then(response => response.json())
+        .then(data => {
+          btn.innerHTML = originalText;
           btn.disabled = false;
 
-          setTimeout(() => {
-            document.getElementById('toast').classList.add('hidden');
-          }, 4000);
-        }, 1500);
-      } else {
-        // Fallback to localStorage only if no token
-        setTimeout(() => {
-          document.getElementById('toast').classList.remove('hidden');
-          btn.innerHTML = 'Save Changes';
-          btn.disabled = false;
+          if (data.user) {
+            // Update localStorage with fresh data
+            localStorage.setItem('userName', data.user.full_name);
+            localStorage.setItem('userEmail', data.user.email);
 
-          setTimeout(() => {
-            document.getElementById('toast').classList.add('hidden');
-          }, 4000);
-        }, 1500);
-      }
+            // Update UI
+            document.querySelector('h2').textContent = data.user.full_name;
+            document.getElementById('sidebarUserName').textContent = data.user.full_name;
+
+            // Show success toast
+            document.getElementById('toast').classList.remove('hidden');
+            setTimeout(() => {
+              document.getElementById('toast').classList.add('hidden');
+            }, 4000);
+          } else {
+            alert('Error: ' + (data.message || 'Failed to update profile'));
+          }
+        })
+        .catch(err => {
+          console.error('Update error:', err);
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+          alert('An error occurred while saving profile.');
+        });
     }
-    
+
     // Load saved user information when page loads
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       const savedAvatar = localStorage.getItem('userAvatar');
       const savedName = localStorage.getItem('userName');
       const savedEmail = localStorage.getItem('userEmail');
-      
+
       if (savedAvatar) {
         document.getElementById('avatarPreview').src = savedAvatar;
       }
-      
+
       if (savedName) {
         document.querySelector('h2').textContent = savedName;
+        document.getElementById('sidebarUserName').textContent = savedName;
         // Update name in input field
-        document.querySelector('input[type="text"]').value = savedName;
+        document.querySelectorAll('input[type="text"]')[0].value = savedName;
       }
-      
+
       if (savedEmail) {
         document.querySelector('p.text-xl').textContent = savedEmail;
+        document.getElementById('sidebarUserEmail').textContent = savedEmail;
         // Update email in input field
         document.querySelector('input[type="email"]').value = savedEmail;
       }
+
+      // Fetch additional profile data
+      const token = localStorage.getItem('access_token');
+      if (token) {
+        fetch('/api/points/balance', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.tier_level) {
+              document.getElementById('profileTier').textContent = data.tier_level + ' Tier';
+            }
+          });
+      }
     });
-  
-    
+
+
 
   </script>
   <script src="assets/js/theme.js"></script>
-  
+
   <!-- Fixed Theme Toggle Button -->
   <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
     <i class="fas fa-moon"></i>
   </button>
 </body>
+
 </html>

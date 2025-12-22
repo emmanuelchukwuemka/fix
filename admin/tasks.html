@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +8,8 @@
 
   <!-- Tailwind + Inter Font -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -31,7 +33,7 @@
     // Check if user is authenticated
     const token = localStorage.getItem('access_token');
     const userRole = localStorage.getItem('userRole');
-    
+
     // Redirect to login if not authenticated or not admin
     if (!token || userRole !== 'admin') {
       window.location.href = '/admin/';
@@ -45,12 +47,17 @@
 
   <!-- Animated Background -->
   <div class="absolute inset-0 -z-10">
-    <div class="absolute top-10 left-10 w-96 h-96 bg-primary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse"></div>
-    <div class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse delay-1000"></div>
+    <div
+      class="absolute top-10 left-10 w-96 h-96 bg-primary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse">
+    </div>
+    <div
+      class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse delay-1000">
+    </div>
   </div>
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
+  <aside id="sidebar"
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
     <div class="flex items-center justify-between p-6 border-b border-border">
       <div class="flex flex-col items-center">
         <img src="../assets/logo.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
@@ -90,7 +97,8 @@
         <i class="fas fa-headset"></i>
         <span>Support Center</span>
       </a>
-      <a href="/admin/profiles" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="/admin/profiles"
+        class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-user-shield"></i>
         <span>Admin Panel</span>
       </a>
@@ -106,13 +114,15 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img id="sidebarAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <img id="sidebarAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin"
+          class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
           <p id="sidebarUserName" class="font-semibold">Admin User</p>
           <p id="sidebarUserEmail" class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
         </div>
       </div>
-      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+      <a href="#" onclick="logout()"
+        class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
         Logout
       </a>
     </div>
@@ -138,16 +148,20 @@
     <main class="p-6 lg:p-10 max-w-7xl mx-auto">
       <!-- Task Management Tabs -->
       <div class="flex border-b border-border mb-8">
-        <button onclick="switchTab('pending')" id="pending-tab" class="px-6 py-3 font-bold border-b-2 border-primary text-primary">
+        <button onclick="switchTab('pending')" id="pending-tab"
+          class="px-6 py-3 font-bold border-b-2 border-primary text-primary">
           Pending Reviews
         </button>
-        <button onclick="switchTab('completed')" id="completed-tab" class="px-6 py-3 font-bold text-gray-600 dark:text-gray-400 hover:text-primary">
+        <button onclick="switchTab('completed')" id="completed-tab"
+          class="px-6 py-3 font-bold text-gray-600 dark:text-gray-400 hover:text-primary">
           Completed Tasks
         </button>
-        <button onclick="switchTab('rejected')" id="rejected-tab" class="px-6 py-3 font-bold text-gray-600 dark:text-gray-400 hover:text-primary">
+        <button onclick="switchTab('rejected')" id="rejected-tab"
+          class="px-6 py-3 font-bold text-gray-600 dark:text-gray-400 hover:text-primary">
           Rejected Tasks
         </button>
-        <button onclick="switchTab('create')" id="create-tab" class="px-6 py-3 font-bold text-gray-600 dark:text-gray-400 hover:text-primary">
+        <button onclick="switchTab('create')" id="create-tab"
+          class="px-6 py-3 font-bold text-gray-600 dark:text-gray-400 hover:text-primary">
           Create Task
         </button>
       </div>
@@ -160,12 +174,16 @@
             <i class="fas fa-filter text-primary"></i> Filter Tasks
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <input type="date" id="filterDate" class="bg-card border border-border rounded-2xl px-6 py-4 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/30 transition" />
-            <select id="filterTask" class="bg-card border border-border rounded-2xl px-6 py-4 focus:outline-none focus:border-primary">
+            <input type="date" id="filterDate"
+              class="bg-card border border-border rounded-2xl px-6 py-4 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/30 transition" />
+            <select id="filterTask"
+              class="bg-card border border-border rounded-2xl px-6 py-4 focus:outline-none focus:border-primary">
               <option value="">All Tasks</option>
             </select>
-            <input type="text" id="filterUser" placeholder="User ID or Email" class="bg-card border border-border rounded-2xl px-6 py-4 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/30 transition" />
-            <button onclick="applyFilters()" class="bg-primary hover:bg-orange-700 px-8 py-4 rounded-2xl font-bold transition shadow-xl">
+            <input type="text" id="filterUser" placeholder="User ID or Email"
+              class="bg-card border border-border rounded-2xl px-6 py-4 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/30 transition" />
+            <button onclick="applyFilters()"
+              class="bg-primary hover:bg-orange-700 px-8 py-4 rounded-2xl font-bold transition shadow-xl">
               <i class="fas fa-search mr-2"></i> Apply Filter
             </button>
           </div>
@@ -181,7 +199,8 @@
         </div>
 
         <div class="text-center mt-12 hidden" id="loadMoreContainer">
-          <button onclick="loadMore()" class="bg-card hover:bg-card/80 px-12 py-6 rounded-2xl font-bold text-xl transition">
+          <button onclick="loadMore()"
+            class="bg-card hover:bg-card/80 px-12 py-6 rounded-2xl font-bold text-xl transition">
             Load More Tasks
           </button>
         </div>
@@ -193,7 +212,7 @@
           <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
             <i class="fas fa-check-circle text-green-500"></i> Recently Completed Tasks
           </h2>
-          
+
           <div class="overflow-x-auto">
             <table class="w-full text-left">
               <thead class="border-b border-border">
@@ -224,7 +243,7 @@
           <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
             <i class="fas fa-times-circle text-red-500"></i> Recently Rejected Tasks
           </h2>
-          
+
           <div class="overflow-x-auto">
             <table class="w-full text-left">
               <thead class="border-b border-border">
@@ -255,17 +274,20 @@
           <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
             <i class="fas fa-plus-circle text-primary"></i> Create New Task
           </h2>
-          
+
           <form id="createTaskForm" class="space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label class="block text-lg font-bold mb-3">Task Title</label>
-                <input type="text" id="taskTitle" placeholder="Enter task title" class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" required />
+                <input type="text" id="taskTitle" placeholder="Enter task title"
+                  class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition"
+                  required />
               </div>
-              
+
               <div>
                 <label class="block text-lg font-bold mb-3">Category</label>
-                <select id="taskCategory" class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
+                <select id="taskCategory"
+                  class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
                   <option value="Survey">Survey</option>
                   <option value="Video">Video Watch</option>
                   <option value="App Download">App Download</option>
@@ -274,40 +296,48 @@
                 </select>
               </div>
             </div>
-            
+
             <div>
               <label class="block text-lg font-bold mb-3">Task Description</label>
-              <textarea id="taskDescription" rows="4" placeholder="Describe the task requirements in detail" class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" required></textarea>
+              <textarea id="taskDescription" rows="4" placeholder="Describe the task requirements in detail"
+                class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition"
+                required></textarea>
             </div>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
                 <label class="block text-lg font-bold mb-3">Reward Amount ($)</label>
-                <input type="number" id="taskReward" min="0" step="0.01" placeholder="0.00" class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" required />
+                <input type="number" id="taskReward" min="0" step="0.01" placeholder="0.00"
+                  class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition"
+                  required />
               </div>
-              
+
               <div>
                 <label class="block text-lg font-bold mb-3">Points Reward</label>
-                <input type="number" id="taskPoints" min="0" placeholder="0" class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" required />
+                <input type="number" id="taskPoints" min="0" placeholder="0"
+                  class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition"
+                  required />
               </div>
-              
+
               <div>
                 <label class="block text-lg font-bold mb-3">Time Required (minutes)</label>
-                <input type="number" id="taskTime" min="0" placeholder="0" class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" />
+                <input type="number" id="taskTime" min="0" placeholder="0"
+                  class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" />
               </div>
             </div>
-            
+
             <div class="flex items-center">
               <input type="checkbox" id="adminVerification" class="w-5 h-5 text-primary rounded focus:ring-primary">
               <label for="adminVerification" class="ml-2 text-lg">Requires Admin Verification</label>
             </div>
-            
+
             <div class="flex items-center">
               <input type="checkbox" id="isActive" class="w-5 h-5 text-primary rounded focus:ring-primary" checked>
               <label for="isActive" class="ml-2 text-lg">Task is Active</label>
             </div>
-            
-            <button type="submit" class="w-full bg-primary hover:bg-orange-700 py-4 rounded-2xl font-bold transition transform hover:scale-105 shadow-lg">
+
+            <button type="submit"
+              class="w-full bg-primary hover:bg-orange-700 py-4 rounded-2xl font-bold transition transform hover:scale-105 shadow-lg">
               <i class="fas fa-plus mr-2"></i> Create Task
             </button>
           </form>
@@ -322,18 +352,19 @@
   <!-- Task Detail Modal -->
   <div id="taskModal" class="fixed inset-0 z-50 hidden">
     <div class="absolute inset-0 bg-black/70" onclick="closeModal()"></div>
-    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl bg-card rounded-3xl p-8 border border-border">
+    <div
+      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl bg-card rounded-3xl p-8 border border-border">
       <div class="flex justify-between items-center mb-6">
         <h3 class="text-2xl font-bold">Task Details</h3>
         <button onclick="closeModal()" class="text-gray-400 hover:text-text">
           <i class="fas fa-times text-2xl"></i>
         </button>
       </div>
-      
+
       <div id="modalContent">
         <!-- Content will be loaded dynamically -->
       </div>
-      
+
       <div class="flex justify-end gap-4 mt-8">
         <button id="rejectBtn" class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-xl font-bold transition">
           Reject Task
@@ -363,19 +394,19 @@
         btn.classList.remove('text-primary', 'border-primary');
         btn.classList.add('text-gray-600', 'dark:text-gray-400');
       });
-      
+
       document.getElementById(`${tab}-tab`).classList.add('text-primary', 'border-primary');
       document.getElementById(`${tab}-tab`).classList.remove('text-gray-600', 'dark:text-gray-400');
-      
+
       // Update tab content
       document.querySelectorAll('[id$="-tab-content"]').forEach(content => {
         content.classList.add('hidden');
       });
-      
+
       document.getElementById(`${tab}-tab-content`).classList.remove('hidden');
-      
+
       currentTab = tab;
-      
+
       // Load data for the selected tab
       if (tab === 'pending') {
         loadTasks();
@@ -412,7 +443,7 @@
       const params = new URLSearchParams();
       params.append('page', currentPage);
       params.append('per_page', 10);
-      
+
       if (currentFilters.task) params.append('task_id', currentFilters.task);
       if (currentFilters.date) params.append('date', currentFilters.date);
       if (currentFilters.user) params.append('user', currentFilters.user);
@@ -432,22 +463,22 @@
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.tasks_for_review) {
-          // Update pending count
-          document.getElementById('pendingCount').textContent = data.total;
-          
-          // Render tasks
-          renderTasks(data.tasks_for_review, append);
-          
-          // Show/hide load more button
-          document.getElementById('loadMoreContainer').classList.toggle('hidden', data.current_page >= data.pages);
-        }
-      })
-      .catch(error => {
-        console.error('Error loading tasks:', error);
-        document.getElementById('tasksContainer').innerHTML = `
+        .then(response => response.json())
+        .then(data => {
+          if (data.tasks_for_review) {
+            // Update pending count
+            document.getElementById('pendingCount').textContent = data.total;
+
+            // Render tasks
+            renderTasks(data.tasks_for_review, append);
+
+            // Show/hide load more button
+            document.getElementById('loadMoreContainer').classList.toggle('hidden', data.current_page >= data.pages);
+          }
+        })
+        .catch(error => {
+          console.error('Error loading tasks:', error);
+          document.getElementById('tasksContainer').innerHTML = `
           <div class="text-center py-10">
             <i class="fas fa-exclamation-triangle text-4xl text-red-500"></i>
             <p class="mt-4 text-xl">Failed to load tasks</p>
@@ -456,16 +487,16 @@
             </button>
           </div>
         `;
-      });
+        });
     }
 
     function renderTasks(tasks, append = false) {
       const container = document.getElementById('tasksContainer');
-      
+
       if (!append) {
         container.innerHTML = '';
       }
-      
+
       if (tasks.length === 0) {
         container.innerHTML = `
           <div class="text-center py-10">
@@ -475,18 +506,18 @@
         `;
         return;
       }
-      
+
       tasks.forEach(item => {
         const task = item.task;
         const user = item.user;
-        
+
         const card = document.createElement('div');
         card.className = 'task-card card rounded-3xl p-8 hover:border-primary transition-all slide-in cursor-pointer';
         card.onclick = () => showTaskDetails(item);
-        
+
         // Format date
         const submittedDate = new Date(item.submitted_at);
-        
+
         card.innerHTML = `
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-6">
@@ -496,7 +527,7 @@
               <div>
                 <h3 class="text-2xl font-bold">${user ? user.full_name : 'Unknown User'}</h3>
                 <p class="text-gray-600 dark:text-gray-400">${task.title}</p>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Submitted: ${submittedDate.toLocaleDateString()} • ${submittedDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Submitted: ${submittedDate.toLocaleDateString()} • ${submittedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
               </div>
             </div>
             <div class="text-right">
@@ -506,22 +537,22 @@
             </div>
           </div>
         `;
-        
+
         container.appendChild(card);
       });
     }
 
     function showTaskDetails(taskItem) {
       selectedTask = taskItem;
-      
+
       const modalContent = document.getElementById('modalContent');
       const task = taskItem.task;
       const user = taskItem.user;
-      
+
       // Format dates
       const submittedDate = new Date(taskItem.submitted_at);
       const startDate = new Date(taskItem.started_at);
-      
+
       modalContent.innerHTML = `
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -552,11 +583,11 @@
           <textarea id="reviewNotes" rows="3" placeholder="Add any notes for this review..." class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition"></textarea>
         </div>
       `;
-      
+
       // Enable buttons
       document.getElementById('rejectBtn').disabled = false;
       document.getElementById('approveBtn').disabled = false;
-      
+
       document.getElementById('taskModal').classList.remove('hidden');
     }
 
@@ -567,20 +598,20 @@
 
     function approveTask() {
       if (!selectedTask) return;
-      
+
       const token = localStorage.getItem('access_token');
       if (!token) {
         window.location.href = 'login.html';
         return;
       }
-      
+
       // Get review notes
       const notes = document.getElementById('reviewNotes').value;
-      
+
       // Disable buttons during processing
       document.getElementById('approveBtn').disabled = true;
       document.getElementById('rejectBtn').disabled = true;
-      
+
       fetch(`/api/tasks/admin/${selectedTask.task.id}/complete`, {
         method: 'POST',
         headers: {
@@ -588,48 +619,48 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          user_id: selectedTask.user_id,
+          user_id: selectedTask.user.id,
           notes: notes
         })
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.message && data.message.includes('success')) {
-          alert('Task approved and reward awarded successfully!');
-          closeModal();
-          loadTasks(); // Refresh the list
-        } else {
-          alert('Failed to approve task: ' + (data.message || 'Unknown error'));
-        }
-      })
-      .catch(error => {
-        console.error('Error approving task:', error);
-        alert('Failed to approve task. Please try again.');
-      })
-      .finally(() => {
-        // Re-enable buttons
-        document.getElementById('approveBtn').disabled = false;
-        document.getElementById('rejectBtn').disabled = false;
-      });
+        .then(response => response.json())
+        .then(data => {
+          if (data.message && data.message.includes('success')) {
+            alert('Task approved and reward awarded successfully!');
+            closeModal();
+            loadTasks(); // Refresh the list
+          } else {
+            alert('Failed to approve task: ' + (data.message || 'Unknown error'));
+          }
+        })
+        .catch(error => {
+          console.error('Error approving task:', error);
+          alert('Failed to approve task. Please try again.');
+        })
+        .finally(() => {
+          // Re-enable buttons
+          document.getElementById('approveBtn').disabled = false;
+          document.getElementById('rejectBtn').disabled = false;
+        });
     }
 
     function rejectTask() {
       if (!selectedTask) return;
-      
+
       const reason = prompt('Please provide a reason for rejecting this task:');
       if (!reason) return;
-      
+
       const token = localStorage.getItem('access_token');
       if (!token) {
         window.location.href = 'login.html';
         return;
       }
-      
+
       // Disable buttons during processing
       document.getElementById('approveBtn').disabled = true;
       document.getElementById('rejectBtn').disabled = true;
-      
-      fetch(`/api/tasks/admin/${selectedTask.id}/reject`, {
+
+      fetch(`/api/tasks/admin/${selectedTask.user_task_id}/reject`, {
         method: 'POST',
         headers: {
           'Authorization': 'Bearer ' + token,
@@ -639,25 +670,25 @@
           reason: reason
         })
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.message && data.message.includes('success')) {
-          alert('Task rejected successfully!');
-          closeModal();
-          loadTasks(); // Refresh the list
-        } else {
-          alert('Failed to reject task: ' + (data.message || 'Unknown error'));
-        }
-      })
-      .catch(error => {
-        console.error('Error rejecting task:', error);
-        alert('Failed to reject task. Please try again.');
-      })
-      .finally(() => {
-        // Re-enable buttons
-        document.getElementById('approveBtn').disabled = false;
-        document.getElementById('rejectBtn').disabled = false;
-      });
+        .then(response => response.json())
+        .then(data => {
+          if (data.message && data.message.includes('success')) {
+            alert('Task rejected successfully!');
+            closeModal();
+            loadTasks(); // Refresh the list
+          } else {
+            alert('Failed to reject task: ' + (data.message || 'Unknown error'));
+          }
+        })
+        .catch(error => {
+          console.error('Error rejecting task:', error);
+          alert('Failed to reject task. Please try again.');
+        })
+        .finally(() => {
+          // Re-enable buttons
+          document.getElementById('approveBtn').disabled = false;
+          document.getElementById('rejectBtn').disabled = false;
+        });
     }
 
     function loadCompletedTasks() {
@@ -672,15 +703,15 @@
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.review_history) {
-          renderCompletedTasks(data.review_history);
-        }
-      })
-      .catch(error => {
-        console.error('Error loading completed tasks:', error);
-        document.getElementById('completedTasksTable').innerHTML = `
+        .then(response => response.json())
+        .then(data => {
+          if (data.review_history) {
+            renderCompletedTasks(data.review_history);
+          }
+        })
+        .catch(error => {
+          console.error('Error loading completed tasks:', error);
+          document.getElementById('completedTasksTable').innerHTML = `
           <tr>
             <td colspan="4" class="text-center py-10 text-gray-600 dark:text-gray-400">
               <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
@@ -688,12 +719,12 @@
             </td>
           </tr>
         `;
-      });
+        });
     }
 
     function renderCompletedTasks(tasks) {
       const container = document.getElementById('completedTasksTable');
-      
+
       if (tasks.length === 0) {
         container.innerHTML = `
           <tr>
@@ -705,14 +736,14 @@
         `;
         return;
       }
-      
+
       container.innerHTML = '';
-      
+
       tasks.forEach(item => {
         const task = item.task;
         const user = item.user;
         const completedDate = new Date(item.completed_at);
-        
+
         const row = document.createElement('tr');
         row.className = 'border-b border-border hover:bg-card/50';
         row.innerHTML = `
@@ -730,7 +761,7 @@
             <div class="text-gray-600 dark:text-gray-400">$${task.reward_amount.toFixed(2)}</div>
           </td>
         `;
-        
+
         container.appendChild(row);
       });
     }
@@ -754,15 +785,15 @@
     }
 
     // Handle create task form submission
-    document.getElementById('createTaskForm').addEventListener('submit', function(e) {
+    document.getElementById('createTaskForm').addEventListener('submit', function (e) {
       e.preventDefault();
-      
+
       const token = localStorage.getItem('access_token');
       if (!token) {
         window.location.href = 'login.html';
         return;
       }
-      
+
       const formData = {
         title: document.getElementById('taskTitle').value,
         description: document.getElementById('taskDescription').value,
@@ -773,13 +804,13 @@
         requires_admin_verification: document.getElementById('adminVerification').checked,
         is_active: document.getElementById('isActive').checked
       };
-      
+
       // Show loading state
       const submitButton = this.querySelector('button[type="submit"]');
       const originalText = submitButton.innerHTML;
       submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Creating...';
       submitButton.disabled = true;
-      
+
       fetch('/api/tasks/admin', {
         method: 'POST',
         headers: {
@@ -788,27 +819,27 @@
         },
         body: JSON.stringify(formData)
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.message && data.message.includes('success')) {
-          alert('Task created successfully!');
-          // Reset form
-          this.reset();
-          // Switch back to pending tab
-          switchTab('pending');
-        } else {
-          alert('Failed to create task: ' + (data.message || 'Unknown error'));
-        }
-      })
-      .catch(error => {
-        console.error('Error creating task:', error);
-        alert('Failed to create task. Please try again.');
-      })
-      .finally(() => {
-        // Reset button
-        submitButton.innerHTML = originalText;
-        submitButton.disabled = false;
-      });
+        .then(response => response.json())
+        .then(data => {
+          if (data.message && data.message.includes('success')) {
+            alert('Task created successfully!');
+            // Reset form
+            this.reset();
+            // Switch back to pending tab
+            switchTab('pending');
+          } else {
+            alert('Failed to create task: ' + (data.message || 'Unknown error'));
+          }
+        })
+        .catch(error => {
+          console.error('Error creating task:', error);
+          alert('Failed to create task. Please try again.');
+        })
+        .finally(() => {
+          // Reset button
+          submitButton.innerHTML = originalText;
+          submitButton.disabled = false;
+        });
     });
 
     // Event listeners for modal buttons
@@ -816,24 +847,24 @@
     document.getElementById('rejectBtn').addEventListener('click', rejectTask);
 
     // Fetch tasks when page loads
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       // Load user information from localStorage
       const savedAvatar = localStorage.getItem('userAvatar');
       const savedName = localStorage.getItem('userName');
       const savedEmail = localStorage.getItem('userEmail');
-      
+
       if (savedAvatar) {
         document.getElementById('sidebarAvatar').src = savedAvatar;
       }
-      
+
       if (savedName) {
         document.getElementById('sidebarUserName').textContent = savedName;
       }
-      
+
       if (savedEmail) {
         document.getElementById('sidebarUserEmail').textContent = savedEmail;
       }
-      
+
       loadTasks();
     });
 
@@ -847,10 +878,11 @@
     }
   </script>
   <script src="../assets/js/theme.js"></script>
-  
+
   <!-- Fixed Theme Toggle Button -->
   <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
     <i class="fas fa-moon"></i>
   </button>
 </body>
+
 </html>

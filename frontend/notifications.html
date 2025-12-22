@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -33,7 +34,8 @@
 
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
+  <aside id="sidebar"
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
     <div class="flex items-center justify-between p-6 border-b border-border">
       <img src="assets/logo.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
       <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
@@ -70,7 +72,8 @@
         <i class="fas fa-headset"></i>
         <span>Support Center</span>
       </a>
-      <a href="notifications.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="notifications.html"
+        class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-bell"></i>
         <span>Notifications</span>
       </a>
@@ -82,13 +85,15 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User"
+          class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
           <p class="font-semibold">John Doe</p>
           <p class="text-sm text-gray-600 dark:text-gray-400">john@example.com</p>
         </div>
       </div>
-      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+      <a href="#" onclick="logout()"
+        class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
         Logout
       </a>
     </div>
@@ -106,7 +111,8 @@
           <h1 class="text-2xl font-bold text-primary">Notifications</h1>
           <p class="text-gray-600 dark:text-gray-400 text-sm">Stay updated with your earnings & activities</p>
         </div>
-        <button onclick="markAllRead()" class="bg-primary hover:bg-orange-700 px-5 py-2 rounded-xl text-sm font-medium transition">
+        <button onclick="markAllRead()"
+          class="bg-primary hover:bg-orange-700 px-5 py-2 rounded-xl text-sm font-medium transition">
           Mark All as Read
         </button>
       </div>
@@ -137,9 +143,11 @@
       <div class="space-y-4">
 
         <!-- Earnings -->
-        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-5 hover:border-indigo-500 transition-all group">
+        <div
+          class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-5 hover:border-indigo-500 transition-all group">
           <div class="flex items-start gap-4">
-            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center flex-shrink-0">
+            <div
+              class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center flex-shrink-0">
               <i class="fas fa-dollar-sign text-xl"></i>
             </div>
             <div class="flex-1">
@@ -153,16 +161,19 @@
                 <button class="text-indigo-400 hover:text-white text-sm">View Details</button>
               </div>
             </div>
-            <button onclick="this.parentElement.parentElement.parentElement.remove()" class="opacity-0 group-hover:opacity-100 transition text-gray-500 hover:text-red-400">
+            <button onclick="this.parentElement.parentElement.parentElement.remove()"
+              class="opacity-0 group-hover:opacity-100 transition text-gray-500 hover:text-red-400">
               <i class="fas fa-times"></i>
             </button>
           </div>
         </div>
 
         <!-- Referral -->
-        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-5 hover:border-purple-500 transition-all group">
+        <div
+          class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-5 hover:border-purple-500 transition-all group">
           <div class="flex items-start gap-4">
-            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center flex-shrink-0">
+            <div
+              class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center flex-shrink-0">
               <i class="fas fa-users text-xl"></i>
             </div>
             <div class="flex-1">
@@ -175,16 +186,19 @@
                 <span class="text-purple-400 font-medium">+$25.00 + 250 pts</span>
               </div>
             </div>
-            <button onclick="this.parentElement.parentElement.parentElement.remove()" class="opacity-0 group-hover:opacity-100 transition text-gray-500 hover:text-red-400">
+            <button onclick="this.parentElement.parentElement.parentElement.remove()"
+              class="opacity-0 group-hover:opacity-100 transition text-gray-500 hover:text-red-400">
               <i class="fas fa-times"></i>
             </button>
           </div>
         </div>
 
         <!-- Withdrawal -->
-        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-5 hover:border-green-500 transition-all group">
+        <div
+          class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-5 hover:border-green-500 transition-all group">
           <div class="flex items-start gap-4">
-            <div class="w-12 h-12 bg-gradient-to-br from-green-600 to-cyan-600 rounded-full flex items-center justify-center flex-shrink-0">
+            <div
+              class="w-12 h-12 bg-gradient-to-br from-green-600 to-cyan-600 rounded-full flex items-center justify-center flex-shrink-0">
               <i class="fas fa-check-circle text-xl"></i>
             </div>
             <div class="flex-1">
@@ -201,9 +215,11 @@
         </div>
 
         <!-- Task Reminder -->
-        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-5 hover:border-yellow-500 transition-all group">
+        <div
+          class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-5 hover:border-yellow-500 transition-all group">
           <div class="flex items-start gap-4">
-            <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex items-center justify-center flex-shrink-0">
+            <div
+              class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex items-center justify-center flex-shrink-0">
               <i class="fas fa-clock text-xl"></i>
             </div>
             <div class="flex-1">
@@ -212,7 +228,8 @@
                 <span class="text-xs text-gray-500">2 days ago</span>
               </div>
               <p class="text-gray-300 mt-1">Don't miss out! Complete "Watch Video Ad" before it expires.</p>
-              <button class="mt-3 bg-yellow-600 hover:bg-yellow-700 px-5 py-2 rounded-xl text-sm font-medium transition">
+              <button
+                class="mt-3 bg-yellow-600 hover:bg-yellow-700 px-5 py-2 rounded-xl text-sm font-medium transition">
                 Complete Now
               </button>
             </div>
@@ -220,9 +237,11 @@
         </div>
 
         <!-- System Update -->
-        <div class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-5 hover:border-blue-500 transition-all group">
+        <div
+          class="bg-gray-800/70 backdrop-blur border border-gray-700 rounded-2xl p-5 hover:border-blue-500 transition-all group">
           <div class="flex items-start gap-4">
-            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex items-center justify-center flex-shrink-0">
+            <div
+              class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex items-center justify-center flex-shrink-0">
               <i class="fas fa-bullhorn text-xl"></i>
             </div>
             <div class="flex-1">
@@ -230,7 +249,8 @@
                 <h3 class="font-semibold text-lg">New Feature Released!</h3>
                 <span class="text-xs text-gray-500">Nov 20, 2025</span>
               </div>
-              <p class="text-gray-300 mt-1">Instant Crypto Withdrawals are now live! Withdraw to BTC, ETH, USDT and more.</p>
+              <p class="text-gray-300 mt-1">Instant Crypto Withdrawals are now live! Withdraw to BTC, ETH, USDT and
+                more.</p>
               <button class="mt-3 text-blue-400 hover:text-white text-sm font-medium">
                 Learn More
               </button>
@@ -258,21 +278,131 @@
       document.getElementById('overlay').classList.toggle('hidden');
     }
 
-    function markAllRead() {
-      document.querySelectorAll('.bg-gray-800\\/70').forEach(card => {
-        card.style.opacity = '0.6';
-      });
-      alert('All notifications marked as read!');
+    async function fetchNotifications() {
+      const token = localStorage.getItem('access_token');
+      if (!token) return;
+
+      try {
+        const response = await fetch('/api/notifications/', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await response.json();
+        if (data.notifications) {
+          renderNotifications(data.notifications);
+          updateUnreadCount(data.unread_count);
+        }
+      } catch (err) {
+        console.error('Error fetching notifications:', err);
+      }
     }
-  
-    
+
+    function renderNotifications(notifications) {
+      const list = document.querySelector('.space-y-4');
+      const emptyState = document.getElementById('emptyState');
+      if (!list) return;
+
+      if (notifications.length === 0) {
+        list.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      list.innerHTML = notifications.map(n => `
+        <div class="bg-card backdrop-blur border ${n.is_read ? 'border-border opacity-60' : 'border-primary shadow-lg'} rounded-2xl p-5 hover:border-primary transition-all group">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 ${getIconBg(n.type)} rounded-full flex items-center justify-center flex-shrink-0">
+              <i class="fas ${getIcon(n.type)} text-xl"></i>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-lg ${n.is_read ? 'text-gray-400' : 'text-text'}">${n.title}</h3>
+                <span class="text-xs text-gray-500">${new Date(n.created_at).toLocaleString()}</span>
+              </div>
+              <p class="text-gray-300 mt-1">${n.message}</p>
+              ${!n.is_read ? `<button onclick="markAsRead(${n.id})" class="text-primary hover:text-white text-sm font-medium mt-3">Mark as read</button>` : ''}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function getIcon(type) {
+      if (type === 'earning') return 'fa-dollar-sign';
+      if (type === 'referral') return 'fa-users';
+      if (type === 'withdrawal') return 'fa-check-circle';
+      if (type === 'task') return 'fa-tasks';
+      return 'fa-bell';
+    }
+
+    function getIconBg(type) {
+      if (type === 'earning') return 'bg-gradient-to-br from-green-500 to-emerald-600';
+      if (type === 'referral') return 'bg-gradient-to-br from-purple-500 to-pink-600';
+      if (type === 'withdrawal') return 'bg-gradient-to-br from-green-600 to-cyan-600';
+      if (type === 'task') return 'bg-gradient-to-br from-yellow-500 to-orange-600';
+      return 'bg-gradient-to-br from-blue-500 to-cyan-600';
+    }
+
+    function updateUnreadCount(count) {
+      const countPill = document.querySelector('.bg-red-500.text-xs');
+      if (countPill) {
+        countPill.textContent = count;
+        if (count === 0) countPill.classList.add('hidden');
+        else countPill.classList.remove('hidden');
+      }
+    }
+
+    async function markAsRead(id) {
+      const token = localStorage.getItem('access_token');
+      if (!token) return;
+
+      try {
+        await fetch(`/api/notifications/${id}/read`, {
+          method: 'PUT',
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        fetchNotifications();
+      } catch (err) {
+        console.error('Error marking as read:', err);
+      }
+    }
+
+    async function markAllRead() {
+      const token = localStorage.getItem('access_token');
+      if (!token) return;
+
+      const btn = document.querySelector('button[onclick="markAllRead()"]');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Marking...';
+      btn.disabled = true;
+
+      try {
+        const response = await fetch('/api/notifications/mark-all-read', {
+          method: 'PUT',
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (response.ok) {
+          fetchNotifications();
+        }
+      } catch (err) {
+        console.error('Error marking all as read:', err);
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchNotifications);
+
+
 
   </script>
   <script src="assets/js/theme.js"></script>
-  
+
   <!-- Fixed Theme Toggle Button -->
   <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
     <i class="fas fa-moon"></i>
   </button>
 </body>
+
 </html>
