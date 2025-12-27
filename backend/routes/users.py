@@ -231,6 +231,106 @@ def search_users():
         return jsonify({'message': 'Failed to search users', 'error': str(e)}), 500
 
 
+@users_bp.route('/admin/<int:user_id>/suspend', methods=['POST'])
+@jwt_required()
+def suspend_user(user_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        admin_user = User.query.get(current_user_id)
+        
+        # Check if user is admin
+        if admin_user.role != UserRole.ADMIN:
+            return jsonify({'message': 'Access denied'}), 403
+        
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+        
+        # Suspend the user
+        user.is_suspended = True
+        
+        # Create notification for the user
+        from backend.models.notification import Notification, NotificationType
+        notification = Notification(
+            user_id=user.id,
+            title="Account Suspended",
+            message="Your account has been suspended by an administrator.",
+            type=NotificationType.WARNING
+        )
+        
+        db.session.add(notification)
+        db.session.commit()
+        
+        # Optionally send email notification
+        try:
+            from backend.utils.emailer import send_email
+            user_email = user.email
+            email_subject = "Account Suspended - MyFigPoint"
+            email_body = f"Hello {user.full_name},\n\nYour account has been suspended by an administrator.\n\nIf you believe this is an error, please contact our support team.\n\nThank you for using MyFigPoint!"
+            send_email(user_email, email_subject, email_body)
+        except Exception as email_error:
+            # If email fails, log the error but don't fail the entire operation
+            print(f"Failed to send email notification: {str(email_error)}")
+        
+        return jsonify({
+            'message': 'User suspended successfully',
+            'user': user.to_dict()
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to suspend user', 'error': str(e)}), 500
+
+
+@users_bp.route('/admin/<int:user_id>/unsuspend', methods=['POST'])
+@jwt_required()
+def unsuspend_user(user_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        admin_user = User.query.get(current_user_id)
+        
+        # Check if user is admin
+        if admin_user.role != UserRole.ADMIN:
+            return jsonify({'message': 'Access denied'}), 403
+        
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+        
+        # Lift suspension
+        user.is_suspended = False
+        
+        # Create notification for the user
+        from backend.models.notification import Notification, NotificationType
+        notification = Notification(
+            user_id=user.id,
+            title="Account Suspension Lifted",
+            message="Your account suspension has been lifted by an administrator.",
+            type=NotificationType.SUCCESS
+        )
+        
+        db.session.add(notification)
+        db.session.commit()
+        
+        # Optionally send email notification
+        try:
+            from backend.utils.emailer import send_email
+            user_email = user.email
+            email_subject = "Account Suspension Lifted - MyFigPoint"
+            email_body = f"Hello {user.full_name},\n\nYour account suspension has been lifted by an administrator. Your account is now active.\n\nThank you for using MyFigPoint!"
+            send_email(user_email, email_subject, email_body)
+        except Exception as email_error:
+            # If email fails, log the error but don't fail the entire operation
+            print(f"Failed to send email notification: {str(email_error)}")
+        
+        return jsonify({
+            'message': 'User suspension lifted successfully',
+            'user': user.to_dict()
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to lift user suspension', 'error': str(e)}), 500
+
+
 @users_bp.route('/avatar', methods=['POST'])
 @jwt_required()
 @partner_restricted

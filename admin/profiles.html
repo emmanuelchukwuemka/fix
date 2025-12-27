@@ -488,9 +488,9 @@
               class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl font-bold">
               <i class="fas fa-envelope mr-2"></i> Send Message
             </button>
-            <button onclick="suspendAccount()"
+            <button id="suspendUnsuspendBtn" onclick="toggleSuspendAccount()"
               class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold">
-              <i class="fas fa-user-slash mr-2"></i> Suspend Account
+              <i id="suspendUnsuspendIcon" class="fas fa-user-slash mr-2"></i> <span id="suspendUnsuspendText">Suspend Account</span>
             </button>
           </div>
         </div>
@@ -772,7 +772,30 @@
       document.getElementById('statPoints').textContent = `${user.points_balance.toFixed(2)} pts`;
       document.getElementById('statEarnings').textContent = `$${user.total_earnings.toFixed(2)}`;
 
+      // Update suspend/unsuspend button based on account status
+      updateSuspendButton(user.is_suspended);
+
       // Note: Referrals count would need a separate API call
+    }
+
+    function updateSuspendButton(isSuspended) {
+      const suspendBtn = document.getElementById('suspendUnsuspendBtn');
+      const suspendIcon = document.getElementById('suspendUnsuspendIcon');
+      const suspendText = document.getElementById('suspendUnsuspendText');
+      
+      if (isSuspended) {
+        // Account is suspended, show unsuspend button
+        suspendBtn.className = 'flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-bold';
+        suspendIcon.className = 'fas fa-user-check mr-2';
+        suspendText.textContent = 'Unsuspend Account';
+        suspendBtn.onclick = function() { unsuspendAccount(currentProfileId); };
+      } else {
+        // Account is active, show suspend button
+        suspendBtn.className = 'flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold';
+        suspendIcon.className = 'fas fa-user-slash mr-2';
+        suspendText.textContent = 'Suspend Account';
+        suspendBtn.onclick = function() { suspendAccount(); };
+      }
     }
 
     function verifyProfile(profileId) {

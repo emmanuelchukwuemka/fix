@@ -434,6 +434,102 @@ def verify_user(user_id):
     except Exception as e:
         return jsonify({'message': 'Failed to verify user', 'error': str(e)}), 500
 
+
+@admin_bp.route('/users/<int:user_id>/verify-documents', methods=['POST'])
+@admin_required
+def verify_user_documents(user_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        admin_user = User.query.get(current_user_id)
+        
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+        
+        # Mark user as verified
+        user.is_verified = True
+        user.verification_pending = False
+        
+        # Create notification for the user
+        from backend.models.notification import Notification, NotificationType
+        notification = Notification(
+            user_id=user.id,
+            title="Documents Verified",
+            message="Your submitted documents have been verified successfully by an administrator.",
+            type=NotificationType.SUCCESS
+        )
+        
+        db.session.add(notification)
+        db.session.commit()
+        
+        # Optionally send email notification
+        try:
+            from backend.utils.emailer import send_email
+            user_email = user.email
+            email_subject = "Document Verification Approved - MyFigPoint"
+            email_body = f"Hello {user.full_name},\n\nYour submitted documents have been verified successfully by an administrator. Your account is now verified.\n\nThank you for using MyFigPoint!"
+            send_email(user_email, email_subject, email_body)
+        except Exception as email_error:
+            # If email fails, log the error but don't fail the entire operation
+            print(f"Failed to send email notification: {str(email_error)}")
+        
+        return jsonify({
+            'message': 'Documents verified successfully',
+            'user': user.to_dict()
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to verify documents', 'error': str(e)}), 500
+
+
+@admin_bp.route('/users/<int:user_id>/message', methods=['POST'])
+@admin_required
+def send_user_message(user_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        admin_user = User.query.get(current_user_id)
+        
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+        
+        data = request.get_json()
+        message_text = data.get('message', '')
+        
+        if not message_text:
+            return jsonify({'message': 'Message content is required'}), 400
+        
+        # Create notification for the user
+        from backend.models.notification import Notification, NotificationType
+        notification = Notification(
+            user_id=user.id,
+            title="Message from Admin",
+            message=message_text,
+            type=NotificationType.INFO
+        )
+        
+        db.session.add(notification)
+        db.session.commit()
+        
+        # Optionally send email notification
+        try:
+            from backend.utils.emailer import send_email
+            user_email = user.email
+            email_subject = "Message from Admin - MyFigPoint"
+            email_body = f"Hello {user.full_name},\n\nYou have received a message from an administrator:\n\n{message_text}\n\nThank you for using MyFigPoint!"
+            send_email(user_email, email_subject, email_body)
+        except Exception as email_error:
+            # If email fails, log the error but don't fail the entire operation
+            print(f"Failed to send email notification: {str(email_error)}")
+        
+        return jsonify({
+            'message': 'Message sent successfully',
+            'user': user.to_dict()
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to send message', 'error': str(e)}), 500
+
 @admin_bp.route('/withdrawals', methods=['GET'])
 @admin_required
 def get_pending_withdrawals():
