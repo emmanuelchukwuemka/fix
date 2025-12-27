@@ -164,6 +164,9 @@
               localStorage.setItem('userName', data.user.full_name);
               localStorage.setItem('userEmail', data.user.email);
               localStorage.setItem('userRole', data.user.role);
+              if (data.user.avatar_url) {
+                localStorage.setItem('userAvatar', data.user.avatar_url);
+              }
             }
             // Redirect to admin dashboard
             window.location.href = '/admin/dashboard';

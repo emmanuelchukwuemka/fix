@@ -259,11 +259,9 @@
         return;
       }
 
-      // Load user info
-      const savedName = localStorage.getItem('userName');
-      const savedEmail = localStorage.getItem('userEmail');
-      if (savedName) document.getElementById('sidebarUserName').textContent = savedName;
-      if (savedEmail) document.getElementById('sidebarUserEmail').textContent = savedEmail;
+      if (typeof updateSidebar === 'function') {
+        updateSidebar();
+      }
 
       // Fetch referral stats
       fetch('/api/auth/profile', {
@@ -304,7 +302,7 @@
 
             // Stats
             document.getElementById('statActiveReferrals').textContent = data.user.referrals_count || 0;
-            document.getElementById('statReferralCash').textContent = '₦' + (data.user.total_referral_earnings || 0).toLocaleString();
+            document.getElementById('statReferralCash').textContent = '$' + (data.user.total_referral_earnings || 0).toLocaleString();
             document.getElementById('statReferralPoints').textContent = (data.user.total_referral_points || 0).toLocaleString();
 
             // Bonus Tier Progress

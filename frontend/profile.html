@@ -84,11 +84,11 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User"
+        <img id="sidebarAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User"
           class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
-          <p class="font-semibold">John Doe</p>
-          <p class="text-sm text-gray-600 dark:text-gray-400">john@example.com</p>
+          <p id="sidebarUserName" class="font-semibold">John Doe</p>
+          <p id="sidebarUserEmail" class="text-sm text-gray-600 dark:text-gray-400">john@example.com</p>
         </div>
       </div>
       <a href="#" onclick="logout()"
@@ -122,14 +122,43 @@
         <div class="relative inline-block">
           <img id="avatarPreview" src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="Profile"
             class="w-40 h-40 rounded-full ring-8 ring-primary/50 shadow-2xl">
-          <label for="avatarUpload"
-            class="absolute bottom-4 right-4 bg-primary hover:bg-orange-700 w-14 h-14 rounded-full flex items-center justify-center cursor-pointer shadow-2xl transition transform hover:scale-110">
-            <i class="fas fa-camera text-xl"></i>
-          </label>
+          <div class="absolute bottom-4 right-4 flex gap-2">
+            <button type="button" onclick="openCamera()"
+              class="bg-primary hover:bg-orange-700 w-14 h-14 rounded-full flex items-center justify-center cursor-pointer shadow-2xl transition transform hover:scale-110">
+              <i class="fas fa-camera text-xl"></i>
+            </button>
+            <label for="avatarUpload"
+              class="bg-primary hover:bg-orange-700 w-14 h-14 rounded-full flex items-center justify-center cursor-pointer shadow-2xl transition transform hover:scale-110">
+              <i class="fas fa-folder text-xl"></i>
+            </label>
+          </div>
           <input type="file" id="avatarUpload" accept="image/*" class="hidden" onchange="previewAvatar(event)">
+          <div id="cameraModal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4">
+            <div class="bg-card rounded-3xl p-8 max-w-2xl w-full">
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">Take Photo</h2>
+                <button onclick="closeCameraModal()" class="text-gray-500 hover:text-text">
+                  <i class="fas fa-times text-2xl"></i>
+                </button>
+              </div>
+              <div class="space-y-6">
+                <video id="videoPreview" class="w-full rounded-xl border border-border"></video>
+                <div class="flex justify-center gap-4">
+                  <button onclick="captureFromCamera()"
+                    class="bg-primary hover:bg-orange-700 text-white px-6 py-3 rounded-xl font-bold transition">
+                    <i class="fas fa-camera mr-2"></i> Capture
+                  </button>
+                  <button onclick="closeCameraModal()"
+                    class="border border-border hover:bg-card px-6 py-3 rounded-xl font-bold transition">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <h2 class="text-4xl font-bold mt-6 text-primary">John Doe</h2>
-        <p class="text-xl text-gray-600 dark:text-gray-400 mt-2">john.doe@example.com</p>
+        <h2 id="profileHeroName" class="text-4xl font-bold mt-6 text-primary">John Doe</h2>
+        <p id="profileHeroEmail" class="text-xl text-gray-600 dark:text-gray-400 mt-2">john.doe@example.com</p>
         <div class="flex justify-center gap-8 mt-6">
           <div class="text-center">
             <p id="profileTier" class="text-3xl font-bold text-green-400">Loading...</p>
@@ -150,25 +179,141 @@
             Personal Information</h3>
           <div class="space-y-6">
             <div class="relative">
-              <input type="text" value="John Doe"
+              <input type="text" id="profileFullName" value="John Doe"
                 class="peer w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
               <label
                 class="absolute left-5 -top-2.5 bg-card px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-focus:text-primary">Full
                 Name</label>
             </div>
             <div class="relative">
-              <input type="email" value="john.doe@example.com"
+              <input type="email" id="profileEmail" value="john.doe@example.com"
                 class="peer w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
               <label
                 class="absolute left-5 -top-2.5 bg-card px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-focus:text-primary">Email
                 Address</label>
             </div>
             <div class="relative">
-              <input type="tel" id="profilePhone" value="" placeholder="Enter phone number"
+              <label class="absolute left-5 -top-2.5 bg-card px-2 text-sm text-gray-600 dark:text-gray-400 z-10">Phone
+                Number</label>
+              <div class="flex gap-2">
+                <select id="profileCountryCode"
+                  class="w-32 px-3 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+234" selected>🇳🇬 +234</option>
+                  <option value="+44">🇬🇧 +44</option>
+                  <option value="+91">🇮🇳 +91</option>
+                  <option value="+86">🇨🇳 +86</option>
+                  <option value="+81">🇯🇵 +81</option>
+                  <option value="+49">🇩🇪 +49</option>
+                  <option value="+33">🇫🇷 +33</option>
+                  <option value="+39">🇮🇹 +39</option>
+                  <option value="+34">🇪🇸 +34</option>
+                  <option value="+7">🇷🇺 +7</option>
+                  <option value="+55">🇧🇷 +55</option>
+                  <option value="+52">🇲🇽 +52</option>
+                  <option value="+27">🇿🇦 +27</option>
+                  <option value="+254">🇰🇪 +254</option>
+                  <option value="+233">🇬🇭 +233</option>
+                  <option value="+20">🇪🇬 +20</option>
+                  <option value="+213">🇩🇿 +213</option>
+                  <option value="+212">🇲🇦 +212</option>
+                  <option value="+256">🇺🇬 +256</option>
+                  <option value="+255">🇹🇿 +255</option>
+                  <option value="+61">🇦🇺 +61</option>
+                  <option value="+64">🇳🇿 +64</option>
+                  <option value="+65">🇸🇬 +65</option>
+                  <option value="+60">🇲🇾 +60</option>
+                  <option value="+66">🇹🇭 +66</option>
+                  <option value="+84">🇻🇳 +84</option>
+                  <option value="+63">🇵🇭 +63</option>
+                  <option value="+62">🇮🇩 +62</option>
+                  <option value="+92">🇵🇰 +92</option>
+                  <option value="+880">🇧🇩 +880</option>
+                  <option value="+971">🇦🇪 +971</option>
+                  <option value="+966">🇸🇦 +966</option>
+                  <option value="+90">🇹🇷 +90</option>
+                  <option value="+351">🇵🇹 +351</option>
+                  <option value="+31">🇳🇱 +31</option>
+                  <option value="+32">🇧🇪 +32</option>
+                  <option value="+41">🇨🇭 +41</option>
+                  <option value="+43">🇦🇹 +43</option>
+                  <option value="+46">🇸🇪 +46</option>
+                  <option value="+47">🇳🇴 +47</option>
+                  <option value="+45">🇩🇰 +45</option>
+                  <option value="+358">🇫🇮 +358</option>
+                  <option value="+48">🇵🇱 +48</option>
+                  <option value="+30">🇬🇷 +30</option>
+                  <option value="+420">🇨🇿 +420</option>
+                </select>
+                <input type="tel" id="profilePhone" value="" placeholder="Enter phone number"
+                  class="flex-1 px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
+              </div>
+              <p class="text-xs text-gray-500 mt-2 ml-1"><i class="fas fa-info-circle mr-1"></i>Select your country code
+                to help us identify your region</p>
+            </div>
+
+            <div class="relative">
+              <select id="profileCountry"
+                class="peer w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition appearance-none">
+                <option value="">Select your country</option>
+                <option value="Nigeria" selected>🇳🇬 Nigeria</option>
+                <option value="United States">🇺🇸 United States</option>
+                <option value="United Kingdom">🇬🇧 United Kingdom</option>
+                <option value="India">🇮🇳 India</option>
+                <option value="China">🇨🇳 China</option>
+                <option value="Japan">🇯🇵 Japan</option>
+                <option value="Germany">🇩🇪 Germany</option>
+                <option value="France">🇫🇷 France</option>
+                <option value="Italy">🇮🇹 Italy</option>
+                <option value="Spain">🇪🇸 Spain</option>
+                <option value="Russia">🇷🇺 Russia</option>
+                <option value="Brazil">🇧🇷 Brazil</option>
+                <option value="Mexico">🇲🇽 Mexico</option>
+                <option value="South Africa">🇿🇦 South Africa</option>
+                <option value="Kenya">🇰🇪 Kenya</option>
+                <option value="Ghana">🇬🇭 Ghana</option>
+                <option value="Egypt">🇪🇬 Egypt</option>
+                <option value="Algeria">🇩🇿 Algeria</option>
+                <option value="Morocco">🇲🇦 Morocco</option>
+                <option value="Uganda">🇺🇬 Uganda</option>
+                <option value="Tanzania">🇹🇿 Tanzania</option>
+                <option value="Australia">🇦🇺 Australia</option>
+                <option value="New Zealand">🇳🇿 New Zealand</option>
+                <option value="Singapore">🇸🇬 Singapore</option>
+                <option value="Malaysia">🇲🇾 Malaysia</option>
+                <option value="Thailand">🇹🇭 Thailand</option>
+                <option value="Vietnam">🇻🇳 Vietnam</option>
+                <option value="Philippines">🇵🇭 Philippines</option>
+                <option value="Indonesia">🇮🇩 Indonesia</option>
+                <option value="Pakistan">🇵🇰 Pakistan</option>
+                <option value="Bangladesh">🇧🇩 Bangladesh</option>
+                <option value="United Arab Emirates">🇦🇪 United Arab Emirates</option>
+                <option value="Saudi Arabia">🇸🇦 Saudi Arabia</option>
+                <option value="Turkey">🇹🇷 Turkey</option>
+                <option value="Portugal">🇵🇹 Portugal</option>
+                <option value="Netherlands">🇳🇱 Netherlands</option>
+                <option value="Belgium">🇧🇪 Belgium</option>
+                <option value="Switzerland">🇨🇭 Switzerland</option>
+                <option value="Austria">🇦🇹 Austria</option>
+                <option value="Sweden">🇸🇪 Sweden</option>
+                <option value="Norway">🇳🇴 Norway</option>
+                <option value="Denmark">🇩🇰 Denmark</option>
+                <option value="Finland">🇫🇮 Finland</option>
+                <option value="Poland">🇵🇱 Poland</option>
+                <option value="Greece">🇬🇷 Greece</option>
+                <option value="Czech Republic">🇨🇿 Czech Republic</option>
+                <option value="Canada">🇨🇦 Canada</option>
+              </select>
+              <label
+                class="absolute left-5 -top-2.5 bg-card px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-focus:text-primary">Country</label>
+              <i class="fas fa-chevron-down absolute right-4 top-5 text-gray-400 pointer-events-none"></i>
+            </div>
+
+            <div class="relative">
+              <input type="text" id="profileProvince" value="" placeholder="Enter province/state"
                 class="peer w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
               <label
-                class="absolute left-5 -top-2.5 bg-card px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-focus:text-primary">Phone
-                Number</label>
+                class="absolute left-5 -top-2.5 bg-card px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-focus:text-primary">Province/State</label>
             </div>
           </div>
         </div>
@@ -217,14 +362,18 @@
           <h3 class="text-xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-university text-yellow-400"></i>
             Withdrawal Methods</h3>
           <div class="space-y-4">
-            <select id="withdrawalMethodList"
-              class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-yellow-500">
-              <option value="">No methods added</option>
-              <option value="add">Add New Method +</option>
-            </select>
-            <button
+            <div class="flex items-center justify-between mb-4">
+              <h4 class="text-lg font-semibold">Bank Transfer</h4>
+              <span id="bankMethodStatus" class="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-full text-sm">Not
+                Set</span>
+            </div>
+            <div id="bankDetailsContainer"
+              class="space-y-4 p-5 bg-gradient-to-br from-green-500/5 to-blue-500/5 border border-green-500/20 rounded-xl hidden">
+              <!-- Banking details will be dynamically inserted here -->
+            </div>
+            <button onclick="addWithdrawalMethod()"
               class="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 py-4 rounded-xl font-bold transition transform hover:scale-105">
-              Add Withdrawal Method
+              <span id="withdrawalMethodButtonText">Add Bank Transfer Details</span>
             </button>
           </div>
         </div>
@@ -293,11 +442,39 @@
         reader.onload = (e) => {
           const avatarPreview = document.getElementById('avatarPreview');
           avatarPreview.src = e.target.result;
-          // Save the image to localStorage
+
+          // Save avatar to localStorage for later upload
           localStorage.setItem('userAvatar', e.target.result);
         };
         reader.readAsDataURL(file);
       }
+    }
+
+
+
+    function openCamera() {
+      // Create input element for camera capture
+      const cameraInput = document.createElement('input');
+      cameraInput.type = 'file';
+      cameraInput.accept = 'image/*';
+      cameraInput.capture = 'environment'; // Use rear camera
+
+      cameraInput.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const avatarPreview = document.getElementById('avatarPreview');
+            avatarPreview.src = e.target.result;
+
+            // Save avatar to localStorage for later upload
+            localStorage.setItem('userAvatar', e.target.result);
+          };
+          reader.readAsDataURL(file);
+        }
+      };
+
+      cameraInput.click();
     }
 
     function togglePass() {
@@ -319,9 +496,15 @@
       btn.disabled = true;
 
       // Get user info from form
-      const fullName = document.querySelector('input[type="text"]').value;
-      const email = document.querySelector('input[type="email"]').value;
+      const fullName = document.getElementById('profileFullName').value;
+      const email = document.getElementById('profileEmail').value;
+      const countryCode = document.getElementById('profileCountryCode').value;
       const phone = document.getElementById('profilePhone').value;
+      const country = document.getElementById('profileCountry').value;
+      const province = document.getElementById('profileProvince').value;
+
+      // Combine country code and phone number
+      const fullPhone = phone ? countryCode + phone : '';
 
       const token = localStorage.getItem('access_token');
       if (!token) {
@@ -332,8 +515,12 @@
       // Prepare data for update
       const updateData = {
         full_name: fullName,
-        phone: phone
+        phone: fullPhone,
+        country: country,
+        province: province
       };
+
+
 
       // Send update request to backend
       fetch('/api/users/profile', {
@@ -344,68 +531,219 @@
         },
         body: JSON.stringify(updateData)
       })
-        .then(response => response.json())
+        .then(response => {
+          if (response.status === 401) { window.location.href = 'login.html'; throw new Error('Unauthorized'); }
+          return response.json();
+        })
         .then(data => {
-          btn.innerHTML = originalText;
-          btn.disabled = false;
-
           if (data.user) {
             // Update localStorage with fresh data
             localStorage.setItem('userName', data.user.full_name);
             localStorage.setItem('userEmail', data.user.email);
 
             // Update UI
-            document.querySelector('h2').textContent = data.user.full_name;
+            document.getElementById('profileHeroName').textContent = data.user.full_name;
             document.getElementById('sidebarUserName').textContent = data.user.full_name;
 
-            // Show success toast
-            document.getElementById('toast').classList.remove('hidden');
-            setTimeout(() => {
-              document.getElementById('toast').classList.add('hidden');
-            }, 4000);
+            // Handle avatar upload if there's a new avatar
+            const avatarFile = document.getElementById('avatarUpload').files[0];
+            if (avatarFile) {
+              const formData = new FormData();
+              formData.append('avatar', avatarFile);
+
+              return fetch('/api/users/avatar', {
+                method: 'POST',
+                headers: {
+                  'Authorization': 'Bearer ' + token
+                  // Don't set Content-Type header, let browser set it with boundary
+                },
+                body: formData
+              })
+                .then(response => response.json())
+                .then(avatarData => {
+                  if (avatarData.user && avatarData.user.avatar_url) {
+                    // Update avatar in UI
+                    document.getElementById('avatarPreview').src = avatarData.user.avatar_url;
+                    // Save to localStorage
+                    localStorage.setItem('userAvatar', avatarData.user.avatar_url);
+                    // Update sidebar avatar
+                    const sidebarAvatar = document.getElementById('sidebarAvatar');
+                    if (sidebarAvatar) {
+                      sidebarAvatar.src = avatarData.user.avatar_url;
+                    }
+                  }
+                  return avatarData;
+                });
+            } else {
+              // Check if there's an avatar in localStorage (from camera)
+              const avatarFromStorage = localStorage.getItem('userAvatar');
+              if (avatarFromStorage && !avatarFromStorage.startsWith('https://api.dicebear.com')) {
+                // Create a blob from the data URL and upload it
+                return new Promise((resolve) => {
+                  fetch(avatarFromStorage)
+                    .then(res => res.blob())
+                    .then(blob => {
+                      // Create a file from the blob
+                      const file = new File([blob], 'avatar.jpg', { type: blob.type });
+
+                      const formData = new FormData();
+                      formData.append('avatar', file);
+
+                      return fetch('/api/users/avatar', {
+                        method: 'POST',
+                        headers: {
+                          'Authorization': 'Bearer ' + token
+                          // Don't set Content-Type header, let browser set it with boundary
+                        },
+                        body: formData
+                      });
+                    })
+                    .then(response => response.json())
+                    .then(avatarData => {
+                      if (avatarData.user && avatarData.user.avatar_url) {
+                        // Update avatar in UI
+                        document.getElementById('avatarPreview').src = avatarData.user.avatar_url;
+                        // Save to localStorage
+                        localStorage.setItem('userAvatar', avatarData.user.avatar_url);
+                        // Update sidebar avatar
+                        const sidebarAvatar = document.querySelector('#sidebar img[alt="User"]');
+                        if (sidebarAvatar) {
+                          sidebarAvatar.src = avatarData.user.avatar_url;
+                        }
+                      }
+                      resolve(avatarData);
+                    })
+                    .catch(err => {
+                      console.error('Avatar upload error:', err);
+                      resolve(data); // Resolve with original data if avatar upload fails
+                    });
+                });
+              }
+            }
+            return data;
           } else {
-            alert('Error: ' + (data.message || 'Failed to update profile'));
+            throw new Error(data.message || 'Failed to update profile');
           }
+        })
+        .then(finalData => {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+
+          // Show success toast
+          document.getElementById('toast').classList.remove('hidden');
+          setTimeout(() => {
+            document.getElementById('toast').classList.add('hidden');
+          }, 4000);
         })
         .catch(err => {
           console.error('Update error:', err);
           btn.innerHTML = originalText;
           btn.disabled = false;
-          alert('An error occurred while saving profile.');
+          alert('An error occurred while saving profile: ' + err.message);
         });
     }
 
     // Load saved user information when page loads
     document.addEventListener('DOMContentLoaded', function () {
-      const savedAvatar = localStorage.getItem('userAvatar');
-      const savedName = localStorage.getItem('userName');
-      const savedEmail = localStorage.getItem('userEmail');
-
-      if (savedAvatar) {
-        document.getElementById('avatarPreview').src = savedAvatar;
-      }
-
-      if (savedName) {
-        document.querySelector('h2').textContent = savedName;
-        document.getElementById('sidebarUserName').textContent = savedName;
-        // Update name in input field
-        document.querySelectorAll('input[type="text"]')[0].value = savedName;
-      }
-
-      if (savedEmail) {
-        document.querySelector('p.text-xl').textContent = savedEmail;
-        document.getElementById('sidebarUserEmail').textContent = savedEmail;
-        // Update email in input field
-        document.querySelector('input[type="email"]').value = savedEmail;
-      }
-
-      // Fetch additional profile data
       const token = localStorage.getItem('access_token');
       if (token) {
+        // Fetch user profile data from backend
+        fetch('/api/users/profile', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        })
+          .then(response => {
+            if (response.status === 401) { window.location.href = 'login.html'; throw new Error('Unauthorized'); }
+            return response.json();
+          })
+          .then(data => {
+            if (data.user) {
+              const user = data.user;
+
+              // Update profile image
+              if (user.avatar_url) {
+                document.getElementById('avatarPreview').src = user.avatar_url;
+                localStorage.setItem('userAvatar', user.avatar_url);
+
+                // Update sidebar avatar
+                const sidebarAvatar = document.getElementById('sidebarAvatar');
+                if (sidebarAvatar) {
+                  sidebarAvatar.src = user.avatar_url;
+                }
+              }
+
+              // Update name
+              if (user.full_name) {
+                document.getElementById('profileHeroName').textContent = user.full_name;
+                document.getElementById('sidebarUserName').textContent = user.full_name;
+                // Update name in input field
+                document.getElementById('profileFullName').value = user.full_name;
+              }
+
+              // Update email
+              if (user.email) {
+                document.getElementById('profileHeroEmail').textContent = user.email;
+                document.getElementById('sidebarUserEmail').textContent = user.email;
+                // Update email in input field
+                document.getElementById('profileEmail').value = user.email;
+              }
+
+              // Update phone with country code parsing
+              if (user.phone) {
+                // Try to extract country code from phone number
+                const phoneStr = user.phone.toString();
+                let foundCode = '+234'; // Default to Nigeria
+                let phoneNumber = phoneStr;
+
+                // Check if phone starts with +
+                if (phoneStr.startsWith('+')) {
+                  // Try to match country codes from our dropdown
+                  const codes = ['+234', '+1', '+44', '+91', '+86', '+81', '+49', '+33', '+39', '+34', '+7', '+55', '+52', '+27', '+254', '+233', '+20', '+213', '+212', '+256', '+255', '+61', '+64', '+65', '+60', '+66', '+84', '+63', '+62', '+92', '+880', '+971', '+966', '+90', '+351', '+31', '+32', '+41', '+43', '+46', '+47', '+45', '+358', '+48', '+30', '+420'];
+
+                  for (const code of codes) {
+                    if (phoneStr.startsWith(code)) {
+                      foundCode = code;
+                      phoneNumber = phoneStr.substring(code.length);
+                      break;
+                    }
+                  }
+                }
+
+                document.getElementById('profileCountryCode').value = foundCode;
+                document.getElementById('profilePhone').value = phoneNumber;
+              }
+
+              // Update country
+              if (user.country) {
+                document.getElementById('profileCountry').value = user.country;
+              }
+
+              // Update province
+              if (user.province) {
+                document.getElementById('profileProvince').value = user.province;
+              }
+
+              // Update tier
+              if (user.tier_level) {
+                document.getElementById('profileTier').textContent = user.tier_level + ' Tier';
+              }
+
+              // Save to localStorage
+              localStorage.setItem('userName', user.full_name);
+              localStorage.setItem('userEmail', user.email);
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching profile:', error);
+          });
+
+        // Also fetch points balance for tier information
         fetch('/api/points/balance', {
           headers: { 'Authorization': 'Bearer ' + token }
         })
-          .then(response => response.json())
+          .then(response => {
+            if (response.status === 401) { window.location.href = 'login.html'; throw new Error('Unauthorized'); }
+            return response.json();
+          })
           .then(data => {
             if (data.tier_level) {
               document.getElementById('profileTier').textContent = data.tier_level + ' Tier';
@@ -414,7 +752,435 @@
       }
     });
 
+    // Function to handle adding withdrawal methods
+    function addWithdrawalMethod() {
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        window.location.href = 'login.html';
+        return;
+      }
 
+      // Get user's banking details from profile
+      fetch('/api/users/profile', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.user) {
+            const user = data.user;
+
+            // Check if user already has banking details saved
+            if (user.bank_name && user.account_name && user.account_number) {
+              // Show confirmation dialog
+              if (confirm('You already have bank transfer details saved. Do you want to update them?')) {
+                showBankingDetailsModal(user);
+              }
+            } else {
+              // Show modal to add banking details
+              showBankingDetailsModal();
+            }
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching profile:', error);
+          alert('Error accessing your profile. Please try again.');
+        });
+    }
+
+    // Function to show banking details modal
+    function showBankingDetailsModal(user = null) {
+      // Safely get values or use empty strings
+      const bankNameVal = user && user.bank_name ? user.bank_name : '';
+      const accountNameVal = user && user.account_name ? user.account_name : '';
+      const accountNumberVal = user && user.account_number ? user.account_number : '';
+      const routingNumberVal = user && user.routing_number ? user.routing_number : '';
+      const swiftCodeVal = user && user.swift_code ? user.swift_code : '';
+      const accountTypeVal = user && user.account_type ? user.account_type : 'savings';
+      const bankAddressVal = user && user.bank_address ? user.bank_address : '';
+
+      // Create modal HTML with better scrolling
+      const modalHtml = `
+        <div id="bankingModal" class="fixed inset-0 bg-black/80 z-50 flex items-start justify-center p-4 overflow-y-auto backdrop-blur-sm" style="padding-top: 2rem; padding-bottom: 2rem;">
+          <div class="bg-card rounded-2xl w-full max-w-3xl shadow-2xl border border-border my-auto">
+            <!-- Modal Header - Sticky -->
+            <div class="sticky top-0 bg-card border-b border-border rounded-t-2xl px-6 py-4 flex items-center justify-between z-10">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
+                  <i class="fas fa-university text-primary"></i>
+                </div>
+                <div>
+                  <h2 class="text-xl font-bold">${user ? 'Update' : 'Add'} Bank Transfer Details</h2>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">Secure withdrawal setup</p>
+                </div>
+              </div>
+              <button onclick="closeBankingModal()" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                <i class="fas fa-times text-lg"></i>
+              </button>
+            </div>
+            
+            <!-- Modal Body - Scrollable -->
+            <form id="bankingDetailsForm" class="px-6 py-5 space-y-5 max-h-[70vh] overflow-y-auto">
+              <!-- Important Notice -->
+              <div class="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3 flex gap-3">
+                <i class="fas fa-info-circle text-blue-400 text-sm mt-0.5"></i>
+                <div>
+                  <p class="text-xs text-gray-300 leading-relaxed">Ensure all details match your official bank account to avoid withdrawal delays.</p>
+                </div>
+              </div>
+
+              <!-- Account Holder Information -->
+              <div class="space-y-3">
+                <h3 class="text-sm font-bold flex items-center gap-2 text-gray-400 uppercase tracking-wide">
+                  <i class="fas fa-user-circle text-green-400"></i>
+                  Account Holder
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div class="relative">
+                    <input type="text" id="modalAccountName" value=""
+                      class="w-full pl-10 pr-4 py-3 bg-card border border-border rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition text-sm"
+                      placeholder="Full name as on account" required>
+                    <i class="fas fa-user absolute left-3 top-3.5 text-gray-400 text-sm"></i>
+                    <label class="absolute -top-2 left-8 bg-card px-2 text-xs text-gray-500">Account Name *</label>
+                  </div>
+                  <div class="relative">
+                    <select id="modalAccountType"
+                      class="w-full pl-10 pr-4 py-3 bg-card border border-border rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition text-sm appearance-none" required>
+                      <option value="savings">Savings Account</option>
+                      <option value="checking">Checking Account</option>
+                      <option value="current">Current Account</option>
+                    </select>
+                    <i class="fas fa-list-alt absolute left-3 top-3.5 text-gray-400 text-sm"></i>
+                    <label class="absolute -top-2 left-8 bg-card px-2 text-xs text-gray-500">Account Type *</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bank Information -->
+              <div class="space-y-3">
+                <h3 class="text-sm font-bold flex items-center gap-2 text-gray-400 uppercase tracking-wide">
+                  <i class="fas fa-building-columns text-yellow-400"></i>
+                  Bank Details
+                </h3>
+                <div class="space-y-3">
+                  <div class="relative">
+                    <input type="text" id="modalBankName" value=""
+                      class="w-full pl-10 pr-4 py-3 bg-card border border-border rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition text-sm"
+                      placeholder="e.g., Chase Bank, Wells Fargo" required>
+                    <i class="fas fa-landmark absolute left-3 top-3.5 text-gray-400 text-sm"></i>
+                    <label class="absolute -top-2 left-8 bg-card px-2 text-xs text-gray-500">Bank Name *</label>
+                  </div>
+                  <div class="relative">
+                    <input type="text" id="modalBankAddress" value=""
+                      class="w-full pl-10 pr-4 py-3 bg-card border border-border rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition text-sm"
+                      placeholder="Optional">
+                    <i class="fas fa-map-marker-alt absolute left-3 top-3.5 text-gray-400 text-sm"></i>
+                    <label class="absolute -top-2 left-8 bg-card px-2 text-xs text-gray-500">Branch Address</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Account Details -->
+              <div class="space-y-3">
+                <h3 class="text-sm font-bold flex items-center gap-2 text-gray-400 uppercase tracking-wide">
+                  <i class="fas fa-credit-card text-purple-400"></i>
+                  Account Numbers
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div class="relative md:col-span-2">
+                    <input type="text" id="modalAccountNumber" value=""
+                      class="w-full pl-10 pr-4 py-3 bg-card border border-border rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition text-sm"
+                      placeholder="Your account number" required>
+                    <i class="fas fa-hashtag absolute left-3 top-3.5 text-gray-400 text-sm"></i>
+                    <label class="absolute -top-2 left-8 bg-card px-2 text-xs text-gray-500">Account Number *</label>
+                  </div>
+                  <div class="relative">
+                    <input type="text" id="modalRoutingNumber" value=""
+                      class="w-full pl-10 pr-4 py-3 bg-card border border-border rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition text-sm"
+                      placeholder="e.g., 021000021">
+                    <i class="fas fa-code-branch absolute left-3 top-3.5 text-gray-400 text-sm"></i>
+                    <label class="absolute -top-2 left-8 bg-card px-2 text-xs text-gray-500">Routing Number</label>
+                  </div>
+                  <div class="relative">
+                    <input type="text" id="modalSwiftCode" value=""
+                      class="w-full pl-10 pr-4 py-3 bg-card border border-border rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition text-sm"
+                      placeholder="e.g., CHASUS33">
+                    <i class="fas fa-globe absolute left-3 top-3.5 text-gray-400 text-sm"></i>
+                    <label class="absolute -top-2 left-8 bg-card px-2 text-xs text-gray-500">SWIFT/BIC</label>
+                  </div>
+                </div>
+                <p class="text-xs text-gray-500 flex items-center gap-1 ml-1">
+                  <i class="fas fa-info-circle"></i>
+                  SWIFT code required only for international transfers
+                </p>
+              </div>
+
+              <!-- Security Notice -->
+              <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-3 flex gap-3">
+                <i class="fas fa-shield-alt text-green-400 text-sm mt-0.5"></i>
+                <p class="text-xs text-gray-300 leading-relaxed">Your information is encrypted and securely stored. We never share your data.</p>
+              </div>
+            </form>
+
+            <!-- Modal Footer - Sticky -->
+            <div class="sticky bottom-0 bg-card border-t border-border rounded-b-2xl px-6 py-4 flex justify-between items-center gap-3">
+              <p class="text-xs text-gray-500 flex items-center gap-1">
+                <i class="fas fa-asterisk text-red-400" style="font-size: 6px;"></i>
+                Required fields
+              </p>
+              <div class="flex gap-3">
+                <button type="button" onclick="closeBankingModal()" class="px-6 py-2.5 border border-border hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg font-semibold transition text-sm">
+                  Cancel
+                </button>
+                <button type="button" onclick="document.getElementById('bankingDetailsForm').dispatchEvent(new Event('submit', {cancelable: true}));" class="px-6 py-2.5 bg-gradient-to-r from-primary to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg font-semibold transition shadow-lg text-sm">
+                  <i class="fas fa-check mr-2"></i>Save Details
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Add modal to the page
+      document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+      // Set values after modal is added to DOM
+      if (user) {
+        document.getElementById('modalBankName').value = bankNameVal;
+        document.getElementById('modalAccountName').value = accountNameVal;
+        document.getElementById('modalAccountNumber').value = accountNumberVal;
+        document.getElementById('modalRoutingNumber').value = routingNumberVal;
+        document.getElementById('modalSwiftCode').value = swiftCodeVal;
+        document.getElementById('modalAccountType').value = accountTypeVal;
+        document.getElementById('modalBankAddress').value = bankAddressVal;
+      }
+
+      // Add form submit handler
+      document.getElementById('bankingDetailsForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        saveBankingDetails();
+      });
+    }
+
+    // Function to close banking details modal
+    function closeBankingModal() {
+      const modal = document.getElementById('bankingModal');
+      if (modal) {
+        modal.remove();
+      }
+    }
+
+    // Function to save banking details
+    function saveBankingDetails() {
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Get values from form
+      const bankName = document.getElementById('modalBankName').value.trim();
+      const accountName = document.getElementById('modalAccountName').value.trim();
+      const accountNumber = document.getElementById('modalAccountNumber').value.trim();
+      const routingNumber = document.getElementById('modalRoutingNumber').value.trim();
+      const swiftCode = document.getElementById('modalSwiftCode').value.trim();
+      const accountType = document.getElementById('modalAccountType').value;
+      const bankAddress = document.getElementById('modalBankAddress').value.trim();
+
+      // Validate required inputs
+      if (!bankName || !accountName || !accountNumber) {
+        alert('Please fill in all required fields (Bank Name, Account Name, and Account Number)');
+        return;
+      }
+
+      // Validate account number (should be numeric and reasonable length)
+      const accountNumberRegex = /^[0-9\-\s]+$/;
+      if (!accountNumberRegex.test(accountNumber)) {
+        alert('Account number should contain only numbers, spaces, and hyphens');
+        return;
+      }
+
+      if (accountNumber.replace(/[^0-9]/g, '').length < 4) {
+        alert('Account number should be at least 4 digits');
+        return;
+      }
+
+      // Validate SWIFT code if provided (should be 8 or 11 characters)
+      if (swiftCode && !/^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$/i.test(swiftCode)) {
+        alert('SWIFT/BIC code should be 8 or 11 characters (e.g., CHASUS33XXX)');
+        return;
+      }
+
+      // Show loading state on button
+      const submitButton = document.querySelector('#bankingDetailsForm button[type="submit"]');
+      const originalButtonHtml = submitButton.innerHTML;
+      submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
+      submitButton.disabled = true;
+
+      // Update user profile with banking details
+      fetch('/api/users/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({
+          bank_name: bankName,
+          account_name: accountName,
+          account_number: accountNumber,
+          routing_number: routingNumber,
+          swift_code: swiftCode,
+          account_type: accountType,
+          bank_address: bankAddress
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message && data.message.includes('success')) {
+            // Close modal and show success message
+            closeBankingModal();
+
+            // Show success toast
+            document.getElementById('toast').classList.remove('hidden');
+            document.getElementById('toast').innerHTML = `
+            <i class="fas fa-check-circle text-3xl"></i>
+            <div>
+              <p class="font-bold text-lg">Bank Transfer Details Saved Successfully!</p>
+              <p>Your withdrawal method has been updated.</p>
+            </div>
+          `;
+
+            setTimeout(() => {
+              document.getElementById('toast').classList.add('hidden');
+            }, 4000);
+
+            // Update the UI to show the saved method
+            updateWithdrawalMethodDisplay(bankName, accountName, accountNumber, routingNumber, swiftCode, accountType, bankAddress);
+          } else {
+            // Reset button state
+            submitButton.innerHTML = originalButtonHtml;
+            submitButton.disabled = false;
+            alert('Error saving banking details: ' + (data.message || 'Unknown error'));
+          }
+        })
+        .catch(error => {
+          console.error('Error saving banking details:', error);
+          // Reset button state
+          submitButton.innerHTML = originalButtonHtml;
+          submitButton.disabled = false;
+          alert('Error saving banking details. Please try again.');
+        });
+    }
+
+    // Function to update the withdrawal method display
+    function updateWithdrawalMethodDisplay(bankName, accountName, accountNumber, routingNumber = '', swiftCode = '', accountType = '', bankAddress = '') {
+      // Update status indicator
+      document.getElementById('bankMethodStatus').textContent = 'Active';
+      document.getElementById('bankMethodStatus').className = 'px-3 py-1 bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full text-sm font-semibold';
+
+      // Update displayed details with enhanced formatting
+      const detailsHtml = `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="flex items-center gap-2">
+            <i class="fas fa-landmark text-primary"></i>
+            <div>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Bank Name</p>
+              <p class="font-semibold">${bankName}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fas fa-user text-green-400"></i>
+            <div>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Account Name</p>
+              <p class="font-semibold">${accountName}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fas fa-hashtag text-purple-400"></i>
+            <div>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Account Number</p>
+              <p class="font-semibold">${accountNumber.replace(/.(?=.{4})/g, '*')}</p>
+            </div>
+          </div>
+          ${accountType ? `
+          <div class="flex items-center gap-2">
+            <i class="fas fa-list-alt text-blue-400"></i>
+            <div>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Account Type</p>
+              <p class="font-semibold capitalize">${accountType}</p>
+            </div>
+          </div>
+          ` : ''}
+          ${routingNumber ? `
+          <div class="flex items-center gap-2">
+            <i class="fas fa-code-branch text-yellow-400"></i>
+            <div>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Routing Number</p>
+              <p class="font-semibold">${routingNumber}</p>
+            </div>
+          </div>
+          ` : ''}
+          ${swiftCode ? `
+          <div class="flex items-center gap-2">
+            <i class="fas fa-globe text-indigo-400"></i>
+            <div>
+              <p class="text-xs text-gray-500 dark:text-gray-400">SWIFT Code</p>
+              <p class="font-semibold">${swiftCode}</p>
+            </div>
+          </div>
+          ` : ''}
+        </div>
+      `;
+
+      document.getElementById('bankDetailsContainer').innerHTML = detailsHtml;
+
+      // Show the details container
+      document.getElementById('bankDetailsContainer').classList.remove('hidden');
+
+      // Update button text
+      document.getElementById('withdrawalMethodButtonText').textContent = 'Update Bank Transfer Details';
+    }
+
+    // Load banking details when page loads
+    function loadBankingDetails() {
+      const token = localStorage.getItem('access_token');
+      if (!token) return;
+
+      fetch('/api/users/profile', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.user && data.user.bank_name && data.user.account_name && data.user.account_number) {
+            updateWithdrawalMethodDisplay(
+              data.user.bank_name,
+              data.user.account_name,
+              data.user.account_number,
+              data.user.routing_number || '',
+              data.user.swift_code || '',
+              data.user.account_type || '',
+              data.user.bank_address || ''
+            );
+          } else {
+            // Update status to show no method set
+            document.getElementById('bankMethodStatus').textContent = 'Not Set';
+            document.getElementById('bankMethodStatus').className = 'px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-full text-sm';
+
+            // Hide the details container
+            document.getElementById('bankDetailsContainer').classList.add('hidden');
+
+            // Update button text
+            document.getElementById('withdrawalMethodButtonText').textContent = 'Add Bank Transfer Details';
+          }
+        })
+        .catch(error => {
+          console.error('Error loading banking details:', error);
+        });
+    }
+
+    // Initialize banking details when page loads
+    document.addEventListener('DOMContentLoaded', function () {
+      loadBankingDetails();
+    });
 
   </script>
   <script src="assets/js/theme.js"></script>

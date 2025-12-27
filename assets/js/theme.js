@@ -62,28 +62,77 @@ function toggleTheme() {
 
 // Sidebar user info synchronization
 function updateSidebar() {
-  const sidebar = document.getElementById('sidebar');
-  if (!sidebar) return;
+  // Use setTimeout to ensure DOM is fully loaded
+  setTimeout(() => {
+    const sidebar = document.getElementById('sidebar');
+    if (!sidebar) return;
 
-  const savedName = localStorage.getItem('userName');
-  const savedEmail = localStorage.getItem('userEmail');
+    const savedName = localStorage.getItem('userName');
+    const savedEmail = localStorage.getItem('userEmail');
+    const savedAvatar = localStorage.getItem('userAvatar');
 
-  const nameEl = sidebar.querySelector('.font-semibold');
-  // Selector for email needs careful selection as it uses Tailwind responsive classes
-  const emailEl = sidebar.querySelector('.text-gray-600') || sidebar.querySelector('.dark\\:text-gray-400');
-  const avatarEl = sidebar.querySelector('img[alt="User"]');
+    // Support both user dashboard IDs and generic admin selectors
+    const nameEl = document.getElementById('sidebarUserName') || sidebar.querySelector('.font-semibold');
+    const emailEl = document.getElementById('sidebarUserEmail') || sidebar.querySelector('.text-gray-600') || sidebar.querySelector('.dark\\:text-gray-400');
+    const avatarEl = document.getElementById('sidebarAvatar') || sidebar.querySelector('img[alt="User"]');
 
-  if (savedName && nameEl) nameEl.textContent = savedName;
-  if (savedEmail && emailEl) emailEl.textContent = savedEmail;
-  if (savedName && avatarEl && !avatarEl.src.includes('logo.png')) {
-    avatarEl.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${savedName}`;
-  }
+    if (savedName && nameEl) {
+      nameEl.textContent = savedName;
+      // Also update other common header elements if they exist
+      const headerName = document.getElementById('headerUserName');
+      if (headerName) headerName.textContent = savedName.split(' ')[0] + '!';
+      const welcomeName = document.getElementById('welcomeUserName');
+      if (welcomeName) welcomeName.textContent = savedName.split(' ')[0];
+    } else if (nameEl) {
+      nameEl.textContent = 'Guest';
+    }
+
+    if (savedEmail && emailEl) {
+      emailEl.textContent = savedEmail;
+    } else if (emailEl) {
+      emailEl.textContent = 'guest@example.com';
+    }
+
+    if (avatarEl) {
+      if (savedAvatar) {
+        avatarEl.src = savedAvatar;
+      } else if (savedName && !avatarEl.src.includes('logo.png')) {
+        avatarEl.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${savedName}`;
+      }
+    }
+  }, 100);
+}
+
+// Global profile synchronization
+function syncUserProfile() {
+  const token = localStorage.getItem('access_token');
+  if (!token) return;
+
+  fetch('/api/auth/profile', {
+    headers: { 'Authorization': 'Bearer ' + token }
+  })
+    .then(response => {
+      if (response.status === 401) return; // Silent fail for auth issues here
+      return response.json();
+    })
+    .then(data => {
+      if (data && data.user) {
+        localStorage.setItem('userName', data.user.full_name);
+        localStorage.setItem('userEmail', data.user.email);
+        if (data.user.avatar_url) {
+          localStorage.setItem('userAvatar', data.user.avatar_url);
+        }
+        updateSidebar();
+      }
+    })
+    .catch(err => console.debug('Profile sync skipped:', err));
 }
 
 // Initialize theme and sidebar on page load
 document.addEventListener('DOMContentLoaded', function () {
   initTheme();
   updateSidebar();
+  syncUserProfile(); // Proactively sync on every page load
 
   // Add event listeners to theme toggle buttons
   const themeToggles = document.querySelectorAll('#themeToggle, #themeToggleMobile');
@@ -98,4 +147,11 @@ document.addEventListener('DOMContentLoaded', function () {
 window.addEventListener('load', function () {
   initTheme();
   updateSidebar();
+});
+
+// Listen for storage changes to update sidebar when user logs in/out on another tab
+window.addEventListener('storage', function (e) {
+  if (['userName', 'userEmail', 'userAvatar', 'access_token'].includes(e.key)) {
+    updateSidebar();
+  }
 });

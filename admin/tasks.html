@@ -186,6 +186,10 @@
               class="bg-primary hover:bg-orange-700 px-8 py-4 rounded-2xl font-bold transition shadow-xl">
               <i class="fas fa-search mr-2"></i> Apply Filter
             </button>
+            <button onclick="loadTasks()"
+              class="bg-gray-700 hover:bg-gray-800 px-8 py-4 rounded-2xl font-bold transition shadow-xl">
+              <i class="fas fa-sync mr-2"></i> Refresh
+            </button>
           </div>
         </div>
 
@@ -288,12 +292,13 @@
                 <label class="block text-lg font-bold mb-3">Category</label>
                 <select id="taskCategory"
                   class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
-                  <option value="Survey">Survey</option>
-                  <option value="Video">Video Watch</option>
-                  <option value="App Download">App Download</option>
-                  <option value="Social Media">Social Media</option>
+                  <option value="Invite a Friend">Invite a Friend</option>
+                  <option value="Daily Code Upload">Daily Code Upload</option>
+                  <option value="Special Task">Special Task</option>
                   <option value="Other">Other</option>
                 </select>
+                <p class="text-xs text-gray-500 mt-2"><i class="fas fa-info-circle"></i> "Invite a Friend" tasks
+                  automatically require admin verification</p>
               </div>
             </div>
 
@@ -353,26 +358,49 @@
   <div id="taskModal" class="fixed inset-0 z-50 hidden">
     <div class="absolute inset-0 bg-black/70" onclick="closeModal()"></div>
     <div
-      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl bg-card rounded-3xl p-8 border border-border">
-      <div class="flex justify-between items-center mb-6">
-        <h3 class="text-2xl font-bold">Task Details</h3>
+      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-[90vh] bg-card rounded-3xl border border-border flex flex-col">
+      <div class="flex justify-between items-center p-6 border-b border-border">
+        <h3 class="text-2xl font-bold">Task Review Details</h3>
         <button onclick="closeModal()" class="text-gray-400 hover:text-text">
           <i class="fas fa-times text-2xl"></i>
         </button>
       </div>
 
-      <div id="modalContent">
+      <div id="modalContent" class="flex-1 overflow-y-auto p-6">
         <!-- Content will be loaded dynamically -->
       </div>
 
-      <div class="flex justify-end gap-4 mt-8">
-        <button id="rejectBtn" class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-xl font-bold transition">
-          Reject Task
-        </button>
-        <button id="approveBtn" class="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-xl font-bold transition">
-          Approve Task
-        </button>
+      <div class="flex justify-between items-center p-6 border-t border-border bg-card/50 rounded-b-3xl">
+        <div class="text-sm text-gray-500">
+          <p>Review and approve or reject this task submission</p>
+        </div>
+        <div class="flex gap-4">
+          <button id="rejectBtn" class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-xl font-bold transition flex items-center gap-2">
+            <i class="fas fa-times"></i> Reject Task
+          </button>
+          <button id="approveBtn" class="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-xl font-bold transition flex items-center gap-2">
+            <i class="fas fa-check"></i> Approve Task
+          </button>
+        </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div id="successModal" class="fixed inset-0 z-[60] hidden">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+    <div
+      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-sm bg-card rounded-3xl p-10 border border-primary/30 shadow-[0_0_50px_rgba(253,102,6,0.2)] text-center slide-in">
+      <div
+        class="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-green-500/50">
+        <i class="fas fa-check text-5xl text-green-500"></i>
+      </div>
+      <h3 class="text-3xl font-black mb-2 text-white">Awesome!</h3>
+      <p class="text-gray-400 mb-8 text-lg">Task created successfully with all requirements saved.</p>
+      <button onclick="closeSuccessModal()"
+        class="w-full bg-primary hover:bg-orange-700 py-4 rounded-2xl font-bold transition transform hover:scale-105 shadow-lg text-lg">
+        Continue
+      </button>
     </div>
   </div>
 
@@ -463,8 +491,16 @@
           'Authorization': 'Bearer ' + token
         }
       })
-        .then(response => response.json())
+        .then(response => {
+          if (response.status === 401) {
+            alert('Your session has expired. Please login again.');
+            window.location.href = '/admin/login.html';
+            return;
+          }
+          return response.json();
+        })
         .then(data => {
+          if (!data) return;
           if (data.tasks_for_review) {
             // Update pending count
             document.getElementById('pendingCount').textContent = data.total;
@@ -474,6 +510,14 @@
 
             // Show/hide load more button
             document.getElementById('loadMoreContainer').classList.toggle('hidden', data.current_page >= data.pages);
+          } else {
+            // Handle case where there's no tasks_for_review property
+            document.getElementById('tasksContainer').innerHTML = `
+              <div class="text-center py-10">
+                <i class="fas fa-inbox text-4xl text-gray-500"></i>
+                <p class="mt-4 text-xl">No pending tasks found</p>
+              </div>
+            `;
           }
         })
         .catch(error => {
@@ -512,29 +556,55 @@
         const user = item.user;
 
         const card = document.createElement('div');
-        card.className = 'task-card card rounded-3xl p-8 hover:border-primary transition-all slide-in cursor-pointer';
-        card.onclick = () => showTaskDetails(item);
+        card.className = 'task-card card rounded-3xl p-6 hover:border-primary transition-all slide-in cursor-pointer border-l-4 border-primary';
+        card.onclick = (e) => {
+          // Only trigger modal if not clicking on the review button
+          if (!e.target.closest('.review-btn')) {
+            showTaskDetails(item);
+          }
+        };
 
         // Format date
         const submittedDate = new Date(item.submitted_at);
 
         card.innerHTML = `
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-6">
-              <div class="w-16 h-16 bg-blue-600/20 rounded-2xl flex items-center justify-center">
-                <i class="fas fa-tasks text-blue-400 text-3xl"></i>
+          <div class="flex items-start justify-between">
+            <div class="flex items-start gap-4">
+              <div class="w-14 h-14 bg-blue-600/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-tasks text-blue-400 text-2xl"></i>
               </div>
-              <div>
-                <h3 class="text-2xl font-bold">${user ? user.full_name : 'Unknown User'}</h3>
-                <p class="text-gray-600 dark:text-gray-400">${task.title}</p>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Submitted: ${submittedDate.toLocaleDateString()} • ${submittedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                  <h3 class="text-xl font-bold truncate">${user ? user.full_name : 'Unknown User'}</h3>
+                  <span class="bg-purple-600/20 text-purple-400 px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap">Pending Review</span>
+                </div>
+                <p class="text-gray-600 dark:text-gray-400 font-medium truncate">${task.title}</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">${task.description}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-2 flex items-center gap-4">
+                  <span class="flex items-center gap-1">
+                    <i class="fas fa-calendar text-xs"></i>
+                    ${submittedDate.toLocaleDateString()}
+                  </span>
+                  <span class="flex items-center gap-1">
+                    <i class="fas fa-clock text-xs"></i>
+                    ${submittedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                  <span class="flex items-center gap-1">
+                    <i class="fas fa-coins text-xs"></i>
+                    +${task.points_reward} pts
+                  </span>
+                </p>
               </div>
             </div>
-            <div class="text-right">
-              <p class="text-2xl font-bold text-green-400">+${task.points_reward} pts</p>
-              <p class="text-2xl font-bold text-gray-400">$${task.reward_amount.toFixed(2)}</p>
-              <span class="bg-purple-600/20 text-purple-400 px-4 py-2 rounded-full text-sm font-bold mt-2 inline-block">Pending Review</span>
+            <div class="text-right flex-shrink-0 ml-4">
+              <p class="text-lg font-bold text-green-400">+${task.points_reward} pts</p>
+              <p class="text-lg font-bold text-gray-400 mt-1">$${task.reward_amount.toFixed(2)}</p>
             </div>
+          </div>
+          <div class="mt-4 pt-4 border-t border-border flex justify-end">
+            <button class="review-btn bg-primary hover:bg-orange-700 px-4 py-2 rounded-xl font-bold transition text-sm flex items-center gap-2">
+              <i class="fas fa-eye"></i> Review Task
+            </button>
           </div>
         `;
 
@@ -554,33 +624,102 @@
       const startDate = new Date(taskItem.started_at);
 
       modalContent.innerHTML = `
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <h4 class="text-xl font-bold mb-4">User Information</h4>
-            <p><strong>Name:</strong> ${user ? user.full_name : 'N/A'}</p>
-            <p><strong>Email:</strong> ${user ? user.email : 'N/A'}</p>
-            <p><strong>User ID:</strong> ${taskItem.user_id}</p>
+        <div class="mb-6">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-16 h-16 bg-blue-600/20 rounded-xl flex items-center justify-center">
+              <i class="fas fa-tasks text-blue-400 text-3xl"></i>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold">${task.title}</h3>
+              <p class="text-gray-600 dark:text-gray-400">${task.description}</p>
+            </div>
           </div>
           
-          <div>
-            <h4 class="text-xl font-bold mb-4">Task Details</h4>
-            <p><strong>Title:</strong> ${task.title}</p>
-            <p><strong>Description:</strong> ${task.description}</p>
-            <p><strong>Reward:</strong> ${task.points_reward} points ($${task.reward_amount.toFixed(2)})</p>
-            <p><strong>Started:</strong> ${startDate.toLocaleString()}</p>
-            <p><strong>Submitted:</strong> ${submittedDate.toLocaleString()}</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="card rounded-2xl p-5">
+              <h4 class="text-lg font-bold mb-3 flex items-center gap-2">
+                <i class="fas fa-user text-primary"></i> User Information
+              </h4>
+              <div class="space-y-2">
+                <p class="flex justify-between">
+                  <span class="text-gray-500">Name:</span>
+                  <span class="font-medium">${user ? user.full_name : 'N/A'}</span>
+                </p>
+                <p class="flex justify-between">
+                  <span class="text-gray-500">Email:</span>
+                  <span class="font-medium">${user ? user.email : 'N/A'}</span>
+                </p>
+                <p class="flex justify-between">
+                  <span class="text-gray-500">User ID:</span>
+                  <span class="font-medium">${taskItem.user_id}</span>
+                </p>
+              </div>
+            </div>
+            
+            <div class="card rounded-2xl p-5">
+              <h4 class="text-lg font-bold mb-3 flex items-center gap-2">
+                <i class="fas fa-receipt text-green-500"></i> Task Details
+              </h4>
+              <div class="space-y-2">
+                <p class="flex justify-between">
+                  <span class="text-gray-500">Reward:</span>
+                  <span class="font-medium text-green-400">${task.points_reward} points ($${task.reward_amount.toFixed(2)})</span>
+                </p>
+                <p class="flex justify-between">
+                  <span class="text-gray-500">Started:</span>
+                  <span class="font-medium">${startDate.toLocaleString()}</span>
+                </p>
+                <p class="flex justify-between">
+                  <span class="text-gray-500">Submitted:</span>
+                  <span class="font-medium">${submittedDate.toLocaleString()}</span>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
         
-        <div class="mt-6">
-          <h4 class="text-xl font-bold mb-4">Verification Instructions</h4>
-          <p>Please verify that the user has completed all requirements for this task:</p>
-          <p class="mt-2 p-4 bg-card border border-border rounded-xl">${task.description}</p>
+        <div class="card rounded-2xl p-5 mb-6">
+          <h4 class="text-lg font-bold mb-3 flex items-center gap-2">
+            <i class="fas fa-clipboard-check text-purple-500"></i> Verification Instructions
+          </h4>
+          <p class="mb-3">Please verify that the user has completed all requirements for this task:</p>
+          <div class="p-4 bg-background border border-border rounded-xl">${task.description}</div>
         </div>
         
-        <div class="mt-6">
-          <h4 class="text-xl font-bold mb-4">Additional Notes</h4>
-          <textarea id="reviewNotes" rows="3" placeholder="Add any notes for this review..." class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition"></textarea>
+        <div class="card rounded-2xl p-5 mb-6">
+          <h4 class="text-lg font-bold mb-3 flex items-center gap-2">
+            <i class="fas fa-clipboard-list text-yellow-500"></i> Submitted Proof
+          </h4>
+          <div class="space-y-4">
+            <div>
+              <p class="text-sm text-gray-400 mb-2 flex items-center gap-2">
+                <i class="fas fa-align-left"></i> Text Proof:
+              </p>
+              <div class="p-4 bg-background border border-border rounded-xl whitespace-pre-wrap">${taskItem.proof_text || '<span class="text-gray-500 italic">No text proof provided.</span>'}</div>
+            </div>
+            
+            <div>
+              <p class="text-sm text-gray-400 mb-2 flex items-center gap-2">
+                <i class="fas fa-image"></i> Image Proof:
+              </p>
+              ${taskItem.proof_image ?
+          `<div class="relative group">
+                  <img src="${taskItem.proof_image}" class="max-w-full h-auto rounded-xl border border-border mt-2 cursor-zoom-in transition-transform hover:scale-[1.02]" onclick="window.open(this.src)" alt="Task Proof">
+                  <div class="absolute inset-x-0 bottom-0 p-4 bg-black/50 text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity rounded-b-xl">
+                    Click to view full size
+                  </div>
+                </div>` :
+          '<p class="text-gray-500 italic">No image proof provided.</p>'
+        }
+            </div>
+          </div>
+        </div>
+        
+        <div class="card rounded-2xl p-5">
+          <h4 class="text-lg font-bold mb-3 flex items-center gap-2">
+            <i class="fas fa-sticky-note text-blue-500"></i> Additional Notes
+          </h4>
+          <textarea id="reviewNotes" rows="3" placeholder="Add any notes for this review..." class="w-full px-5 py-4 bg-background border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition"></textarea>
         </div>
       `;
 
@@ -594,6 +733,11 @@
     function closeModal() {
       document.getElementById('taskModal').classList.add('hidden');
       selectedTask = null;
+    }
+
+    function closeSuccessModal() {
+      document.getElementById('successModal').classList.add('hidden');
+      switchTab('pending');
     }
 
     function approveTask() {
@@ -703,8 +847,16 @@
           'Authorization': 'Bearer ' + token
         }
       })
-        .then(response => response.json())
+        .then(response => {
+          if (response.status === 401) {
+            alert('Your session has expired. Please login again.');
+            window.location.href = '/admin/login.html';
+            return;
+          }
+          return response.json();
+        })
         .then(data => {
+          if (!data) return;
           if (data.review_history) {
             renderCompletedTasks(data.review_history);
           }
@@ -794,14 +946,22 @@
         return;
       }
 
+      const category = document.getElementById('taskCategory').value;
+
+      // For "Invite a Friend" tasks, ensure admin verification is required
+      let requiresAdminVerification = document.getElementById('adminVerification').checked;
+      if (category === 'Invite a Friend') {
+        requiresAdminVerification = true;
+      }
+
       const formData = {
         title: document.getElementById('taskTitle').value,
         description: document.getElementById('taskDescription').value,
         reward_amount: parseFloat(document.getElementById('taskReward').value),
         points_reward: parseInt(document.getElementById('taskPoints').value),
-        category: document.getElementById('taskCategory').value,
+        category: category,
         time_required: parseInt(document.getElementById('taskTime').value) || 0,
-        requires_admin_verification: document.getElementById('adminVerification').checked,
+        requires_admin_verification: requiresAdminVerification,
         is_active: document.getElementById('isActive').checked
       };
 
@@ -819,16 +979,23 @@
         },
         body: JSON.stringify(formData)
       })
-        .then(response => response.json())
+        .then(response => {
+          if (response.status === 401) {
+            alert('Your session has expired. Please login again.');
+            window.location.href = '/admin/login.html';
+            return;
+          }
+          return response.json();
+        })
         .then(data => {
-          if (data.message && data.message.includes('success')) {
-            alert('Task created successfully!');
+          if (!data) return;
+          if (data.message && data.message.toLowerCase().includes('success')) {
+            // Show Success Modal instead of alert
+            document.getElementById('successModal').classList.remove('hidden');
             // Reset form
             this.reset();
-            // Switch back to pending tab
-            switchTab('pending');
           } else {
-            alert('Failed to create task: ' + (data.message || 'Unknown error'));
+            alert('Failed to create task: ' + (data.message || data.msg || 'Unknown error'));
           }
         })
         .catch(error => {
@@ -842,29 +1009,55 @@
         });
     });
 
+    // Update admin verification checkbox when category changes
+    document.getElementById('taskCategory').addEventListener('change', function () {
+      if (this.value === 'Invite a Friend') {
+        document.getElementById('adminVerification').checked = true;
+        document.getElementById('adminVerification').disabled = true;
+      } else {
+        document.getElementById('adminVerification').disabled = false;
+      }
+    });
+
     // Event listeners for modal buttons
     document.getElementById('approveBtn').addEventListener('click', approveTask);
     document.getElementById('rejectBtn').addEventListener('click', rejectTask);
 
-    // Fetch tasks when page loads
-    document.addEventListener('DOMContentLoaded', function () {
-      // Load user information from localStorage
-      const savedAvatar = localStorage.getItem('userAvatar');
+    function loadAdminInfo() {
+      const token = localStorage.getItem('access_token');
       const savedName = localStorage.getItem('userName');
       const savedEmail = localStorage.getItem('userEmail');
+      const savedAvatar = localStorage.getItem('userAvatar');
 
-      if (savedAvatar) {
-        document.getElementById('sidebarAvatar').src = savedAvatar;
+      if (savedName) document.getElementById('sidebarUserName').textContent = savedName;
+      if (savedEmail) document.getElementById('sidebarUserEmail').textContent = savedEmail;
+      if (savedAvatar) document.getElementById('sidebarAvatar').src = savedAvatar;
+
+      if (token) {
+        fetch('/api/auth/profile', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.user) {
+              const user = data.user;
+              document.getElementById('sidebarUserName').textContent = user.full_name;
+              document.getElementById('sidebarUserEmail').textContent = user.email;
+              if (user.avatar_url) {
+                document.getElementById('sidebarAvatar').src = user.avatar_url;
+                localStorage.setItem('userAvatar', user.avatar_url);
+              }
+              localStorage.setItem('userName', user.full_name);
+              localStorage.setItem('userEmail', user.email);
+            }
+          })
+          .catch(err => console.error('Error loading admin info:', err));
       }
+    }
 
-      if (savedName) {
-        document.getElementById('sidebarUserName').textContent = savedName;
-      }
-
-      if (savedEmail) {
-        document.getElementById('sidebarUserEmail').textContent = savedEmail;
-      }
-
+    // Fetch tasks when page loads
+    document.addEventListener('DOMContentLoaded', function () {
+      loadAdminInfo();
       loadTasks();
     });
 

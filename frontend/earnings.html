@@ -226,7 +226,7 @@
       })
         .then(response => response.json())
         .then(data => {
-          document.getElementById('statTotalEarnings').textContent = '₦' + (data.total_earnings || 0).toLocaleString();
+          document.getElementById('statTotalEarnings').textContent = '$' + (data.total_earnings || 0).toLocaleString();
           document.getElementById('statPointsEarned').textContent = (data.total_code_redemption_points || 0).toLocaleString() + ' pts';
           document.getElementById('statTasksCompleted').textContent = data.tasks_completed || 0;
           document.getElementById('statReferralsCount').textContent = data.referrals_count || 0;

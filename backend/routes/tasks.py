@@ -1,10 +1,11 @@
 from flask import Blueprint, request, jsonify
-from backend.app import db
+from backend.extensions import db
 from backend.models.user import User, UserRole
 from backend.models.task import Task, UserTask
 from backend.models.transaction import Transaction, TransactionType, TransactionStatus
 from backend.models.reward_code import RewardCode
 from backend.utils.decorators import partner_restricted
+from backend.utils.admin_auth import admin_required
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import re
 from backend.models.notification import Notification, NotificationType
@@ -19,12 +20,12 @@ def test_tasks():
 @jwt_required()
 def get_tasks():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         category = request.args.get('category')
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 10, type=int)
         
-        query = Task.query.filter_by(is_active=True)
+        query = Task.query.filter_by(is_active=True).order_by(Task.created_at.desc())
         
         if category:
             query = query.filter_by(category=category)
@@ -58,7 +59,7 @@ def get_tasks():
 @partner_restricted
 def start_task(task_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         
         # Check if task exists
         task = Task.query.get(task_id)
@@ -97,7 +98,7 @@ def start_task(task_id):
 @partner_restricted
 def complete_task(task_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         # Check if task exists
@@ -115,12 +116,18 @@ def complete_task(task_id):
         if not user_task:
             return jsonify({'message': 'Task not started or already completed'}), 400
         
+        data = request.get_json() or {}
+        proof_text = data.get('proof_text', '')
+        proof_image = data.get('proof_image', '')
+        
         # Check if task requires admin verification
         if task.requires_admin_verification:
             # For tasks requiring admin verification, we just mark it as pending review
             # and notify the admin
             user_task.status = 'pending_review'
             user_task.completed_at = db.func.current_timestamp()
+            user_task.proof_text = proof_text
+            user_task.proof_image = proof_image
             
             # Create notification for admin
             admin_users = User.query.filter_by(role=UserRole.ADMIN).all()
@@ -175,15 +182,11 @@ def complete_task(task_id):
         return jsonify({'message': 'Failed to complete task', 'error': str(e)}), 500
 
 @tasks_bp.route('/admin', methods=['POST'])
-@jwt_required()
+@admin_required
 def create_task():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         data = request.get_json()
         
@@ -214,15 +217,11 @@ def create_task():
         return jsonify({'message': 'Failed to create task', 'error': str(e)}), 500
 
 @tasks_bp.route('/admin/<int:task_id>', methods=['PUT'])
-@jwt_required()
+@admin_required
 def update_task(task_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         task = Task.query.get(task_id)
         if not task:
@@ -251,15 +250,11 @@ def update_task(task_id):
         return jsonify({'message': 'Failed to update task', 'error': str(e)}), 500
 
 @tasks_bp.route('/admin/<int:task_id>', methods=['DELETE'])
-@jwt_required()
+@admin_required
 def delete_task(task_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         task = Task.query.get(task_id)
         if not task:
@@ -274,15 +269,11 @@ def delete_task(task_id):
         return jsonify({'message': 'Failed to delete task', 'error': str(e)}), 500
 
 @tasks_bp.route('/admin', methods=['GET'])
-@jwt_required()
+@admin_required
 def get_all_tasks():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 20, type=int)
@@ -316,7 +307,7 @@ def get_all_tasks():
 @partner_restricted
 def upload_daily_codes():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         if not user:
@@ -410,15 +401,11 @@ def upload_daily_codes():
         return jsonify({'message': 'Failed to process codes', 'error': str(e)}), 500
 
 @tasks_bp.route('/daily/set-requirement', methods=['POST'])
-@jwt_required()
+@admin_required
 def set_daily_requirement():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         data = request.get_json()
         user_id = data.get('user_id')
@@ -448,15 +435,11 @@ def set_daily_requirement():
         return jsonify({'message': 'Failed to set daily requirement', 'error': str(e)}), 500
 
 @tasks_bp.route('/admin/<int:task_id>/complete', methods=['POST'])
-@jwt_required()
+@admin_required
 def admin_complete_task(task_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         data = request.get_json()
         user_id = data.get('user_id')
@@ -513,6 +496,17 @@ def admin_complete_task(task_id):
         db.session.add(notification)
         db.session.commit()
         
+        # Optionally send email notification
+        try:
+            from backend.utils.emailer import send_email
+            user_email = user.email
+            email_subject = "Task Approval Notification - MyFigPoint"
+            email_body = f"Hello {user.full_name},\n\nYour task '{task.title}' has been approved by an administrator. You have earned {task.points_reward} points.\n\nThank you for using MyFigPoint!"
+            send_email(user_email, email_subject, email_body)
+        except Exception as email_error:
+            # If email fails, log the error but don't fail the entire operation
+            print(f"Failed to send email notification: {str(email_error)}")
+        
         # Create notification for admin (task completion confirmation)
         admin_notification = Notification(
             user_id=current_user_id,
@@ -534,15 +528,11 @@ def admin_complete_task(task_id):
         return jsonify({'message': 'Failed to complete task', 'error': str(e)}), 500
 
 @tasks_bp.route('/admin/completed-tasks', methods=['GET'])
-@jwt_required()
+@admin_required
 def get_completed_tasks_for_review():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 20, type=int)
@@ -576,15 +566,11 @@ def get_completed_tasks_for_review():
         return jsonify({'message': 'Failed to fetch tasks for review', 'error': str(e)}), 500
 
 @tasks_bp.route('/admin/review-history', methods=['GET'])
-@jwt_required()
+@admin_required
 def get_task_review_history():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 20, type=int)
@@ -618,15 +604,11 @@ def get_task_review_history():
         return jsonify({'message': 'Failed to fetch review history', 'error': str(e)}), 500
 
 @tasks_bp.route('/admin/<int:user_task_id>/reject', methods=['POST'])
-@jwt_required()
+@admin_required
 def admin_reject_task(user_task_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         data = request.get_json()
         reason = data.get('reason', 'Task requirements not met')
@@ -654,6 +636,17 @@ def admin_reject_task(user_task_id):
         db.session.add(notification)
         db.session.commit()
         
+        # Optionally send email notification
+        try:
+            from backend.utils.emailer import send_email
+            user_email = user.email
+            email_subject = "Task Rejection Notification - MyFigPoint"
+            email_body = f"Hello {user.full_name},\n\nYour task '{task.title}' has been rejected by an administrator. Reason: {reason}\n\nThank you for using MyFigPoint!"
+            send_email(user_email, email_subject, email_body)
+        except Exception as email_error:
+            # If email fails, log the error but don't fail the entire operation
+            print(f"Failed to send email notification: {str(email_error)}")
+        
         return jsonify({
             'message': 'Task rejected successfully',
             'user_notified': True
@@ -666,7 +659,7 @@ def admin_reject_task(user_task_id):
 @jwt_required()
 def get_rejected_tasks():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 10, type=int)

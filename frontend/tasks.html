@@ -111,7 +111,7 @@
         </button>
         <div>
           <h1 class="text-lg font-bold">Earn Points</h1>
-          <p class="text-gray-600 dark:text-gray-400 text-xs">Complete tasks below and watch your balance grow!</p>
+          <p class="text-gray-600 dark:text-gray-400 text-xs">Join tasks and get verified by admin to earn rewards!</p>
         </div>
         <div class="text-right">
           <p id="topPointsBalance" class="text-xl font-bold text-primary">0 pts</p>
@@ -121,6 +121,44 @@
     </header>
 
     <main class="p-6 lg:p-10">
+      <!-- How It Works Section -->
+      <div class="bg-gradient-to-r from-primary/10 to-orange-500/10 border border-primary/30 rounded-2xl p-6 mb-8">
+        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+          <i class="fas fa-lightbulb text-primary"></i>
+          How the Task System Works
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="text-center">
+            <div class="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
+              <span class="text-blue-400 font-bold">1</span>
+            </div>
+            <p class="font-bold mb-1">Join Task</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">Click "Join Task" to start</p>
+          </div>
+          <div class="text-center">
+            <div class="w-12 h-12 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
+              <span class="text-yellow-400 font-bold">2</span>
+            </div>
+            <p class="font-bold mb-1">Complete Task</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">Finish requirements & submit</p>
+          </div>
+          <div class="text-center">
+            <div class="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
+              <span class="text-purple-400 font-bold">3</span>
+            </div>
+            <p class="font-bold mb-1">Admin Review</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">Wait for admin verification</p>
+          </div>
+          <div class="text-center">
+            <div class="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
+              <span class="text-green-400 font-bold">4</span>
+            </div>
+            <p class="font-bold mb-1">Get Rewarded</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">Receive points & earnings</p>
+          </div>
+        </div>
+      </div>
+
       <!-- Stats Bar -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <div class="card rounded-xl p-4 text-center">
@@ -136,35 +174,23 @@
           <p id="statTotalEarned" class="text-2xl font-bold text-yellow-400">$0.00</p>
         </div>
         <div class="card rounded-xl p-4 text-center">
-          <p class="text-gray-600 dark:text-gray-400 text-sm">Bonus Multiplier</p>
-          <p id="statBonusMultiplier" class="text-2xl font-bold text-primary">1.0x</p>
+          <p class="text-gray-600 dark:text-gray-400 text-sm">My Tasks</p>
+          <p id="statMyTasks" class="text-2xl font-bold text-purple-400">0</p>
         </div>
       </div>
 
       <!-- Task Categories Tabs -->
-      <div class="flex flex-wrap gap-3 mb-8 border-b border-border">
-        <button class="px-6 py-3 rounded-t-xl font-medium transition bg-primary text-white">
-          All Tasks
+      <div id="categoryTabs"
+        class="flex flex-wrap gap-2 mb-8 border-b border-border pb-px overflow-x-auto no-scrollbar">
+        <button onclick="filterTasks('all')" id="tab-all"
+          class="tab-btn px-6 py-3 rounded-t-xl font-bold transition flex items-center gap-2 border-b-2 border-primary text-primary bg-primary/10">
+          <i class="fas fa-tasks"></i> All Tasks
         </button>
-        <button class="px-6 py-3 rounded-t-xl font-medium transition bg-card hover:bg-card/80">
-          Daily
-        </button>
-        <button class="px-6 py-3 rounded-t-xl font-medium transition bg-card hover:bg-card/80">
-          Surveys
-        </button>
-        <button class="px-6 py-3 rounded-t-xl font-medium transition bg-card hover:bg-card/80">
-          Offers
-        </button>
-        <button class="px-6 py-3 rounded-t-xl font-medium transition bg-card hover:bg-card/80">
-          Videos
-        </button>
-        <button class="px-6 py-3 rounded-t-xl font-medium transition bg-card hover:bg-card/80">
-          Limited Time <span class="ml-2 bg-red-500 text-xs px-2 py-1 rounded-full">Hot</span>
-        </button>
+        <!-- Dynamic tabs will be inserted here -->
       </div>
 
       <!-- Tasks Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div id="tasksGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         <!-- Task cards will be dynamically generated here -->
         <div class="text-center py-10">
           <i class="fas fa-spinner fa-spin text-4xl text-primary"></i>
@@ -177,10 +203,87 @@
   <!-- Overlay -->
   <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden"></div>
 
+  <!-- Task Proof Modal -->
+  <div id="proofModal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-card rounded-3xl p-8 max-w-lg w-full">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold">Submit Task Proof</h2>
+        <button onclick="closeProofModal()" class="text-gray-500 hover:text-text">
+          <i class="fas fa-times text-2xl"></i>
+        </button>
+      </div>
+
+      <div class="space-y-6">
+        <p id="proofTaskTitle" class="font-bold text-primary"></p>
+
+        <div>
+          <label class="block text-sm font-bold mb-2">Text Proof (Optional)</label>
+          <textarea id="proofText" placeholder="Describe what you did or paste link here..."
+            class="w-full h-32 px-4 py-3 rounded-2xl bg-background border border-border focus:border-primary outline-none resize-none"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold mb-2">Image Proof (Screenshot)</label>
+          <div id="imageUploadArea" class="relative group cursor-pointer">
+            <input type="file" id="proofImage" accept="image/*" class="hidden" onchange="previewProofImage(this)">
+            <div onclick="document.getElementById('proofImage').click()"
+              class="w-full h-40 border-2 border-dashed border-border rounded-2xl flex flex-col items-center justify-center group-hover:border-primary transition-colors relative overflow-hidden">
+              <i id="previewIcon"
+                class="fas fa-cloud-upload-alt text-4xl text-gray-500 mb-2 group-hover:text-primary transition-colors"></i>
+              <p id="previewText" class="text-sm text-gray-500 group-hover:text-primary transition-colors">Click to
+                upload screenshot</p>
+              <img id="imagePreview" class="absolute inset-0 w-full h-full object-contain hidden p-2">
+            </div>
+          </div>
+        </div>
+
+        <button id="submitProofBtn" onclick="submitTaskWithProof()"
+          class="w-full bg-primary hover:bg-orange-700 text-white py-4 rounded-2xl font-bold transition">
+          Submit for Review
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    let allTasks = [];
+    let currentFilter = 'all';
+    let currentTaskIdForProof = null;
+
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('overlay').classList.toggle('hidden');
+    }
+
+    function filterTasks(category) {
+      currentFilter = category;
+
+      // Update tab styling
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('border-primary', 'text-primary', 'bg-primary/10');
+        btn.classList.add('text-gray-500', 'hover:text-primary');
+      });
+
+      const activeTabId = category === 'all' ? 'tab-all' : `tab-${category.replace(/\s+/g, '-').toLowerCase()}`;
+      const activeTab = document.getElementById(activeTabId);
+      if (activeTab) {
+        activeTab.classList.remove('text-gray-500', 'hover:text-primary');
+        activeTab.classList.add('border-primary', 'text-primary', 'bg-primary/10');
+      }
+
+      renderTasks();
+    }
+
+    function renderTasks() {
+      const container = document.getElementById('tasksGrid');
+      const filteredTasks = currentFilter === 'all' ? allTasks : allTasks.filter(t => t.category === currentFilter);
+
+      if (filteredTasks.length === 0) {
+        container.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No tasks available in this category. Check back later!</div>';
+        return;
+      }
+
+      container.innerHTML = filteredTasks.map(taskObj => createTaskCard(taskObj, taskObj.user_status)).join('');
     }
 
     // Function to create task card HTML
@@ -189,51 +292,72 @@
       let buttonText = '';
       let buttonClass = '';
       let buttonAction = '';
+      let statusIcon = '';
+      let statusColor = '';
 
       switch (userStatus) {
         case 'available':
-          statusBadge = '<div class="bg-blue-600/20 px-3 py-1 rounded-full text-blue-300 text-xs font-medium">Available</div>';
-          buttonText = 'Join Task';
-          buttonClass = 'bg-primary hover:bg-orange-700 py-3 rounded-xl font-semibold transition';
+          statusBadge = '<div class="bg-blue-600/20 px-3 py-1.5 rounded-full text-blue-300 text-xs font-medium flex items-center gap-1"><i class="fas fa-circle-play"></i> Available</div>';
+          buttonText = '<i class="fas fa-rocket mr-2"></i>Join Task';
+          buttonClass = 'bg-gradient-to-r from-primary to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-3 rounded-xl font-semibold transition shadow-lg transform hover:scale-105';
           buttonAction = `onclick="startTask(${task.id})"`;
+          statusIcon = 'fa-circle-play';
+          statusColor = 'blue';
           break;
         case 'in_progress':
-          statusBadge = '<div class="bg-yellow-600/20 px-3 py-1 rounded-full text-yellow-300 text-xs font-medium">In Progress</div>';
-          buttonText = 'Task Completed';
-          buttonClass = 'bg-green-600 hover:bg-green-700 py-3 rounded-xl font-semibold transition';
+          statusBadge = '<div class="bg-yellow-600/20 px-3 py-1.5 rounded-full text-yellow-300 text-xs font-medium flex items-center gap-1"><i class="fas fa-hourglass-half"></i> In Progress</div>';
+          buttonText = '<i class="fas fa-check-circle mr-2"></i>Task Completed';
+          buttonClass = 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-3 rounded-xl font-semibold transition shadow-lg transform hover:scale-105';
           buttonAction = `onclick="completeTask(${task.id})"`;
+          statusIcon = 'fa-hourglass-half';
+          statusColor = 'yellow';
           break;
         case 'pending_review':
-          statusBadge = '<div class="bg-purple-600/20 px-3 py-1 rounded-full text-purple-300 text-xs font-medium">Pending Review</div>';
-          buttonText = 'Awaiting Admin Review';
-          buttonClass = 'bg-card text-gray-500 py-3 rounded-xl cursor-not-allowed';
+          statusBadge = '<div class="bg-purple-600/20 px-3 py-1.5 rounded-full text-purple-300 text-xs font-medium flex items-center gap-1"><i class="fas fa-clock"></i> Pending Review</div>';
+          buttonText = '<i class="fas fa-user-shield mr-2"></i>Awaiting Admin Review';
+          buttonClass = 'bg-gray-700 text-gray-400 py-3 rounded-xl cursor-not-allowed';
           buttonAction = 'disabled';
+          statusIcon = 'fa-clock';
+          statusColor = 'purple';
           break;
         case 'completed':
-          statusBadge = '<div class="bg-green-600/20 px-3 py-1 rounded-full text-green-300 text-xs font-medium">Completed</div>';
-          buttonText = 'Completed';
-          buttonClass = 'bg-card text-gray-500 py-3 rounded-xl cursor-not-allowed';
+          statusBadge = '<div class="bg-green-600/20 px-3 py-1.5 rounded-full text-green-300 text-xs font-medium flex items-center gap-1"><i class="fas fa-check-double"></i> Completed</div>';
+          buttonText = '<i class="fas fa-trophy mr-2"></i>Completed';
+          buttonClass = 'bg-green-600/30 text-green-300 py-3 rounded-xl cursor-not-allowed';
           buttonAction = 'disabled';
+          statusIcon = 'fa-check-double';
+          statusColor = 'green';
           break;
         case 'rejected':
-          statusBadge = '<div class="bg-red-600/20 px-3 py-1 rounded-full text-red-300 text-xs font-medium">Rejected</div>';
-          buttonText = 'Start Again';
-          buttonClass = 'bg-primary hover:bg-orange-700 py-3 rounded-xl font-semibold transition';
+          statusBadge = '<div class="bg-red-600/20 px-3 py-1.5 rounded-full text-red-300 text-xs font-medium flex items-center gap-1"><i class="fas fa-times-circle"></i> Rejected</div>';
+          buttonText = '<i class="fas fa-redo mr-2"></i>Try Again';
+          buttonClass = 'bg-gradient-to-r from-primary to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-3 rounded-xl font-semibold transition shadow-lg';
           buttonAction = `onclick="startTask(${task.id})"`;
+          statusIcon = 'fa-times-circle';
+          statusColor = 'red';
           break;
       }
 
+      const requiresVerification = task.requires_admin_verification ?
+        '<div class="bg-orange-600/20 px-3 py-1.5 rounded-full text-orange-300 text-xs font-medium flex items-center gap-1"><i class="fas fa-shield-halved"></i> Requires Verification</div>' : '';
+
       return `
-        <div class="group card rounded-2xl p-6">
-          <div class="flex justify-between items-start mb-4">
+        <div class="group card rounded-2xl p-6 hover:border-primary/50 transition-all">
+          <div class="flex justify-between items-start mb-4 flex-wrap gap-2">
             ${statusBadge}
-            ${task.requires_admin_verification ? '<div class="bg-red-600/20 px-3 py-1 rounded-full text-red-300 text-xs font-medium">Admin Review</div>' : ''}
+            ${requiresVerification}
           </div>
           <h3 class="text-xl font-bold mb-2">${task.title}</h3>
-          <p class="text-gray-400 text-sm mb-4">${task.description}</p>
-          <div class="flex items-center gap-3 mb-4">
-            <span class="text-2xl font-bold text-green-400">$${task.reward_amount.toFixed(2)}</span>
-            <span class="text-yellow-400">+${task.points_reward} pts</span>
+          <p class="text-gray-400 text-sm mb-4 line-clamp-2">${task.description}</p>
+          <div class="flex items-center justify-between mb-4 p-3 bg-gradient-to-r from-green-500/10 to-yellow-500/10 rounded-lg border border-green-500/20">
+            <div class="text-center flex-1">
+              <p class="text-xs text-gray-400 mb-1">Reward</p>
+              <span class="text-xl font-bold text-green-400">$${task.reward_amount.toFixed(2)}</span>
+            </div>
+            <div class="text-center flex-1 border-l border-gray-600">
+              <p class="text-xs text-gray-400 mb-1">Points</p>
+              <span class="text-xl font-bold text-yellow-400">+${task.points_reward}</span>
+            </div>
           </div>
           <button class="w-full ${buttonClass}" ${buttonAction}>
             ${buttonText}
@@ -247,6 +371,14 @@
       const token = localStorage.getItem('access_token');
       if (!token) {
         window.location.href = 'login.html';
+        return;
+      }
+
+      // Find the task to check its category
+      const task = allTasks.find(t => t.id === taskId);
+
+      // Show confirmation
+      if (!confirm('Join this task? You can submit it for review after completing the requirements.')) {
         return;
       }
 
@@ -279,6 +411,17 @@
         return;
       }
 
+      // Find the task to check its category
+      const task = allTasks.find(t => t.id === taskId);
+
+      if (task && task.requires_admin_verification) {
+        // Open proof modal for tasks requiring verification
+        currentTaskIdForProof = taskId;
+        document.getElementById('proofTaskTitle').textContent = task.title;
+        document.getElementById('proofModal').classList.remove('hidden');
+        return;
+      }
+
       if (!confirm('Have you completed all the requirements for this task?')) {
         return;
       }
@@ -304,6 +447,89 @@
         });
     }
 
+    function closeProofModal() {
+      document.getElementById('proofModal').classList.add('hidden');
+      document.getElementById('proofText').value = '';
+      document.getElementById('proofImage').value = '';
+      document.getElementById('imagePreview').classList.add('hidden');
+      document.getElementById('previewIcon').classList.remove('hidden');
+      document.getElementById('previewText').classList.remove('hidden');
+      currentTaskIdForProof = null;
+    }
+
+    function previewProofImage(input) {
+      const preview = document.getElementById('imagePreview');
+      const icon = document.getElementById('previewIcon');
+      const text = document.getElementById('previewText');
+
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          preview.src = e.target.result;
+          preview.classList.remove('hidden');
+          icon.classList.add('hidden');
+          text.classList.add('hidden');
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function submitTaskWithProof() {
+      if (!currentTaskIdForProof) return;
+
+      const token = localStorage.getItem('access_token');
+      const proofText = document.getElementById('proofText').value;
+      const proofImageFile = document.getElementById('proofImage').files[0];
+
+      if (!proofText && !proofImageFile) {
+        alert('Please provide some proof (text or image) to proceed.');
+        return;
+      }
+
+      const submitBtn = document.getElementById('submitProofBtn');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Submitting...';
+
+      // Function to send data
+      const sendData = (imageBuffer = null) => {
+        fetch(`/api/tasks/${currentTaskIdForProof}/complete`, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            proof_text: proofText,
+            proof_image: imageBuffer
+          })
+        })
+          .then(response => response.json())
+          .then(data => {
+            alert(data.message || 'Task submitted for review!');
+            closeProofModal();
+            loadTasks();
+          })
+          .catch(error => {
+            console.error('Error submitting proof:', error);
+            alert('Failed to submit task proof. Please try again.');
+          })
+          .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit for Review';
+          });
+      };
+
+      if (proofImageFile) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          sendData(e.target.result);
+        };
+        reader.readAsDataURL(proofImageFile);
+      } else {
+        sendData();
+      }
+    }
+
     // Function to load tasks
     function loadTasks() {
       const token = localStorage.getItem('access_token');
@@ -312,53 +538,94 @@
         return;
       }
 
-      // Fetch tasks from backend
-      fetch('/api/tasks/', {
-        headers: {
-          'Authorization': 'Bearer ' + token
-        }
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.tasks) {
-            const tasksContainer = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.xl\\:grid-cols-3.gap-6');
-            tasksContainer.innerHTML = '';
+      // Prevent multiple simultaneous loads
+      if (window.isLoadingTasks) {
+        return;
+      }
+      window.isLoadingTasks = true;
 
-            if (data.tasks.length > 0) {
-              document.getElementById('statTasksAvailable').textContent = data.tasks.length;
-              data.tasks.forEach(taskObj => {
-                const taskCard = createTaskCard(taskObj, taskObj.user_status);
-                tasksContainer.innerHTML += taskCard;
-              });
-            } else {
-              tasksContainer.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No tasks available at the moment. Check back later!</div>';
-              document.getElementById('statTasksAvailable').textContent = '0';
-            }
+      // Fetch all data in parallel but only update UI once
+      Promise.all([
+        fetch('/api/tasks/', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
+          if (r.status === 401) { window.location.href = 'login.html'; throw new Error('Unauthorized'); }
+          return r.json();
+        }),
+        fetch('/api/points/balance', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
+          if (r.status === 401) { window.location.href = 'login.html'; throw new Error('Unauthorized'); }
+          return r.json();
+        }),
+        fetch('/api/auth/profile', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
+          if (r.status === 401) { window.location.href = 'login.html'; throw new Error('Unauthorized'); }
+          return r.json();
+        })
+      ])
+        .then(([tasksData, pointsData, profileData]) => {
+          // Update tasks
+          if (tasksData.tasks) {
+            allTasks = tasksData.tasks;
+
+            // Generate dynamic categories
+            const categories = [...new Set(allTasks.map(t => t.category).filter(c => c))];
+            const tabContainer = document.getElementById('categoryTabs');
+
+            // Keep All Tasks tab, but clear others
+            const allTasksTab = document.getElementById('tab-all');
+            tabContainer.innerHTML = '';
+            tabContainer.appendChild(allTasksTab);
+
+            categories.forEach(cat => {
+              const tabId = `tab-${cat.replace(/\s+/g, '-').toLowerCase()}`;
+              const btn = document.createElement('button');
+              btn.id = tabId;
+              btn.onclick = () => filterTasks(cat);
+              btn.className = 'tab-btn px-6 py-3 rounded-t-xl font-bold transition flex items-center gap-2 text-gray-500 hover:text-primary whitespace-nowrap';
+
+              let icon = 'fa-tag';
+              if (cat.toLowerCase().includes('invite')) icon = 'fa-user-plus';
+              if (cat.toLowerCase().includes('code')) icon = 'fa-barcode';
+              if (cat.toLowerCase().includes('social')) icon = 'fa-share-nodes';
+              if (cat.toLowerCase().includes('survey')) icon = 'fa-poll-h';
+              if (cat.toLowerCase().includes('video')) icon = 'fa-play-circle';
+
+              btn.innerHTML = `<i class="fas ${icon}"></i> ${cat}`;
+              tabContainer.appendChild(btn);
+            });
+
+            // Re-apply current filter styling
+            filterTasks(currentFilter);
+
+            const availableCount = tasksData.tasks.filter(t => t.user_status === 'available').length;
+            const myTasksCount = tasksData.tasks.filter(t => ['in_progress', 'pending_review', 'completed'].includes(t.user_status)).length;
+
+            document.getElementById('statTasksAvailable').textContent = availableCount;
+            document.getElementById('statMyTasks').textContent = myTasksCount;
+
+            renderTasks();
+          }
+
+          // Update points balance
+          if (pointsData) {
+            const pointsBalance = (pointsData.points_balance || 0).toLocaleString() + ' pts';
+            const tierLevel = pointsData.tier_level || 'Bronze';
+
+            document.getElementById('topPointsBalance').textContent = pointsBalance;
+            document.getElementById('statTierLevel').textContent = tierLevel;
+          }
+
+          // Update earnings
+          if (profileData && profileData.user) {
+            const earnings = '$' + (profileData.user.total_earnings || 0).toFixed(2);
+
+            document.getElementById('topTotalEarned').textContent = earnings + ' earned';
+            document.getElementById('statTotalEarned').textContent = earnings;
           }
         })
         .catch(error => {
-          console.error('Error fetching tasks:', error);
-        });
-
-      // Fetch points and extra stats
-      fetch('/api/points/balance', {
-        headers: { 'Authorization': 'Bearer ' + token }
-      })
-        .then(response => response.json())
-        .then(data => {
-          document.getElementById('topPointsBalance').textContent = (data.points_balance || 0).toLocaleString() + ' pts';
-          document.getElementById('statTierLevel').textContent = data.tier_level || 'Bronze';
-        });
-
-      fetch('/api/auth/profile', {
-        headers: { 'Authorization': 'Bearer ' + token }
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.user) {
-            document.getElementById('topTotalEarned').textContent = '$' + (data.user.total_earnings || 0).toFixed(2) + ' earned';
-            document.getElementById('statTotalEarned').textContent = '$' + (data.user.total_earnings || 0).toFixed(2);
-          }
+          console.error('Error fetching data:', error);
+          document.getElementById('tasksGrid').innerHTML = '<div class="col-span-full text-center py-10 text-red-500">Failed to load tasks. Please refresh the page.</div>';
+        })
+        .finally(() => {
+          window.isLoadingTasks = false;
         });
     }
 
@@ -370,33 +637,8 @@
         return;
       }
 
-      // Load user information from localStorage
-      const savedAvatar = localStorage.getItem('userAvatar');
-      const savedName = localStorage.getItem('userName');
-      const savedEmail = localStorage.getItem('userEmail');
-
-      if (savedName) {
-        document.getElementById('sidebarUserName').textContent = savedName;
-      }
-
-      if (savedEmail) {
-        document.getElementById('sidebarUserEmail').textContent = savedEmail;
-      }
-
-      // Load from profile if missing
-      if (token && (!savedName || !savedEmail)) {
-        fetch('/api/auth/profile', {
-          headers: { 'Authorization': 'Bearer ' + token }
-        })
-          .then(response => response.json())
-          .then(data => {
-            if (data.user) {
-              document.getElementById('sidebarUserName').textContent = data.user.full_name;
-              document.getElementById('sidebarUserEmail').textContent = data.user.email;
-              localStorage.setItem('userName', data.user.full_name);
-              localStorage.setItem('userEmail', data.user.email);
-            }
-          });
+      if (typeof updateSidebar === 'function') {
+        updateSidebar();
       }
 
       // Load tasks

@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from backend.app import db
+from backend.extensions import db
 from backend.models.user import User, UserRole
 from backend.models.support_message import SupportMessage, MessageType, MessageStatus
 from backend.utils.decorators import partner_restricted
@@ -12,7 +12,7 @@ support_bp = Blueprint('support', __name__)
 @partner_restricted
 def create_support_message():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
 
         if not user:
@@ -53,7 +53,7 @@ def create_support_message():
 @partner_restricted
 def get_support_messages():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 10, type=int)
 
@@ -76,7 +76,7 @@ def get_support_messages():
 @partner_restricted
 def get_support_message(message_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         message = SupportMessage.query.filter_by(
             id=message_id,
             user_id=current_user_id

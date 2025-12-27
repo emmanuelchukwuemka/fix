@@ -23,7 +23,9 @@ def migrate():
         ('is_approved', 'BOOLEAN DEFAULT 0'),
         ('is_suspended', 'BOOLEAN DEFAULT 0'),
         ('is_verified', 'BOOLEAN DEFAULT 0'),
-        ('verification_pending', 'BOOLEAN DEFAULT 0')
+        ('verification_pending', 'BOOLEAN DEFAULT 0'),
+        ('requires_admin_verification', 'BOOLEAN DEFAULT 0'),
+        ('avatar_url', 'TEXT')
     ]
 
     for column_name, column_type in columns_to_add:

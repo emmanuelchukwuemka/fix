@@ -4,8 +4,10 @@ from backend.models.user import User, UserRole
 from backend.models.reward_code import RewardCode
 from backend.models.transaction import Transaction, TransactionType, TransactionStatus
 from backend.models.support_message import SupportMessage, MessageStatus, MessageType
+from backend.models.task import Task, UserTask
 from backend.utils.helpers import generate_reward_code, generate_batch_id
 from backend.utils.emailer import Emailer
+from backend.utils.admin_auth import admin_required
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import csv
 import io
@@ -13,15 +15,11 @@ import io
 admin_bp = Blueprint('admin', __name__)
 
 @admin_bp.route('/codes/generate', methods=['POST'])
-@jwt_required()
+@admin_required
 def generate_codes():
     try:
         current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         data = request.get_json()
         count = data.get('count', 100)
@@ -61,15 +59,11 @@ def generate_codes():
         return jsonify({'message': 'Failed to generate codes', 'error': str(e)}), 500
 
 @admin_bp.route('/codes/export/<batch_id>', methods=['GET'])
-@jwt_required()
+@admin_required
 def export_codes(batch_id):
     try:
         current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         # Get codes for this batch
         codes = RewardCode.query.filter_by(batch_id=batch_id).all()
@@ -103,15 +97,11 @@ def export_codes(batch_id):
         return jsonify({'message': 'Failed to export codes', 'error': str(e)}), 500
 
 @admin_bp.route('/codes', methods=['GET'])
-@jwt_required()
+@admin_required
 def get_all_codes():
     try:
         current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 50, type=int)
@@ -143,15 +133,11 @@ def get_all_codes():
         return jsonify({'message': 'Failed to fetch codes', 'error': str(e)}), 500
 
 @admin_bp.route('/codes/<int:code_id>/delete', methods=['DELETE'])
-@jwt_required()
+@admin_required
 def delete_single_code(code_id):
     try:
         current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         code = RewardCode.query.get(code_id)
         if not code:
@@ -166,15 +152,11 @@ def delete_single_code(code_id):
         return jsonify({'message': 'Failed to delete code', 'error': str(e)}), 500
 
 @admin_bp.route('/support-messages', methods=['GET'])
-@jwt_required()
+@admin_required
 def get_all_support_messages():
     try:
         current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 20, type=int)
@@ -211,15 +193,11 @@ def get_all_support_messages():
         return jsonify({'message': 'Failed to fetch support messages', 'error': str(e)}), 500
 
 @admin_bp.route('/support-messages/<int:message_id>/respond', methods=['POST'])
-@jwt_required()
+@admin_required
 def respond_to_support_message(message_id):
     try:
         current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         data = request.get_json()
         response_text = data.get('response')
@@ -246,15 +224,11 @@ def respond_to_support_message(message_id):
         return jsonify({'message': 'Failed to respond to support message', 'error': str(e)}), 500
 
 @admin_bp.route('/activities/recent', methods=['GET'])
-@jwt_required()
+@admin_required
 def get_recent_activities():
     try:
         current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
             
         limit = request.args.get('limit', 20, type=int)
         
@@ -310,15 +284,11 @@ def get_recent_activities():
         return jsonify({'message': 'Failed to fetch recent activities', 'error': str(e)}), 500
 
 @admin_bp.route('/users/points/update', methods=['POST'])
-@jwt_required()
+@admin_required
 def update_user_points():
     try:
         current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         data = request.get_json()
         user_id = data.get('user_id')
@@ -356,15 +326,11 @@ def update_user_points():
         return jsonify({'message': 'Failed to update user points', 'error': str(e)}), 500
 
 @admin_bp.route('/users', methods=['GET'])
-@jwt_required()
+@admin_required
 def get_all_users():
     try:
         current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 20, type=int)
@@ -395,15 +361,11 @@ def get_all_users():
         return jsonify({'message': 'Failed to fetch users', 'error': str(e)}), 500
 
 @admin_bp.route('/users/<int:user_id>/details', methods=['GET'])
-@jwt_required()
+@admin_required
 def get_user_details(user_id):
     try:
         current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         user = User.query.get(user_id)
         if not user:
@@ -415,14 +377,11 @@ def get_user_details(user_id):
         return jsonify({'message': 'Failed to fetch user details', 'error': str(e)}), 500
 
 @admin_bp.route('/users/<int:user_id>/suspend', methods=['POST'])
-@jwt_required()
+@admin_required
 def suspend_user(user_id):
     try:
         current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
-        
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
             
         user = User.query.get(user_id)
         if not user:
@@ -436,14 +395,11 @@ def suspend_user(user_id):
         return jsonify({'message': 'Failed to suspend user', 'error': str(e)}), 500
 
 @admin_bp.route('/users/<int:user_id>/unsuspend', methods=['POST'])
-@jwt_required()
+@admin_required
 def unsuspend_user(user_id):
     try:
         current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
-        
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
             
         user = User.query.get(user_id)
         if not user:
@@ -457,14 +413,11 @@ def unsuspend_user(user_id):
         return jsonify({'message': 'Failed to unsuspend user', 'error': str(e)}), 500
 
 @admin_bp.route('/users/<int:user_id>/verify', methods=['POST'])
-@jwt_required()
+@admin_required
 def verify_user(user_id):
     try:
         current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
-        
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
             
         user = User.query.get(user_id)
         if not user:
@@ -482,15 +435,11 @@ def verify_user(user_id):
         return jsonify({'message': 'Failed to verify user', 'error': str(e)}), 500
 
 @admin_bp.route('/withdrawals', methods=['GET'])
-@jwt_required()
+@admin_required
 def get_pending_withdrawals():
     try:
         current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 20, type=int)
@@ -531,7 +480,7 @@ def get_pending_withdrawals():
             Transaction.updated_at >= today
         ).count()
         
-        week_approved_sum = db.session.query(db.func.sum(Transaction.amount)).filter(
+        week_approved_sum = db.session.query(db.func.coalesce(db.func.sum(Transaction.amount), 0.0)).filter(
             Transaction.type == TransactionType.POINT_WITHDRAWAL,
             Transaction.status == TransactionStatus.COMPLETED,
             Transaction.updated_at >= week_ago
@@ -559,15 +508,11 @@ def get_pending_withdrawals():
         return jsonify({'message': 'Failed to fetch withdrawals', 'error': str(e)}), 500
 
 @admin_bp.route('/withdrawals/<int:transaction_id>/approve', methods=['POST'])
-@jwt_required()
+@admin_required
 def approve_withdrawal(transaction_id):
     try:
         current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         # Get the transaction
         transaction = Transaction.query.get(transaction_id)
@@ -610,15 +555,11 @@ def approve_withdrawal(transaction_id):
         return jsonify({'message': 'Failed to approve withdrawal', 'error': str(e)}), 500
 
 @admin_bp.route('/withdrawals/<int:transaction_id>/reject', methods=['POST'])
-@jwt_required()
+@admin_required
 def reject_withdrawal(transaction_id):
     try:
         current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         # Get the transaction
         transaction = Transaction.query.get(transaction_id)
@@ -666,6 +607,8 @@ def reject_withdrawal(transaction_id):
     except Exception as e:
         return jsonify({'message': 'Failed to reject withdrawal', 'error': str(e)}), 500
 
+
+
 def get_method_from_description(description):
     """Extract payment method from transaction description"""
     import re
@@ -673,15 +616,11 @@ def get_method_from_description(description):
     return match.group(1) if match else 'unknown'
 
 @admin_bp.route('/referrals/award-bonus', methods=['POST'])
-@jwt_required()
+@admin_required
 def award_referral_bonus():
     try:
         current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         data = request.get_json()
         user_id = data.get('user_id')
@@ -727,15 +666,11 @@ def award_referral_bonus():
         return jsonify({'message': 'Failed to award referral bonus', 'error': str(e)}), 500
 
 @admin_bp.route('/dashboard/stats', methods=['GET'])
-@jwt_required()
+@admin_required
 def get_dashboard_stats():
     try:
         current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
-        
-        # Check if user is admin
-        if admin_user.role != UserRole.ADMIN:
-            return jsonify({'message': 'Access denied'}), 403
         
         # Get total users
         total_users = User.query.count()
@@ -755,19 +690,21 @@ def get_dashboard_stats():
             status=MessageStatus.SENT
         ).count()
         
-        # Get platform earnings (sum of all completed transactions)
-        platform_earnings = db.session.query(db.func.sum(Transaction.amount)).filter(
+        # Get platform earnings (sum of completed earning transactions)
+        platform_earnings = db.session.query(db.func.coalesce(db.func.sum(Transaction.amount), 0.0)).filter(
             Transaction.status == TransactionStatus.COMPLETED,
-            Transaction.type != TransactionStatus.FAILED
+            Transaction.type != TransactionType.POINT_WITHDRAWAL  # Exclude withdrawal transactions from platform earnings
         ).scalar() or 0.0
         
         # Get daily active users (placeholder)
-        daily_active_users = User.query.count() 
+        from datetime import datetime, timedelta
+        yesterday = datetime.utcnow() - timedelta(days=1)
+        daily_active_users = User.query.filter(User.updated_at >= yesterday).count()
         
         # Get tasks completed today
         from backend.models.task import UserTask
-        from datetime import datetime, time
-        today_start = datetime.combine(datetime.utcnow().date(), time.min)
+        from datetime import datetime, date
+        today_start = datetime.combine(date.today(), datetime.min.time())
         tasks_completed_today = UserTask.query.filter(
             UserTask.status == 'completed',
             UserTask.updated_at >= today_start
@@ -777,7 +714,7 @@ def get_dashboard_stats():
         total_referrals = User.query.filter(User.referred_by.isnot(None)).count()
         
         # Get referral earnings
-        referral_earnings = db.session.query(db.func.sum(Transaction.amount)).filter(
+        referral_earnings = db.session.query(db.func.coalesce(db.func.sum(Transaction.amount), 0.0)).filter(
             Transaction.type == TransactionType.REFERRAL_BONUS,
             Transaction.status == TransactionStatus.COMPLETED
         ).scalar() or 0.0

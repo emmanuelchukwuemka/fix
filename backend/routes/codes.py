@@ -16,7 +16,7 @@ codes_bp = Blueprint('codes', __name__)
 @partner_restricted
 def redeem_code():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         if not user:
@@ -78,7 +78,7 @@ def redeem_code():
 @partner_restricted
 def get_redemption_history():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 10, type=int)
         
@@ -147,7 +147,7 @@ def get_code_info(code):
 @jwt_required()
 def get_all_codes():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -185,7 +185,7 @@ def get_all_codes():
 @jwt_required()
 def delete_code(code_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -212,7 +212,7 @@ def delete_code(code_id):
 @jwt_required()
 def get_code_stats():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         # Check if user is admin

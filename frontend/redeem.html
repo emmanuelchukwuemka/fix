@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -35,13 +36,20 @@
 
   <!-- Animated Background Orbs -->
   <div class="absolute inset-0 -z-10">
-    <div class="absolute top-10 left-10 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-60 animate-pulse"></div>
-    <div class="absolute bottom-10 right-10 w-96 h-96 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-60 animate-pulse delay-1000"></div>
-    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-pulse delay-700"></div>
+    <div
+      class="absolute top-10 left-10 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-60 animate-pulse">
+    </div>
+    <div
+      class="absolute bottom-10 right-10 w-96 h-96 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-60 animate-pulse delay-1000">
+    </div>
+    <div
+      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-pulse delay-700">
+    </div>
   </div>
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
+  <aside id="sidebar"
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
     <div class="flex items-center justify-between p-6 border-b border-border">
       <div class="flex flex-col items-center">
         <img src="assets/logo.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
@@ -73,7 +81,8 @@
         <i class="fas fa-history"></i>
         <span>Transaction History</span>
       </a>
-      <a href="redeem.html" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="redeem.html"
+        class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-gift"></i>
         <span>Redeem Code</span>
       </a>
@@ -89,13 +98,15 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="User" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <img id="sidebarAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=User" alt="User"
+          class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
-          <p class="font-semibold">John Doe</p>
-          <p class="text-sm text-gray-600 dark:text-gray-400">john@example.com</p>
+          <p id="sidebarUserName" class="font-semibold">Loading...</p>
+          <p id="sidebarUserEmail" class="text-sm text-gray-600 dark:text-gray-400">Loading...</p>
         </div>
       </div>
-      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+      <a href="#" onclick="logout()"
+        class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
         Logout
       </a>
     </div>
@@ -113,7 +124,8 @@
           <h1 class="text-3xl font-bold text-primary">
             Redeem Code
           </h1>
-          <p class="text-gray-600 dark:text-gray-400">Enter your 8-character code (5 letters + 3 numbers) to claim points instantly</p>
+          <p class="text-gray-600 dark:text-gray-400">Enter your 8-character code (5 letters + 3 numbers) to claim
+            points instantly</p>
         </div>
       </div>
     </header>
@@ -125,26 +137,23 @@
         <div class="text-center mb-10">
           <i class="fas fa-gift text-7xl text-primary mb-6"></i>
           <h2 class="text-4xl font-bold">Enter Your Code</h2>
-          <p class="text-gray-600 dark:text-gray-400 mt-4 text-lg">Codes contain 5 letters + 3 numbers (e.g., ABCDE123)</p>
+          <p class="text-gray-600 dark:text-gray-400 mt-4 text-lg">Codes contain 5 letters + 3 numbers (e.g., ABCDE123)
+          </p>
         </div>
 
         <!-- Code Input -->
         <div class="max-w-2xl mx-auto">
           <div class="relative mb-8">
-            <input 
-              type="text" 
-              id="codeInput" 
-              maxlength="8" 
-              placeholder="ABCDE123" 
-              class="w-full text-center text-5xl font-bold tracking-widest px-10 py-8 bg-card border-2 border-border rounded-2xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/30 transition text-primary placeholder-gray-500 uppercase"
-            />
+            <input type="text" id="codeInput" maxlength="8" placeholder="ABCDE123"
+              class="w-full text-center text-5xl font-bold tracking-widest px-10 py-8 bg-card border-2 border-border rounded-2xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/30 transition text-primary placeholder-gray-500 uppercase" />
             <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div id="codeFormat" class="text-sm text-gray-500 opacity-0 transition-opacity">XXXXX###</div>
             </div>
           </div>
 
           <!-- Drag & Drop Upload -->
-          <div id="dropZone" class="border-2 border-dashed border-border rounded-2xl p-12 text-center cursor-pointer hover:border-primary hover:bg-card/50 transition mb-8">
+          <div id="dropZone"
+            class="border-2 border-dashed border-border rounded-2xl p-12 text-center cursor-pointer hover:border-primary hover:bg-card/50 transition mb-8">
             <i class="fas fa-cloud-upload-alt text-6xl text-gray-500 mb-4"></i>
             <p class="text-xl font-medium">Drop your code file here</p>
             <p class="text-gray-600 dark:text-gray-400 mt-2">or click to browse (.txt, .csv)</p>
@@ -152,10 +161,8 @@
           </div>
 
           <!-- Redeem Button -->
-          <button 
-            id="redeemButton" 
-            class="w-full bg-primary hover:bg-orange-700 text-white font-bold text-2xl py-6 rounded-2xl shadow-2xl transform hover:scale-105 transition duration-300"
-          >
+          <button id="redeemButton"
+            class="w-full bg-primary hover:bg-orange-700 text-white font-bold text-2xl py-6 rounded-2xl shadow-2xl transform hover:scale-105 transition duration-300">
             Redeem Now
           </button>
         </div>
@@ -184,13 +191,15 @@
                 <td class="py-5 font-mono text-lg">ABCDE123</td>
                 <td class="py-5"><span class="text-green-400 font-bold">+150 pts</span></td>
                 <td class="py-5">Jun 10, 2025</td>
-                <td class="py-5"><span class="bg-green-600/20 text-green-400 px-4 py-2 rounded-full text-sm">Success</span></td>
+                <td class="py-5"><span
+                    class="bg-green-600/20 text-green-400 px-4 py-2 rounded-full text-sm">Success</span></td>
               </tr>
               <tr class="border-b border-border hover:bg-card/50 transition">
                 <td class="py-5 font-mono text-lg">XYZAB789</td>
                 <td class="py-5"><span class="text-green-400 font-bold">+100 pts</span></td>
                 <td class="py-5">Jun 12, 2025</td>
-                <td class="py-5"><span class="bg-green-600/20 text-green-400 px-4 py-2 rounded-full text-sm">Success</span></td>
+                <td class="py-5"><span
+                    class="bg-green-600/20 text-green-400 px-4 py-2 rounded-full text-sm">Success</span></td>
               </tr>
             </tbody>
           </table>
@@ -216,7 +225,7 @@
     const historyTable = document.getElementById('historyTable');
 
     // Live code formatting
-    codeInput.addEventListener('input', function() {
+    codeInput.addEventListener('input', function () {
       this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
       // Limit to 8 characters total: 5 letters + 3 digits
       if (this.value.length > 8) {
@@ -228,13 +237,13 @@
     redeemButton.addEventListener('click', () => {
       const code = codeInput.value.trim();
       const token = localStorage.getItem('access_token');
-      
+
       if (!token) {
         showMessage('Please log in to redeem codes', 'error');
         window.location.href = 'login.html';
         return;
       }
-      
+
       if (!/^[A-Z]{5}[0-9]{3}$/.test(code)) {
         showMessage('Invalid code format! Use 5 letters + 3 numbers (e.g., ABCDE123)', 'error');
         return;
@@ -253,44 +262,44 @@
         },
         body: JSON.stringify({ code: code })
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.message && data.message.includes('Successfully')) {
-          // Success!
-          confetti({
-            particleCount: 150,
-            spread: 70,
-            origin: { y: 0.6 }
-          });
+        .then(response => response.json())
+        .then(data => {
+          if (data.message && data.message.includes('Successfully')) {
+            // Success!
+            confetti({
+              particleCount: 150,
+              spread: 70,
+              origin: { y: 0.6 }
+            });
 
-          showMessage(data.message, 'success');
-          
-          // Add to history
-          const row = document.createElement('tr');
-          row.className = 'border-b border-gray-800 animate-fade-in';
-          const now = new Date();
-          row.innerHTML = `
+            showMessage(data.message, 'success');
+
+            // Add to history
+            const row = document.createElement('tr');
+            row.className = 'border-b border-gray-800 animate-fade-in';
+            const now = new Date();
+            row.innerHTML = `
             <td class="py-5 font-mono text-lg">${code}</td>
             <td class="py-5"><span class="text-green-400 font-bold">+${data.points_added} pts</span></td>
             <td class="py-5">${now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
             <td class="py-5"><span class="bg-green-600/20 text-green-400 px-4 py-2 rounded-full text-sm">Success</span></td>
           `;
-          historyTable.prepend(row);
+            historyTable.prepend(row);
 
-          codeInput.value = '';
-        } else {
-          showMessage(data.message || 'Failed to redeem code', 'error');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        showMessage('Failed to redeem code. Please try again.', 'error');
-      })
-      .finally(() => {
-        // Re-enable button
-        redeemButton.disabled = false;
-        redeemButton.textContent = originalText;
-      });
+            codeInput.value = '';
+          } else {
+            showMessage(data.message || 'Failed to redeem code', 'error');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          showMessage('Failed to redeem code. Please try again.', 'error');
+        })
+        .finally(() => {
+          // Re-enable button
+          redeemButton.disabled = false;
+          redeemButton.textContent = originalText;
+        });
     });
 
     function showMessage(text, type) {
@@ -327,68 +336,83 @@
     });
 
     dropZone.addEventListener('click', () => fileUpload.click());
-    
+
     // Fetch redemption history when page loads
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       const token = localStorage.getItem('access_token');
       if (!token) {
         window.location.href = 'login.html';
         return;
       }
-      
+
       fetch('/api/codes/history', {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.codes && data.codes.length > 0) {
-          // Clear existing rows
-          historyTable.innerHTML = '';
-          
-          // Add history rows
-          data.codes.forEach(code => {
-            if (code.is_used) {
-              const row = document.createElement('tr');
-              row.className = 'border-b border-gray-800 hover:bg-gray-700/50 transition';
-              const usedDate = new Date(code.used_at);
-              row.innerHTML = `
+        .then(response => response.json())
+        .then(data => {
+          if (data.codes && data.codes.length > 0) {
+            // Clear existing rows
+            historyTable.innerHTML = '';
+
+            // Add history rows
+            data.codes.forEach(code => {
+              if (code.is_used) {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-800 hover:bg-gray-700/50 transition';
+                const usedDate = new Date(code.used_at);
+                row.innerHTML = `
                 <td class="py-5 font-mono text-lg">${code.code}</td>
                 <td class="py-5"><span class="text-green-400 font-bold">+${code.point_value} pts</span></td>
                 <td class="py-5">${usedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
                 <td class="py-5"><span class="bg-green-600/20 text-green-400 px-4 py-2 rounded-full text-sm">Success</span></td>
               `;
-              historyTable.appendChild(row);
-            }
-          });
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching redemption history:', error);
-        if (error.message && error.message.includes('401')) {
-          localStorage.removeItem('access_token');
-          window.location.href = 'login.html';
-        }
-      });
+                historyTable.appendChild(row);
+              }
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching redemption history:', error);
+          if (error.message && error.message.includes('401')) {
+            localStorage.removeItem('access_token');
+            window.location.href = 'login.html';
+          }
+        });
     });
-    
+
     // Logout function
     function logout() {
       localStorage.removeItem('access_token');
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userEmail');
+      // Update sidebar to reflect logout
+      if (typeof updateSidebar === 'function') {
+        updateSidebar();
+      }
       window.location.href = 'login.html';
     }
   </script>
 
   <style>
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    .animate-fade-in { animation: fadeIn 0.6s ease-out; }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease-out;
+    }
   </style>
   <script src="assets/js/theme.js"></script>
-  
-  <!-- Fixed Theme Toggle Button -->
-  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
-    <i class="fas fa-moon"></i>
-  </button>
 </body>
+
 </html>

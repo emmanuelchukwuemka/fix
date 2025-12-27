@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from backend.app import db
+from backend.extensions import db
 from backend.models.user import User, UserRole
 from backend.models.transaction import Transaction, TransactionType, TransactionStatus
 from backend.utils.decorators import partner_restricted
@@ -12,7 +12,7 @@ referrals_bp = Blueprint('referrals', __name__)
 @partner_restricted
 def get_referral_stats():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         if not user:
@@ -49,7 +49,7 @@ def get_referral_stats():
 @jwt_required()
 def get_all_referrals():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -104,7 +104,7 @@ def get_all_referrals():
 @jwt_required()
 def get_referral_bonuses():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -135,18 +135,28 @@ def get_referral_bonuses():
 @jwt_required()
 def get_top_referrers():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         # Check if user is admin
         if user.role != UserRole.ADMIN:
             return jsonify({'message': 'Access denied'}), 403
         
-        # Get users with the most referrals
+        from sqlalchemy import func
+        
+        # Get users with the most referrals using a cleaner query
+        referrer_alias = db.aliased(User)
+        referred_alias = db.aliased(User)
+        
         top_referrers = db.session.query(
-            User,
-            db.func.count(User.referred_users).label('referral_count')
-        ).join(User.referred_users).group_by(User.id).order_by(
+            referrer_alias,
+            func.count(referred_alias.id).label('referral_count')
+        ).join(
+            referred_alias, 
+            referred_alias.referred_by == referrer_alias.id
+        ).group_by(
+            referrer_alias.id
+        ).order_by(
             db.desc('referral_count')
         ).limit(10).all()
         
@@ -171,7 +181,7 @@ def get_top_referrers():
 @partner_restricted
 def get_referred_users():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 10, type=int)
         
@@ -194,7 +204,7 @@ def get_referred_users():
 @partner_restricted
 def get_referral_link():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         if not user:

@@ -112,7 +112,7 @@
         </button>
         <h1 class="text-2xl font-bold text-primary">My Points</h1>
         <div class="text-right">
-          <p class="text-sm text-gray-600 dark:text-gray-400">1 Point = $0.10</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">1 Point = $0.30</p>
           <p id="topUsdWorth" class="text-lg font-medium text-green-400">Loading...</p>
         </div>
       </div>
@@ -230,7 +230,7 @@
             document.getElementById('statPointsUsed').textContent = (data.total_points_withdrawn || 0).toLocaleString();
 
             // Update worth in USD
-            const usdWorth = data.points_balance * 0.1;
+            const usdWorth = data.points_balance * 0.30;
             document.getElementById('topUsdWorth').textContent = 'Worth $' + usdWorth.toFixed(2) + ' today';
 
             // Update tier progress

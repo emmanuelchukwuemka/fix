@@ -8,13 +8,13 @@ document.addEventListener("DOMContentLoaded", function () {
       // Get form values
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
-      
+
       // Simple validation
       if (!email || !password) {
         alert("Please fill in all fields");
         return;
       }
-      
+
       // Send login request to backend
       fetch("/api/auth/login", {
         method: "POST",
@@ -23,25 +23,32 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         body: JSON.stringify({ email, password })
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.access_token) {
-          localStorage.setItem("access_token", data.access_token);
-          // Store user data
-          if (data.user) {
-            localStorage.setItem('userName', data.user.full_name);
-            localStorage.setItem('userEmail', data.user.email);
+        .then(response => response.json())
+        .then(data => {
+          if (data.access_token) {
+            localStorage.setItem("access_token", data.access_token);
+            // Store user data
+            if (data.user) {
+              localStorage.setItem('userName', data.user.full_name);
+              localStorage.setItem('userEmail', data.user.email);
+              if (data.user.avatar_url) {
+                localStorage.setItem('userAvatar', data.user.avatar_url);
+              }
+            }
+            // Update sidebar with new user info before redirect
+            if (typeof updateSidebar === 'function') {
+              updateSidebar();
+            }
+            // Redirect to dashboard page
+            window.location.href = "dashboard.html";
+          } else {
+            alert("Login failed: " + (data.message || "Invalid credentials"));
           }
-          // Redirect to dashboard page
-          window.location.href = "dashboard.html";
-        } else {
-          alert("Login failed: " + (data.message || "Invalid credentials"));
-        }
-      })
-      .catch(error => {
-        console.error("Error:", error);
-        alert("Login failed. Please try again.");
-      });
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          alert("Login failed. Please try again.");
+        });
     });
   }
 
@@ -53,18 +60,18 @@ document.addEventListener("DOMContentLoaded", function () {
       const fullName = document.getElementById("full_name").value;
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
-      
+
       // Simple validation
       if (!fullName || !email || !password) {
         alert("Please fill in all required fields");
         return;
       }
-      
+
       if (password.length < 8) {
         alert("Password must be at least 8 characters long");
         return;
       }
-      
+
       // Prepare data for backend
       const data = {
         full_name: fullName,
@@ -72,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
         password: password,
         role: "user" // Default role
       };
-      
+
       // Send signup request to backend
       fetch("/api/auth/register", {
         method: "POST",
@@ -81,26 +88,33 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         body: JSON.stringify(data)
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.access_token) {
-          localStorage.setItem("access_token", data.access_token);
-          // Store user data
-          if (data.user) {
-            localStorage.setItem('userName', data.user.full_name);
-            localStorage.setItem('userEmail', data.user.email);
+        .then(response => response.json())
+        .then(data => {
+          if (data.access_token) {
+            localStorage.setItem("access_token", data.access_token);
+            // Store user data
+            if (data.user) {
+              localStorage.setItem('userName', data.user.full_name);
+              localStorage.setItem('userEmail', data.user.email);
+              if (data.user.avatar_url) {
+                localStorage.setItem('userAvatar', data.user.avatar_url);
+              }
+            }
+            alert("Account created successfully");
+            // Update sidebar with new user info before redirect
+            if (typeof updateSidebar === 'function') {
+              updateSidebar();
+            }
+            // Redirect to dashboard page
+            window.location.href = "dashboard.html";
+          } else {
+            alert("Registration failed: " + (data.message || "Please try again"));
           }
-          alert("Account created successfully");
-          // Redirect to dashboard page
-          window.location.href = "dashboard.html";
-        } else {
-          alert("Registration failed: " + (data.message || "Please try again"));
-        }
-      })
-      .catch(error => {
-        console.error("Error:", error);
-        alert("Registration failed. Please try again.");
-      });
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          alert("Registration failed. Please try again.");
+        });
     });
   }
 });

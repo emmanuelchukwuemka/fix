@@ -31,6 +31,13 @@ class User(db.Model):
     is_suspended = db.Column(db.Boolean, default=False)  # For account suspension
     is_verified = db.Column(db.Boolean, default=False)  # For verified status
     verification_pending = db.Column(db.Boolean, default=False)  # For pending verification
+    avatar_url = db.Column(db.String(255))  # User avatar URL
+    country = db.Column(db.String(100))
+    province = db.Column(db.String(100))
+    routing_number = db.Column(db.String(50))
+    swift_code = db.Column(db.String(50))
+    account_type = db.Column(db.String(50), default="savings")
+    bank_address = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
@@ -64,6 +71,13 @@ class User(db.Model):
             'is_suspended': self.is_suspended,
             'is_verified': self.is_verified,
             'verification_pending': self.verification_pending,
+            'avatar_url': self.avatar_url,
+            'country': self.country,
+            'province': self.province,
+            'routing_number': self.routing_number,
+            'swift_code': self.swift_code,
+            'account_type': self.account_type,
+            'bank_address': self.bank_address,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None
         }

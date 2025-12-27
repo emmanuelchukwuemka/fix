@@ -114,11 +114,11 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin"
+        <img id="sidebarAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin"
           class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
-          <p class="font-semibold">Admin User</p>
-          <p class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
+          <p id="sidebarUserName" class="font-semibold">Admin User</p>
+          <p id="sidebarUserEmail" class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
         </div>
       </div>
       <a href="#" onclick="logout()"
@@ -466,15 +466,15 @@
             <div class="space-y-4">
               <div class="flex justify-between items-center p-4 bg-card rounded-2xl border border-border">
                 <span>Total Platform Earnings</span>
-                <span class="font-bold text-green-500" data-stat="platformEarnings">$12,450.75</span>
+                <span class="font-bold text-green-500" data-stat="platformEarnings">$0.00</span>
               </div>
               <div class="flex justify-between items-center p-4 bg-card rounded-2xl border border-border">
                 <span>Daily Active Users</span>
-                <span class="font-bold text-blue-500" data-stat="dailyActiveUsers">1,248</span>
+                <span class="font-bold text-blue-500" data-stat="dailyActiveUsers">0</span>
               </div>
               <div class="flex justify-between items-center p-4 bg-card rounded-2xl border border-border">
                 <span>Tasks Completed Today</span>
-                <span class="font-bold text-purple-500" data-stat="tasksCompletedToday">342</span>
+                <span class="font-bold text-purple-500" data-stat="tasksCompletedToday">0</span>
               </div>
             </div>
           </div>
@@ -551,7 +551,7 @@
               <i class="fas fa-users text-indigo-500 text-2xl"></i>
             </div>
             <h3 class="text-xl font-bold">Total Referrals</h3>
-            <p class="text-3xl font-bold text-indigo-500 mt-2" data-stat="totalReferrals">1,842</p>
+            <p class="text-3xl font-bold text-indigo-500 mt-2" data-stat="totalReferrals">0</p>
           </div>
 
           <div class="p-6 bg-card rounded-2xl border border-border text-center">
@@ -559,7 +559,7 @@
               <i class="fas fa-dollar-sign text-green-500 text-2xl"></i>
             </div>
             <h3 class="text-xl font-bold">Referral Earnings</h3>
-            <p class="text-3xl font-bold text-green-500 mt-2" data-stat="referralEarnings">$3,240.50</p>
+            <p class="text-3xl font-bold text-green-500 mt-2" data-stat="referralEarnings">$0.00</p>
           </div>
 
           <div class="p-6 bg-card rounded-2xl border border-border text-center">
@@ -615,7 +615,7 @@
               <i class="fas fa-user-friends text-pink-500 text-2xl"></i>
             </div>
             <h3 class="text-xl font-bold">Total Partners</h3>
-            <p class="text-3xl font-bold text-pink-500 mt-2" data-stat="totalPartners">142</p>
+            <p class="text-3xl font-bold text-pink-500 mt-2" data-stat="totalPartners">0</p>
           </div>
 
           <div class="p-6 bg-card rounded-2xl border border-border text-center">
@@ -623,7 +623,7 @@
               <i class="fas fa-clock text-blue-500 text-2xl"></i>
             </div>
             <h3 class="text-xl font-bold">Pending Approval</h3>
-            <p class="text-3xl font-bold text-blue-500 mt-2" data-stat="pendingApprovals">7</p>
+            <p class="text-3xl font-bold text-blue-500 mt-2" data-stat="pendingApprovals">0</p>
           </div>
 
           <div class="p-6 bg-card rounded-2xl border border-border text-center">
@@ -631,7 +631,7 @@
               <i class="fas fa-check-circle text-green-500 text-2xl"></i>
             </div>
             <h3 class="text-xl font-bold">Approved Partners</h3>
-            <p class="text-3xl font-bold text-green-500 mt-2" data-stat="approvedPartners">135</p>
+            <p class="text-3xl font-bold text-green-500 mt-2" data-stat="approvedPartners">0</p>
           </div>
         </div>
 
@@ -760,12 +760,31 @@
       </div>
 
       <form id="adjustPointsForm" class="space-y-6">
-        <div>
-          <label class="block text-lg font-bold mb-2">Select User</label>
-          <select class="form-input w-full px-4 py-3 rounded-2xl" id="userIdSelect">
-            <option value="">Select a user...</option>
-            <!-- Options will be populated dynamically -->
-          </select>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-lg font-bold mb-2">Search User</label>
+            <div class="flex gap-2">
+              <div class="relative flex-1">
+                <input type="text" id="userSelectSearch" class="form-input w-full px-4 py-3 rounded-2xl pl-10"
+                  placeholder="Search name or email..." oninput="debounceUserSearch()">
+                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
+              </div>
+              <button type="button" onclick="populateUserDropdown()"
+                class="bg-card border border-border px-4 rounded-2xl hover:bg-card/80 transition"
+                title="Refresh user list">
+                <i class="fas fa-sync-alt" id="refreshUserIcon"></i>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-lg font-bold mb-2">Select User <span id="userCountLabel"
+                class="text-sm font-normal text-gray-500"></span></label>
+            <select class="form-input w-full px-4 py-3 rounded-2xl" id="userIdSelect">
+              <option value="">Select a user...</option>
+              <!-- Options will be populated dynamically -->
+            </select>
+          </div>
         </div>
 
         <div>
@@ -886,6 +905,7 @@
 
     function showAdjustPoints() {
       document.getElementById('adjustPointsModal').classList.remove('hidden');
+      populateUserDropdown(); // Refresh user list when opening modal
     }
 
     function showWithdrawalApproval() {
@@ -1101,54 +1121,110 @@
         });
     });
 
-    // Function to populate user dropdown
-    function populateUserDropdown() {
+    // Function to populate user dropdown with search
+    let userSearchTimeout;
+    function debounceUserSearch() {
+      clearTimeout(userSearchTimeout);
+      userSearchTimeout = setTimeout(() => {
+        const searchTerm = document.getElementById('userSelectSearch').value;
+        populateUserDropdown(searchTerm);
+      }, 500);
+    }
+
+    function populateUserDropdown(search = '') {
       const token = localStorage.getItem('access_token');
       const select = document.getElementById('userIdSelect');
+      const refreshIcon = document.getElementById('refreshUserIcon');
+      const countLabel = document.getElementById('userCountLabel');
 
-      fetch('/api/admin/users?per_page=100', {
+      if (refreshIcon) refreshIcon.classList.add('fa-spin');
+      if (countLabel) countLabel.textContent = '(Loading...)';
+
+      fetch(`/api/admin/users?per_page=50${search ? `&search=${encodeURIComponent(search)}` : ''}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       })
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) throw new Error('Failed to fetch users');
+          return response.json();
+        })
         .then(data => {
           if (data.users) {
+            const currentSelected = select.value;
             select.innerHTML = '<option value="">Select a user...</option>';
+
             data.users.forEach(user => {
               const option = document.createElement('option');
               option.value = user.id;
-              option.textContent = `${user.full_name} (${user.email})`;
+              option.textContent = `${user.full_name} (${user.role}) - ${user.email}`;
+              if (user.id == currentSelected) option.selected = true;
               select.appendChild(option);
             });
+
+            if (countLabel) countLabel.textContent = `(${data.total || data.users.length} found)`;
+          } else {
+            console.error('No users found in response:', data);
           }
         })
-        .catch(error => console.error('Error fetching users for dropdown:', error));
+        .catch(error => {
+          console.error('Error fetching users for dropdown:', error);
+          if (countLabel) countLabel.textContent = '(Error loading users)';
+        })
+        .finally(() => {
+          if (refreshIcon) refreshIcon.classList.remove('fa-spin');
+        });
     }
 
     document.addEventListener('DOMContentLoaded', function () {
       loadDashboardStats();
       loadRecentActivities();
       loadAdminInfo();
+      // Initially populate list
       populateUserDropdown();
     });
 
     function loadAdminInfo() {
-      const userName = localStorage.getItem('userName');
-      const userEmail = localStorage.getItem('userEmail');
+      const token = localStorage.getItem('access_token');
+      const savedName = localStorage.getItem('userName');
+      const savedEmail = localStorage.getItem('userEmail');
+      const savedAvatar = localStorage.getItem('userAvatar');
 
-      if (userName) {
-        document.querySelector('.p-6.border-t.border-border .font-semibold').textContent = userName;
-      }
+      if (savedName) document.getElementById('sidebarUserName').textContent = savedName;
+      if (savedEmail) document.getElementById('sidebarUserEmail').textContent = savedEmail;
+      if (savedAvatar) document.getElementById('sidebarAvatar').src = savedAvatar;
 
-      if (userEmail) {
-        document.querySelector('.p-6.border-t.border-border .text-sm.text-gray-600.dark\:text-gray-400').textContent = userEmail;
+      if (token) {
+        fetch('/api/auth/profile', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.user) {
+              const user = data.user;
+              document.getElementById('sidebarUserName').textContent = user.full_name;
+              document.getElementById('sidebarUserEmail').textContent = user.email;
+              if (user.avatar_url) {
+                document.getElementById('sidebarAvatar').src = user.avatar_url;
+                localStorage.setItem('userAvatar', user.avatar_url);
+              }
+              localStorage.setItem('userName', user.full_name);
+              localStorage.setItem('userEmail', user.email);
+            }
+          })
+          .catch(err => console.error('Error loading admin info:', err));
       }
     }
 
     function loadDashboardStats() {
       // Get token from localStorage
       const token = localStorage.getItem('access_token');
+
+      // Show loading state
+      document.getElementById('statTotalUsers').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+      document.getElementById('statPendingWithdrawals').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+      document.getElementById('statActiveTasks').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+      document.getElementById('statPendingSupport').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
       // Fetch dashboard statistics from the API
       fetch('/api/admin/dashboard/stats', {
@@ -1157,14 +1233,19 @@
           'Content-Type': 'application/json'
         }
       })
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to fetch dashboard stats');
+          }
+          return response.json();
+        })
         .then(data => {
           if (data.stats) {
             const stats = data.stats;
             document.getElementById('statTotalUsers').textContent = stats.total_users.toLocaleString();
-            document.getElementById('statPendingWithdrawals').textContent = stats.pending_withdrawals;
-            document.getElementById('statActiveTasks').textContent = stats.active_tasks;
-            document.getElementById('statPendingSupport').textContent = stats.pending_support;
+            document.getElementById('statPendingWithdrawals').textContent = stats.pending_withdrawals || 0;
+            document.getElementById('statActiveTasks').textContent = stats.active_tasks || 0;
+            document.getElementById('statPendingSupport').textContent = stats.pending_support || 0;
             document.getElementById('totalUsers').textContent = stats.total_users.toLocaleString();
 
             // Update other stats if available
@@ -1204,6 +1285,11 @@
         })
         .catch(error => {
           console.error('Error loading dashboard stats:', error);
+          // Show error state
+          document.getElementById('statTotalUsers').innerHTML = '<span class="text-red-500 text-sm">Error</span>';
+          document.getElementById('statPendingWithdrawals').innerHTML = '<span class="text-red-500 text-sm">Error</span>';
+          document.getElementById('statActiveTasks').innerHTML = '<span class="text-red-500 text-sm">Error</span>';
+          document.getElementById('statPendingSupport').innerHTML = '<span class="text-red-500 text-sm">Error</span>';
         });
     }
 
@@ -1212,12 +1298,29 @@
       const container = document.getElementById('recentActivitiesContainer');
       if (!container) return;
 
+      // Show loading state
+      container.innerHTML = `
+        <div class="flex items-start gap-3 p-3 bg-card rounded-xl border border-border">
+          <div class="w-10 h-10 bg-gray-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+            <i class="fas fa-spinner fa-spin text-gray-500"></i>
+          </div>
+          <div>
+            <p class="font-medium">Loading activities...</p>
+          </div>
+        </div>
+      `;
+
       fetch('/api/admin/activities/recent?limit=5', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       })
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to fetch activities');
+          }
+          return response.json();
+        })
         .then(data => {
           if (data.activities && data.activities.length > 0) {
             container.innerHTML = '';
@@ -1261,7 +1364,20 @@
             container.innerHTML = '<p class="text-center py-4 text-gray-500">No recent activities</p>';
           }
         })
-        .catch(error => console.error('Error loading recent activities:', error));
+        .catch(error => {
+          console.error('Error loading recent activities:', error);
+          container.innerHTML = `
+            <div class="flex items-start gap-3 p-3 bg-card rounded-xl border border-red-500/30">
+              <div class="w-10 h-10 bg-red-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <i class="fas fa-exclamation-triangle text-red-500"></i>
+              </div>
+              <div>
+                <p class="font-medium text-red-400">Failed to load activities</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Please refresh the page</p>
+              </div>
+            </div>
+          `;
+        });
     }
   </script>
   <script src="../assets/js/theme.js"></script>

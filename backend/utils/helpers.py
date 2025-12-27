@@ -19,12 +19,12 @@ def generate_batch_id():
     random_chars = ''.join(random.choice(string.ascii_uppercase) for _ in range(4))
     return f"BATCH-{timestamp}-{random_chars}"
 
-def points_to_usd(points, rate=0.1):
-    """Convert points to USD (default: 10 points = $1)"""
+def points_to_usd(points, rate=0.30):
+    """Convert points to USD (default: 1 point = $0.30)"""
     return points * rate
 
-def usd_to_points(usd, rate=0.1):
-    """Convert USD to points (default: $1 = 10 points)"""
+def usd_to_points(usd, rate=0.30):
+    """Convert USD to points (default: $0.30 = 1 point)"""
     return usd / rate
 
 def get_tier_level(points):

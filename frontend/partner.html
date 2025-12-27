@@ -300,7 +300,7 @@
         if (cards.length >= 4) {
           cards[0].querySelector('h3').textContent = data.referred_users_count || 0;
           cards[1].querySelector('h3').textContent = (data.total_points_earned || 0).toFixed(1);
-          cards[2].querySelector('h3').textContent = '₦' + (data.total_earnings || 0).toLocaleString();
+          cards[2].querySelector('h3').textContent = '$' + (data.total_earnings || 0).toLocaleString();
           // cards[3] could be something else like active referrals if backend provided it
         }
       }

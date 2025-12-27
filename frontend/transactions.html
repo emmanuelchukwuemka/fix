@@ -211,11 +211,9 @@
         return;
       }
 
-      // Load user info
-      const savedName = localStorage.getItem('userName');
-      const savedEmail = localStorage.getItem('userEmail');
-      if (savedName) document.getElementById('sidebarUserName').textContent = savedName;
-      if (savedEmail) document.getElementById('sidebarUserEmail').textContent = savedEmail;
+      if (typeof updateSidebar === 'function') {
+        updateSidebar();
+      }
 
       // Fetch Points Balance
       fetch('/api/points/balance', {

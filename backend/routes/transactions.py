@@ -12,7 +12,7 @@ transactions_bp = Blueprint('transactions', __name__)
 @partner_restricted
 def get_transactions():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 10, type=int)
         transaction_type = request.args.get('type')
@@ -44,7 +44,7 @@ def get_transactions():
 @partner_restricted
 def get_transaction(transaction_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         transaction = Transaction.query.filter_by(
             id=transaction_id, 
             user_id=current_user_id
@@ -62,7 +62,7 @@ def get_transaction(transaction_id):
 @jwt_required()
 def get_all_transactions():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -100,7 +100,7 @@ def get_all_transactions():
 @jwt_required()
 def update_transaction_status(transaction_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -123,6 +123,44 @@ def update_transaction_status(transaction_id):
         except ValueError:
             return jsonify({'message': 'Invalid status value'}), 400
         
+        # Create notification for the user about the status change
+        if transaction.type == TransactionType.POINT_WITHDRAWAL:
+            from backend.models.notification import Notification, NotificationType
+            
+            user = User.query.get(transaction.user_id)
+            
+            if new_status == 'completed':
+                notification_title = "Withdrawal Approved"
+                notification_message = f"Your withdrawal request for {abs(transaction.points_amount)} points (${abs(transaction.amount):.2f}) has been approved and processed."
+                notification_type = NotificationType.SUCCESS
+            elif new_status == 'rejected':
+                notification_title = "Withdrawal Rejected"
+                notification_message = f"Your withdrawal request for {abs(transaction.points_amount)} points (${abs(transaction.amount):.2f}) has been rejected."
+                notification_type = NotificationType.WARNING
+            else:
+                # For other status changes, we don't send a specific notification
+                notification_title = None
+                
+            if notification_title:
+                user_notification = Notification(
+                    user_id=transaction.user_id,
+                    title=notification_title,
+                    message=notification_message,
+                    type=notification_type
+                )
+                db.session.add(user_notification)
+                
+                # Optionally send email notification
+                try:
+                    from backend.utils.emailer import send_email
+                    user_email = user.email
+                    email_subject = f"{notification_title} - MyFigPoint"
+                    email_body = f"Hello {user.full_name},\n\n{notification_message}\n\nThank you for using MyFigPoint!"
+                    send_email(user_email, email_subject, email_body)
+                except Exception as email_error:
+                    # If email fails, log the error but don't fail the entire operation
+                    print(f"Failed to send email notification: {str(email_error)}")
+        
         db.session.commit()
         
         return jsonify({
@@ -137,7 +175,7 @@ def update_transaction_status(transaction_id):
 @jwt_required()
 def get_user_transactions(user_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -169,7 +207,7 @@ def get_user_transactions(user_id):
 @partner_restricted
 def get_transaction_summary():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         
         # Calculate totals for different transaction types
         total_earnings = db.session.query(db.func.sum(Transaction.amount)).filter(

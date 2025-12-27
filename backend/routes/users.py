@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from backend.app import db, bcrypt
+from backend.extensions import db, bcrypt
 from backend.models.user import User, UserRole
 from backend.utils.decorators import partner_restricted
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -10,7 +10,7 @@ users_bp = Blueprint('users', __name__)
 @jwt_required()
 def get_profile():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         if not user:
@@ -23,10 +23,9 @@ def get_profile():
 
 @users_bp.route('/profile', methods=['PUT'])
 @jwt_required()
-@partner_restricted
 def update_profile():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         if not user:
@@ -49,6 +48,27 @@ def update_profile():
             
         if 'account_number' in data:
             user.account_number = data['account_number']
+            
+        if 'avatar_url' in data:
+            user.avatar_url = data['avatar_url']
+            
+        if 'country' in data:
+            user.country = data['country']
+            
+        if 'province' in data:
+            user.province = data['province']
+            
+        if 'routing_number' in data:
+            user.routing_number = data['routing_number']
+            
+        if 'swift_code' in data:
+            user.swift_code = data['swift_code']
+            
+        if 'account_type' in data:
+            user.account_type = data['account_type']
+            
+        if 'bank_address' in data:
+            user.bank_address = data['bank_address']
         
         db.session.commit()
         
@@ -62,10 +82,9 @@ def update_profile():
 
 @users_bp.route('/change-password', methods=['POST'])
 @jwt_required()
-@partner_restricted
 def change_password():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         if not user:
@@ -99,7 +118,7 @@ def change_password():
 @jwt_required()
 def update_user_role(user_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -136,7 +155,7 @@ def update_user_role(user_id):
 @jwt_required()
 def admin_update_user_points(user_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -179,7 +198,7 @@ def admin_update_user_points(user_id):
 @jwt_required()
 def search_users():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -210,3 +229,48 @@ def search_users():
         
     except Exception as e:
         return jsonify({'message': 'Failed to search users', 'error': str(e)}), 500
+
+
+@users_bp.route('/avatar', methods=['POST'])
+@jwt_required()
+@partner_restricted
+def upload_avatar():
+    try:
+        current_user_id = int(get_jwt_identity())
+        user = User.query.get(current_user_id)
+        
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+        
+        if 'avatar' not in request.files:
+            return jsonify({'message': 'No avatar file provided'}), 400
+        
+        file = request.files['avatar']
+        
+        if file.filename == '':
+            return jsonify({'message': 'No avatar file selected'}), 400
+        
+        # Validate file type
+        allowed_extensions = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+        if '.' not in file.filename or \
+           file.filename.rsplit('.', 1)[1].lower() not in allowed_extensions:
+            return jsonify({'message': 'Invalid file type. Allowed types: png, jpg, jpeg, gif, webp'}), 400
+        
+        # In a real application, you would save the file to storage (local/cloud)
+        # For now, we'll store the avatar as a data URL in the database
+        import base64
+        file_data = file.read()
+        encoded_string = base64.b64encode(file_data).decode('utf-8')
+        file_extension = file.filename.rsplit('.', 1)[1].lower()
+        avatar_url = f'data:image/{file_extension};base64,{encoded_string}'
+        
+        user.avatar_url = avatar_url
+        db.session.commit()
+        
+        return jsonify({
+            'message': 'Avatar uploaded successfully',
+            'user': user.to_dict()
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to upload avatar', 'error': str(e)}), 500

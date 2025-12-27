@@ -10,7 +10,7 @@ notifications_bp = Blueprint('notifications', __name__)
 @jwt_required()
 def get_notifications():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 20, type=int)
         unread_only = request.args.get('unread_only', 'false').lower() == 'true'
@@ -39,7 +39,7 @@ def get_notifications():
 @jwt_required()
 def mark_as_read(notification_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         notification = Notification.query.filter_by(
             id=notification_id,
             user_id=current_user_id
@@ -63,7 +63,7 @@ def mark_as_read(notification_id):
 @jwt_required()
 def mark_all_as_read():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
 
         updated_count = Notification.query.filter_by(
             user_id=current_user_id,
@@ -83,7 +83,7 @@ def mark_all_as_read():
 @jwt_required()
 def get_unread_count():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         unread_count = Notification.query.filter_by(
             user_id=current_user_id,
             is_read=False
@@ -98,7 +98,7 @@ def get_unread_count():
 @jwt_required()
 def send_notification():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         sender = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -163,7 +163,7 @@ def send_notification():
 @jwt_required()
 def broadcast_notification():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         sender = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -206,7 +206,7 @@ def broadcast_notification():
 @jwt_required()
 def delete_notification(notification_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -229,7 +229,7 @@ def delete_notification(notification_id):
 @jwt_required()
 def get_all_notifications():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin

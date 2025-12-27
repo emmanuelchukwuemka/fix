@@ -1,4 +1,4 @@
-from backend.app import db
+from backend.extensions import db
 from datetime import datetime
 
 class Task(db.Model):
@@ -41,8 +41,11 @@ class UserTask(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'), nullable=False)
     status = db.Column(db.String(20), default='available')  # available, in_progress, completed, pending_review, rejected
+    proof_text = db.Column(db.Text)  # Text submitted by user as proof
+    proof_image = db.Column(db.String(255))  # URL to image submitted by user
     completed_at = db.Column(db.DateTime)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     # Relationships
     user = db.relationship('User')
@@ -57,6 +60,9 @@ class UserTask(db.Model):
             'user_id': self.user_id,
             'task_id': self.task_id,
             'status': self.status,
+            'proof_text': self.proof_text,
+            'proof_image': self.proof_image,
             'completed_at': self.completed_at.isoformat() if self.completed_at else None,
-            'created_at': self.created_at.isoformat() if self.created_at else None
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None
         }

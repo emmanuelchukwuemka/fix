@@ -40,6 +40,8 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = database_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY') or 'jwt-secret-string-change-in-production'
+    from datetime import timedelta
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
     
     # Handle Render deployment
     if os.environ.get('RENDER') == 'true':
@@ -52,6 +54,23 @@ def create_app():
     bcrypt.init_app(app)
     jwt.init_app(app)
     CORS(app)
+    
+    # JWT error handlers
+    @jwt.expired_token_loader
+    def expired_token_callback(jwt_header, jwt_payload):
+        return jsonify({'message': 'Token has expired', 'error': 'token_expired'}), 401
+    
+    @jwt.invalid_token_loader
+    def invalid_token_callback(error):
+        return jsonify({'message': 'Invalid token', 'error': 'invalid_token'}), 401
+    
+    @jwt.unauthorized_loader
+    def missing_token_callback(error):
+        return jsonify({'message': 'Authorization token is required', 'error': 'authorization_required'}), 401
+    
+    @jwt.revoked_token_loader
+    def revoked_token_callback(jwt_header, jwt_payload):
+        return jsonify({'message': 'Token has been revoked', 'error': 'token_revoked'}), 401
     
     # Serve static files
     @app.route('/')
@@ -183,6 +202,98 @@ def create_app():
     app.register_blueprint(support_bp, url_prefix='/api/support')
     app.register_blueprint(partners_bp, url_prefix='/api/partners')
     app.register_blueprint(tasks_bp, url_prefix='/api/tasks')
+    
+    # Main API endpoint
+    @app.route('/api')
+    def api_info():
+        return jsonify({
+            'message': 'MyFigPoint API',
+            'version': '1.0.0',
+            'description': 'This is the main API endpoint for MyFigPoint application',
+            'endpoints': {
+                '/api/auth': 'Authentication endpoints',
+                '/api/users': 'User management endpoints',
+                '/api/points': 'Points management endpoints',
+                '/api/codes': 'Redeem code endpoints',
+                '/api/transactions': 'Transaction endpoints',
+                '/api/referrals': 'Referral system endpoints',
+                '/api/admin': 'Admin endpoints',
+                '/api/notifications': 'Notification endpoints',
+                '/api/support': 'Support system endpoints',
+                '/api/partners': 'Partner management endpoints',
+                '/api/tasks': 'Task management endpoints'
+            },
+            'documentation': '/api/docs'  # Placeholder for future documentation
+        }), 200
+    
+    # API Documentation endpoint
+    @app.route('/api/docs')
+    def api_docs():
+        return jsonify({
+            'api_documentation': {
+                'title': 'MyFigPoint API Documentation',
+                'version': '1.0.0',
+                'description': 'This API provides access to MyFigPoint services including user management, points system, referrals, tasks, and more.',
+                'base_url': request.url_root,
+                'available_endpoints': [
+                    {
+                        'endpoint': '/api/auth',
+                        'methods': ['POST', 'GET'],
+                        'description': 'Handles user authentication including login, signup, and token management'
+                    },
+                    {
+                        'endpoint': '/api/users',
+                        'methods': ['GET', 'PUT'],
+                        'description': 'Manages user profiles, including profile updates and user search (admin only)'
+                    },
+                    {
+                        'endpoint': '/api/points',
+                        'methods': ['GET', 'POST'],
+                        'description': 'Handles points management for users'
+                    },
+                    {
+                        'endpoint': '/api/codes',
+                        'methods': ['GET', 'POST'],
+                        'description': 'Manages redeem codes for points'
+                    },
+                    {
+                        'endpoint': '/api/transactions',
+                        'methods': ['GET'],
+                        'description': 'Provides transaction history for users'
+                    },
+                    {
+                        'endpoint': '/api/referrals',
+                        'methods': ['GET', 'POST'],
+                        'description': 'Manages referral system and rewards'
+                    },
+                    {
+                        'endpoint': '/api/admin',
+                        'methods': ['GET', 'POST', 'PUT', 'DELETE'],
+                        'description': 'Admin-specific endpoints for managing the platform'
+                    },
+                    {
+                        'endpoint': '/api/notifications',
+                        'methods': ['GET', 'POST'],
+                        'description': 'Handles user notifications'
+                    },
+                    {
+                        'endpoint': '/api/support',
+                        'methods': ['GET', 'POST'],
+                        'description': 'Support ticket system'
+                    },
+                    {
+                        'endpoint': '/api/partners',
+                        'methods': ['GET', 'POST', 'PUT'],
+                        'description': 'Partner management and approval system'
+                    },
+                    {
+                        'endpoint': '/api/tasks',
+                        'methods': ['GET', 'POST', 'PUT'],
+                        'description': 'Task management for users to earn points'
+                    }
+                ]
+            }
+        }), 200
     
     # Create tables
     with app.app_context():

@@ -170,26 +170,14 @@
 
       <!-- Withdrawal Form -->
       <div class="bg-gray-800/70 backdrop-blur-xl border border-gray-700 rounded-3xl p-10 shadow-3xl">
-        <h2 class="text-3xl font-bold mb-8 text-center">Choose Withdrawal Method</h2>
-
-        <!-- Method Tabs -->
-        <div class="grid grid-cols-2 gap-4 mb-10">
-          <button onclick="selectMethod('bank')"
-            class="method-btn active bg-gradient-to-r from-indigo-600 to-purple-600 p-6 rounded-2xl font-bold text-xl shadow-xl">
-            <i class="fas fa-university text-3xl mb-3 block"></i> Bank Transfer
-          </button>
-          <button onclick="selectMethod('gift')"
-            class="method-btn bg-gray-700/50 p-6 rounded-2xl font-bold text-xl hover:bg-indigo-600/50 transition">
-            <i class="fas fa-gift text-3xl mb-3 block"></i> Gift Cards
-          </button>
-        </div>
+        <h2 class="text-3xl font-bold mb-8 text-center">Withdraw via Bank Transfer</h2>
 
         <form id="withdrawForm" class="space-y-8">
           <!-- Banking Details Section -->
           <div class="bg-gray-700/50 rounded-2xl p-6 mb-8">
             <h3 class="text-2xl font-bold mb-6 flex items-center gap-3"><i
                 class="fas fa-university text-yellow-400"></i> Banking Details</h3>
-            <p class="text-gray-300 mb-6">Please enter your banking information before withdrawing funds. This
+            <p class="text-gray-300 mb-6">Please enter your banking information. This
               information will be securely stored for future withdrawals.</p>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -201,7 +189,7 @@
               </div>
 
               <div>
-                <label class="block text-lg font-bold mb-3">Account Holder Name *</label>
+                <label class="block text-lg font-bold mb-3">Account Name *</label>
                 <input type="text" id="accountHolderName" placeholder="e.g., John Doe"
                   class="w-full bg-gray-800 border border-gray-600 rounded-xl px-6 py-4 text-lg focus:outline-none focus:border-yellow-500 transition"
                   required />
@@ -215,7 +203,7 @@
               </div>
 
               <div>
-                <label class="block text-lg font-bold mb-3">Routing Number</label>
+                <label class="block text-lg font-bold mb-3">Routing Number (Optional)</label>
                 <input type="text" id="routingNumber" placeholder="e.g., 021000021"
                   class="w-full bg-gray-800 border border-gray-600 rounded-xl px-6 py-4 text-lg focus:outline-none focus:border-yellow-500 transition" />
               </div>
@@ -228,33 +216,12 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <label class="block text-xl font-bold mb-4">Points to Withdraw</label>
-              <input type="number" id="points" min="500" placeholder="Min: 500 pts"
-                class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl px-8 py-6 text-2xl focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/30 transition"
-                oninput="updateUSD()" />
-              <p class="text-right mt-3 text-3xl font-bold text-green-400" id="usdValue">$0.00 USD</p>
-            </div>
-
-            <div id="methodDetails">
-              <!-- Bank Details -->
-              <div id="bankDetails">
-                <p class="text-gray-300 mb-4">Your banking details will be used for this withdrawal.</p>
-              </div>
-
-              <!-- Gift Card Details -->
-              <div id="giftCardDetails" class="hidden">
-                <label class="block text-xl font-bold mb-4">Gift Card Type</label>
-                <select id="giftCardType"
-                  class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl px-8 py-6 text-xl focus:outline-none focus:border-indigo-500 transition">
-                  <option value="amazon">Amazon</option>
-                  <option value="steam">Steam</option>
-                  <option value="google_play">Google Play</option>
-                  <option value="itunes">iTunes</option>
-                </select>
-              </div>
-            </div>
+          <div>
+            <label class="block text-xl font-bold mb-4">Points to Withdraw</label>
+            <input type="number" id="points" min="500" placeholder="Min: 500 pts"
+              class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl px-8 py-6 text-2xl focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/30 transition"
+              oninput="updateUSD()" />
+            <p class="text-right mt-3 text-3xl font-bold text-green-400" id="usdValue">$0.00 USD</p>
           </div>
 
           <div class="text-center">
@@ -278,36 +245,14 @@
   <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/70 z-40 hidden lg:hidden"></div>
 
   <script>
-    // Track current selected method
-    let currentMethod = 'bank';
-
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('overlay').classList.toggle('hidden');
     }
 
-    function selectMethod(method) {
-      // Update UI
-      document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active', 'bg-gradient-to-r', 'from-indigo-600', 'to-purple-600'));
-      event.target.closest('button').classList.add('active', 'bg-gradient-to-r', 'from-indigo-600', 'to-purple-600');
-
-      // Update current method
-      currentMethod = method;
-
-      // Show/hide method-specific details
-      document.getElementById('bankDetails').classList.toggle('hidden', method !== 'bank');
-      document.getElementById('giftCardDetails').classList.toggle('hidden', method !== 'gift');
-
-      // Show/hide banking details section based on method
-      const bankingDetailsSection = document.querySelector('.bg-gray-700/50.rounded-2xl.p-6.mb-8');
-      if (bankingDetailsSection) {
-        bankingDetailsSection.style.display = method === 'bank' ? 'block' : 'none';
-      }
-    }
-
     function updateUSD() {
       const points = parseInt(document.getElementById('points').value) || 0;
-      const usd = (points * 0.1).toFixed(2); // 10 pts = $1
+      const usd = (points * 0.30).toFixed(2); // 1 point = $0.30
       document.getElementById('usdValue').textContent = `$${usd} USD`;
     }
 
@@ -319,16 +264,14 @@
         return;
       }
 
-      // Validate banking details if bank transfer is selected
-      if (currentMethod === 'bank') {
-        const bankName = document.getElementById('bankName').value;
-        const accountHolderName = document.getElementById('accountHolderName').value;
-        const accountNumber = document.getElementById('accountNumber').value;
+      // Validate banking details
+      const bankName = document.getElementById('bankName').value;
+      const accountHolderName = document.getElementById('accountHolderName').value;
+      const accountNumber = document.getElementById('accountNumber').value;
 
-        if (!bankName || !accountHolderName || !accountNumber) {
-          alert('Please fill in all required banking details');
-          return;
-        }
+      if (!bankName || !accountHolderName || !accountNumber) {
+        alert('Please fill in all required banking details (Bank Name, Account Name, and Account Number)');
+        return;
       }
 
       const token = localStorage.getItem('access_token');
@@ -344,37 +287,18 @@
       submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-4"></i> Processing...';
       submitButton.disabled = true;
 
-      // Prepare request data based on selected method
-      const requestData = { points: parseInt(points) };
-
-      if (currentMethod === 'bank') {
-        requestData.method = 'bank';
-        requestData.bank_name = document.getElementById('bankName').value;
-        requestData.account_holder_name = document.getElementById('accountHolderName').value;
-        requestData.account_number = document.getElementById('accountNumber').value;
-        requestData.routing_number = document.getElementById('routingNumber').value;
-
-        // Save banking details if checkbox is checked
-        if (document.getElementById('saveBankDetails').checked) {
-          saveBankDetails(token).then(success => {
-            if (success) {
-              // Proceed with withdrawal after saving details
-              processWithdrawal(requestData, token, submitButton, originalText);
-            } else {
-              // Reset button if saving failed
-              submitButton.innerHTML = originalText;
-              submitButton.disabled = false;
-            }
-          });
-          return; // Don't proceed with withdrawal immediately
-        }
-      } else if (currentMethod === 'gift') {
-        requestData.method = 'gift_card';
-        requestData.gift_card_type = document.getElementById('giftCardType').value;
-      }
+      // Prepare request data for bank transfer
+      const requestData = {
+        points: parseInt(points),
+        method: 'bank',
+        bank_name: document.getElementById('bankName').value,
+        account_holder_name: document.getElementById('accountHolderName').value,
+        account_number: document.getElementById('accountNumber').value,
+        routing_number: document.getElementById('routingNumber').value
+      };
 
       // Save banking details if checkbox is checked
-      if (currentMethod === 'bank' && document.getElementById('saveBankDetails').checked) {
+      if (document.getElementById('saveBankDetails').checked) {
         saveBankDetails(token).then(success => {
           if (success) {
             // Proceed with withdrawal after saving details
@@ -419,7 +343,7 @@
 
               // Update balance display
               document.querySelector('header .text-right .text-6xl').innerHTML = data.new_balance.toFixed(2) + '<span class="text-4xl"> pts</span>';
-              document.querySelector('header .text-right .text-3xl').textContent = '$' + (data.new_balance * 0.1).toFixed(2) + ' USD';
+              document.querySelector('header .text-right .text-3xl').textContent = '$' + (data.new_balance * 0.30).toFixed(2) + ' USD';
             }, 1000);
           } else {
             alert('Withdrawal failed: ' + (data.message || 'Unknown error'));
@@ -522,7 +446,7 @@
           if (data.points_balance !== undefined) {
             // Update balance display
             document.querySelector('header .text-right .text-6xl').innerHTML = data.points_balance.toFixed(2) + '<span class="text-4xl"> pts</span>';
-            document.querySelector('header .text-right .text-3xl').textContent = '$' + (data.points_balance * 0.1).toFixed(2) + ' USD';
+            document.querySelector('header .text-right .text-3xl').textContent = '$' + (data.points_balance * 0.30).toFixed(2) + ' USD';
           }
         })
         .catch(error => {

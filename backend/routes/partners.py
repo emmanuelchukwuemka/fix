@@ -13,7 +13,7 @@ partners_bp = Blueprint('partners', __name__)
 @jwt_required()
 def get_partner_stats():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         if not user:
@@ -59,7 +59,7 @@ def get_partner_stats():
 @jwt_required()
 def get_partner_referrals():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         if not user:
@@ -94,7 +94,7 @@ def get_partner_referrals():
 @jwt_required()
 def get_commission_rates():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         if not user:
@@ -158,7 +158,7 @@ def get_commission_rates():
 @jwt_required()
 def get_partner_dashboard():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         if not user:
@@ -204,7 +204,7 @@ def get_partner_dashboard():
 @jwt_required()
 def promote_to_partner():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -239,7 +239,7 @@ def promote_to_partner():
 @jwt_required()
 def demote_from_partner():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -273,7 +273,7 @@ def demote_from_partner():
 @jwt_required()
 def approve_partner():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -311,7 +311,7 @@ def approve_partner():
 @jwt_required()
 def deny_partner():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -350,7 +350,7 @@ def deny_partner():
 @jwt_required()
 def list_partners():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin_user = User.query.get(current_user_id)
         
         # Check if user is admin
@@ -396,7 +396,7 @@ def list_partners():
 @jwt_required()
 def generate_partner_codes():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         # Check if user is partner

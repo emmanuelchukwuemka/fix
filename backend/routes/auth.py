@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from backend.app import db, bcrypt
+from backend.extensions import db, bcrypt
 from backend.models.user import User, UserRole
 from backend.models.password_reset import PasswordResetToken
 from backend.models.transaction import Transaction, TransactionType, TransactionStatus
@@ -75,7 +75,7 @@ def register():
             db.session.commit()
         
         # Create access token
-        access_token = create_access_token(identity=user.id)
+        access_token = create_access_token(identity=str(user.id))
         
         return jsonify({
             'message': 'User registered successfully',

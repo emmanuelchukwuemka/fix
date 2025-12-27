@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MyFigPoint Dashboard</title>
-  <meta name="description" content="Manage your points, track earnings, and redeem rewards in your personalized dashboard." />
+  <meta name="description"
+    content="Manage your points, track earnings, and redeem rewards in your personalized dashboard." />
 
   <!-- Tailwind CSS v3 -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -23,7 +25,8 @@
   </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="assets/css/app.css" />
 </head>
@@ -31,7 +34,8 @@
 <body class="bg-background text-text min-h-screen flex">
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col">
+  <aside id="sidebar"
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col">
     <div class="flex items-center justify-between p-3 border-b border-border">
       <div class="flex flex-col items-center">
         <img src="assets/logo.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
@@ -43,7 +47,8 @@
     </div>
 
     <nav class="flex-1 overflow-y-auto p-3 space-y-1">
-      <a href="dashboard.html" class="flex items-center space-x-2 px-3 py-2 bg-primary/20 border border-primary/50 rounded-lg text-primary font-medium text-sm">
+      <a href="dashboard.html"
+        class="flex items-center space-x-2 px-3 py-2 bg-primary/20 border border-primary/50 rounded-lg text-primary font-medium text-sm">
         <i class="fas fa-tachometer-alt"></i>
         <span>Dashboard</span>
       </a>
@@ -51,7 +56,8 @@
         <i class="fas fa-tasks"></i>
         <span>Earn Points</span>
       </a>
-      <a href="referrals.html" class="flex items-center space-x-2 px-3 py-2 hover:bg-card rounded-lg transition text-sm">
+      <a href="referrals.html"
+        class="flex items-center space-x-2 px-3 py-2 hover:bg-card rounded-lg transition text-sm">
         <i class="fas fa-users"></i>
         <span>Refer & Earn</span>
       </a>
@@ -59,7 +65,8 @@
         <i class="fas fa-wallet"></i>
         <span>Wallet</span>
       </a>
-      <a href="transactions.html" class="flex items-center space-x-2 px-3 py-2 hover:bg-card rounded-lg transition text-sm">
+      <a href="transactions.html"
+        class="flex items-center space-x-2 px-3 py-2 hover:bg-card rounded-lg transition text-sm">
         <i class="fas fa-history"></i>
         <span>Transaction History</span>
       </a>
@@ -79,13 +86,15 @@
 
     <div class="p-4 border-t border-border">
       <div class="flex items-center space-x-2">
-        <img id="sidebarAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=User" alt="User" class="w-8 h-8 rounded-full ring-2 ring-primary">
+        <img id="sidebarAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=User" alt="User"
+          class="w-8 h-8 rounded-full ring-2 ring-primary">
         <div>
           <p id="sidebarUserName" class="font-semibold text-sm">Loading...</p>
           <p id="sidebarUserEmail" class="text-xs text-gray-600 dark:text-gray-400">Loading...</p>
         </div>
       </div>
-      <a href="#" onclick="logout()" class="mt-3 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-1.5 rounded text-xs font-medium transition">
+      <a href="#" onclick="logout()"
+        class="mt-3 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-1.5 rounded text-xs font-medium transition">
         Logout
       </a>
     </div>
@@ -99,7 +108,8 @@
         <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
           <i class="fas fa-bars text-xl"></i>
         </button>
-        <h1 class="text-lg font-bold">Welcome back, <span id="headerUserName" class="text-primary text-xs">...</span></h1>
+        <h1 class="text-lg font-bold">Welcome back, <span id="headerUserName" class="text-primary text-xs">...</span>
+        </h1>
         <div class="flex items-center space-x-3">
           <button class="relative p-1.5 hover:bg-card rounded-lg" onclick="window.location.href='notifications.html'">
             <i class="fas fa-bell"></i>
@@ -112,7 +122,8 @@
     <main class="p-6 lg:p-10">
       <div class="flex justify-between items-center mb-8">
         <div>
-          <h1 class="text-3xl font-extrabold">Welcome back, <span id="welcomeUserName" class="text-primary">User</span>!</h1>
+          <h1 class="text-3xl font-extrabold">Welcome back, <span id="welcomeUserName" class="text-primary">User</span>!
+          </h1>
           <p class="text-gray-600 dark:text-gray-400">Here's what's happening with your account today.</p>
         </div>
         <div class="text-right">
@@ -149,7 +160,9 @@
           </div>
         </div>
 
-        <div class="group bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all cursor-pointer">
+        <div
+          class="group bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all cursor-pointer"
+          onclick="openRedeemModal()">
           <p class="text-green-100 text-sm uppercase tracking-wider">Redeem Code</p>
           <p class="text-2xl font-bold mt-3">Redeem Code →</p>
         </div>
@@ -159,7 +172,9 @@
             <p class="text-gray-600 dark:text-gray-400 text-sm uppercase tracking-wider">Member Level</p>
             <p id="statTierLevel" class="text-2xl font-bold mt-2 text-primary">None</p>
             <div class="mt-3 bg-gray-700 rounded-full h-3 overflow-hidden">
-              <div id="tierProgressBar" class="bg-gradient-to-r from-primary to-orange-600 h-3 rounded-full w-0 transition-all duration-1000"></div>
+              <div id="tierProgressBar"
+                class="bg-gradient-to-r from-primary to-orange-600 h-3 rounded-full w-0 transition-all duration-1000">
+              </div>
             </div>
             <p id="tierNextLevelInfo" class="text-xs text-gray-600 dark:text-gray-400 mt-2">Loading tier info...</p>
           </div>
@@ -203,7 +218,8 @@
                 <span id="overviewWithdrawn" class="font-bold text-red-400">-$0.00</span>
               </div>
             </div>
-            <button class="w-full mt-6 bg-primary hover:bg-orange-700 py-3 rounded-xl font-semibold transition" onclick="window.location.href='transactions.html'">
+            <button class="w-full mt-6 bg-primary hover:bg-orange-700 py-3 rounded-xl font-semibold transition"
+              onclick="window.location.href='transactions.html'">
               View Full History
             </button>
           </div>
@@ -238,219 +254,302 @@
         window.location.href = 'login.html';
       }
     }
-    
+
+    function openRedeemModal() {
+      document.getElementById('redeemModal').classList.remove('hidden');
+      document.getElementById('quickCodeInput').value = '';
+      document.getElementById('quickMessageArea').innerHTML = '';
+    }
+
+    function closeRedeemModal() {
+      document.getElementById('redeemModal').classList.add('hidden');
+    }
+
+    function quickRedeemCode() {
+      const code = document.getElementById('quickCodeInput').value.trim();
+      const token = localStorage.getItem('access_token');
+
+      if (!token) {
+        showQuickMessage('Please log in to redeem codes', 'error');
+        window.location.href = 'login.html';
+        return;
+      }
+
+      if (!/^[A-Z]{5}[0-9]{3}$/.test(code)) {
+        showQuickMessage('Invalid code format! Use 5 letters + 3 numbers (e.g., ABCDE123)', 'error');
+        return;
+      }
+
+      // Disable button during request
+      const button = document.getElementById('quickRedeemButton');
+      button.disabled = true;
+      const originalText = button.textContent;
+      button.textContent = 'Redeeming...';
+
+      fetch('/api/codes/redeem', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ code: code })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message && data.message.includes('Successfully')) {
+            showQuickMessage(data.message, 'success');
+
+            // Update points balance
+            document.getElementById('topPointsBalance').textContent = data.new_balance.toLocaleString() + ' pts';
+            document.getElementById('statPointsBalance').textContent = data.new_balance.toLocaleString() + ' pts';
+
+            // Close modal after success
+            setTimeout(() => {
+              closeRedeemModal();
+            }, 2000);
+          } else {
+            showQuickMessage(data.message || 'Failed to redeem code', 'error');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          showQuickMessage('Failed to redeem code. Please try again.', 'error');
+        })
+        .finally(() => {
+          // Re-enable button
+          button.disabled = false;
+          button.textContent = originalText;
+        });
+    }
+
+    function showQuickMessage(text, type) {
+      const messageArea = document.getElementById('quickMessageArea');
+      messageArea.innerHTML = `
+        <div class="inline-flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium ${type === 'success' ? 'bg-green-600/20 text-green-400 border border-green-500/50' : 'bg-red-600/20 text-red-400 border border-red-500/50'}">
+          <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+          ${text}
+        </div>
+      `;
+      setTimeout(() => messageArea.innerHTML = '', 5000);
+    }
+
+    // Add event listener to the redeem code input for formatting
+    document.addEventListener('DOMContentLoaded', function () {
+      const quickCodeInput = document.getElementById('quickCodeInput');
+      if (quickCodeInput) {
+        quickCodeInput.addEventListener('input', function () {
+          this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+          if (this.value.length > 8) {
+            this.value = this.value.slice(0, 8);
+          }
+        });
+      }
+    });
+
     // Add event listeners to interactive elements
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       // Load user information from localStorage or fetch from backend
-      const savedAvatar = localStorage.getItem('userAvatar');
-      const savedName = localStorage.getItem('userName');
-      const savedEmail = localStorage.getItem('userEmail');
-      
-      if (savedAvatar) {
-        document.getElementById('sidebarAvatar').src = savedAvatar;
+      if (typeof updateSidebar === 'function') {
+        updateSidebar();
       }
-      
-      if (savedName) {
-        document.getElementById('sidebarUserName').textContent = savedName;
-        document.getElementById('headerUserName').textContent = savedName.split(' ')[0] + '!';
-        document.getElementById('welcomeUserName').textContent = savedName.split(' ')[0];
-      }
-      
-      if (savedEmail) {
-        document.getElementById('sidebarUserEmail').textContent = savedEmail;
-      }
-      
-      // Fetch data from backend
+
+      // Fetch data from backend - consolidated to prevent flickering
       const token = localStorage.getItem('access_token');
       if (token) {
-        // Fetch User Profile
-        fetch('/api/auth/profile', {
-          headers: { 'Authorization': 'Bearer ' + token }
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.user) {
-            document.getElementById('sidebarUserName').textContent = data.user.full_name;
-            document.getElementById('sidebarUserEmail').textContent = data.user.email;
-            document.getElementById('headerUserName').textContent = data.user.full_name.split(' ')[0] + '!';
-            document.getElementById('welcomeUserName').textContent = data.user.full_name.split(' ')[0];
-            
-            localStorage.setItem('userName', data.user.full_name);
-            localStorage.setItem('userEmail', data.user.email);
-            
-            // Update total earnings from user object
-            document.getElementById('statTotalEarnings').textContent = '$' + (data.user.total_earnings || 0).toFixed(2);
-            document.getElementById('overviewTotalEarned').textContent = '$' + (data.user.total_earnings || 0).toFixed(2);
-          }
-        });
+        // Fetch all data in parallel to prevent race conditions and flickering
+        Promise.all([
+          fetch('/api/auth/profile', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
+            if (r.status === 401) { window.location.href = 'login.html'; throw new Error('Unauthorized'); }
+            return r.json();
+          }),
+          fetch('/api/points/balance', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
+            if (r.status === 401) { window.location.href = 'login.html'; throw new Error('Unauthorized'); }
+            return r.json();
+          }),
+          fetch('/api/transactions/summary', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
+            if (r.status === 401) { window.location.href = 'login.html'; throw new Error('Unauthorized'); }
+            return r.json();
+          }),
+          fetch('/api/transactions/?per_page=4', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
+            if (r.status === 401) { window.location.href = 'login.html'; throw new Error('Unauthorized'); }
+            return r.json();
+          }),
+          fetch('/api/tasks/?per_page=3', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
+            if (r.status === 401) { window.location.href = 'login.html'; throw new Error('Unauthorized'); }
+            return r.json();
+          })
+        ])
+          .then(([profileData, pointsData, summaryData, transactionsData, tasksData]) => {
+            // Update user profile
+            if (profileData.user) {
+              localStorage.setItem('userName', profileData.user.full_name);
+              localStorage.setItem('userEmail', profileData.user.email);
+              if (profileData.user.avatar_url) {
+                localStorage.setItem('userAvatar', profileData.user.avatar_url);
+              }
 
-        // Fetch Points Balance & Tier
-        fetch('/api/points/balance', {
-          headers: { 'Authorization': 'Bearer ' + token }
-        })
-        .then(response => response.json())
-        .then(data => {
-          const balance = data.points_balance || 0;
-          document.getElementById('topPointsBalance').textContent = balance.toLocaleString() + ' pts';
-          document.getElementById('statPointsBalance').textContent = balance.toLocaleString() + ' pts';
-          document.getElementById('statTierLevel').textContent = data.tier_level || 'None';
-          
-          // Tier Logic (Simple version for display)
-          let nextTier = 'Bronze';
-          let req = 50;
-          let current = balance;
-          
-          if (data.tier_level === 'Bronze') { nextTier = 'Silver'; req = 500; }
-          else if (data.tier_level === 'Silver') { nextTier = 'Gold'; req = 8000; }
-          else if (data.tier_level === 'Gold') { nextTier = 'Platinum'; req = 15000; }
-          else if (data.tier_level === 'Platinum') { nextTier = 'Max'; req = balance; }
-          
-          const progress = Math.min(100, (current / req) * 100);
-          document.getElementById('tierProgressBar').style.width = progress + '%';
-          if (nextTier !== 'Max') {
-            document.getElementById('tierNextLevelInfo').textContent = `${(req - current).toLocaleString()} pts to ${nextTier}`;
-          } else {
-            document.getElementById('tierNextLevelInfo').textContent = 'Highest Tier Reached!';
-          }
-        });
+              if (typeof updateSidebar === 'function') {
+                updateSidebar();
+              }
 
-        // Fetch Transaction Summary
-        fetch('/api/transactions/summary', {
-          headers: { 'Authorization': 'Bearer ' + token }
-        })
-        .then(response => response.json())
-        .then(data => {
-          document.getElementById('overviewReferralEarned').textContent = '+$' + (data.total_referral_bonus || 0).toFixed(2);
-          document.getElementById('overviewCodesEarned').textContent = (data.total_code_redemption_points || 0).toLocaleString() + ' pts';
-          document.getElementById('overviewWithdrawn').textContent = '-$' + (data.total_withdrawn || 0).toFixed(2);
-        });
+              // Update total earnings
+              const earnings = (profileData.user.total_earnings || 0).toFixed(2);
+              document.getElementById('statTotalEarnings').textContent = '$' + earnings;
+              document.getElementById('overviewTotalEarned').textContent = '$' + earnings;
+            }
 
-        // Fetch Recent Activity
-        fetch('/api/transactions/?per_page=4', {
-          headers: { 'Authorization': 'Bearer ' + token }
-        })
-        .then(response => response.json())
-        .then(data => {
-          const list = document.getElementById('dashboardActivityList');
-          list.innerHTML = '';
-          if (data.transactions && data.transactions.length > 0) {
-            data.transactions.forEach(t => {
-              const date = new Date(t.created_at);
-              const timeAgo = Math.floor((new Date() - date) / 60000); // minutes
-              let timeStr = timeAgo < 60 ? `${timeAgo}m ago` : 
-                           timeAgo < 1440 ? `${Math.floor(timeAgo/60)}h ago` : 
-                           `${Math.floor(timeAgo/1440)}d ago`;
-              
-              const item = document.createElement('li');
-              item.className = 'flex items-start space-x-3';
-              
-              let colors = 'bg-blue-500/20 text-blue-500';
-              let icon = 'fa-info';
-              if (t.type === 'earning') { colors = 'bg-green-500/20 text-green-500'; icon = 'fa-plus'; }
-              if (t.type === 'point_withdrawal') { colors = 'bg-red-500/20 text-red-500'; icon = 'fa-arrow-up'; }
-              if (t.type === 'referral_bonus') { colors = 'bg-purple-500/20 text-purple-500'; icon = 'fa-user-plus'; }
-              
-              item.innerHTML = `
+            // Update points balance and tier
+            if (pointsData) {
+              const balance = pointsData.points_balance || 0;
+              const balanceText = balance.toLocaleString() + ' pts';
+              document.getElementById('topPointsBalance').textContent = balanceText;
+              document.getElementById('statPointsBalance').textContent = balanceText;
+              document.getElementById('statTierLevel').textContent = pointsData.tier_level || 'None';
+
+              // Tier Logic
+              let nextTier = 'Bronze';
+              let req = 50;
+
+              if (pointsData.tier_level === 'Bronze') { nextTier = 'Silver'; req = 500; }
+              else if (pointsData.tier_level === 'Silver') { nextTier = 'Gold'; req = 8000; }
+              else if (pointsData.tier_level === 'Gold') { nextTier = 'Platinum'; req = 15000; }
+              else if (pointsData.tier_level === 'Platinum') { nextTier = 'Max'; req = balance; }
+
+              const progress = Math.min(100, (balance / req) * 100);
+              document.getElementById('tierProgressBar').style.width = progress + '%';
+              if (nextTier !== 'Max') {
+                document.getElementById('tierNextLevelInfo').textContent = `${(req - balance).toLocaleString()} pts to ${nextTier}`;
+              } else {
+                document.getElementById('tierNextLevelInfo').textContent = 'Highest Tier Reached!';
+              }
+            }
+
+            // Update transaction summary
+            if (summaryData) {
+              document.getElementById('overviewReferralEarned').textContent = '+$' + (summaryData.total_referral_bonus || 0).toFixed(2);
+              document.getElementById('overviewCodesEarned').textContent = (summaryData.total_code_redemption_points || 0).toLocaleString() + ' pts';
+              document.getElementById('overviewWithdrawn').textContent = '-$' + (summaryData.total_withdrawn || 0).toFixed(2);
+            }
+
+            // Update recent activity
+            const activityList = document.getElementById('dashboardActivityList');
+            activityList.innerHTML = '';
+            if (transactionsData.transactions && transactionsData.transactions.length > 0) {
+              transactionsData.transactions.forEach(t => {
+                const date = new Date(t.created_at);
+                const timeAgo = Math.floor((new Date() - date) / 60000);
+                let timeStr = timeAgo < 60 ? `${timeAgo}m ago` :
+                  timeAgo < 1440 ? `${Math.floor(timeAgo / 60)}h ago` :
+                    `${Math.floor(timeAgo / 1440)}d ago`;
+
+                const item = document.createElement('li');
+                item.className = 'flex items-start space-x-3';
+
+                let colors = 'bg-blue-500/20 text-blue-500';
+                let icon = 'fa-info';
+                if (t.type === 'earning') { colors = 'bg-green-500/20 text-green-500'; icon = 'fa-plus'; }
+                if (t.type === 'point_withdrawal') { colors = 'bg-red-500/20 text-red-500'; icon = 'fa-arrow-up'; }
+                if (t.type === 'referral_bonus') { colors = 'bg-purple-500/20 text-purple-500'; icon = 'fa-user-plus'; }
+
+                item.innerHTML = `
                 <div class="mt-1 w-8 h-8 rounded-full ${colors} flex items-center justify-center">
                   <i class="fas ${icon}"></i>
                 </div>
                 <div>
                   <p class="font-medium">${t.description}</p>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">${t.amount !== 0 ? '$'+t.amount.toFixed(2) : t.points_amount + ' pts'}</p>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">${t.amount !== 0 ? '$' + t.amount.toFixed(2) : t.points_amount + ' pts'}</p>
                   <p class="text-xs text-gray-500">${timeStr}</p>
                 </div>
               `;
-              list.appendChild(item);
-            });
-          } else {
-            list.innerHTML = '<li class="text-center py-4 text-gray-500">No recent activity</li>';
-          }
-        });
+                activityList.appendChild(item);
+              });
+            } else {
+              activityList.innerHTML = '<li class="text-center py-4 text-gray-500">No recent activity</li>';
+            }
 
-        // Fetch Tasks
-        fetch('/api/tasks/?per_page=3', {
-          headers: { 'Authorization': 'Bearer ' + token }
-        })
-        .then(response => response.json())
-        .then(data => {
-          const list = document.getElementById('dashboardTaskList');
-          list.innerHTML = '';
-          if (data.tasks && data.tasks.length > 0) {
-            const completed = data.tasks.filter(t => t.user_status === 'completed').length;
-            document.getElementById('taskCompletionCount').textContent = `${completed} / ${data.tasks.length} Completed`;
-            
-            data.tasks.forEach(task => {
-              const item = document.createElement('li');
-              item.className = 'flex items-center justify-between p-4 bg-card rounded-lg hover:bg-primary/10 transition cursor-pointer';
-              item.onclick = () => window.location.href = 'tasks.html';
-              
-              const isComp = task.user_status === 'completed';
-              item.innerHTML = `
+            // Update tasks list
+            const tasksList = document.getElementById('dashboardTaskList');
+            tasksList.innerHTML = '';
+            if (tasksData.tasks && tasksData.tasks.length > 0) {
+              const completed = tasksData.tasks.filter(t => t.user_status === 'completed').length;
+              document.getElementById('taskCompletionCount').textContent = `${completed} / ${tasksData.tasks.length} Completed`;
+
+              tasksData.tasks.forEach(task => {
+                const item = document.createElement('li');
+                item.className = 'flex items-center justify-between p-4 bg-card rounded-lg hover:bg-primary/10 transition cursor-pointer';
+                item.onclick = () => {
+                  window.location.href = 'tasks.html';
+                };
+
+                const isComp = task.user_status === 'completed';
+                item.innerHTML = `
                 <div class="flex items-center space-x-3">
                   <input type="checkbox" ${isComp ? 'checked' : ''} disabled class="w-5 h-5 text-primary rounded" />
                   <span class="${isComp ? 'line-through text-gray-500' : ''}">${task.title}</span>
                 </div>
                 <span class="${isComp ? 'text-green-400' : 'text-primary'} font-bold">+${task.points_reward} pts</span>
               `;
-              list.appendChild(item);
-            });
-          } else {
-            list.innerHTML = '<li class="text-center py-4 text-gray-500 text-sm">No tasks available</li>';
-            document.getElementById('taskCompletionCount').textContent = '0 / 0 Completed';
-          }
-        });
+                tasksList.appendChild(item);
+              });
+            } else {
+              tasksList.innerHTML = '<li class="text-center py-4 text-gray-500 text-sm">No tasks available</li>';
+              document.getElementById('taskCompletionCount').textContent = '0 / 0 Completed';
+            }
+          })
+          .catch(error => {
+            console.error('Error loading dashboard data:', error);
+          });
       } else {
         window.location.href = 'login.html';
       }
     });
-    
+
     // Function to fetch and display notifications
     function fetchNotifications() {
       const token = localStorage.getItem('access_token');
       if (!token) return;
-      
+
       fetch('/api/notifications/?unread_only=true', {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.notifications && data.notifications.length > 0) {
-          displayNotifications(data.notifications);
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching notifications:', error);
-      });
+        .then(response => response.json())
+        .then(data => {
+          if (data.notifications && data.notifications.length > 0) {
+            displayNotifications(data.notifications);
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching notifications:', error);
+        });
     }
-    
+
     // Function to display notifications
     function displayNotifications(notifications) {
       const banner = document.getElementById('notificationsBanner');
       banner.innerHTML = '';
       banner.classList.remove('hidden');
-      
+
       notifications.forEach(notification => {
         // Only show task-related notifications
         if (notification.title.includes('Task') || notification.message.includes('task')) {
           const notificationElement = document.createElement('div');
-          notificationElement.className = `p-4 rounded-xl mb-4 ${
-            notification.type === 'success' ? 'bg-green-600/20 border border-green-500/30' :
+          notificationElement.className = `p-4 rounded-xl mb-4 ${notification.type === 'success' ? 'bg-green-600/20 border border-green-500/30' :
             notification.type === 'warning' ? 'bg-yellow-600/20 border border-yellow-500/30' :
-            notification.type === 'error' ? 'bg-red-600/20 border border-red-500/30' :
-            'bg-blue-600/20 border border-blue-500/30'
-          }`;
-          
+              notification.type === 'error' ? 'bg-red-600/20 border border-red-500/30' :
+                'bg-blue-600/20 border border-blue-500/30'
+            }`;
+
           const date = new Date(notification.created_at);
-          
+
           notificationElement.innerHTML = `
             <div class="flex justify-between items-start">
               <div>
-                <h4 class="font-bold ${notification.type === 'success' ? 'text-green-400' : 
-                                      notification.type === 'warning' ? 'text-yellow-400' : 
-                                      notification.type === 'error' ? 'text-red-400' : 
-                                      'text-blue-400'}">
+                <h4 class="font-bold ${notification.type === 'success' ? 'text-green-400' :
+              notification.type === 'warning' ? 'text-yellow-400' :
+                notification.type === 'error' ? 'text-red-400' :
+                  'text-blue-400'}">
                   ${notification.title}
                 </h4>
                 <p class="text-gray-300 mt-1">${notification.message}</p>
@@ -461,38 +560,70 @@
               </button>
             </div>
           `;
-          
+
           banner.appendChild(notificationElement);
         }
       });
     }
-    
+
     // Function to mark notification as read
     function markAsRead(notificationId) {
       const token = localStorage.getItem('access_token');
       if (!token) return;
-      
+
       fetch(`/api/notifications/${notificationId}/read`, {
         method: 'PUT',
         headers: {
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        // Remove the notification from the UI
-        fetchNotifications(); // Refresh notifications
-      })
-      .catch(error => {
-        console.error('Error marking notification as read:', error);
-      });
+        .then(response => response.json())
+        .then(data => {
+          // Remove the notification from the UI
+          fetchNotifications(); // Refresh notifications
+        })
+        .catch(error => {
+          console.error('Error marking notification as read:', error);
+        });
     }
   </script>
   <script src="assets/js/theme.js"></script>
-  
+
   <!-- Fixed Theme Toggle Button -->
   <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
     <i class="fas fa-moon"></i>
   </button>
+
+  <!-- Redeem Code Modal -->
+  <div id="redeemModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-card p-8 rounded-2xl shadow-2xl max-w-md w-full mx-4">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-bold">Redeem Code</h3>
+        <button onclick="closeRedeemModal()" class="text-gray-500 hover:text-text">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="mb-6">
+        <label class="block text-sm font-medium mb-2">Enter your 8-character code</label>
+        <input type="text" id="quickCodeInput" maxlength="8" placeholder="ABCDE123"
+          class="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition text-center text-lg font-bold uppercase" />
+      </div>
+
+      <div id="quickMessageArea" class="mb-4 text-center"></div>
+
+      <div class="flex space-x-3">
+        <button id="quickRedeemButton" onclick="quickRedeemCode()"
+          class="flex-1 bg-primary hover:bg-orange-700 text-white font-bold py-3 rounded-lg transition">
+          Redeem Now
+        </button>
+        <button onclick="closeRedeemModal()"
+          class="px-4 py-3 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
 </body>
+
 </html>

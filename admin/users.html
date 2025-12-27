@@ -114,11 +114,11 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin"
+        <img id="sidebarAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin"
           class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
-          <p class="font-semibold">Admin User</p>
-          <p class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
+          <p id="sidebarUserName" class="font-semibold">Admin User</p>
+          <p id="sidebarUserEmail" class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
         </div>
       </div>
       <a href="#" onclick="logout()"
@@ -203,6 +203,8 @@
               <tr class="border-b border-border">
                 <th class="pb-4 text-left">User</th>
                 <th class="pb-4 text-left">Role</th>
+                <th class="pb-4 text-left">Verification</th>
+                <th class="pb-4 text-left">Account Status</th>
                 <th class="pb-4 text-left">Points Balance</th>
                 <th class="pb-4 text-left">Total Earned</th>
                 <th class="pb-4 text-left">Joined</th>
@@ -266,8 +268,12 @@
               alt="User">
             <h3 class="text-xl font-bold">John Smith</h3>
             <p class="text-gray-600 dark:text-gray-400">john.smith@example.com</p>
-            <div class="mt-3">
-              <span class="bg-blue-600/20 text-blue-500 px-3 py-1 rounded-full text-sm font-bold">User</span>
+            <div class="mt-3 flex flex-col items-center gap-2">
+              <span class="role-badge bg-blue-600/20 text-blue-500 px-3 py-1 rounded-full text-sm font-bold">User</span>
+              <span id="detailVerificationBadge"
+                class="bg-gray-600/20 text-gray-500 px-3 py-1 rounded-full text-sm font-bold">Unverified</span>
+              <span id="detailStatusBadge"
+                class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Active</span>
             </div>
           </div>
 
@@ -350,15 +356,15 @@
               class="flex-1 bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
               <i class="fas fa-coins mr-2"></i> Adjust Points
             </button>
+            <button id="verifyUserBtn" onclick="toggleVerificationFromModal()"
+              class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-bold">
+              <i class="fas fa-user-check mr-2"></i> Verify User
+            </button>
             <button onclick="sendMessage()"
               class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl font-bold">
               <i class="fas fa-envelope mr-2"></i> Send Message
             </button>
-            <button onclick="resetPassword()"
-              class="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white py-3 rounded-2xl font-bold">
-              <i class="fas fa-key mr-2"></i> Reset Password
-            </button>
-            <button onclick="suspendUserConfirm()"
+            <button id="suspendUserBtn" onclick="suspendUserConfirm()"
               class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold">
               <i class="fas fa-ban mr-2"></i> Suspend Account
             </button>
@@ -409,7 +415,7 @@
       // Show loading state
       document.getElementById('usersTableBody').innerHTML = `
         <tr>
-          <td colspan="6" class="text-center py-10">
+          <td colspan="8" class="text-center py-10">
             <i class="fas fa-spinner fa-spin text-4xl text-primary"></i>
             <p class="mt-4 text-xl">Loading users...</p>
           </td>
@@ -437,13 +443,13 @@
           console.error('Error loading users:', error);
           document.getElementById('usersTableBody').innerHTML = `
           <tr>
-            <td colspan="6" class="text-center py-10">
-              <i class="fas fa-exclamation-triangle text-4xl text-red-500"></i>
-              <p class="mt-4 text-xl">Failed to load users</p>
-              <button onclick="loadUsers()" class="mt-4 bg-primary hover:bg-orange-700 px-6 py-3 rounded-xl font-bold transition">
-                Retry
-              </button>
-            </td>
+          <td colspan="8" class="text-center py-10">
+            <i class="fas fa-exclamation-triangle text-4xl text-red-500"></i>
+            <p class="mt-4 text-xl">Failed to load users</p>
+            <button onclick="loadUsers()" class="mt-4 bg-primary hover:bg-orange-700 px-6 py-3 rounded-xl font-bold transition">
+              Retry
+            </button>
+          </td>
           </tr>
         `;
         });
@@ -455,7 +461,7 @@
       if (users.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="6" class="text-center py-10">
+            <td colspan="8" class="text-center py-10">
               <i class="fas fa-inbox text-4xl text-gray-500"></i>
               <p class="mt-4 text-xl">No users found</p>
             </td>
@@ -487,6 +493,14 @@
             roleBadge = '<span class="bg-blue-600/20 text-blue-500 px-3 py-1 rounded-full text-sm font-bold">User</span>';
         }
 
+        // Determine status badge
+        let statusBadge = '';
+        if (user.is_suspended) {
+          statusBadge = '<span class="bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold">Suspended</span>';
+        } else {
+          statusBadge = '<span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Active</span>';
+        }
+
         row.innerHTML = `
           <td class="py-4">
             <div class="flex items-center gap-3">
@@ -500,17 +514,26 @@
           <td class="py-4">
             ${roleBadge}
           </td>
+          <td class="py-4">
+            ${verificationBadge}
+          </td>
+          <td class="py-4">
+            ${statusBadge}
+          </td>
           <td class="py-4 font-bold">${user.points_balance.toFixed(2)} pts</td>
           <td class="py-4">$${user.total_earnings.toFixed(2)}</td>
           <td class="py-4">${formattedDate}</td>
           <td class="py-4 text-right">
-            <button onclick="viewUserDetails(${user.id})" class="text-primary hover:text-orange-700 mx-2">
+            <button onclick="viewUserDetails(${user.id})" class="text-primary hover:text-orange-700 mx-1" title="View Details">
               <i class="fas fa-eye"></i>
             </button>
-            <button onclick="editUser(${user.id})" class="text-blue-500 hover:text-blue-700 mx-2">
+            <button onclick="editUser(${user.id})" class="text-blue-500 hover:text-blue-700 mx-1" title="Edit">
               <i class="fas fa-edit"></i>
             </button>
-            <button onclick="suspendUser(${user.id})" class="text-red-500 hover:text-red-700 mx-2">
+            <button onclick="toggleVerification(${user.id}, ${user.is_verified})" class="${user.is_verified ? 'text-orange-500 hover:text-orange-700' : 'text-green-500 hover:text-green-700'} mx-1" title="${user.is_verified ? 'Unverify' : 'Verify'}">
+              <i class="fas ${user.is_verified ? 'fa-user-slash' : 'fa-user-check'}"></i>
+            </button>
+            <button onclick="suspendUser(${user.id}, ${user.is_suspended})" class="text-red-500 hover:text-red-700 mx-1" title="${user.is_suspended ? 'Unsuspend' : 'Suspend'}">
               <i class="fas fa-ban"></i>
             </button>
           </td>
@@ -565,7 +588,7 @@
       document.querySelector('#userDetailsModal img').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`;
 
       // Update role badge
-      const roleElement = document.querySelector('#userDetailsModal .bg-blue-600\/20');
+      const roleElement = document.querySelector('#userDetailsModal .role-badge');
       if (roleElement) {
         let roleClass = '';
         let roleText = '';
@@ -582,8 +605,63 @@
             roleClass = 'bg-blue-600/20 text-blue-500';
             roleText = 'User';
         }
-        roleElement.className = `px-3 py-1 rounded-full text-sm font-bold ${roleClass}`;
+        roleElement.className = `role-badge px-3 py-1 rounded-full text-sm font-bold ${roleClass}`;
         roleElement.textContent = roleText;
+      }
+
+      // Update verification badge
+      const verificationBadge = document.getElementById('detailVerificationBadge');
+      if (verificationBadge) {
+        if (user.is_verified) {
+          verificationBadge.className = 'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold';
+          verificationBadge.innerHTML = '<i class="fas fa-check-circle mr-1"></i>Verified';
+        } else if (user.verification_pending) {
+          verificationBadge.className = 'bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold';
+          verificationBadge.innerHTML = '<i class="fas fa-clock mr-1"></i>Pending Verification';
+        } else {
+          verificationBadge.className = 'bg-gray-600/20 text-gray-500 px-3 py-1 rounded-full text-sm font-bold';
+          verificationBadge.textContent = 'Unverified';
+        }
+      }
+
+      // Update status badge
+      const statusBadge = document.getElementById('detailStatusBadge');
+      if (statusBadge) {
+        if (user.is_suspended) {
+          statusBadge.className = 'bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold';
+          statusBadge.textContent = 'Suspended';
+        } else {
+          statusBadge.className = 'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold';
+          statusBadge.textContent = 'Active';
+        }
+      }
+
+      // Update verify button
+      const verifyBtn = document.getElementById('verifyUserBtn');
+      if (verifyBtn) {
+        if (user.is_verified) {
+          verifyBtn.innerHTML = '<i class="fas fa-user-slash mr-2"></i>Unverify User';
+          verifyBtn.className = 'flex-1 bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-2xl font-bold';
+        } else {
+          verifyBtn.innerHTML = '<i class="fas fa-user-check mr-2"></i>Verify User';
+          verifyBtn.className = 'flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-bold';
+        }
+        // Store current status on button
+        verifyBtn.dataset.verified = user.is_verified;
+      }
+
+      // Update suspend button
+      const suspendBtn = document.getElementById('suspendUserBtn');
+      if (suspendBtn) {
+        if (user.is_suspended) {
+          suspendBtn.innerHTML = '<i class="fas fa-user-check mr-2"></i>Unsuspend Account';
+          suspendBtn.className = 'flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-bold';
+        } else {
+          suspendBtn.innerHTML = '<i class="fas fa-ban mr-2"></i>Suspend Account';
+          suspendBtn.className = 'flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold';
+        }
+        // Store current status on button
+        suspendBtn.dataset.suspended = user.is_suspended;
       }
 
       // Update member since
@@ -623,6 +701,58 @@
 
     function editUser(userId) {
       alert('Edit user functionality would open here');
+    }
+
+    function toggleVerification(userId, isCurrentlyVerified) {
+      const newStatus = !isCurrentlyVerified;
+      const action = newStatus ? 'verify' : 'unverify';
+      if (confirm(`Are you sure you want to ${action} this user?`)) {
+        const token = localStorage.getItem('access_token');
+        fetch(`/api/admin/users/${userId}/verify`, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ verified: newStatus })
+        })
+          .then(response => response.json())
+          .then(data => {
+            alert(data.message);
+            loadUsers();
+          })
+          .catch(error => console.error(`Error updating verification status:`, error));
+      }
+    }
+
+    function toggleVerificationFromModal() {
+      const userId = document.getElementById('detailUserId').textContent;
+      const verifyBtn = document.getElementById('verifyUserBtn');
+      const isCurrentlyVerified = verifyBtn.dataset.verified === 'true';
+
+      const newStatus = !isCurrentlyVerified;
+      const action = newStatus ? 'verify' : 'unverify';
+
+      if (confirm(`Are you sure you want to ${action} this user?`)) {
+        const token = localStorage.getItem('access_token');
+        fetch(`/api/admin/users/${userId}/verify`, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ verified: newStatus })
+        })
+          .then(response => response.json())
+          .then(data => {
+            alert(data.message);
+            // Update modal data
+            viewUserDetails(userId);
+            // Refresh main table
+            loadUsers();
+          })
+          .catch(error => console.error(`Error updating verification status:`, error));
+      }
     }
 
     function suspendUser(userId, currentStatus) {
@@ -700,8 +830,8 @@
 
     function suspendUserConfirm() {
       const userId = document.getElementById('detailUserId').textContent;
-      const isSuspended = document.querySelector('#userDetailsModal .bg-red-600\/20') !== null &&
-        document.querySelector('#userDetailsModal .bg-red-600\/20').textContent === 'Suspended';
+      const suspendBtn = document.getElementById('suspendUserBtn');
+      const isSuspended = suspendBtn.dataset.suspended === 'true';
 
       const action = isSuspended ? 'unsuspend' : 'suspend';
 
@@ -731,6 +861,7 @@
       }
     }
 
+
     // Logout function
     function logout() {
       localStorage.removeItem('access_token');
@@ -747,8 +878,41 @@
       }
     }
 
+    function loadAdminInfo() {
+      const token = localStorage.getItem('access_token');
+      const savedName = localStorage.getItem('userName');
+      const savedEmail = localStorage.getItem('userEmail');
+      const savedAvatar = localStorage.getItem('userAvatar');
+
+      if (savedName) document.getElementById('sidebarUserName').textContent = savedName;
+      if (savedEmail) document.getElementById('sidebarUserEmail').textContent = savedEmail;
+      if (savedAvatar) document.getElementById('sidebarAvatar').src = savedAvatar;
+
+      if (token) {
+        fetch('/api/auth/profile', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.user) {
+              const user = data.user;
+              document.getElementById('sidebarUserName').textContent = user.full_name;
+              document.getElementById('sidebarUserEmail').textContent = user.email;
+              if (user.avatar_url) {
+                document.getElementById('sidebarAvatar').src = user.avatar_url;
+                localStorage.setItem('userAvatar', user.avatar_url);
+              }
+              localStorage.setItem('userName', user.full_name);
+              localStorage.setItem('userEmail', user.email);
+            }
+          })
+          .catch(err => console.error('Error loading admin info:', err));
+      }
+    }
+
     // Load users when page loads
     document.addEventListener('DOMContentLoaded', function () {
+      loadAdminInfo();
       loadUsers();
     });
   </script>

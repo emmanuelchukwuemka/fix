@@ -1,4 +1,4 @@
-from backend.app import db
+from backend.extensions import db
 from datetime import datetime
 
 class RewardCode(db.Model):
@@ -12,6 +12,7 @@ class RewardCode(db.Model):
     used_at = db.Column(db.DateTime)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     batch_id = db.Column(db.String(50))  # To group codes from the same batch
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     # Relationships
     user = db.relationship('User', back_populates='codes')
@@ -28,5 +29,6 @@ class RewardCode(db.Model):
             'used_by': self.used_by,
             'used_at': self.used_at.isoformat() if self.used_at else None,
             'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
             'batch_id': self.batch_id
         }

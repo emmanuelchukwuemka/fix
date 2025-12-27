@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +8,8 @@
 
   <!-- Tailwind + Inter Font -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -31,7 +33,7 @@
     // Check if user is authenticated
     const token = localStorage.getItem('access_token');
     const userRole = localStorage.getItem('userRole');
-    
+
     // Redirect to login if not authenticated or not admin
     if (!token || userRole !== 'admin') {
       window.location.href = '/admin/login.html';
@@ -45,12 +47,17 @@
 
   <!-- Animated Background -->
   <div class="absolute inset-0 -z-10">
-    <div class="absolute top-10 left-10 w-96 h-96 bg-primary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse"></div>
-    <div class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse"></div>
+    <div
+      class="absolute top-10 left-10 w-96 h-96 bg-primary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse">
+    </div>
+    <div
+      class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse">
+    </div>
   </div>
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+  <aside id="sidebar"
+    class="fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
     <div class="p-6 border-b border-border">
       <div class="flex items-center gap-3">
         <img src="../assets/logo.png" alt="MyFigPoint Logo" class="w-12 h-12 rounded-full object-contain">
@@ -90,7 +97,8 @@
         <i class="fas fa-headset"></i>
         <span>Support Center</span>
       </a>
-      <a href="/admin/profiles" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="/admin/profiles"
+        class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-user-shield"></i>
         <span>Admin Panel</span>
       </a>
@@ -106,13 +114,15 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin"
+          class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
           <p class="font-semibold">Admin User</p>
           <p class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
         </div>
       </div>
-      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+      <a href="#" onclick="logout()"
+        class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
         Logout
       </a>
     </div>
@@ -129,7 +139,8 @@
           User Profile Management
         </h1>
         <div class="flex items-center gap-4">
-          <button onclick="refreshProfiles()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
+          <button onclick="refreshProfiles()"
+            class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
             <i class="fas fa-sync-alt"></i> Refresh
           </button>
         </div>
@@ -139,7 +150,8 @@
     <main class="p-6 lg:p-10 max-w-7xl mx-auto">
       <!-- Stats Overview -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="card rounded-2xl p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 border border-green-500/30">
+        <div
+          class="card rounded-2xl p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 border border-green-500/30">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Total Users</p>
@@ -150,7 +162,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="card rounded-2xl p-6 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-blue-500/30">
           <div class="flex items-center justify-between">
             <div>
@@ -162,8 +174,9 @@
             </div>
           </div>
         </div>
-        
-        <div class="card rounded-2xl p-6 bg-gradient-to-br from-yellow-600/20 to-amber-600/20 border border-yellow-500/30">
+
+        <div
+          class="card rounded-2xl p-6 bg-gradient-to-br from-yellow-600/20 to-amber-600/20 border border-yellow-500/30">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Pending Verification</p>
@@ -174,7 +187,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="card rounded-2xl p-6 bg-gradient-to-br from-red-600/20 to-pink-600/20 border border-red-500/30">
           <div class="flex items-center justify-between">
             <div>
@@ -194,11 +207,12 @@
           <div>
             <label class="block text-sm font-bold mb-2">Search Users</label>
             <div class="relative">
-              <input type="text" id="userSearch" class="form-input w-full px-4 py-3 rounded-2xl pl-10" placeholder="Name, email, or ID...">
+              <input type="text" id="userSearch" class="form-input w-full px-4 py-3 rounded-2xl pl-10"
+                placeholder="Name, email, or ID...">
               <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
             </div>
           </div>
-          
+
           <div>
             <label class="block text-sm font-bold mb-2">Verification Status</label>
             <select class="form-input w-full px-4 py-3 rounded-2xl" id="verificationFilter">
@@ -208,7 +222,7 @@
               <option value="unverified">Unverified</option>
             </select>
           </div>
-          
+
           <div>
             <label class="block text-sm font-bold mb-2">Account Status</label>
             <select class="form-input w-full px-4 py-3 rounded-2xl" id="accountFilter">
@@ -218,14 +232,15 @@
               <option value="closed">Closed</option>
             </select>
           </div>
-          
+
           <div>
             <label class="block text-sm font-bold mb-2">Join Date</label>
             <input type="date" class="form-input w-full px-4 py-3 rounded-2xl" id="joinDate">
           </div>
-          
+
           <div class="flex items-end">
-            <button onclick="applyFilters()" class="w-full bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
+            <button onclick="applyFilters()"
+              class="w-full bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
               Apply Filters
             </button>
           </div>
@@ -240,7 +255,7 @@
             <p class="text-lg font-bold">Total Users: <span id="totalUsersCount">1,247</span></p>
           </div>
         </div>
-        
+
         <div class="overflow-x-auto">
           <table class="w-full">
             <thead>
@@ -264,18 +279,23 @@
             </tbody>
           </table>
         </div>
-        
+
         <!-- Pagination -->
         <div class="flex items-center justify-between mt-8">
           <p class="text-gray-600 dark:text-gray-400">Showing 1 to 3 of 1,247 users</p>
           <div class="flex gap-2">
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
               <i class="fas fa-chevron-left"></i>
             </button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">2</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">3</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">2</button>
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">3</button>
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
               <i class="fas fa-chevron-right"></i>
             </button>
           </div>
@@ -296,44 +316,47 @@
           <i class="fas fa-times text-2xl"></i>
         </button>
       </div>
-      
+
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <!-- User Info -->
         <div class="md:col-span-1">
           <div class="text-center mb-6">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-24 h-24 rounded-full mx-auto mb-4" alt="User">
-            <h3 class="text-xl font-bold">Sarah Johnson</h3>
-            <p class="text-gray-600 dark:text-gray-400">sarah.j@example.com</p>
+            <img id="detailAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah"
+              class="w-24 h-24 rounded-full mx-auto mb-4" alt="User">
+            <h3 id="detailFullName" class="text-xl font-bold">Sarah Johnson</h3>
+            <p id="detailEmail" class="text-gray-600 dark:text-gray-400">sarah.j@example.com</p>
             <div class="mt-3">
-              <span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Verified</span>
+              <span id="detailVerificationStatus"
+                class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Verified</span>
             </div>
           </div>
-          
+
           <div class="space-y-4">
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">User ID</p>
-              <p class="font-mono font-bold">USR-001247</p>
+              <p id="detailUserId" class="font-mono font-bold">USR-001247</p>
             </div>
-            
+
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Member Since</p>
-              <p class="font-bold">March 22, 2024</p>
+              <p id="detailJoinDate" class="font-bold">March 22, 2024</p>
             </div>
-            
+
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Last Login</p>
               <p class="font-bold">2 hours ago</p>
             </div>
-            
+
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Account Status</p>
               <p>
-                <span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Active</span>
+                <span id="detailAccountStatus"
+                  class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Active</span>
               </p>
             </div>
           </div>
         </div>
-        
+
         <!-- Profile Details -->
         <div class="md:col-span-2">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -342,71 +365,74 @@
               <div class="space-y-3">
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Full Name</p>
-                  <p class="font-bold">Sarah Johnson</p>
+                  <p id="infoFullName" class="font-bold">Sarah Johnson</p>
                 </div>
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Phone</p>
-                  <p class="font-bold">+1 (555) 123-4567</p>
+                  <p id="infoPhone" class="font-bold">+1 (555) 123-4567</p>
                 </div>
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Referral Code</p>
-                  <p class="font-mono font-bold">SARAH7XK</p>
+                  <p id="infoReferralCode" class="font-mono font-bold">SARAH7XK</p>
                 </div>
               </div>
             </div>
-            
+
             <div class="p-6 bg-card border border-border rounded-2xl">
               <h4 class="font-bold mb-3">Banking Information</h4>
               <div class="space-y-3">
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Bank Name</p>
-                  <p class="font-bold">First National Bank</p>
+                  <p id="infoBankName" class="font-bold">First National Bank</p>
                 </div>
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Account Holder</p>
-                  <p class="font-bold">Sarah Johnson</p>
+                  <p id="infoAccountName" class="font-bold">Sarah Johnson</p>
                 </div>
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Account Number</p>
-                  <p class="font-mono font-bold">**** **** **** 4829</p>
+                  <p id="infoAccountNumber" class="font-mono font-bold">**** **** **** 4829</p>
                 </div>
               </div>
             </div>
-            
+
             <div class="p-6 bg-card border border-border rounded-2xl">
               <h4 class="font-bold mb-3">Verification Status</h4>
               <div class="space-y-3">
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">ID Verification</p>
                   <p>
-                    <span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Verified</span>
+                    <span id="vIdStatus"
+                      class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Verified</span>
                   </p>
                 </div>
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Address Verification</p>
                   <p>
-                    <span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Verified</span>
+                    <span id="vAddressStatus"
+                      class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Verified</span>
                   </p>
                 </div>
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Bank Verification</p>
                   <p>
-                    <span class="bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold">Pending</span>
+                    <span id="vBankStatus"
+                      class="bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold">Pending</span>
                   </p>
                 </div>
               </div>
             </div>
-            
+
             <div class="p-6 bg-card border border-border rounded-2xl">
               <h4 class="font-bold mb-3">Account Statistics</h4>
               <div class="space-y-3">
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Points Balance</p>
-                  <p class="font-bold">1,250.75 pts</p>
+                  <p id="statPoints" class="font-bold">1,250.75 pts</p>
                 </div>
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Total Earned</p>
-                  <p class="font-bold">$375.23</p>
+                  <p id="statEarnings" class="font-bold">$375.23</p>
                 </div>
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Referrals</p>
@@ -415,7 +441,7 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Document Verification -->
           <div class="mb-8">
             <h3 class="text-xl font-bold mb-4">Document Verification</h3>
@@ -429,7 +455,7 @@
                   <p class="text-xs text-gray-600 dark:text-gray-400">Front</p>
                 </div>
               </div>
-              
+
               <div class="border border-border rounded-2xl overflow-hidden">
                 <div class="bg-gray-200 border-b border-border h-32 flex items-center justify-center">
                   <i class="fas fa-id-card text-3xl text-gray-400"></i>
@@ -439,7 +465,7 @@
                   <p class="text-xs text-gray-600 dark:text-gray-400">Back</p>
                 </div>
               </div>
-              
+
               <div class="border border-border rounded-2xl overflow-hidden">
                 <div class="bg-gray-200 border-b border-border h-32 flex items-center justify-center">
                   <i class="fas fa-home text-3xl text-gray-400"></i>
@@ -451,16 +477,19 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Actions -->
           <div class="flex flex-wrap gap-4">
-            <button onclick="verifyDocuments()" class="flex-1 bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
+            <button onclick="verifyDocuments()"
+              class="flex-1 bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
               <i class="fas fa-badge-check mr-2"></i> Verify Documents
             </button>
-            <button onclick="sendMessage()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl font-bold">
+            <button onclick="sendMessage()"
+              class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl font-bold">
               <i class="fas fa-envelope mr-2"></i> Send Message
             </button>
-            <button onclick="suspendAccount()" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold">
+            <button onclick="suspendAccount()"
+              class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold">
               <i class="fas fa-user-slash mr-2"></i> Suspend Account
             </button>
           </div>
@@ -473,7 +502,7 @@
     // Global variables
     let currentPage = 1;
     let currentProfileId = null;
-    
+
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('overlay').classList.toggle('hidden');
@@ -493,23 +522,23 @@
         window.location.href = '../frontend/login.html';
         return;
       }
-      
+
       // Get filter values
       const searchQuery = document.getElementById('userSearch').value;
       const verificationFilter = document.getElementById('verificationFilter').value;
       const accountFilter = document.getElementById('accountFilter').value;
       const joinDate = document.getElementById('joinDate').value;
-      
+
       // Build query parameters
       const params = new URLSearchParams();
       params.append('page', currentPage);
       params.append('per_page', 20);
-      
+
       if (searchQuery) params.append('search', searchQuery);
       if (verificationFilter) params.append('verification_status', verificationFilter);
       if (accountFilter) params.append('account_status', accountFilter);
       if (joinDate) params.append('join_date', joinDate);
-      
+
       // Show loading state
       document.getElementById('profilesTableBody').innerHTML = `
         <tr>
@@ -519,27 +548,30 @@
           </td>
         </tr>
       `;
-      
+
       fetch(`/api/admin/users?${params.toString()}`, {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.users) {
-          // Update total users count
-          document.getElementById('totalUsersCount').textContent = data.total.toLocaleString();
-          
-          // Render profiles
-          renderProfiles(data.users);
-        } else {
-          throw new Error(data.message || 'Failed to load profiles');
-        }
-      })
-      .catch(error => {
-        console.error('Error loading profiles:', error);
-        document.getElementById('profilesTableBody').innerHTML = `
+        .then(response => {
+          if (response.status === 401) { window.location.href = '/admin/login.html'; throw new Error('Unauthorized'); }
+          return response.json();
+        })
+        .then(data => {
+          if (data.users) {
+            // Update total users count
+            document.getElementById('totalUsersCount').textContent = data.total.toLocaleString();
+
+            // Render profiles
+            renderProfiles(data.users);
+          } else {
+            throw new Error(data.message || 'Failed to load profiles');
+          }
+        })
+        .catch(error => {
+          console.error('Error loading profiles:', error);
+          document.getElementById('profilesTableBody').innerHTML = `
           <tr>
             <td colspan="6" class="text-center py-10">
               <i class="fas fa-exclamation-triangle text-4xl text-red-500"></i>
@@ -550,12 +582,12 @@
             </td>
           </tr>
         `;
-      });
+        });
     }
-    
+
     function renderProfiles(users) {
       const tbody = document.getElementById('profilesTableBody');
-      
+
       if (users.length === 0) {
         tbody.innerHTML = `
           <tr>
@@ -567,17 +599,17 @@
         `;
         return;
       }
-      
+
       tbody.innerHTML = '';
-      
+
       users.forEach(user => {
         const row = document.createElement('tr');
         row.className = 'border-b border-border hover:bg-card/50';
-        
+
         // Format join date
         const joinDate = new Date(user.created_at);
         const formattedDate = joinDate.toLocaleDateString();
-        
+
         // Determine verification status badge
         let verificationBadge = '';
         if (user.is_verified) {
@@ -587,7 +619,7 @@
         } else {
           verificationBadge = '<span class="bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold">Unverified</span>';
         }
-        
+
         // Determine account status badge
         let accountBadge = '';
         if (user.is_suspended) {
@@ -595,7 +627,7 @@
         } else {
           accountBadge = '<span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Active</span>';
         }
-        
+
         row.innerHTML = `
           <td class="py-4">
             <div class="flex items-center gap-3">
@@ -623,21 +655,21 @@
             <button onclick="viewProfileDetails(${user.id})" class="text-primary hover:text-orange-700 mx-2">
               <i class="fas fa-eye"></i>
             </button>
-            ${user.is_verified ? 
-              '' : 
-              `<button onclick="verifyProfile(${user.id})" class="text-blue-500 hover:text-blue-700 mx-2">
+            ${user.is_verified ?
+            '' :
+            `<button onclick="verifyProfile(${user.id})" class="text-blue-500 hover:text-blue-700 mx-2">
                 <i class="fas fa-badge-check"></i>
               </button>`
-            }
-            ${user.is_suspended ? 
-              `<button onclick="unsuspendAccount(${user.id})" class="text-green-500 hover:text-green-700 mx-2">
+          }
+            ${user.is_suspended ?
+            `<button onclick="unsuspendAccount(${user.id})" class="text-green-500 hover:text-green-700 mx-2">
                 <i class="fas fa-user-check"></i>
               </button>` :
-              ''
-            }
+            ''
+          }
           </td>
         `;
-        
+
         tbody.appendChild(row);
       });
     }
@@ -658,124 +690,88 @@
         window.location.href = '../frontend/login.html';
         return;
       }
-      
+
       fetch(`/api/admin/users/${profileId}/details`, {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.user) {
-          populateProfileDetails(data.user);
-          document.getElementById('profileDetailsModal').classList.remove('hidden');
-        } else {
-          alert('Failed to load profile details: ' + (data.message || 'Unknown error'));
-        }
-      })
-      .catch(error => {
-        console.error('Error loading profile details:', error);
-        alert('Failed to load profile details. Please try again.');
-      });
+        .then(response => {
+          if (response.status === 401) { window.location.href = '/admin/login.html'; throw new Error('Unauthorized'); }
+          return response.json();
+        })
+        .then(data => {
+          if (data.user) {
+            populateProfileDetails(data.user);
+            document.getElementById('profileDetailsModal').classList.remove('hidden');
+          } else {
+            alert('Failed to load profile details: ' + (data.message || 'Unknown error'));
+          }
+        })
+        .catch(error => {
+          console.error('Error loading profile details:', error);
+          alert('Failed to load profile details. Please try again.');
+        });
     }
-    
+
     function populateProfileDetails(user) {
-      // Update user info section
-      document.querySelector('#profileDetailsModal .text-xl.font-bold').textContent = user.full_name;
-      document.querySelector('#profileDetailsModal .text-gray-600.dark\:text-gray-400').textContent = user.email;
-      
-      // Update avatar
-      document.querySelector('#profileDetailsModal img').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`;
-      
-      // Update verification status badge
-      const verificationElement = document.querySelector('#profileDetailsModal .bg-green-600\/20');
-      if (verificationElement) {
-        let verificationClass = '';
-        let verificationText = '';
-        if (user.is_verified) {
-          verificationClass = 'bg-green-600/20 text-green-500';
-          verificationText = 'Verified';
-        } else if (user.verification_pending) {
-          verificationClass = 'bg-yellow-600/20 text-yellow-500';
-          verificationText = 'Pending';
-        } else {
-          verificationClass = 'bg-red-600/20 text-red-500';
-          verificationText = 'Unverified';
-        }
-        verificationElement.className = `px-3 py-1 rounded-full text-sm font-bold ${verificationClass}`;
-        verificationElement.textContent = verificationText;
+      document.getElementById('detailFullName').textContent = user.full_name;
+      document.getElementById('detailEmail').textContent = user.email;
+      document.getElementById('detailAvatar').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`;
+
+      const vStatus = document.getElementById('detailVerificationStatus');
+      if (user.is_verified) {
+        vStatus.className = 'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold';
+        vStatus.textContent = 'Verified';
+      } else if (user.verification_pending) {
+        vStatus.className = 'bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold';
+        vStatus.textContent = 'Pending';
+      } else {
+        vStatus.className = 'bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold';
+        vStatus.textContent = 'Unverified';
       }
-      
-      // Update user ID
-      document.querySelectorAll('#profileDetailsModal .font-mono.font-bold')[0].textContent = `USR-${String(user.id).padStart(6, '0')}`;
-      
-      // Update member since
+
+      document.getElementById('detailUserId').textContent = `USR-${String(user.id).padStart(6, '0')}`;
       const joinDate = new Date(user.created_at);
-      document.querySelectorAll('#profileDetailsModal .font-bold')[2].textContent = joinDate.toLocaleDateString();
-      
-      // Update account status
-      const accountStatusElement = document.querySelectorAll('#profileDetailsModal .bg-green-600\/20')[1];
-      if (accountStatusElement) {
-        let accountClass = '';
-        let accountText = '';
-        if (user.is_suspended) {
-          accountClass = 'bg-red-600/20 text-red-500';
-          accountText = 'Suspended';
-        } else {
-          accountClass = 'bg-green-600/20 text-green-500';
-          accountText = 'Active';
-        }
-        accountStatusElement.className = `px-3 py-1 rounded-full text-sm font-bold ${accountClass}`;
-        accountStatusElement.textContent = accountText;
+      document.getElementById('detailJoinDate').textContent = joinDate.toLocaleDateString();
+
+      const aStatus = document.getElementById('detailAccountStatus');
+      if (user.is_suspended) {
+        aStatus.className = 'bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold';
+        aStatus.textContent = 'Suspended';
+      } else {
+        aStatus.className = 'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold';
+        aStatus.textContent = 'Active';
       }
-      
-      // Update personal information
-      document.querySelectorAll('#profileDetailsModal .font-bold')[4].textContent = user.full_name;
-      document.querySelectorAll('#profileDetailsModal .font-bold')[5].textContent = user.phone || 'N/A';
-      document.querySelectorAll('#profileDetailsModal .font-mono.font-bold')[1].textContent = user.referral_code || 'N/A';
-      
-      // Update banking information
-      if (user.bank_name) {
-        document.querySelectorAll('#profileDetailsModal .font-bold')[7].textContent = user.bank_name;
-      }
-      if (user.account_name) {
-        document.querySelectorAll('#profileDetailsModal .font-bold')[8].textContent = user.account_name;
-      }
+
+      document.getElementById('infoFullName').textContent = user.full_name;
+      document.getElementById('infoPhone').textContent = user.phone || 'N/A';
+      document.getElementById('infoReferralCode').textContent = user.referral_code || 'N/A';
+
+      document.getElementById('infoBankName').textContent = user.bank_name || 'N/A';
+      document.getElementById('infoAccountName').textContent = user.account_name || 'N/A';
       if (user.account_number) {
-        // Mask account number for security
-        const maskedAccount = user.account_number.replace(/.(?=.{4})/g, '*');
-        document.querySelectorAll('#profileDetailsModal .font-mono.font-bold')[2].textContent = maskedAccount;
+        const masked = user.account_number.replace(/.(?=.{4})/g, '*');
+        document.getElementById('infoAccountNumber').textContent = masked;
+      } else {
+        document.getElementById('infoAccountNumber').textContent = 'N/A';
       }
-      
-      // Update verification statuses
-      const idVerificationElement = document.querySelectorAll('#profileDetailsModal .bg-green-600\/20')[2];
-      if (idVerificationElement) {
-        idVerificationElement.textContent = user.id_verified ? 'Verified' : 'Not Verified';
-        idVerificationElement.className = user.id_verified ? 
-          'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold' : 
-          'bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold';
-      }
-      
-      const addressVerificationElement = document.querySelectorAll('#profileDetailsModal .bg-green-600\/20')[3];
-      if (addressVerificationElement) {
-        addressVerificationElement.textContent = user.address_verified ? 'Verified' : 'Not Verified';
-        addressVerificationElement.className = user.address_verified ? 
-          'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold' : 
-          'bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold';
-      }
-      
-      const bankVerificationElement = document.querySelectorAll('#profileDetailsModal .bg-yellow-600\/20')[0];
-      if (bankVerificationElement) {
-        bankVerificationElement.textContent = user.bank_verified ? 'Verified' : 'Pending';
-        bankVerificationElement.className = user.bank_verified ? 
-          'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold' : 
-          'bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold';
-      }
-      
-      // Update account statistics
-      document.querySelectorAll('#profileDetailsModal .font-bold')[13].textContent = `${user.points_balance.toFixed(2)} pts`;
-      document.querySelectorAll('#profileDetailsModal .font-bold')[14].textContent = `$${user.total_earnings.toFixed(2)}`;
-      
+
+      const vId = document.getElementById('vIdStatus');
+      vId.textContent = user.id_verified ? 'Verified' : 'Not Verified';
+      vId.className = user.id_verified ? 'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold' : 'bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold';
+
+      const vAddr = document.getElementById('vAddressStatus');
+      vAddr.textContent = user.address_verified ? 'Verified' : 'Not Verified';
+      vAddr.className = user.address_verified ? 'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold' : 'bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold';
+
+      const vBank = document.getElementById('vBankStatus');
+      vBank.textContent = user.bank_verified ? 'Verified' : 'Pending';
+      vBank.className = user.bank_verified ? 'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold' : 'bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold';
+
+      document.getElementById('statPoints').textContent = `${user.points_balance.toFixed(2)} pts`;
+      document.getElementById('statEarnings').textContent = `$${user.total_earnings.toFixed(2)}`;
+
       // Note: Referrals count would need a separate API call
     }
 
@@ -786,7 +782,7 @@
           window.location.href = '../frontend/login.html';
           return;
         }
-        
+
         fetch(`/api/admin/users/${profileId}/verify`, {
           method: 'POST',
           headers: {
@@ -795,19 +791,19 @@
           },
           body: JSON.stringify({ verified: true })
         })
-        .then(response => response.json())
-        .then(data => {
-          if (data.message && data.message.includes('success')) {
-            alert('Profile verified successfully');
-            loadProfiles(); // Refresh the list
-          } else {
-            alert('Failed to verify profile: ' + (data.message || 'Unknown error'));
-          }
-        })
-        .catch(error => {
-          console.error('Error verifying profile:', error);
-          alert('Failed to verify profile. Please try again.');
-        });
+          .then(response => response.json())
+          .then(data => {
+            if (data.message && data.message.includes('success')) {
+              alert('Profile verified successfully');
+              loadProfiles(); // Refresh the list
+            } else {
+              alert('Failed to verify profile: ' + (data.message || 'Unknown error'));
+            }
+          })
+          .catch(error => {
+            console.error('Error verifying profile:', error);
+            alert('Failed to verify profile. Please try again.');
+          });
       }
     }
 
@@ -818,7 +814,7 @@
           window.location.href = '../frontend/login.html';
           return;
         }
-        
+
         fetch(`/api/admin/users/${profileId}/unsuspend`, {
           method: 'POST',
           headers: {
@@ -826,19 +822,19 @@
             'Content-Type': 'application/json'
           }
         })
-        .then(response => response.json())
-        .then(data => {
-          if (data.message && data.message.includes('success')) {
-            alert('Account unsuspended successfully');
-            loadProfiles(); // Refresh the list
-          } else {
-            alert('Failed to unsuspend account: ' + (data.message || 'Unknown error'));
-          }
-        })
-        .catch(error => {
-          console.error('Error unsuspending account:', error);
-          alert('Failed to unsuspend account. Please try again.');
-        });
+          .then(response => response.json())
+          .then(data => {
+            if (data.message && data.message.includes('success')) {
+              alert('Account unsuspended successfully');
+              loadProfiles(); // Refresh the list
+            } else {
+              alert('Failed to unsuspend account: ' + (data.message || 'Unknown error'));
+            }
+          })
+          .catch(error => {
+            console.error('Error unsuspending account:', error);
+            alert('Failed to unsuspend account. Please try again.');
+          });
       }
     }
 
@@ -853,7 +849,7 @@
           window.location.href = '../frontend/login.html';
           return;
         }
-        
+
         fetch(`/api/admin/users/${currentProfileId}/verify-documents`, {
           method: 'POST',
           headers: {
@@ -861,20 +857,20 @@
             'Content-Type': 'application/json'
           }
         })
-        .then(response => response.json())
-        .then(data => {
-          if (data.message && data.message.includes('success')) {
-            alert('Documents verified successfully');
-            // Refresh profile details
-            viewProfileDetails(currentProfileId);
-          } else {
-            alert('Failed to verify documents: ' + (data.message || 'Unknown error'));
-          }
-        })
-        .catch(error => {
-          console.error('Error verifying documents:', error);
-          alert('Failed to verify documents. Please try again.');
-        });
+          .then(response => response.json())
+          .then(data => {
+            if (data.message && data.message.includes('success')) {
+              alert('Documents verified successfully');
+              // Refresh profile details
+              viewProfileDetails(currentProfileId);
+            } else {
+              alert('Failed to verify documents: ' + (data.message || 'Unknown error'));
+            }
+          })
+          .catch(error => {
+            console.error('Error verifying documents:', error);
+            alert('Failed to verify documents. Please try again.');
+          });
       }
     }
 
@@ -886,7 +882,7 @@
           window.location.href = '../frontend/login.html';
           return;
         }
-        
+
         fetch(`/api/admin/users/${currentProfileId}/message`, {
           method: 'POST',
           headers: {
@@ -895,18 +891,18 @@
           },
           body: JSON.stringify({ message: message })
         })
-        .then(response => response.json())
-        .then(data => {
-          if (data.message && data.message.includes('success')) {
-            alert('Message sent successfully');
-          } else {
-            alert('Failed to send message: ' + (data.message || 'Unknown error'));
-          }
-        })
-        .catch(error => {
-          console.error('Error sending message:', error);
-          alert('Failed to send message. Please try again.');
-        });
+          .then(response => response.json())
+          .then(data => {
+            if (data.message && data.message.includes('success')) {
+              alert('Message sent successfully');
+            } else {
+              alert('Failed to send message: ' + (data.message || 'Unknown error'));
+            }
+          })
+          .catch(error => {
+            console.error('Error sending message:', error);
+            alert('Failed to send message. Please try again.');
+          });
       }
     }
 
@@ -918,7 +914,7 @@
           window.location.href = '../frontend/login.html';
           return;
         }
-        
+
         fetch(`/api/admin/users/${currentProfileId}/suspend`, {
           method: 'POST',
           headers: {
@@ -927,40 +923,41 @@
           },
           body: JSON.stringify({ reason: reason })
         })
-        .then(response => response.json())
-        .then(data => {
-          if (data.message && data.message.includes('success')) {
-            alert('Account suspended with reason: ' + reason);
-            closeModal('profileDetailsModal');
-            loadProfiles(); // Refresh the list
-          } else {
-            alert('Failed to suspend account: ' + (data.message || 'Unknown error'));
-          }
-        })
-        .catch(error => {
-          console.error('Error suspending account:', error);
-          alert('Failed to suspend account. Please try again.');
-        });
+          .then(response => response.json())
+          .then(data => {
+            if (data.message && data.message.includes('success')) {
+              alert('Account suspended with reason: ' + reason);
+              closeModal('profileDetailsModal');
+              loadProfiles(); // Refresh the list
+            } else {
+              alert('Failed to suspend account: ' + (data.message || 'Unknown error'));
+            }
+          })
+          .catch(error => {
+            console.error('Error suspending account:', error);
+            alert('Failed to suspend account. Please try again.');
+          });
       }
     }
 
     // Close modals when clicking outside
-    window.onclick = function(event) {
+    window.onclick = function (event) {
       if (event.target.classList.contains('fixed') && event.target.classList.contains('inset-0')) {
         event.target.classList.add('hidden');
       }
     }
-    
+
     // Load profiles when page loads
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       loadProfiles();
     });
   </script>
   <script src="../assets/js/theme.js"></script>
-  
+
   <!-- Fixed Theme Toggle Button -->
   <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
     <i class="fas fa-moon"></i>
   </button>
 </body>
+
 </html>

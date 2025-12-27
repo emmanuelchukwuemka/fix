@@ -167,32 +167,25 @@
           <div>
             <form id="walletWithdrawForm" class="space-y-6">
               <div>
-                <label for="withdrawalMethod" class="block text-lg font-bold mb-3">Withdrawal Method</label>
-                <select id="withdrawalMethod" title="Select Withdrawal Method"
-                  class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
-                  <option value="bank">Bank Transfer</option>
-                  <option value="gift">Gift Card</option>
-                </select>
-              </div>
-
-              <div>
                 <label for="withdrawPoints" class="block text-lg font-bold mb-3">Points to Withdraw</label>
                 <input type="number" id="withdrawPoints" min="50" placeholder="Min: 50 pts" title="Points to Withdraw"
                   class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" />
                 <p class="text-right mt-2 text-green-400 font-bold" id="withdrawUsdValue">$0.00 USD</p>
               </div>
 
-              <div id="bankDetailsSection">
+              <div>
                 <label class="block text-lg font-bold mb-3">Banking Details</label>
                 <div class="space-y-4">
                   <input type="text" id="bankName" placeholder="Bank Name" title="Bank Name"
-                    class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" />
-                  <input type="text" id="accountHolderName" placeholder="Account Holder Name"
-                    title="Account Holder Name"
-                    class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" />
+                    class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition"
+                    required />
+                  <input type="text" id="accountHolderName" placeholder="Account Name" title="Account Name"
+                    class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition"
+                    required />
                   <input type="text" id="accountNumber" placeholder="Account Number" title="Account Number"
-                    class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" />
-                  <input type="text" id="routingNumber" placeholder="Routing Number (optional)" title="Routing Number"
+                    class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition"
+                    required />
+                  <input type="text" id="routingNumber" placeholder="Routing Number (Optional)" title="Routing Number"
                     class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" />
                 </div>
               </div>
@@ -389,11 +382,9 @@
         return;
       }
 
-      // Load user info
-      const savedName = localStorage.getItem('userName');
-      const savedEmail = localStorage.getItem('userEmail');
-      if (savedName) document.getElementById('sidebarUserName').textContent = savedName;
-      if (savedEmail) document.getElementById('sidebarUserEmail').textContent = savedEmail;
+      if (typeof updateSidebar === 'function') {
+        updateSidebar();
+      }
 
       // Fetch Points Balance
       fetch('/api/points/balance', {
@@ -403,6 +394,26 @@
         .then(data => {
           const balance = data.points_balance || 0;
           document.getElementById('topPointsBalance').innerHTML = balance.toLocaleString() + ' pts';
+
+          if (data.total_points_earned !== undefined) {
+            const earnedUsd = (data.total_points_earned * 0.30).toFixed(2);
+            document.getElementById('topTotalEarned').textContent = `$${earnedUsd} earned`;
+          }
+        });
+
+      // Fetch Profile to auto-fill banking details
+      fetch('/api/users/profile', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.user) {
+            const user = data.user;
+            if (user.bank_name) document.getElementById('bankName').value = user.bank_name;
+            if (user.account_name) document.getElementById('accountHolderName').value = user.account_name;
+            if (user.account_number) document.getElementById('accountNumber').value = user.account_number;
+            if (user.routing_number) document.getElementById('routingNumber').value = user.routing_number;
+          }
         });
 
       fetch('/api/transactions/?type=withdrawal', {
@@ -461,7 +472,7 @@
     // Update USD value when points change
     document.getElementById('withdrawPoints').addEventListener('input', function () {
       const points = parseFloat(this.value) || 0;
-      const usd = (points * 0.1).toFixed(2); // 10 pts = $1
+      const usd = (points * 0.30).toFixed(2); // 1 point = $0.30
       document.getElementById('withdrawUsdValue').textContent = `$${usd} USD`;
     });
 
@@ -475,18 +486,14 @@
         return;
       }
 
-      const method = document.getElementById('withdrawalMethod').value;
+      // Validate banking details
+      const bankName = document.getElementById('bankName').value;
+      const accountHolderName = document.getElementById('accountHolderName').value;
+      const accountNumber = document.getElementById('accountNumber').value;
 
-      // Validate banking details if bank transfer is selected
-      if (method === 'bank') {
-        const bankName = document.getElementById('bankName').value;
-        const accountHolderName = document.getElementById('accountHolderName').value;
-        const accountNumber = document.getElementById('accountNumber').value;
-
-        if (!bankName || !accountHolderName || !accountNumber) {
-          alert('Please fill in all required banking details');
-          return;
-        }
+      if (!bankName || !accountHolderName || !accountNumber) {
+        alert('Please fill in all required banking details (Bank Name, Account Name, and Account Number)');
+        return;
       }
 
       const token = localStorage.getItem('access_token');
@@ -502,18 +509,16 @@
       submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
       submitButton.disabled = true;
 
-      // Prepare request data based on selected method
-      const requestData = { points: parseInt(points) };
-
-      if (method === 'bank') {
-        requestData.method = 'bank';
-        requestData.bank_name = document.getElementById('bankName').value;
-        requestData.account_holder_name = document.getElementById('accountHolderName').value;
-        requestData.account_number = document.getElementById('accountNumber').value;
-        requestData.routing_number = document.getElementById('routingNumber').value;
-      } else if (method === 'gift') {
-        requestData.method = 'gift_card';
-      }
+      // Prepare request data for bank transfer
+      const requestData = {
+        points: parseInt(points),
+        method: 'bank',
+        bank_name: document.getElementById('bankName').value,
+        account_holder_name: document.getElementById('accountHolderName').value,
+        account_number: document.getElementById('accountNumber').value,
+        routing_number: document.getElementById('routingNumber').value,
+        save_bank_details: document.getElementById('saveBankDetails').checked
+      };
 
       // Send withdrawal request
       fetch('/api/points/withdraw', {

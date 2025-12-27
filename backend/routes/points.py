@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from backend.app import db
+from backend.extensions import db
 from backend.models.user import User, UserRole
 from backend.models.transaction import Transaction, TransactionType, TransactionStatus
 from backend.utils.helpers import points_to_usd, get_tier_level
@@ -13,7 +13,7 @@ points_bp = Blueprint('points', __name__)
 @jwt_required()
 def get_points_balance():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
         if not user:
@@ -34,7 +34,7 @@ def get_points_balance():
 @partner_restricted
 def get_points_history():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 10, type=int)
         
@@ -60,7 +60,7 @@ def get_points_history():
 @partner_restricted
 def withdraw_points():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
 
         if not user:
@@ -90,17 +90,21 @@ def withdraw_points():
 
         # Check if user has required details based on payment method
         if method == 'bank':
-            # Update user's banking details if provided in the request
-            if data.get('bank_name'):
-                user.bank_name = data['bank_name']
-            if data.get('account_holder_name'):
-                user.account_name = data['account_holder_name']
-            if data.get('account_number'):
-                user.account_number = data['account_number']
+            # Check if user has all required banking details
+            bank_name = data.get('bank_name') or user.bank_name
+            account_name = data.get('account_holder_name') or user.account_name
+            account_number = data.get('account_number') or user.account_number
             
-            # Validate that user has all required banking details
-            if not user.bank_name or not user.account_name or not user.account_number:
-                return jsonify({'message': 'Please complete your bank details in profile settings before withdrawing via bank transfer'}), 400
+            if not bank_name or not account_name or not account_number:
+                return jsonify({'message': 'Please provide complete bank details (Bank Name, Account Name, and Account Number)'}), 400
+
+            # Update user's banking details if requested
+            if data.get('save_bank_details'):
+                user.bank_name = bank_name
+                user.account_name = account_name
+                user.account_number = account_number
+                if data.get('routing_number'):
+                    user.routing_number = data.get('routing_number')
         elif method == 'gift_card' and not data.get('gift_card_type'):
             return jsonify({'message': 'Gift card type is required for gift card withdrawals'}), 400
 
@@ -193,7 +197,7 @@ def withdraw_points():
 @partner_restricted
 def convert_points():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
 
         if not user:
