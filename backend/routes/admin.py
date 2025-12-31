@@ -65,33 +65,163 @@ def export_codes(batch_id):
         current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
         
+        # Get format parameter (csv, pdf, word)
+        format_type = request.args.get('format', 'csv').lower()
+        
         # Get codes for this batch
         codes = RewardCode.query.filter_by(batch_id=batch_id).all()
         
         if not codes:
             return jsonify({'message': 'No codes found for this batch'}), 404
         
-        # Create CSV in memory
-        output = io.StringIO()
-        writer = csv.writer(output)
-        writer.writerow(['Code', 'Point Value', 'Batch ID', 'Created At'])
+        if format_type == 'csv':
+            # Create CSV in memory
+            output = io.StringIO()
+            writer = csv.writer(output)
+            writer.writerow(['Code', 'Point Value', 'Batch ID', 'Created At'])
+            
+            for code in codes:
+                writer.writerow([
+                    code.code,
+                    code.point_value,
+                    code.batch_id,
+                    code.created_at.isoformat()
+                ])
+            
+            csv_data = output.getvalue()
+            output.close()
+            
+            return jsonify({
+                'batch_id': batch_id,
+                'code_count': len(codes),
+                'csv_data': csv_data,
+                'format': 'csv'
+            }), 200
         
-        for code in codes:
-            writer.writerow([
-                code.code,
-                code.point_value,
-                code.batch_id,
-                code.created_at.isoformat()
-            ])
+        elif format_type == 'pdf':
+            # Create PDF using reportlab
+            from reportlab.lib.pagesizes import letter
+            from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+            from reportlab.lib.styles import getSampleStyleSheet
+            from reportlab.lib import colors
+            import base64
+            
+            # Create in-memory buffer
+            buffer = io.BytesIO()
+            doc = SimpleDocTemplate(buffer, pagesize=letter)
+            elements = []
+            
+            # Add title
+            styles = getSampleStyleSheet()
+            title = Paragraph(f"MyFigPoint - Reward Codes Report (Batch: {batch_id})", styles['Title'])
+            elements.append(title)
+            elements.append(Spacer(1, 12))
+            
+            # Add subtitle with date
+            from datetime import datetime
+            date_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            subtitle = Paragraph(f"Generated on: {date_str}", styles['Normal'])
+            elements.append(subtitle)
+            elements.append(Spacer(1, 20))
+            
+            # Create table data
+            data = [['Code', 'Point Value', 'Batch ID', 'Created At']]
+            for code in codes:
+                data.append([
+                    code.code,
+                    str(code.point_value),
+                    code.batch_id or '',
+                    code.created_at.isoformat()
+                ])
+            
+            # Create table
+            table = Table(data)
+            table.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, 0), (-1, 0), 14),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+                ('FONTSIZE', (0, 1), (-1, -1), 12),
+                ('GRID', (0, 0), (-1, -1), 1, colors.black)
+            ]))
+            
+            elements.append(table)
+            
+            # Build PDF
+            doc.build(elements)
+            
+            # Get PDF data and encode it
+            pdf_data = buffer.getvalue()
+            buffer.close()
+            encoded_pdf = base64.b64encode(pdf_data).decode('utf-8')
+            
+            return jsonify({
+                'batch_id': batch_id,
+                'code_count': len(codes),
+                'pdf_data': encoded_pdf,
+                'format': 'pdf'
+            }), 200
         
-        csv_data = output.getvalue()
-        output.close()
+        elif format_type == 'word':
+            # Create Word document using python-docx
+            from docx import Document
+            from docx.shared import Inches
+            import base64
+            
+            # Create in-memory buffer
+            buffer = io.BytesIO()
+            
+            # Create Word document
+            doc = Document()
+            
+            # Add title
+            doc.add_heading(f'MyFigPoint - Reward Codes Report (Batch: {batch_id})', 0)
+            
+            # Add subtitle with date
+            from datetime import datetime
+            date_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            doc.add_paragraph(f'Generated on: {date_str}')
+            
+            # Add table
+            table = doc.add_table(rows=1, cols=4)
+            table.style = 'Table Grid'
+            
+            # Add header row
+            hdr_cells = table.rows[0].cells
+            hdr_cells[0].text = 'Code'
+            hdr_cells[1].text = 'Point Value'
+            hdr_cells[2].text = 'Batch ID'
+            hdr_cells[3].text = 'Created At'
+            
+            # Add data rows
+            for code in codes:
+                row_cells = table.add_row().cells
+                row_cells[0].text = code.code
+                row_cells[1].text = str(code.point_value)
+                row_cells[2].text = code.batch_id or ''
+                row_cells[3].text = code.created_at.isoformat()
+            
+            # Save to buffer
+            doc.save(buffer)
+            
+            # Get Word data and encode it
+            word_data = buffer.getvalue()
+            buffer.close()
+            encoded_word = base64.b64encode(word_data).decode('utf-8')
+            
+            return jsonify({
+                'batch_id': batch_id,
+                'code_count': len(codes),
+                'word_data': encoded_word,
+                'format': 'word'
+            }), 200
         
-        return jsonify({
-            'batch_id': batch_id,
-            'code_count': len(codes),
-            'csv_data': csv_data
-        }), 200
+        else:
+            return jsonify({'message': 'Invalid format. Use csv, pdf, or word'}), 400
         
     except Exception as e:
         return jsonify({'message': 'Failed to export codes', 'error': str(e)}), 500
@@ -150,6 +280,38 @@ def delete_single_code(code_id):
         
     except Exception as e:
         return jsonify({'message': 'Failed to delete code', 'error': str(e)}), 500
+
+
+@admin_bp.route('/codes/<code>/details', methods=['GET'])
+@admin_required
+def get_code_details(code):
+    try:
+        current_user_id = int(get_jwt_identity())
+        admin_user = User.query.get(current_user_id)
+        
+        # Find the reward code by its code value
+        reward_code = RewardCode.query.filter_by(code=code.upper()).first()
+        
+        if not reward_code:
+            return jsonify({'message': 'Code not found'}), 404
+        
+        # Prepare the code data
+        code_data = reward_code.to_dict()
+        
+        # If the code was used, get user details
+        if reward_code.used_by:
+            user = User.query.get(reward_code.used_by)
+            if user:
+                code_data['used_by_user'] = {
+                    'id': user.id,
+                    'full_name': user.full_name,
+                    'email': user.email
+                }
+        
+        return jsonify({'code': code_data}), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to fetch code details', 'error': str(e)}), 500
 
 @admin_bp.route('/support-messages', methods=['GET'])
 @admin_required
@@ -626,6 +788,10 @@ def approve_withdrawal(transaction_id):
         if not user:
             return jsonify({'message': 'User not found'}), 404
         
+        # Verify that points were already deducted when the withdrawal was requested
+        # The points should have been deducted when the request was submitted
+        points_to_deduct = abs(transaction.points_amount)
+        
         # Update transaction status to completed
         transaction.status = TransactionStatus.COMPLETED
         transaction.updated_at = db.func.current_timestamp()
@@ -644,7 +810,9 @@ def approve_withdrawal(transaction_id):
         
         return jsonify({
             'message': 'Withdrawal approved successfully',
-            'transaction': transaction.to_dict()
+            'transaction': transaction.to_dict(),
+            'new_balance': user.points_balance,
+            'new_usd_balance': user.total_earnings  # This reflects the USD equivalent
         }), 200
         
     except Exception as e:
@@ -674,9 +842,10 @@ def reject_withdrawal(transaction_id):
             return jsonify({'message': 'User not found'}), 404
         
         # Refund points to user
-        user.points_balance -= transaction.points_amount  # points_amount is negative for withdrawals
-        user.total_points_withdrawn += transaction.points_amount
-        user.total_withdrawn += transaction.amount
+        # points_amount is negative for withdrawals, so subtracting a negative value adds the points back
+        user.points_balance -= transaction.points_amount
+        user.total_points_withdrawn += transaction.points_amount  # This will reduce the total withdrawn since points_amount is negative
+        user.total_withdrawn += transaction.amount  # This will reduce the total withdrawn since amount is negative
         
         # Update transaction status to failed
         transaction.status = TransactionStatus.FAILED
@@ -697,7 +866,9 @@ def reject_withdrawal(transaction_id):
         
         return jsonify({
             'message': 'Withdrawal rejected and points refunded',
-            'transaction': transaction.to_dict()
+            'transaction': transaction.to_dict(),
+            'new_balance': user.points_balance,
+            'new_usd_balance': user.total_earnings  # This reflects the USD equivalent
         }), 200
         
     except Exception as e:

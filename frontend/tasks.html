@@ -276,10 +276,22 @@
 
     function renderTasks() {
       const container = document.getElementById('tasksGrid');
-      const filteredTasks = currentFilter === 'all' ? allTasks : allTasks.filter(t => t.category === currentFilter);
+      
+      // Filter tasks to only show "Invite a Friend" task
+      let filteredTasks = allTasks.filter(t => t.title.toLowerCase().includes('invite') && t.title.toLowerCase().includes('friend'));
+      
+      // If current filter is not 'all', apply category filter as well
+      if (currentFilter !== 'all') {
+        filteredTasks = filteredTasks.filter(t => t.category === currentFilter);
+      }
 
       if (filteredTasks.length === 0) {
-        container.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No tasks available in this category. Check back later!</div>';
+        if (currentFilter === 'all') {
+          // Only show message if user is looking for all tasks
+          container.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">Only "Invite a Friend" task is available. Complete it to earn rewards!</div>';
+        } else {
+          container.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No tasks available in this category. Check back later!</div>';
+        }
         return;
       }
 
@@ -505,7 +517,8 @@
         })
           .then(response => response.json())
           .then(data => {
-            alert(data.message || 'Task submitted for review!');
+            // Show success message
+            showMessage(data.message || 'Task submitted for review!', 'success');
             closeProofModal();
             loadTasks();
           })
@@ -528,6 +541,37 @@
       } else {
         sendData();
       }
+    }
+
+    function showMessage(text, type) {
+      // Create or update the message area
+      let messageArea = document.getElementById('messageArea');
+      if (!messageArea) {
+        // Create message area if it doesn't exist
+        messageArea = document.createElement('div');
+        messageArea.id = 'messageArea';
+        messageArea.className = 'fixed top-4 right-4 z-50';
+        document.body.appendChild(messageArea);
+      }
+      
+      // Create message element
+      const messageEl = document.createElement('div');
+      messageEl.className = `inline-flex items-center gap-3 px-6 py-4 rounded-xl text-sm font-medium mb-2 ${type === 'success' ? 'bg-green-600/20 text-green-400 border border-green-500/50' : 'bg-red-600/20 text-red-400 border border-red-500/50'}`;
+      messageEl.innerHTML = `
+        <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+        ${text}
+      `;
+      
+      // Add to message area
+      messageArea.innerHTML = '';
+      messageArea.appendChild(messageEl);
+      
+      // Auto remove after 5 seconds
+      setTimeout(() => {
+        if (messageArea.contains(messageEl)) {
+          messageEl.remove();
+        }
+      }, 5000);
     }
 
     // Function to load tasks

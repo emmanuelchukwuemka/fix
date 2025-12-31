@@ -132,6 +132,18 @@
 
       <!-- Tier Progress Ring -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+        <div class="text-center opacity-60">
+          <i class="fas fa-crown text-6xl text-pink-500 mb-4"></i>
+          <p class="text-xl font-bold">Bronze</p>
+          <p class="text-gray-400">50 pts</p>
+        </div>
+
+        <div class="text-center opacity-60">
+          <i class="fas fa-gem text-6xl text-purple-500 mb-4"></i>
+          <p class="text-xl font-bold">Silver</p>
+          <p class="text-gray-400">500 pts</p>
+        </div>
+
         <div class="text-center">
           <div class="relative inline-block">
             <svg class="w-32 h-32 transform -rotate-90">
@@ -153,18 +165,6 @@
           <i class="fas fa-coins text-6xl text-yellow-500 mb-4"></i>
           <p class="text-xl font-bold">Platinum</p>
           <p class="text-gray-400">15,000 pts</p>
-        </div>
-
-        <div class="text-center opacity-40">
-          <i class="fas fa-gem text-6xl text-purple-500 mb-4"></i>
-          <p class="text-xl font-bold">Diamond</p>
-          <p class="text-gray-400">50,000 pts</p>
-        </div>
-
-        <div class="text-center opacity-30">
-          <i class="fas fa-crown text-6xl text-pink-500 mb-4"></i>
-          <p class="text-xl font-bold">Legend</p>
-          <p class="text-gray-400">100,000+ pts</p>
         </div>
       </div>
 
@@ -218,7 +218,7 @@
 
           <div>
             <label class="block text-xl font-bold mb-4">Points to Withdraw</label>
-            <input type="number" id="points" min="500" placeholder="Min: 500 pts"
+            <input type="number" id="points" min="50" placeholder="Min: 50 pts"
               class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl px-8 py-6 text-2xl focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/30 transition"
               oninput="updateUSD()" />
             <p class="text-right mt-3 text-3xl font-bold text-green-400" id="usdValue">$0.00 USD</p>
@@ -259,8 +259,8 @@
     document.getElementById('withdrawForm').addEventListener('submit', function (e) {
       e.preventDefault();
       const points = document.getElementById('points').value;
-      if (!points || points < 500) {
-        alert('Minimum withdrawal is 500 points');
+      if (!points || points < 50) {
+        alert('Minimum withdrawal is 50 points');
         return;
       }
 

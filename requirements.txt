@@ -1,0 +1,9 @@
+flask
+flask-sqlalchemy
+flask-bcrypt
+flask-jwt-extended
+flask-cors
+gunicorn
+python-dotenv
+reportlab
+python-docx
