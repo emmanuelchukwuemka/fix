@@ -512,7 +512,7 @@
         row.innerHTML = `
           <td class="py-4">
             <div class="flex items-center gap-3">
-              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}" class="w-10 h-10 rounded-full" alt="User">
+              <img src="${user.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`}" class="w-10 h-10 rounded-full" alt="User">
               <div>
                 <p class="font-bold">${user.full_name}</p>
                 <p class="text-sm text-gray-600 dark:text-gray-400">${user.email}</p>
@@ -593,7 +593,7 @@
       document.querySelector('#userDetailsModal .text-gray-600.dark\:text-gray-400').textContent = user.email;
 
       // Update avatar
-      document.querySelector('#userDetailsModal img').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`;
+      document.querySelector('#userDetailsModal img').src = user.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`;
 
       // Update role badge
       const roleElement = document.querySelector('#userDetailsModal .role-badge');
@@ -1308,7 +1308,7 @@
         row.innerHTML = `
           <td class="py-4">
             <div class="flex items-center gap-3">
-              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}" class="w-10 h-10 rounded-full" alt="User">
+              <img src="${user.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`}" class="w-10 h-10 rounded-full" alt="User">
               <div>
                 <p class="font-bold">${user.full_name}</p>
                 <p class="text-sm text-gray-600 dark:text-gray-400">${user.email}</p>
@@ -1389,7 +1389,7 @@
       document.querySelector('#userDetailsModal .text-gray-600.dark\:text-gray-400').textContent = user.email;
 
       // Update avatar
-      document.querySelector('#userDetailsModal img').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`;
+      document.querySelector('#userDetailsModal img').src = user.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`;
 
       // Update role badge
       const roleElement = document.querySelector('#userDetailsModal .role-badge');
@@ -1701,7 +1701,7 @@
         // Update avatar
         const avatarElement = document.querySelector('#userDetailsModal img');
         if (avatarElement) {
-          avatarElement.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`;
+          avatarElement.src = `${user.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`}`;
         }
 
         // Update role badge
