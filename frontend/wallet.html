@@ -168,7 +168,7 @@
             <form id="walletWithdrawForm" class="space-y-6">
               <div>
                 <label for="withdrawPoints" class="block text-lg font-bold mb-3">Points to Withdraw</label>
-                <input type="number" id="withdrawPoints" min="50" placeholder="Min: 50 pts" title="Points to Withdraw"
+                <input type="number" id="withdrawPoints" min="50" placeholder="Min: 50 pts (Tier-based)" title="Points to Withdraw"
                   class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" />
                 <p class="text-right mt-2 text-green-400 font-bold" id="withdrawUsdValue">$0.00 USD</p>
               </div>
@@ -375,6 +375,7 @@
     }
 
     // Fetch transactions when page loads
+    let userTier = 'Bronze'; // Default tier
     document.addEventListener('DOMContentLoaded', function () {
       const token = localStorage.getItem('access_token');
       if (!token) {
@@ -399,6 +400,17 @@
             const earnedUsd = (data.total_points_earned * 0.30).toFixed(2);
             document.getElementById('topTotalEarned').textContent = `$${earnedUsd} earned`;
           }
+          
+          // Store user's tier for validation
+          userTier = data.tier_level || 'Bronze';
+          
+          // Update the placeholder to show tier-based minimum
+          let minPoints = 50;
+          if (userTier === 'Silver') minPoints = 500;
+          else if (userTier === 'Gold') minPoints = 8000;
+          else if (userTier === 'Platinum') minPoints = 15000;
+          
+          document.getElementById('withdrawPoints').placeholder = `Min: ${minPoints} pts (${userTier} tier)`;
         });
 
       // Fetch Profile to auto-fill banking details
@@ -480,9 +492,20 @@
     document.getElementById('walletWithdrawForm').addEventListener('submit', function (e) {
       e.preventDefault();
 
+      let minWithdrawal = 50; // Default for Bronze tier
+      
+      // Set minimum withdrawal based on user's actual tier
+      if (userTier === 'Silver') {
+        minWithdrawal = 500;
+      } else if (userTier === 'Gold') {
+        minWithdrawal = 8000;
+      } else if (userTier === 'Platinum') {
+        minWithdrawal = 15000;
+      }
+      
       const points = document.getElementById('withdrawPoints').value;
-      if (!points || points < 50) {
-        alert('Minimum withdrawal is 50 points');
+      if (!points || points < minWithdrawal) {
+        alert(`Minimum withdrawal for ${userTier} tier is ${minWithdrawal} points`);
         return;
       }
 

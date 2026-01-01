@@ -1019,6 +1019,25 @@
       }
     });
 
+    // Automatic calculation between points and USD
+    const taskPointsInput = document.getElementById('taskPoints');
+    const taskRewardInput = document.getElementById('taskReward');
+    const CONVERSION_RATE = 0.30; // 1 point = 0.30 USD
+
+    // Calculate USD when points change
+    taskPointsInput.addEventListener('input', function() {
+      const points = parseFloat(this.value) || 0;
+      const usd = points * CONVERSION_RATE;
+      taskRewardInput.value = usd.toFixed(2);
+    });
+
+    // Calculate points when USD changes
+    taskRewardInput.addEventListener('input', function() {
+      const usd = parseFloat(this.value) || 0;
+      const points = usd / CONVERSION_RATE;
+      taskPointsInput.value = Math.round(points);
+    });
+
     // Event listeners for modal buttons
     document.getElementById('approveBtn').addEventListener('click', approveTask);
     document.getElementById('rejectBtn').addEventListener('click', rejectTask);

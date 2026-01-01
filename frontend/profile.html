@@ -1011,7 +1011,11 @@
       }
 
       // Show loading state on button
-      const submitButton = document.querySelector('#bankingDetailsForm button[type="submit"]');
+      const submitButton = document.querySelector('#bankingModal button.bg-gradient-to-r');
+      if (!submitButton) {
+        console.error('Save button not found');
+        return;
+      }
       const originalButtonHtml = submitButton.innerHTML;
       submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
       submitButton.disabled = true;
@@ -1057,16 +1061,22 @@
             updateWithdrawalMethodDisplay(bankName, accountName, accountNumber, routingNumber, swiftCode, accountType, bankAddress);
           } else {
             // Reset button state
-            submitButton.innerHTML = originalButtonHtml;
-            submitButton.disabled = false;
+            const buttonToReset = document.querySelector('#bankingModal button.bg-gradient-to-r');
+            if (buttonToReset) {
+              buttonToReset.innerHTML = originalButtonHtml;
+              buttonToReset.disabled = false;
+            }
             alert('Error saving banking details: ' + (data.message || 'Unknown error'));
           }
         })
         .catch(error => {
           console.error('Error saving banking details:', error);
           // Reset button state
-          submitButton.innerHTML = originalButtonHtml;
-          submitButton.disabled = false;
+          const buttonToReset = document.querySelector('#bankingModal button.bg-gradient-to-r');
+          if (buttonToReset) {
+            buttonToReset.innerHTML = originalButtonHtml;
+            buttonToReset.disabled = false;
+          }
           alert('Error saving banking details. Please try again.');
         });
     }

@@ -277,18 +277,16 @@
     function renderTasks() {
       const container = document.getElementById('tasksGrid');
       
-      // Filter tasks to only show "Invite a Friend" task
-      let filteredTasks = allTasks.filter(t => t.title.toLowerCase().includes('invite') && t.title.toLowerCase().includes('friend'));
-      
-      // If current filter is not 'all', apply category filter as well
+      // If current filter is not 'all', apply category filter
+      let filteredTasks = allTasks;
       if (currentFilter !== 'all') {
-        filteredTasks = filteredTasks.filter(t => t.category === currentFilter);
+        filteredTasks = allTasks.filter(t => t.category === currentFilter);
       }
 
       if (filteredTasks.length === 0) {
         if (currentFilter === 'all') {
           // Only show message if user is looking for all tasks
-          container.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">Only "Invite a Friend" task is available. Complete it to earn rewards!</div>';
+          container.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No tasks available. Check back later for new tasks!</div>';
         } else {
           container.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No tasks available in this category. Check back later!</div>';
         }

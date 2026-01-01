@@ -56,8 +56,8 @@ def register():
         
         # Award referral bonus to referrer if applicable
         if referrer:
-            # Award 100 points as referral bonus
-            bonus_points = 100.0
+            # Award 100 points as referral bonus (ensure integer)
+            bonus_points = max(1, int(100))  # Ensure at least 1 point and integer
             referrer.points_balance += bonus_points
             referrer.total_points_earned += bonus_points
             

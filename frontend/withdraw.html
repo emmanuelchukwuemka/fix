@@ -218,7 +218,7 @@
 
           <div>
             <label class="block text-xl font-bold mb-4">Points to Withdraw</label>
-            <input type="number" id="points" min="50" placeholder="Min: 50 pts"
+            <input type="number" id="points" min="50" placeholder="Min: 50 pts (Tier-based)"
               class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl px-8 py-6 text-2xl focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/30 transition"
               oninput="updateUSD()" />
             <p class="text-right mt-3 text-3xl font-bold text-green-400" id="usdValue">$0.00 USD</p>
@@ -259,8 +259,19 @@
     document.getElementById('withdrawForm').addEventListener('submit', function (e) {
       e.preventDefault();
       const points = document.getElementById('points').value;
-      if (!points || points < 50) {
-        alert('Minimum withdrawal is 50 points');
+      let minWithdrawal = 50; // Default for Bronze tier
+      
+      // Set minimum withdrawal based on user's actual tier
+      if (userTier === 'Silver') {
+        minWithdrawal = 500;
+      } else if (userTier === 'Gold') {
+        minWithdrawal = 8000;
+      } else if (userTier === 'Platinum') {
+        minWithdrawal = 15000;
+      }
+      
+      if (!points || points < minWithdrawal) {
+        alert(`Minimum withdrawal for ${userTier} tier is ${minWithdrawal} points`);
         return;
       }
 
@@ -429,6 +440,7 @@
     }
 
     // Fetch user points balance when page loads
+    let userTier = 'Bronze'; // Default tier
     document.addEventListener('DOMContentLoaded', function () {
       const token = localStorage.getItem('access_token');
       if (!token) {
@@ -447,6 +459,17 @@
             // Update balance display
             document.querySelector('header .text-right .text-6xl').innerHTML = data.points_balance.toFixed(2) + '<span class="text-4xl"> pts</span>';
             document.querySelector('header .text-right .text-3xl').textContent = '$' + (data.points_balance * 0.30).toFixed(2) + ' USD';
+            
+            // Store user's tier for validation
+            userTier = data.tier_level || 'Bronze';
+            
+            // Update the placeholder to show tier-based minimum
+            let minPoints = 50;
+            if (userTier === 'Silver') minPoints = 500;
+            else if (userTier === 'Gold') minPoints = 8000;
+            else if (userTier === 'Platinum') minPoints = 15000;
+            
+            document.getElementById('points').placeholder = `Min: ${minPoints} pts (${userTier} tier)`;
           }
         })
         .catch(error => {

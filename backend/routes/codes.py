@@ -47,8 +47,11 @@ def redeem_code():
         reward_code.used_at = datetime.utcnow()
         
         # Add points to user
-        user.points_balance += reward_code.point_value
-        user.total_points_earned += reward_code.point_value
+        # Convert float point value to integer, rounding to nearest integer
+        raw_points = round(reward_code.point_value)
+        points_to_add = max(1, raw_points)  # Ensure at least 1 point if any points are awarded
+        user.points_balance += points_to_add
+        user.total_points_earned += points_to_add
         
         # Create transaction record
         transaction = Transaction(
@@ -57,7 +60,7 @@ def redeem_code():
             status=TransactionStatus.COMPLETED,
             description=f"Redeemed code {code_value}",
             amount=0,
-            points_amount=reward_code.point_value,
+            points_amount=points_to_add,  # Use the integer value
             reference_id=reward_code.id
         )
         

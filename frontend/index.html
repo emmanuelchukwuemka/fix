@@ -30,6 +30,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="assets/css/app.css" />
+  
+  <style>
+    /* Adjust for fixed navigation */
+    section[id] {
+      scroll-margin-top: 80px;
+    }
+  </style>
 </head>
 
 <body class="bg-background text-text overflow-auto">
@@ -73,7 +80,7 @@
   </nav>
 
   <!-- Hero Section -->
-  <section class="min-h-screen flex items-center justify-center pt-24 px-6">
+  <section class="min-h-screen flex items-center justify-center pt-32 md:pt-40 px-6">
     <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
       <div data-aos="fade-up">
         <h1 class="text-5xl md:text-6xl font-extrabold leading-tight">
@@ -83,7 +90,7 @@
           </span>
         </h1>
         <p class="mt-6 text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
-          Earn points through tasks, referrals, and daily activity. Track, manage, and redeem them for cash, gift cards, or exclusive perks.
+          Earn points through uploaded codes, completed tasks, referrals, and daily activities. Easily track and manage your points, and redeem them for rewards such as product discounts, branded items, and exclusive perks.
         </p>
         <div class="mt-10 flex flex-col sm:flex-row gap-4">
           <a href="signup.html" class="bg-primary hover:bg-orange-700 px-8 py-4 rounded-full font-semibold text-lg shadow-xl transform hover:scale-105 transition">
@@ -159,22 +166,26 @@
   <section id="how" class="py-24 px-6">
     <div class="max-w-7xl mx-auto text-center">
       <h2 class="text-4xl md:text-5xl font-bold mb-16" data-aos="fade-up">How It Works</h2>
-      <div class="grid md:grid-cols-4 gap-8">
+      <div class="grid md:grid-cols-5 gap-6">
         <div data-aos="zoom-in">
-          <div class="w-20 h-20 mx-auto bg-primary rounded-full flex items-center justify-center text-3xl font-bold mb-4">1</div>
-          <h4 class="text-xl font-semibold">Sign Up Free</h4>
+          <div class="w-16 h-16 mx-auto bg-primary rounded-full flex items-center justify-center text-2xl font-bold mb-3">1</div>
+          <h4 class="text-lg font-semibold">Sign Up Free</h4>
         </div>
-        <div data-aos="zoom-in" data-aos-delay="150">
-          <div class="w-20 h-20 mx-auto bg-primary rounded-full flex items-center justify-center text-3xl font-bold mb-4">2</div>
-          <h4 class="text-xl font-semibold">Complete Tasks</h4>
+        <div data-aos="zoom-in" data-aos-delay="100">
+          <div class="w-16 h-16 mx-auto bg-primary rounded-full flex items-center justify-center text-2xl font-bold mb-3">2</div>
+          <h4 class="text-lg font-semibold">Upload Code</h4>
+        </div>
+        <div data-aos="zoom-in" data-aos-delay="200">
+          <div class="w-16 h-16 mx-auto bg-primary rounded-full flex items-center justify-center text-2xl font-bold mb-3">3</div>
+          <h4 class="text-lg font-semibold">Complete Tasks</h4>
         </div>
         <div data-aos="zoom-in" data-aos-delay="300">
-          <div class="w-20 h-20 mx-auto bg-primary rounded-full flex items-center justify-center text-3xl font-bold mb-4">3</div>
-          <h4 class="text-xl font-semibold">Earn Points</h4>
+          <div class="w-16 h-16 mx-auto bg-primary rounded-full flex items-center justify-center text-2xl font-bold mb-3">4</div>
+          <h4 class="text-lg font-semibold">Earn Points</h4>
         </div>
-        <div data-aos="zoom-in" data-aos-delay="450">
-          <div class="w-20 h-20 mx-auto bg-primary rounded-full flex items-center justify-center text-3xl font-bold mb-4">4</div>
-          <h4 class="text-xl font-semibold">Redeem Rewards</h4>
+        <div data-aos="zoom-in" data-aos-delay="400">
+          <div class="w-16 h-16 mx-auto bg-primary rounded-full flex items-center justify-center text-2xl font-bold mb-3">5</div>
+          <h4 class="text-lg font-semibold">Redeem Rewards</h4>
         </div>
       </div>
     </div>
@@ -324,6 +335,56 @@
     
     // AOS initialization
     AOS.init({ duration: 800, once: true });
+    
+    // Sliding animation for How It Works section
+    function initSlidingAnimation() {
+      const howItWorksSection = document.getElementById('how');
+      if (!howItWorksSection) return;
+      
+      // Get the grid container
+      const gridContainer = howItWorksSection.querySelector('.grid');
+      if (!gridContainer) return;
+      
+      // Create a wrapper for the slider
+      const sliderWrapper = document.createElement('div');
+      sliderWrapper.style.overflow = 'hidden';
+      sliderWrapper.style.width = '100%';
+      sliderWrapper.style.display = 'flex';
+      
+      // Create a container for the items
+      const itemsContainer = document.createElement('div');
+      itemsContainer.style.display = 'flex';
+      itemsContainer.style.animation = 'slide 30s linear infinite';
+      
+      // Move all grid items to the new container
+      const allChildren = Array.from(gridContainer.children);
+      allChildren.forEach(child => {
+        itemsContainer.appendChild(child.cloneNode(true));
+      });
+      
+      // Duplicate items for continuous sliding
+      const originalItems = itemsContainer.children;
+      for (let i = 0; i < originalItems.length; i++) {
+        itemsContainer.appendChild(originalItems[i].cloneNode(true));
+      }
+      
+      sliderWrapper.appendChild(itemsContainer);
+      gridContainer.innerHTML = '';
+      gridContainer.appendChild(sliderWrapper);
+      
+      // Add CSS for the animation
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes slide {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+    
+    // Initialize sliding animation when page loads
+    window.addEventListener('load', initSlidingAnimation);
     
     function toggleMobileMenu() {
       const menu = document.getElementById('mobileMenu');

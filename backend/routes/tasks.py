@@ -12,10 +12,6 @@ from backend.models.notification import Notification, NotificationType
 
 tasks_bp = Blueprint('tasks', __name__)
 
-@tasks_bp.route('/test', methods=['GET'])
-def test_tasks():
-    return jsonify({'message': 'Tasks route is working!'}), 200
-
 @tasks_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_tasks():
@@ -153,8 +149,10 @@ def complete_task(task_id):
             user_task.completed_at = db.func.current_timestamp()
             
             # Award points and Reward to user
-            user.points_balance += task.points_reward
-            user.total_points_earned += task.points_reward
+            raw_points = int(task.points_reward)  # Ensure points is an integer
+            points_to_add = max(1, raw_points)  # Ensure at least 1 point if any points are awarded
+            user.points_balance += points_to_add
+            user.total_points_earned += points_to_add
             user.total_earnings += task.reward_amount
             
             # Create transaction record
@@ -164,7 +162,7 @@ def complete_task(task_id):
                 status=TransactionStatus.COMPLETED,
                 description=f"Completed task: {task.title}",
                 amount=task.reward_amount,
-                points_amount=task.points_reward
+                points_amount=points_to_add  # Use integer value
             )
             
             db.session.add(transaction)
@@ -198,7 +196,7 @@ def create_task():
             title=data.get('title'),
             description=data.get('description', ''),
             reward_amount=data.get('reward_amount', 0.0),
-            points_reward=data.get('points_reward', 0.0),
+            points_reward=int(data.get('points_reward', 0)),  # Ensure points is an integer
             category=data.get('category', 'General'),
             time_required=data.get('time_required', 0),
             is_active=data.get('is_active', True),
@@ -233,7 +231,7 @@ def update_task(task_id):
         task.title = data.get('title', task.title)
         task.description = data.get('description', task.description)
         task.reward_amount = data.get('reward_amount', task.reward_amount)
-        task.points_reward = data.get('points_reward', task.points_reward)
+        task.points_reward = int(data.get('points_reward', task.points_reward))  # Ensure points is an integer
         task.category = data.get('category', task.category)
         task.time_required = data.get('time_required', task.time_required)
         task.is_active = data.get('is_active', task.is_active)
@@ -345,10 +343,12 @@ def upload_daily_codes():
             code.used_by = current_user_id
             code.used_at = db.func.current_timestamp()
             
-            # Add points to user
-            user.points_balance += code.point_value
-            user.total_points_earned += code.point_value
-            points_earned += code.point_value
+            # Add points to user (round to nearest integer and ensure at least 1)
+            raw_code_points = round(code.point_value)
+            code_points = max(1, raw_code_points)  # Ensure at least 1 point if any points are awarded
+            user.points_balance += code_points
+            user.total_points_earned += code_points
+            points_earned += code_points
         
         # Check if user completed daily requirement (5 or 10 codes)
         daily_requirement = getattr(user, 'daily_code_requirement', 5)  # Default to 5
@@ -356,7 +356,8 @@ def upload_daily_codes():
         
         if len(valid_codes) >= daily_requirement:
             # Award extra 2 points for completing daily requirement
-            extra_points = 2.0
+            raw_extra_points = int(2)  # Ensure integer value
+            extra_points = max(1, raw_extra_points)  # Ensure at least 1 point if any points are awarded
             user.points_balance += extra_points
             user.total_points_earned += extra_points
             
@@ -367,19 +368,21 @@ def upload_daily_codes():
                 status=TransactionStatus.COMPLETED,
                 description=f"Daily code upload bonus for {len(valid_codes)} codes",
                 amount=0,
-                points_amount=extra_points
+                points_amount=extra_points  # Use integer value
             )
             db.session.add(extra_transaction)
         
         # Create transactions for each redeemed code
         for code in valid_codes:
+            raw_code_points = round(code.point_value)  # Round to nearest integer
+            code_points = max(1, raw_code_points)  # Ensure at least 1 point if any points are awarded
             transaction = Transaction(
                 user_id=current_user_id,
                 type=TransactionType.CODE_REDEMPTION,
                 status=TransactionStatus.COMPLETED,
                 description=f"Redeemed code {code.code}",
                 amount=0,
-                points_amount=code.point_value,
+                points_amount=code_points,  # Use integer value
                 reference_id=code.id
             )
             db.session.add(transaction)
@@ -470,8 +473,10 @@ def admin_complete_task(task_id):
         user = User.query.get(user_id)
         
         # Award points and Reward to user
-        user.points_balance += task.points_reward
-        user.total_points_earned += task.points_reward
+        raw_points = int(task.points_reward)  # Ensure points is an integer
+        points_to_add = max(1, raw_points)  # Ensure at least 1 point if any points are awarded
+        user.points_balance += points_to_add
+        user.total_points_earned += points_to_add
         user.total_earnings += task.reward_amount
         
         # Create transaction record
@@ -481,7 +486,7 @@ def admin_complete_task(task_id):
             status=TransactionStatus.COMPLETED,
             description=f"Completed task: {task.title}",
             amount=task.reward_amount,
-            points_amount=task.points_reward
+            points_amount=points_to_add  # Use integer value
         )
         
         # Create notification for the user

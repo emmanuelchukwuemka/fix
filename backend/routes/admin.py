@@ -23,7 +23,7 @@ def generate_codes():
         
         data = request.get_json()
         count = data.get('count', 100)
-        point_value = data.get('point_value', 0.1)
+        point_value = float(data.get('point_value', 1.0))  # Use float to allow decimal values
         
         if count <= 0 or count > 10000:
             return jsonify({'message': 'Count must be between 1 and 10,000'}), 400
@@ -40,7 +40,7 @@ def generate_codes():
             code = generate_reward_code()
             reward_code = RewardCode(
                 code=code,
-                point_value=point_value,
+                point_value=point_value,  # This can now be a float value
                 batch_id=batch_id
             )
             db.session.add(reward_code)
@@ -68,11 +68,38 @@ def export_codes(batch_id):
         # Get format parameter (csv, pdf, word)
         format_type = request.args.get('format', 'csv').lower()
         
-        # Get codes for this batch
-        codes = RewardCode.query.filter_by(batch_id=batch_id).all()
+        # Get search and status filters
+        search = request.args.get('search', '')
+        status = request.args.get('status', '')
+        
+        # Build query based on batch_id
+        query = RewardCode.query
+        
+        if batch_id == 'all':
+            # If batch_id is 'all', don't filter by batch_id
+            pass
+        else:
+            # Filter by specific batch_id
+            query = query.filter_by(batch_id=batch_id)
+        
+        # Apply search filter if provided
+        if search:
+            query = query.filter(RewardCode.code.ilike(f'%{search}%'))
+        
+        # Apply status filter if provided
+        if status == 'available':
+            query = query.filter_by(is_used=False)
+        elif status == 'used':
+            query = query.filter_by(is_used=True)
+        
+        # Get the codes
+        codes = query.all()
         
         if not codes:
-            return jsonify({'message': 'No codes found for this batch'}), 404
+            if batch_id == 'all':
+                return jsonify({'message': 'No codes found matching the criteria'}), 404
+            else:
+                return jsonify({'message': 'No codes found for this batch'}), 404
         
         if format_type == 'csv':
             # Create CSV in memory
@@ -454,7 +481,7 @@ def update_user_points():
         
         data = request.get_json()
         user_id = data.get('user_id')
-        points = data.get('points', 0)
+        points = int(data.get('points', 0))  # Ensure points is an integer
         operation = data.get('operation', 'add')  # add or subtract
         
         if not user_id:
@@ -466,13 +493,16 @@ def update_user_points():
         
         # Update points based on operation
         if operation == 'add':
-            user.points_balance += points
-            user.total_points_earned += points
+            raw_points = int(points)  # Ensure points is an integer
+            points_to_add = max(1, raw_points)  # Ensure at least 1 point if any points are added
+            user.points_balance += points_to_add
+            user.total_points_earned += points_to_add
         elif operation == 'subtract':
-            if user.points_balance < points:
+            points_to_subtract = max(1, int(points))  # Ensure at least 1 point if any points are subtracted
+            if user.points_balance < points_to_subtract:
                 return jsonify({'message': 'Insufficient points balance'}), 400
-            user.points_balance -= points
-            user.total_points_withdrawn += points
+            user.points_balance -= points_to_subtract
+            user.total_points_withdrawn += points_to_subtract
         else:
             return jsonify({'message': 'Invalid operation. Use "add" or "subtract"'}), 400
         
@@ -497,6 +527,8 @@ def get_all_users():
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 20, type=int)
         search = request.args.get('search', '')
+        role_filter = request.args.get('role', '')
+        status_filter = request.args.get('status', '')
         
         query = User.query
         
@@ -507,6 +539,17 @@ def get_all_users():
                     User.email.ilike(f'%{search}%')
                 )
             )
+        
+        # Filter by role if provided
+        if role_filter:
+            query = query.filter(User.role == UserRole(role_filter))
+        
+        # Filter by status if provided
+        if status_filter:
+            if status_filter == 'active':
+                query = query.filter(User.is_suspended == False)
+            elif status_filter == 'suspended':
+                query = query.filter(User.is_suspended == True)
         
         users = query.order_by(User.created_at.desc()).paginate(
             page=page, per_page=per_page, error_out=False
@@ -595,6 +638,45 @@ def verify_user(user_id):
         return jsonify({'message': f'User verification status updated to {is_verified}'}), 200
     except Exception as e:
         return jsonify({'message': 'Failed to verify user', 'error': str(e)}), 500
+
+
+@admin_bp.route('/users/<int:user_id>/update', methods=['POST'])
+@admin_required
+def update_user(user_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        admin_user = User.query.get(current_user_id)
+        
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+        
+        data = request.get_json()
+        
+        # Update user fields
+        user.full_name = data.get('full_name', user.full_name)
+        user.email = data.get('email', user.email)
+        user.phone = data.get('phone', user.phone)
+        user.role = UserRole(data.get('role', user.role.value if hasattr(user.role, 'value') else user.role))
+        user.bank_name = data.get('bank_name', user.bank_name)
+        user.account_name = data.get('account_name', user.account_name)
+        user.account_number = data.get('account_number', user.account_number)
+        user.routing_number = data.get('routing_number', user.routing_number)
+        user.points_balance = float(data.get('points_balance', user.points_balance))
+        user.total_earnings = float(data.get('total_earnings', user.total_earnings))
+        user.is_verified = data.get('is_verified', user.is_verified)
+        user.is_suspended = data.get('is_suspended', user.is_suspended)
+        user.is_approved = data.get('is_approved', user.is_approved)
+        
+        db.session.commit()
+        
+        return jsonify({
+            'message': 'User updated successfully',
+            'user': user.to_dict()
+        }), 200
+    
+    except Exception as e:
+        return jsonify({'message': 'Failed to update user', 'error': str(e)}), 500
 
 
 @admin_bp.route('/users/<int:user_id>/verify-documents', methods=['POST'])
@@ -891,8 +973,8 @@ def award_referral_bonus():
         
         data = request.get_json()
         user_id = data.get('user_id')
-        points = data.get('points', 0)
-        amount = data.get('amount', 0.0)
+        points = int(data.get('points', 0))  # Ensure points is an integer
+        amount = float(data.get('amount', 0.0))  # Amount can be decimal
         reason = data.get('reason', 'Admin awarded referral bonus')
         
         if not user_id:
@@ -904,8 +986,12 @@ def award_referral_bonus():
         
         # Award points/amount to user
         if points > 0:
-            user.points_balance += points
-            user.total_points_earned += points
+            raw_points = int(points)  # Ensure points is an integer
+            points_to_add = max(1, raw_points)  # Ensure at least 1 point if any points are awarded
+            user.points_balance += points_to_add
+            user.total_points_earned += points_to_add
+        else:
+            points_to_add = 0  # No points to add
             
         if amount > 0:
             user.total_earnings += amount
@@ -917,7 +1003,7 @@ def award_referral_bonus():
             status=TransactionStatus.COMPLETED,
             description=reason,
             amount=amount,
-            points_amount=points
+            points_amount=points_to_add if points > 0 else 0
         )
         
         db.session.add(transaction)
@@ -1010,3 +1096,140 @@ def get_dashboard_stats():
         
     except Exception as e:
         return jsonify({'message': 'Failed to fetch dashboard stats', 'error': str(e)}), 500
+
+@admin_bp.route('/tasks', methods=['GET'])
+@admin_required
+def get_all_tasks():
+    try:
+        current_user_id = int(get_jwt_identity())
+        admin_user = User.query.get(current_user_id)
+        
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 20, type=int)
+        search = request.args.get('search', '')
+        status = request.args.get('status', 'all')  # all, active, inactive
+        
+        query = Task.query
+        
+        if search:
+            query = query.filter(
+                db.or_(
+                    Task.title.ilike(f'%{search}%'),
+                    Task.description.ilike(f'%{search}%')
+                )
+            )
+        
+        if status == 'active':
+            query = query.filter_by(is_active=True)
+        elif status == 'inactive':
+            query = query.filter_by(is_active=False)
+        
+        tasks = query.order_by(Task.created_at.desc()).paginate(
+            page=page, per_page=per_page, error_out=False
+        )
+        
+        return jsonify({
+            'tasks': [task.to_dict() for task in tasks.items],
+            'total': tasks.total,
+            'pages': tasks.pages,
+            'current_page': page
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to fetch tasks', 'error': str(e)}), 500
+
+@admin_bp.route('/tasks/<int:task_id>/details', methods=['GET'])
+@admin_required
+def get_task_details(task_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        admin_user = User.query.get(current_user_id)
+        
+        task = Task.query.get(task_id)
+        if not task:
+            return jsonify({'message': 'Task not found'}), 404
+            
+        return jsonify({'task': task.to_dict()}), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to fetch task details', 'error': str(e)}), 500
+
+@admin_bp.route('/tasks', methods=['POST'])
+@admin_required
+def create_task():
+    try:
+        current_user_id = int(get_jwt_identity())
+        admin_user = User.query.get(current_user_id)
+        
+        data = request.get_json()
+        task = Task(
+            title=data.get('title'),
+            description=data.get('description', ''),
+            reward_amount=data.get('reward_amount', 0.0),
+            points_reward=int(data.get('points_reward', 0)),  # Ensure points is an integer
+            category=data.get('category', 'General'),
+            time_required=data.get('time_required', 0),
+            is_active=data.get('is_active', True),
+            requires_admin_verification=data.get('requires_admin_verification', False)  # New field
+        )
+        
+        db.session.add(task)
+        db.session.commit()
+        
+        return jsonify({
+            'message': 'Task created successfully',
+            'task': task.to_dict()
+        }), 201
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to create task', 'error': str(e)}), 500
+
+@admin_bp.route('/tasks/<int:task_id>/update', methods=['POST'])
+@admin_required
+def update_task(task_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        admin_user = User.query.get(current_user_id)
+        
+        data = request.get_json()
+        task = Task.query.get(task_id)
+        if not task:
+            return jsonify({'message': 'Task not found'}), 404
+        
+        task.title = data.get('title', task.title)
+        task.description = data.get('description', task.description)
+        task.reward_amount = data.get('reward_amount', task.reward_amount)
+        task.points_reward = int(data.get('points_reward', task.points_reward))  # Ensure points is an integer
+        task.category = data.get('category', task.category)
+        task.time_required = data.get('time_required', task.time_required)
+        task.is_active = data.get('is_active', task.is_active)
+        task.requires_admin_verification = data.get('requires_admin_verification', task.requires_admin_verification)  # New field
+        
+        db.session.commit()
+        
+        return jsonify({
+            'message': 'Task updated successfully',
+            'task': task.to_dict()
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to update task', 'error': str(e)}), 500
+
+@admin_bp.route('/tasks/<int:task_id>/delete', methods=['DELETE'])
+@admin_required
+def delete_task(task_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        admin_user = User.query.get(current_user_id)
+        
+        task = Task.query.get(task_id)
+        if not task:
+            return jsonify({'message': 'Task not found'}), 404
+        
+        db.session.delete(task)
+        db.session.commit()
+        
+        return jsonify({'message': 'Task deleted successfully'}), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to delete task', 'error': str(e)}), 500

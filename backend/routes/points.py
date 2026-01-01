@@ -80,6 +80,10 @@ def withdraw_points():
         if points <= 0:
             return jsonify({'message': 'Points must be greater than 0'}), 400
 
+        # Convert points to integer to ensure whole numbers
+        raw_points = int(points)
+        points = max(1, raw_points)  # Ensure at least 1 point if any points are withdrawn
+
         if points > user.points_balance:
             return jsonify({'message': 'Insufficient points balance'}), 400
 
@@ -112,6 +116,18 @@ def withdraw_points():
         tier = get_tier_level(user.points_balance)
         if tier == "None":
             return jsonify({'message': 'You must reach Bronze tier (50 points) before withdrawing'}), 400
+        
+        # Check minimum withdrawal based on user's tier (based on total points balance)
+        tier_min_withdrawal = {
+            "Bronze": 50,
+            "Silver": 500,
+            "Gold": 8000,
+            "Platinum": 15000
+        }
+        min_withdrawal = tier_min_withdrawal.get(tier, 50)
+        
+        if points < min_withdrawal:
+            return jsonify({'message': f'Insufficient points for your tier. Minimum withdrawal for {tier} tier is {min_withdrawal} points'}), 400
 
         # Convert points to USD
         usd_amount = points_to_usd(points)
@@ -204,7 +220,8 @@ def convert_points():
             return jsonify({'message': 'User not found'}), 404
 
         data = request.get_json()
-        points = data.get('points', 0)
+        points = int(data.get('points', 0))  # Ensure points is an integer
+        points = max(1, points) if points > 0 else 0  # Ensure at least 1 point if any points are requested, else 0
 
         if points <= 0:
             return jsonify({'message': 'Points must be greater than 0'}), 400

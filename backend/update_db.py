@@ -25,7 +25,14 @@ def migrate():
         ('is_verified', 'BOOLEAN DEFAULT 0'),
         ('verification_pending', 'BOOLEAN DEFAULT 0'),
         ('requires_admin_verification', 'BOOLEAN DEFAULT 0'),
-        ('avatar_url', 'TEXT')
+        ('avatar_url', 'TEXT'),
+        ('bank_name', 'TEXT'),
+        ('account_name', 'TEXT'),
+        ('account_number', 'TEXT'),
+        ('routing_number', 'TEXT'),
+        ('swift_code', 'TEXT'),
+        ('account_type', 'TEXT'),
+        ('bank_address', 'TEXT')
     ]
 
     for column_name, column_type in columns_to_add:

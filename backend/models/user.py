@@ -54,7 +54,7 @@ class User(db.Model):
             'id': self.id,
             'full_name': self.full_name,
             'email': self.email,
-            'role': self.role.value,
+            'role': self.role.value if hasattr(self.role, 'value') else self.role,
             'phone': self.phone,
             'bank_name': self.bank_name,
             'account_name': self.account_name,
