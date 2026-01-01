@@ -1689,6 +1689,182 @@
       }
     }
 
+    function populateUserDetails(user) {
+      try {
+        // Update user info section
+        const nameElement = document.querySelector('#userDetailsModal .text-xl.font-bold');
+        if (nameElement) nameElement.textContent = user.full_name;
+        
+        const emailElement = document.querySelector('#userDetailsModal .text-gray-600.text-gray-400, #userDetailsModal .text-gray-600.dark\\:text-gray-400');
+        if (emailElement) emailElement.textContent = user.email;
+
+        // Update avatar
+        const avatarElement = document.querySelector('#userDetailsModal img');
+        if (avatarElement) {
+          avatarElement.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`;
+        }
+
+        // Update role badge
+        const roleElement = document.querySelector('#userDetailsModal .role-badge');
+        if (roleElement) {
+          let roleClass = '';
+          let roleText = '';
+          switch (user.role) {
+            case 'admin':
+              roleClass = 'bg-red-600/20 text-red-500';
+              roleText = 'Admin';
+              break;
+            case 'partner':
+              roleClass = 'bg-purple-600/20 text-purple-500';
+              roleText = 'Partner';
+              break;
+            default:
+              roleClass = 'bg-blue-600/20 text-blue-500';
+              roleText = 'User';
+          }
+          roleElement.className = `role-badge px-3 py-1 rounded-full text-sm font-bold ${roleClass}`;
+          roleElement.textContent = roleText;
+        }
+
+        // Update verification badge
+        const verificationBadge = document.getElementById('detailVerificationBadge');
+        if (verificationBadge) {
+          if (user.is_verified) {
+            verificationBadge.className = 'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold';
+            verificationBadge.innerHTML = '<i class="fas fa-check-circle mr-1"></i>Verified';
+          } else if (user.verification_pending) {
+            verificationBadge.className = 'bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold';
+            verificationBadge.innerHTML = '<i class="fas fa-clock mr-1"></i>Pending Verification';
+          } else {
+            verificationBadge.className = 'bg-gray-600/20 text-gray-500 px-3 py-1 rounded-full text-sm font-bold';
+            verificationBadge.textContent = 'Unverified';
+          }
+        }
+
+        // Update status badge
+        const statusBadge = document.getElementById('detailStatusBadge');
+        if (statusBadge) {
+          if (user.is_suspended) {
+            statusBadge.className = 'bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold';
+            statusBadge.textContent = 'Suspended';
+          } else {
+            statusBadge.className = 'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold';
+            statusBadge.textContent = 'Active';
+          }
+        }
+
+        // Update verify button
+        const verifyBtn = document.getElementById('verifyUserBtn');
+        if (verifyBtn) {
+          if (user.is_verified) {
+            verifyBtn.innerHTML = '<i class="fas fa-user-slash mr-2"></i>Unverify User';
+            verifyBtn.className = 'flex-1 bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-2xl font-bold';
+          } else {
+            verifyBtn.innerHTML = '<i class="fas fa-user-check mr-2"></i>Verify User';
+            verifyBtn.className = 'flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-bold';
+          }
+          // Store current status on button
+          verifyBtn.dataset.verified = user.is_verified;
+        }
+
+        // Update suspend button
+        const suspendBtn = document.getElementById('suspendUserBtn');
+        if (suspendBtn) {
+          if (user.is_suspended) {
+            suspendBtn.innerHTML = '<i class="fas fa-user-check mr-2"></i>Unsuspend Account';
+            suspendBtn.className = 'flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-bold';
+          } else {
+            suspendBtn.innerHTML = '<i class="fas fa-ban mr-2"></i>Suspend Account';
+            suspendBtn.className = 'flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold';
+          }
+          // Store current status on button
+          suspendBtn.dataset.suspended = user.is_suspended;
+        }
+
+        // Update member since - find the element by more specific selector
+        const memberSinceCard = document.querySelector('#userDetailsModal .p-4.bg-card:nth-child(1) .font-bold');
+        if (memberSinceCard) {
+          const joinDate = user.created_at ? new Date(user.created_at) : new Date();
+          memberSinceCard.textContent = joinDate.toLocaleDateString();
+        }
+
+        // Update last login
+        const lastLoginCard = document.querySelector('#userDetailsModal .p-4.bg-card:nth-child(2) .font-bold');
+        if (lastLoginCard) {
+          lastLoginCard.textContent = user.last_login ? new Date(user.last_login).toLocaleString() : 'Never';
+        }
+
+        // Update referral code
+        const referralCodeCard = document.querySelector('#userDetailsModal .p-4.bg-card:nth-child(3) .font-bold');
+        if (referralCodeCard) {
+          referralCodeCard.textContent = user.referral_code || 'N/A';
+        }
+
+        // Update stats - find elements by position in the stats section
+        const pointsBalanceElement = document.querySelector('#userDetailsModal [class*="from-green-600"] .text-3xl.font-bold');
+        if (pointsBalanceElement) {
+          const pointsBalance = user.points_balance || 0;
+          pointsBalanceElement.textContent = `${Number(pointsBalance).toFixed(2)} pts`;
+        }
+        
+        const totalEarnedElement = document.querySelector('#userDetailsModal [class*="from-blue-600"] .text-3xl.font-bold');
+        if (totalEarnedElement) {
+          const totalEarnings = user.total_earnings || 0;
+          totalEarnedElement.textContent = `$${Number(totalEarnings).toFixed(2)}`;
+        }
+        
+        const referralsElement = document.querySelector('#userDetailsModal [class*="from-purple-600"] .text-3xl.font-bold');
+        if (referralsElement) {
+          referralsElement.textContent = user.referrals_count || 0;
+        }
+        
+        const tasksCompletedElement = document.querySelector('#userDetailsModal [class*="from-yellow-600"] .text-3xl.font-bold');
+        if (tasksCompletedElement) {
+          tasksCompletedElement.textContent = user.tasks_completed || 0;
+        }
+
+        // Update banking details
+        const bankNameElement = document.querySelector('#userDetailsModal h3 + div .grid div:nth-child(1) .font-bold');
+        if (bankNameElement && user.bank_name) {
+          bankNameElement.textContent = user.bank_name;
+        }
+        
+        const accountNameElement = document.querySelector('#userDetailsModal h3 + div .grid div:nth-child(2) .font-bold');
+        if (accountNameElement && user.account_name) {
+          accountNameElement.textContent = user.account_name;
+        }
+        
+        const accountNumberElement = document.querySelector('#userDetailsModal h3 + div .grid div:nth-child(3) .font-bold');
+        if (accountNumberElement && user.account_number) {
+          // Mask account number for security
+          const accountNumberStr = String(user.account_number);
+          const maskedAccount = accountNumberStr.replace(/.(?=.{4})/g, '*');
+          accountNumberElement.textContent = maskedAccount;
+        }
+        
+        const routingNumberElement = document.querySelector('#userDetailsModal h3 + div .grid div:nth-child(4) .font-bold');
+        if (routingNumberElement && user.routing_number) {
+          // Mask routing number for security
+          const routingNumberStr = String(user.routing_number);
+          const maskedRouting = routingNumberStr.replace(/.(?=.{4})/g, '*');
+          routingNumberElement.textContent = maskedRouting;
+        }
+
+        // Store user ID for actions
+        let userIdElement = document.getElementById('detailUserId');
+        if (!userIdElement) {
+          userIdElement = document.createElement('div');
+          userIdElement.id = 'detailUserId';
+          userIdElement.style.display = 'none';
+          document.body.appendChild(userIdElement);
+        }
+        userIdElement.textContent = user.id;
+      } catch (error) {
+        console.error('Error populating user details:', error);
+        alert('Failed to load user details. Please try again.');
+      }
+    }
+
     function closeModal(modalId) {
       document.getElementById(modalId).classList.add('hidden');
     }
