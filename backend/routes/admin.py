@@ -105,12 +105,14 @@ def export_codes(batch_id):
             # Create CSV in memory
             output = io.StringIO()
             writer = csv.writer(output)
-            writer.writerow(['Code', 'Point Value', 'Batch ID', 'Created At'])
+            writer.writerow(['Code', 'Point Value', 'USD Value', 'Batch ID', 'Created At'])
             
             for code in codes:
+                usd_value = code.point_value * 0.30  # Calculate USD value based on 1 point = $0.30
                 writer.writerow([
                     code.code,
                     code.point_value,
+                    f"{usd_value:.2f}",  # Format to 2 decimal places
                     code.batch_id,
                     code.created_at.isoformat()
                 ])
@@ -152,11 +154,13 @@ def export_codes(batch_id):
             elements.append(Spacer(1, 20))
             
             # Create table data
-            data = [['Code', 'Point Value', 'Batch ID', 'Created At']]
+            data = [['Code', 'Point Value', 'USD Value', 'Batch ID', 'Created At']]
             for code in codes:
+                usd_value = code.point_value * 0.30  # Calculate USD value based on 1 point = $0.30
                 data.append([
                     code.code,
                     str(code.point_value),
+                    f"{usd_value:.2f}",  # Format to 2 decimal places
                     code.batch_id or '',
                     code.created_at.isoformat()
                 ])
@@ -214,23 +218,26 @@ def export_codes(batch_id):
             doc.add_paragraph(f'Generated on: {date_str}')
             
             # Add table
-            table = doc.add_table(rows=1, cols=4)
+            table = doc.add_table(rows=1, cols=5)
             table.style = 'Table Grid'
             
             # Add header row
             hdr_cells = table.rows[0].cells
             hdr_cells[0].text = 'Code'
             hdr_cells[1].text = 'Point Value'
-            hdr_cells[2].text = 'Batch ID'
-            hdr_cells[3].text = 'Created At'
+            hdr_cells[2].text = 'USD Value'
+            hdr_cells[3].text = 'Batch ID'
+            hdr_cells[4].text = 'Created At'
             
             # Add data rows
             for code in codes:
+                usd_value = code.point_value * 0.30  # Calculate USD value based on 1 point = $0.30
                 row_cells = table.add_row().cells
                 row_cells[0].text = code.code
                 row_cells[1].text = str(code.point_value)
-                row_cells[2].text = code.batch_id or ''
-                row_cells[3].text = code.created_at.isoformat()
+                row_cells[2].text = f"{usd_value:.2f}"  # Format to 2 decimal places
+                row_cells[3].text = code.batch_id or ''
+                row_cells[4].text = code.created_at.isoformat()
             
             # Save to buffer
             doc.save(buffer)

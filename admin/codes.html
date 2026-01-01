@@ -267,6 +267,10 @@
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
                 <i class="fas fa-file-word"></i> Word
               </button>
+              <button onclick="exportAllCodes()"
+                class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
+                <i class="fas fa-file-download"></i> Export All
+              </button>
             </div>
           </div>
         </div>
@@ -298,19 +302,19 @@
 
         <!-- Pagination -->
         <div class="flex items-center justify-between mt-8">
-          <p class="text-gray-600 dark:text-gray-400">Showing 1 to 3 of 12,450 codes</p>
-          <div class="flex gap-2">
-            <button
+          <p class="text-gray-600 dark:text-gray-400" id="paginationInfo">Showing 1 to 20 of 12,450 codes</p>
+          <div class="flex gap-2" id="paginationContainer">
+            <button onclick="prevPage()"
               class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
               <i class="fas fa-chevron-left"></i>
             </button>
-            <button
-              class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
-            <button
-              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">2</button>
-            <button
-              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">3</button>
-            <button
+            <!-- Pagination buttons will be populated dynamically -->
+            <span id="paginationButtons">
+              <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
+              <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">2</button>
+              <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">3</button>
+            </span>
+            <button onclick="nextPage()"
               class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
               <i class="fas fa-chevron-right"></i>
             </button>
@@ -526,6 +530,9 @@
 
             // Render codes
             renderCodes(data.codes);
+            
+            // Update pagination info and controls
+            updatePaginationControls(data);
           } else {
             throw new Error(data.message || 'Failed to load codes');
           }
@@ -615,6 +622,23 @@
       loadCodes();
     }
     
+    function goToPage(page) {
+      currentPage = page;
+      loadCodes();
+    }
+    
+    function nextPage() {
+      currentPage++;
+      loadCodes();
+    }
+    
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        loadCodes();
+      }
+    }
+    
     function loadBatchOptions() {
       const token = localStorage.getItem('access_token');
       if (!token) {
@@ -649,6 +673,55 @@
       .catch(error => {
         console.error('Error loading batch options:', error);
       });
+    }
+    
+    function updatePaginationControls(data) {
+      const totalPages = data.pages || 1;
+      const currentPageNum = data.current_page || currentPage;
+      const totalItems = data.total || 0;
+      const perPage = 20; // This matches the per_page value in loadCodes
+      
+      // Calculate the range of items being shown
+      const startItem = (currentPageNum - 1) * perPage + 1;
+      const endItem = Math.min(currentPageNum * perPage, totalItems);
+      
+      // Update pagination info text
+      const pageInfo = document.getElementById('paginationInfo');
+      if (pageInfo) {
+        if (totalItems === 0) {
+          pageInfo.textContent = 'No codes to show';
+        } else {
+          pageInfo.textContent = `Showing ${startItem} to ${endItem} of ${totalItems.toLocaleString()} codes`;
+        }
+      }
+      
+      // Generate pagination buttons
+      const paginationButtons = document.getElementById('paginationButtons');
+      if (paginationButtons && totalPages > 1) {
+        let buttonsHTML = '';
+                
+        // Calculate which pages to show
+        const maxVisiblePages = 5; // Show at most 5 page buttons
+        let startPage = Math.max(1, currentPageNum - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+                
+        // Adjust startPage if needed to show maxVisiblePages
+        if (endPage - startPage + 1 < maxVisiblePages) {
+          startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+                
+        // Generate page number buttons
+        for (let i = startPage; i <= endPage; i++) {
+          const activeClass = i === currentPageNum ? 'bg-primary text-white' : 'bg-card border border-border hover:bg-card/80';
+          buttonsHTML += `
+            <button onclick="goToPage(${i})" class="w-10 h-10 flex items-center justify-center rounded-xl ${activeClass} font-bold">${i}</button>`;
+        }
+                
+        paginationButtons.innerHTML = buttonsHTML;
+      } else if (paginationButtons) {
+        // If only one page, just show the current page
+        paginationButtons.innerHTML = `<button class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">${currentPageNum}</button>`;
+      }
     }
 
     function viewCodeDetails(code) {
@@ -877,6 +950,131 @@
           btn.disabled = false;
         });
       });
+    }
+    
+    function exportAllCodes() {
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        window.location.href = '../frontend/login.html';
+        return;
+      }
+      
+      // Get selected batch from filter, or use 'all' if no specific batch is selected
+      const batchFilter = document.getElementById('batchFilter').value;
+      const batchId = batchFilter || 'all';
+      
+      // Show loading state
+      const exportAllButton = document.querySelector('button[onclick="exportAllCodes()"]');
+      const originalText = exportAllButton.innerHTML;
+      exportAllButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Exporting All...';
+      exportAllButton.disabled = true;
+      
+      // Store original HTML for later restoration
+      exportAllButton.setAttribute('data-original', originalText);
+      
+      // Define formats to export
+      const formats = ['csv', 'pdf', 'word'];
+      let completedExports = 0;
+      let totalExports = formats.length;
+      
+      // Function to download a file
+      function downloadFile(data, format, batchId) {
+        const date = new Date().toISOString().slice(0, 10);
+        if (format === 'csv') {
+          const blob = new Blob([data.csv_data], { type: 'text/csv' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `MyFigPoint_Codes_${batchId}_${date}.csv`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+        } else if (format === 'pdf') {
+          const binaryString = atob(data.pdf_data);
+          const bytes = new Uint8Array(binaryString.length);
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+          const blob = new Blob([bytes], { type: 'application/pdf' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `MyFigPoint_Codes_${batchId}_${date}.pdf`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+        } else if (format === 'word') {
+          const binaryString = atob(data.word_data);
+          const bytes = new Uint8Array(binaryString.length);
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+          const blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `MyFigPoint_Codes_${batchId}_${date}.docx`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+        }
+      }
+      
+      // Function to process next export
+      function processNextExport() {
+        if (formats.length === 0) {
+          // All exports completed
+          alert(`All ${totalExports} formats exported successfully!`);
+          
+          // Restore button state
+          exportAllButton.innerHTML = exportAllButton.getAttribute('data-original');
+          exportAllButton.disabled = false;
+          return;
+        }
+        
+        const format = formats.shift();
+        
+        // Build the URL with appropriate parameters
+        let url = `/api/admin/codes/export/${batchId}?format=${format}`;
+        
+        // If batchId is 'all', we need to handle it differently
+        if (batchId === 'all') {
+          // Get search filters to potentially limit the export
+          const searchQuery = document.getElementById('codeSearch').value;
+          const statusFilter = document.getElementById('statusFilter').value;
+          
+          if (searchQuery) {
+            url += `&search=${encodeURIComponent(searchQuery)}`;
+          }
+          if (statusFilter) {
+            url += `&status=${encodeURIComponent(statusFilter)}`;
+          }
+        }
+        
+        fetch(url, {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.format) {
+            downloadFile(data, format, batchId);
+            completedExports++;
+          } else {
+            console.error(`Failed to export ${format} format:`, data.message || 'Unknown error');
+            alert(`Failed to export ${format.toUpperCase()} format: ${data.message || 'Unknown error'}`);
+          }
+        })
+        .catch(error => {
+          console.error(`Error exporting ${format} format:`, error);
+          alert(`Error exporting ${format.toUpperCase()} format. Please try again.`);
+        })
+        .finally(() => {
+          // Process next export
+          setTimeout(processNextExport, 500); // Small delay to prevent overwhelming the server
+        });
+      }
+      
+      // Start processing exports
+      processNextExport();
     }
     
     function exportSingleCode() {

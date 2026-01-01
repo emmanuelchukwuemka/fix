@@ -53,13 +53,17 @@ def redeem_code():
         user.points_balance += points_to_add
         user.total_points_earned += points_to_add
         
+        # Calculate and add USD value to total earnings (1 point = $0.30)
+        usd_value = points_to_add * 0.30
+        user.total_earnings += usd_value
+        
         # Create transaction record
         transaction = Transaction(
             user_id=current_user_id,
             type=TransactionType.CODE_REDEMPTION,
             status=TransactionStatus.COMPLETED,
             description=f"Redeemed code {code_value}",
-            amount=0,
+            amount=usd_value,  # Store the USD value in the amount field
             points_amount=points_to_add,  # Use the integer value
             reference_id=reward_code.id
         )
