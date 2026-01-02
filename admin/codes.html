@@ -131,14 +131,14 @@
   <!-- Main Content -->
   <div class="flex-1 lg:ml-64">
     <header class="bg-card backdrop-blur-xl border-b border-border sticky top-0 z-40">
-      <div class="flex items-center justify-between px-3 py-1.5">
-        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-3 py-1.5">
+        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text self-start">
           <i class="fas fa-bars text-xl"></i>
         </button>
-        <h1 class="text-2xl md:text-4xl font-black text-primary">
+        <h1 class="text-2xl md:text-4xl font-black text-primary text-center sm:text-left">
           Reward Code Management
         </h1>
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-4 justify-center sm:justify-end">
           <button onclick="generateNewCodes()"
             class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
             <i class="fas fa-plus"></i> Generate Codes
@@ -153,7 +153,7 @@
 
     <main class="p-6 lg:p-10 max-w-7xl mx-auto">
       <!-- Stats Overview -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div
           class="card rounded-2xl p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 border border-green-500/30">
           <div class="flex items-center justify-between">
@@ -208,7 +208,7 @@
 
       <!-- Filters -->
       <div class="card rounded-3xl p-6 mb-8">
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           <div>
             <label class="block text-sm font-bold mb-2">Search Codes</label>
             <div class="relative">
@@ -252,12 +252,17 @@
       <div class="card rounded-3xl p-6">
         <div class="flex items-center justify-between mb-6">
           <h2 class="text-2xl font-bold">Reward Codes</h2>
-          <div class="flex items-center gap-4">
+          <div class="flex flex-wrap items-center gap-4">
             <p class="text-lg font-bold">Total Codes: <span id="totalCodesCount">12,450</span></p>
-            <div class="flex gap-2">
+            <div class="flex flex-wrap gap-2">
               <button onclick="exportCodes('csv')"
                 class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
                 <i class="fas fa-file-csv"></i> CSV
+              </button>
+              <button onclick="exportRecentBatch('csv')"
+                class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2"
+                title="Export the most recently created batch">
+                <i class="fas fa-file-csv"></i> Recent Batch CSV
               </button>
               <button onclick="exportCodes('pdf')"
                 class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
@@ -276,7 +281,7 @@
         </div>
 
         <div class="overflow-x-auto">
-          <table class="w-full">
+          <table class="w-full min-w-max">
             <thead>
               <tr class="border-b border-border">
                 <th class="pb-4 text-left">Code</th>
@@ -301,15 +306,15 @@
         </div>
 
         <!-- Pagination -->
-        <div class="flex items-center justify-between mt-8">
-          <p class="text-gray-600 dark:text-gray-400" id="paginationInfo">Showing 1 to 20 of 12,450 codes</p>
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8">
+          <p class="text-gray-600 dark:text-gray-400 text-center sm:text-left" id="paginationInfo">Showing 1 to 20 of 12,450 codes</p>
           <div class="flex gap-2" id="paginationContainer">
             <button onclick="prevPage()"
               class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
               <i class="fas fa-chevron-left"></i>
             </button>
             <!-- Pagination buttons will be populated dynamically -->
-            <span id="paginationButtons">
+            <span id="paginationButtons" class="flex flex-wrap gap-1">
               <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
               <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">2</button>
               <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">3</button>
@@ -654,20 +659,30 @@
       .then(data => {
         if (data.batch_stats) {
           const batchFilter = document.getElementById('batchFilter');
-          // Clear existing options except the first one
-          while (batchFilter.children.length > 1) {
-            batchFilter.removeChild(batchFilter.lastChild);
-          }
           
-          // Add batch options
-          data.batch_stats.forEach(batch => {
-            if (batch.batch_id) {  // Only add if batch_id exists
-              const option = document.createElement('option');
-              option.value = batch.batch_id;
-              option.textContent = `${batch.batch_id} (${batch.total} codes)`;
-              batchFilter.appendChild(option);
+          // Clear and populate main batch filter
+          if (batchFilter) {
+            // Store the currently selected value to restore it after update
+            const currentSelection = batchFilter.value;
+            
+            // Clear existing options except the first one
+            while (batchFilter.children.length > 1) {
+              batchFilter.removeChild(batchFilter.lastChild);
             }
-          });
+            
+            // Add batch options to main filter
+            data.batch_stats.forEach(batch => {
+              if (batch.batch_id) {  // Only add if batch_id exists
+                const option = document.createElement('option');
+                option.value = batch.batch_id;
+                option.textContent = `${batch.batch_id} (${batch.total} codes)`;
+                batchFilter.appendChild(option);
+              }
+            });
+            
+            // Restore previous selection if it still exists
+            batchFilter.value = currentSelection;
+          }
         }
       })
       .catch(error => {
@@ -1077,6 +1092,125 @@
       processNextExport();
     }
     
+    function exportRecentBatch(format) {
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        window.location.href = '../frontend/login.html';
+        return;
+      }
+      
+      // Show loading state
+      const exportButton = document.querySelector('button[onclick*="exportRecentBatch"]');
+      const originalText = exportButton.innerHTML;
+      exportButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Exporting...';
+      exportButton.disabled = true;
+      
+      // First, get the most recent batch ID
+      fetch('/api/admin/codes/recent-batch', {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.batch_id) {
+          // Export the recent batch with the retrieved batch ID
+          exportCodesByBatch(data.batch_id, format, originalText);
+        } else {
+          alert('Failed to get recent batch: ' + (data.message || 'Unknown error'));
+          // Restore button state
+          exportButton.innerHTML = originalText;
+          exportButton.disabled = false;
+        }
+      })
+      .catch(error => {
+        console.error('Error getting recent batch:', error);
+        alert('Failed to get recent batch. Please try again.');
+        // Restore button state
+        exportButton.innerHTML = originalText;
+        exportButton.disabled = false;
+      });
+    }
+    
+    function exportCodesByBatch(batchId, format, originalText) {
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        window.location.href = '../frontend/login.html';
+        return;
+      }
+      
+      // Show loading state - note: the button state is already set in the calling function
+      const exportButton = document.querySelector('button[onclick*="exportRecentBatch"]');
+      
+      // Build the URL with appropriate parameters
+      const url = `/api/admin/codes/export/${batchId}?format=${format}`;
+      
+      fetch(url, {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.format) {
+          // Handle the exported data based on format
+          if (data.format === 'csv') {
+            // Create and download CSV file
+            const blob = new Blob([data.csv_data], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `MyFigPoint_Recent_Batch_${batchId}_${new Date().toISOString().slice(0, 10)}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+          } else if (data.format === 'pdf') {
+            // Decode base64 PDF and create blob for download
+            const binaryString = atob(data.pdf_data);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+              bytes[i] = binaryString.charCodeAt(i);
+            }
+            const blob = new Blob([bytes], { type: 'application/pdf' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `MyFigPoint_Recent_Batch_${batchId}_${new Date().toISOString().slice(0, 10)}.pdf`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+          } else if (data.format === 'word') {
+            // Decode base64 Word document and create blob for download
+            const binaryString = atob(data.word_data);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+              bytes[i] = binaryString.charCodeAt(i);
+            }
+            const blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `MyFigPoint_Recent_Batch_${batchId}_${new Date().toISOString().slice(0, 10)}.docx`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+          }
+          
+          alert(`Successfully exported recent batch ${batchId} as ${format.toUpperCase()}!`);
+        } else {
+          alert('Export failed: ' + (data.message || 'Unknown error'));
+        }
+      })
+      .catch(error => {
+        console.error('Export error:', error);
+        alert('Export failed. Please try again.');
+      })
+      .finally(() => {
+        // Restore button state
+        exportButton.innerHTML = originalText;
+        exportButton.disabled = false;
+      });
+    }
+    
     function exportSingleCode() {
       // Export functionality for single code would go here
       // For now, this could export the currently viewed code details
@@ -1086,104 +1220,137 @@
         alert(`Export functionality for single code ${code} would be implemented here`);
       }
     }
-    
-    function exportCode() {
-      // In a real implementation, this would export code data
-      alert('Export functionality would be implemented here');
-    }
 
-    function deleteCodeConfirm() {
-      if (confirm('Are you sure you want to delete this code? This action cannot be undone.')) {
-        alert('Code deleted successfully');
-        closeModal('codeDetailsModal');
-      }
-    }
-
-    // Form submission for generating codes
-    document.getElementById('generateCodesForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-
+    function exportCurrentSelection() {
       const token = localStorage.getItem('access_token');
       if (!token) {
         window.location.href = '../frontend/login.html';
         return;
       }
-
-      const countValue = parseInt(document.getElementById('codeCount').value);
-      const pointValue = parseFloat(document.getElementById('pointValue').value);
       
-      // Validate the inputs
-      if (isNaN(countValue) || countValue <= 0) {
-        alert('Please enter a valid number of codes (greater than 0)');
+      // Get selected batch from filter
+      const batchFilter = document.getElementById('batchFilter').value;
+      const statusFilter = document.getElementById('statusFilter').value;
+      const searchQuery = document.getElementById('codeSearch').value;
+      
+      // Determine what we're exporting
+      let exportType = "all codes";
+      let batchId = "all";
+      
+      if (batchFilter) {
+        exportType = `codes from batch ${batchFilter}`;
+        batchId = batchFilter;
+      } else if (searchQuery || statusFilter !== "") {
+        exportType = "filtered codes";
+        batchId = "filtered"; // Use a special identifier for filtered results
+      }
+      
+      if (!confirm(`You are about to export ${exportType}. Continue?`)) {
         return;
       }
       
-      if (isNaN(pointValue) || pointValue <= 0) {
-        alert('Please enter a valid point value (greater than 0)');
-        return;
-      }
-      
-      const formData = {
-        count: countValue,
-        point_value: pointValue
-      };
-
       // Show loading state
-      const submitButton = this.querySelector('button[type="submit"]');
-      const originalText = submitButton.innerHTML;
-      submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Generating...';
-      submitButton.disabled = true;
-
-      fetch('/api/admin/codes/generate', {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer ' + token,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      })
-        .then(async response => {
-          const data = await response.json();
-          
-          // Handle both success (2xx) and error (4xx/5xx) responses
-          if (response.ok) {
-            // Success response (2xx status)
-            if (data.total_generated !== undefined) {
-              alert(`Successfully generated ${data.total_generated} codes! Batch ID: ${data.batch_id}`);
-              closeModal('generateCodesModal');
-              
-              // Update the batch filter to show the newly generated batch
-              if (data.batch_id) {
-                document.getElementById('batchFilter').value = data.batch_id;
-              }
-              
-              loadCodes(); // Refresh the list
-            } else {
-              alert(data.message || 'Codes generated successfully');
-              closeModal('generateCodesModal');
-              loadCodes(); // Refresh the list
-            }
-          } else {
-            // Error response (4xx/5xx status)
-            alert('Failed to generate codes: ' + (data.message || 'Unknown error'));
-          }
-        })
-        .catch(error => {
-          console.error('Error generating codes:', error);
-          alert('Failed to generate codes. Please try again.');
-        })
-        .finally(() => {
-          // Reset button
-          submitButton.innerHTML = originalText;
-          submitButton.disabled = false;
-        });
-    });
-
-    // Close modals when clicking outside
-    window.onclick = function (event) {
-      if (event.target.classList.contains('fixed') && event.target.classList.contains('inset-0')) {
-        event.target.classList.add('hidden');
+      const exportCurrentButton = document.querySelector('button[onclick="exportCurrentSelection()"]');
+      const originalText = exportCurrentButton.innerHTML;
+      exportCurrentButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Exporting...';
+      exportCurrentButton.disabled = true;
+      
+      // Build the URL with appropriate parameters
+      let url = `/api/admin/codes/export/${batchId}`;
+      
+      // For filtered results (not a specific batch), we need to pass filters
+      if (batchId === "filtered") {
+        // We'll need to handle this differently - export based on current filters
+        // For now, let's export all and apply filters on the backend
+        url = `/api/admin/codes/export/all`;
+        
+        const params = new URLSearchParams();
+        params.append('format', 'csv'); // Default to CSV, user can change
+        
+        if (searchQuery) params.append('search', searchQuery);
+        if (statusFilter) params.append('status', statusFilter);
+        
+        url += `?${params.toString()}`;
+      } else {
+        url += '?format=csv'; // Default to CSV
       }
+      
+      // For this specific implementation, I'll create a prompt to select format
+      const format = prompt("Enter export format (csv/pdf/word):", "csv");
+      if (!format || !['csv', 'pdf', 'word'].includes(format.toLowerCase())) {
+        alert("Invalid format. Please use csv, pdf, or word.");
+        exportCurrentButton.innerHTML = originalText;
+        exportCurrentButton.disabled = false;
+        return;
+      }
+      
+      // Update URL with selected format
+      url = url.replace(/format=\w+/, `format=${format}`);
+      
+      fetch(url, {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.format) {
+          // Handle the exported data based on format
+          if (data.format === 'csv') {
+            // Create and download CSV file
+            const blob = new Blob([data.csv_data], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `MyFigPoint_Codes_${batchId}_${new Date().toISOString().slice(0, 10)}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+          } else if (data.format === 'pdf') {
+            // Decode base64 PDF and create blob for download
+            const binaryString = atob(data.pdf_data);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+              bytes[i] = binaryString.charCodeAt(i);
+            }
+            const blob = new Blob([bytes], { type: 'application/pdf' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `MyFigPoint_Codes_${batchId}_${new Date().toISOString().slice(0, 10)}.pdf`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+          } else if (data.format === 'word') {
+            // Decode base64 Word document and create blob for download
+            const binaryString = atob(data.word_data);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+              bytes[i] = binaryString.charCodeAt(i);
+            }
+            const blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `MyFigPoint_Codes_${batchId}_${new Date().toISOString().slice(0, 10)}.docx`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+          }
+          
+          alert(`Successfully exported ${exportType} as ${format.toUpperCase()}!`);
+        } else {
+          alert('Export failed: ' + (data.message || 'Unknown error'));
+        }
+      })
+      .catch(error => {
+        console.error('Export error:', error);
+        alert('Export failed. Please try again.');
+      })
+      .finally(() => {
+        // Restore button state
+        exportCurrentButton.innerHTML = originalText;
+        exportCurrentButton.disabled = false;
+      });
     }
 
     // Load codes when page loads

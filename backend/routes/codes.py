@@ -255,3 +255,4 @@ def get_code_stats():
         
     except Exception as e:
         return jsonify({'message': 'Failed to fetch code stats', 'error': str(e)}), 500
+

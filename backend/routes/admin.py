@@ -260,6 +260,26 @@ def export_codes(batch_id):
     except Exception as e:
         return jsonify({'message': 'Failed to export codes', 'error': str(e)}), 500
 
+
+@admin_bp.route('/codes/recent-batch', methods=['GET'])
+@admin_required
+def get_recent_batch():
+    try:
+        # Get the most recent batch ID based on the latest created code
+        recent_code = RewardCode.query.order_by(RewardCode.created_at.desc()).first()
+        
+        if not recent_code or not recent_code.batch_id:
+            return jsonify({'message': 'No batches found'}), 404
+        
+        return jsonify({
+            'batch_id': recent_code.batch_id,
+            'message': 'Successfully retrieved most recent batch'
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': 'Failed to fetch recent batch', 'error': str(e)}), 500
+
+
 @admin_bp.route('/codes', methods=['GET'])
 @admin_required
 def get_all_codes():
