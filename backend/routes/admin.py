@@ -950,11 +950,12 @@ def reject_withdrawal(transaction_id):
         if not user:
             return jsonify({'message': 'User not found'}), 404
         
-        # Refund points to user
-        # points_amount is negative for withdrawals, so subtracting a negative value adds the points back
+        # Refund points and amount to user
+        # points_amount and amount are negative for withdrawals
         user.points_balance -= transaction.points_amount
-        user.total_points_withdrawn += transaction.points_amount  # This will reduce the total withdrawn since points_amount is negative
-        user.total_withdrawn += transaction.amount  # This will reduce the total withdrawn since amount is negative
+        user.total_points_withdrawn += transaction.points_amount
+        user.total_earnings -= transaction.amount
+        user.total_withdrawn += transaction.amount
         
         # Update transaction status to failed
         transaction.status = TransactionStatus.FAILED

@@ -137,9 +137,10 @@ def withdraw_points():
         original_withdrawn_points = user.total_points_withdrawn
         original_withdrawn_amount = user.total_withdrawn
 
-        # Deduct points from user balance
+        # Deduct points and amount from user balance
         user.points_balance -= points
         user.total_points_withdrawn += points
+        user.total_earnings -= usd_amount
         user.total_withdrawn += usd_amount
 
         # Create pending withdrawal transaction
