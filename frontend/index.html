@@ -1,10 +1,21 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="assets/logo2.png">
   <title>MyFigPoint – Earn, Track & Redeem Reward Points</title>
-  <meta name="description" content="The ultimate rewards platform to earn points, manage your wallet, and redeem real value effortlessly." />
+  <meta name="description"
+    content="The ultimate rewards platform to earn points, manage your wallet, and redeem real value effortlessly." />
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#FD6606">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="MyFigPoint">
+  <link rel="apple-touch-icon" href="assets/logo.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/logo.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/logo.png">
 
   <!-- Tailwind CSS v3 -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -27,10 +38,11 @@
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="assets/css/app.css" />
-  
+
   <style>
     /* Adjust for fixed navigation */
     section[id] {
@@ -43,8 +55,12 @@
 
   <!-- Background Gradient Orbs -->
   <div class="fixed inset-0 -z-10">
-    <div class="absolute top-0 left-0 w-96 h-96 bg-primary rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-    <div class="absolute bottom-0 right-0 w-96 h-96 bg-secondary rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse delay-1000"></div>
+    <div
+      class="absolute top-0 left-0 w-96 h-96 bg-primary rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse">
+    </div>
+    <div
+      class="absolute bottom-0 right-0 w-96 h-96 bg-secondary rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse delay-1000">
+    </div>
   </div>
 
   <!-- Navigation -->
@@ -59,22 +75,35 @@
         <a href="#how" class="hover:text-primary transition text-sm">How it Works</a>
         <a href="#testimonials" class="hover:text-primary transition text-sm">Testimonials</a>
         <a href="about.html" class="hover:text-primary transition text-sm">About</a>
-        <a href="signup.html" class="bg-primary hover:bg-orange-700 px-3 py-1.5 rounded-full font-medium transition text-sm">Get Started</a>
+        <a href="signup.html"
+          class="bg-primary hover:bg-orange-700 px-3 py-1.5 rounded-full font-medium transition text-sm">Get Started</a>
       </div>
-      <button id="mobileMenuButton" class="md:hidden p-2 rounded-lg text-2xl text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200 ease-in-out" aria-label="Toggle navigation menu">
+      <button id="mobileMenuButton"
+        class="md:hidden p-2 rounded-lg text-2xl text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200 ease-in-out"
+        aria-label="Toggle navigation menu">
         <i class="fas fa-bars"></i>
       </button>
     </div>
-    
+
     <!-- Mobile Menu -->
     <div id="mobileMenu" class="hidden md:hidden bg-card backdrop-blur-lg border-t border-border">
       <div class="px-3 py-2 space-y-2">
-        <a href="#features" class="block py-1.5 px-3 rounded-lg hover:bg-gray-800 hover:text-primary transition text-sm" onclick="toggleMobileMenu()">Features</a>
-        <a href="#how" class="block py-1.5 px-3 rounded-lg hover:bg-gray-800 hover:text-primary transition text-sm" onclick="toggleMobileMenu()">How it Works</a>
-        <a href="#testimonials" class="block py-1.5 px-3 rounded-lg hover:bg-gray-800 hover:text-primary transition text-sm" onclick="toggleMobileMenu()">Testimonials</a>
-        <a href="about.html" class="block py-1.5 px-3 rounded-lg hover:bg-gray-800 hover:text-primary transition text-sm" onclick="toggleMobileMenu()">About</a>
-        <a href="signup.html" class="block bg-primary hover:bg-orange-700 px-3 py-1.5 rounded-full font-medium transition text-center text-sm" onclick="toggleMobileMenu()">Get Started</a>
-        <a href="login.html" class="block text-center py-1.5 px-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition text-sm" onclick="toggleMobileMenu()">Log In</a>
+        <a href="#features" class="block py-1.5 px-3 rounded-lg hover:bg-gray-800 hover:text-primary transition text-sm"
+          onclick="toggleMobileMenu()">Features</a>
+        <a href="#how" class="block py-1.5 px-3 rounded-lg hover:bg-gray-800 hover:text-primary transition text-sm"
+          onclick="toggleMobileMenu()">How it Works</a>
+        <a href="#testimonials"
+          class="block py-1.5 px-3 rounded-lg hover:bg-gray-800 hover:text-primary transition text-sm"
+          onclick="toggleMobileMenu()">Testimonials</a>
+        <a href="about.html"
+          class="block py-1.5 px-3 rounded-lg hover:bg-gray-800 hover:text-primary transition text-sm"
+          onclick="toggleMobileMenu()">About</a>
+        <a href="signup.html"
+          class="block bg-primary hover:bg-orange-700 px-3 py-1.5 rounded-full font-medium transition text-center text-sm"
+          onclick="toggleMobileMenu()">Get Started</a>
+        <a href="login.html"
+          class="block text-center py-1.5 px-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition text-sm"
+          onclick="toggleMobileMenu()">Log In</a>
       </div>
     </div>
   </nav>
@@ -90,13 +119,16 @@
           </span>
         </h1>
         <p class="mt-6 text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
-          Earn points through uploaded codes, completed tasks, referrals, and daily activities. Easily track and manage your points, and redeem them for rewards such as product discounts, branded items, and exclusive perks.
+          Earn points through uploaded codes, completed tasks, referrals, and daily activities. Easily track and manage
+          your points, and redeem them for rewards such as product discounts, branded items, and exclusive perks.
         </p>
         <div class="mt-10 flex flex-col sm:flex-row gap-4">
-          <a href="signup.html" class="bg-primary hover:bg-orange-700 px-8 py-4 rounded-full font-semibold text-lg shadow-xl transform hover:scale-105 transition">
+          <a href="signup.html"
+            class="bg-primary hover:bg-orange-700 px-8 py-4 rounded-full font-semibold text-lg shadow-xl transform hover:scale-105 transition">
             Start Earning Free
           </a>
-          <a href="#features" class="border border-border hover:bg-card px-8 py-4 rounded-full font-semibold text-lg transition">
+          <a href="#features"
+            class="border border-border hover:bg-card px-8 py-4 rounded-full font-semibold text-lg transition">
             Learn More
           </a>
         </div>
@@ -118,10 +150,9 @@
       </div>
 
       <div data-aos="fade-left" class="flex justify-center">
-        <img src="https://illustrations.undraw.io/reward-points.svg" 
-             alt="Earn Rewards" 
-             class="w-full max-w-lg drop-shadow-2xl animate-float" 
-             onerror="this.src='https://via.placeholder.com/600x600/4c1d95/ffffff?text=Earn+Rewards'"/>
+        <img src="https://illustrations.undraw.io/reward-points.svg" alt="Earn Rewards"
+          class="w-full max-w-lg drop-shadow-2xl animate-float"
+          onerror="this.src='https://via.placeholder.com/600x600/4c1d95/ffffff?text=Earn+Rewards'" />
       </div>
     </div>
   </section>
@@ -135,28 +166,47 @@
       </div>
 
       <div class="grid md:grid-cols-3 gap-10">
-        <div class="group card rounded-2xl p-8 hover:border-primary transition-all duration-300" data-aos="fade-up" data-aos-delay="100">
-          <div class="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition">
-            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path></svg>
+        <div class="group card rounded-2xl p-8 hover:border-primary transition-all duration-300" data-aos="fade-up"
+          data-aos-delay="100">
+          <div
+            class="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1">
+              </path>
+            </svg>
           </div>
           <h3 class="text-2xl font-bold mb-3">Earn Points Daily</h3>
-          <p class="text-gray-600 dark:text-gray-400">Complete tasks, surveys, watch videos, invite friends — the more you do, the more you earn.</p>
+          <p class="text-gray-600 dark:text-gray-400">Complete tasks, surveys, watch videos, invite friends — the more
+            you do, the more you earn.</p>
         </div>
 
-        <div class="group card rounded-2xl p-8 hover:border-primary transition-all duration-300" data-aos="fade-up" data-aos-delay="200">
-          <div class="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition">
-            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h10m-6-2v4"></path></svg>
+        <div class="group card rounded-2xl p-8 hover:border-primary transition-all duration-300" data-aos="fade-up"
+          data-aos-delay="200">
+          <div
+            class="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h10m-6-2v4"></path>
+            </svg>
           </div>
           <h3 class="text-2xl font-bold mb-3">Instant Wallet</h3>
-          <p class="text-gray-600 dark:text-gray-400">Real-time balance tracking. Withdraw to bank or gift cards instantly.</p>
+          <p class="text-gray-600 dark:text-gray-400">Real-time balance tracking. Withdraw to bank or gift cards
+            instantly.</p>
         </div>
 
-        <div class="group card rounded-2xl p-8 hover:border-primary transition-all duration-300" data-aos="fade-up" data-aos-delay="300">
-          <div class="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition">
-            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+        <div class="group card rounded-2xl p-8 hover:border-primary transition-all duration-300" data-aos="fade-up"
+          data-aos-delay="300">
+          <div
+            class="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+              </path>
+            </svg>
           </div>
           <h3 class="text-2xl font-bold mb-3">Bank-Level Security</h3>
-          <p class="text-gray-600 dark:text-gray-400">Encrypted transactions, 2FA, fraud detection — your points and data are 100% safe.</p>
+          <p class="text-gray-600 dark:text-gray-400">Encrypted transactions, 2FA, fraud detection — your points and
+            data are 100% safe.</p>
         </div>
       </div>
     </div>
@@ -168,23 +218,33 @@
       <h2 class="text-4xl md:text-5xl font-bold mb-16" data-aos="fade-up">How It Works</h2>
       <div class="grid md:grid-cols-5 gap-6">
         <div data-aos="zoom-in">
-          <div class="w-16 h-16 mx-auto bg-primary rounded-full flex items-center justify-center text-2xl font-bold mb-3">1</div>
+          <div
+            class="w-16 h-16 mx-auto bg-primary rounded-full flex items-center justify-center text-2xl font-bold mb-3">1
+          </div>
           <h4 class="text-lg font-semibold">Sign Up Free</h4>
         </div>
         <div data-aos="zoom-in" data-aos-delay="100">
-          <div class="w-16 h-16 mx-auto bg-primary rounded-full flex items-center justify-center text-2xl font-bold mb-3">2</div>
+          <div
+            class="w-16 h-16 mx-auto bg-primary rounded-full flex items-center justify-center text-2xl font-bold mb-3">2
+          </div>
           <h4 class="text-lg font-semibold">Upload Code</h4>
         </div>
         <div data-aos="zoom-in" data-aos-delay="200">
-          <div class="w-16 h-16 mx-auto bg-primary rounded-full flex items-center justify-center text-2xl font-bold mb-3">3</div>
+          <div
+            class="w-16 h-16 mx-auto bg-primary rounded-full flex items-center justify-center text-2xl font-bold mb-3">3
+          </div>
           <h4 class="text-lg font-semibold">Complete Tasks</h4>
         </div>
         <div data-aos="zoom-in" data-aos-delay="300">
-          <div class="w-16 h-16 mx-auto bg-primary rounded-full flex items-center justify-center text-2xl font-bold mb-3">4</div>
+          <div
+            class="w-16 h-16 mx-auto bg-primary rounded-full flex items-center justify-center text-2xl font-bold mb-3">4
+          </div>
           <h4 class="text-lg font-semibold">Earn Points</h4>
         </div>
         <div data-aos="zoom-in" data-aos-delay="400">
-          <div class="w-16 h-16 mx-auto bg-primary rounded-full flex items-center justify-center text-2xl font-bold mb-3">5</div>
+          <div
+            class="w-16 h-16 mx-auto bg-primary rounded-full flex items-center justify-center text-2xl font-bold mb-3">5
+          </div>
           <h4 class="text-lg font-semibold">Redeem Rewards</h4>
         </div>
       </div>
@@ -198,17 +258,20 @@
       <div class="grid md:grid-cols-3 gap-8">
         <div class="card rounded-2xl p-8 border border-border" data-aos="fade-up">
           <div class="flex mb-4 text-yellow-400">★★★★★</div>
-          <p class="text-lg italic text-gray-600 dark:text-gray-300">"Made over $800 in 3 months just by doing daily tasks!"</p>
+          <p class="text-lg italic text-gray-600 dark:text-gray-300">"Made over $800 in 3 months just by doing daily
+            tasks!"</p>
           <p class="mt-4 font-semibold">Sarah M.</p>
         </div>
         <div class="card rounded-2xl p-8 border border-border" data-aos="fade-up" data-aos-delay="100">
           <div class="flex mb-4 text-yellow-400">★★★★★</div>
-          <p class="text-lg italic text-gray-600 dark:text-gray-300">"Best rewards app I've used. Withdrawals are instant!"</p>
+          <p class="text-lg italic text-gray-600 dark:text-gray-300">"Best rewards app I've used. Withdrawals are
+            instant!"</p>
           <p class="mt-4 font-semibold">James K.</p>
         </div>
         <div class="card rounded-2xl p-8 border border-border" data-aos="fade-up" data-aos-delay="200">
           <div class="flex mb-4 text-yellow-400">★★★★★</div>
-          <p class="text-lg italic text-gray-600 dark:text-gray-300">"Referral program is insane – invited 10 friends and got $250 bonus."</p>
+          <p class="text-lg italic text-gray-600 dark:text-gray-300">"Referral program is insane – invited 10 friends
+            and got $250 bonus."</p>
           <p class="mt-4 font-semibold">Priya R.</p>
         </div>
       </div>
@@ -232,16 +295,19 @@
             Our Company
           </h3>
           <p class="text-gray-600 dark:text-gray-400 mb-6">
-            MyFigPoint is an independent loyalty and distributor-reward platform designed to help users earn, track, and redeem reward points from participating companies across Africa.
+            MyFigPoint is an independent loyalty and distributor-reward platform designed to help users earn, track, and
+            redeem reward points from participating companies across Africa.
           </p>
           <p class="text-gray-600 dark:text-gray-400 mb-6">
-            We empower brands to appreciate loyalty, motivate performance, and reward genuine engagement through a simple and transparent digital system.
+            We empower brands to appreciate loyalty, motivate performance, and reward genuine engagement through a
+            simple and transparent digital system.
           </p>
           <div class="flex items-start gap-4 mt-6 p-4 bg-card rounded-xl border border-border">
             <i class="fas fa-bullseye text-primary mt-1"></i>
             <div>
               <span class="font-medium">Our Mission:</span>
-              <p class="text-gray-600 dark:text-gray-400 mt-1">To build Africa's most trusted digital reward ecosystem</p>
+              <p class="text-gray-600 dark:text-gray-400 mt-1">To build Africa's most trusted digital reward ecosystem
+              </p>
             </div>
           </div>
         </div>
@@ -254,7 +320,8 @@
             Policies & Information
           </h3>
           <p class="text-gray-600 dark:text-gray-400 mb-6">
-            We operate with full transparency in our reward processing and payout policies. MyFigPoint acts as a facilitator between users and brands.
+            We operate with full transparency in our reward processing and payout policies. MyFigPoint acts as a
+            facilitator between users and brands.
           </p>
           <p class="text-gray-600 dark:text-gray-400 mb-6">
             All rewards are fulfilled directly by the issuing brand, not by MyFigPoint.
@@ -282,8 +349,10 @@
   <section class="py-24 px-6 text-center">
     <div class="max-w-4xl mx-auto">
       <h2 class="text-5xl font-extrabold mb-6">Ready to Start Earning?</h2>
-      <p class="text-xl text-gray-600 dark:text-gray-400 mb-10">Join 50,000+ members already cashing out real Reward every week.</p>
-      <a href="signup.html" class="inline-block bg-primary hover:bg-orange-700 text-xl font-bold px-12 py-5 rounded-full shadow-2xl transform hover:scale-105 transition">
+      <p class="text-xl text-gray-600 dark:text-gray-400 mb-10">Join 50,000+ members already cashing out real Reward
+        every week.</p>
+      <a href="signup.html"
+        class="inline-block bg-primary hover:bg-orange-700 text-xl font-bold px-12 py-5 rounded-full shadow-2xl transform hover:scale-105 transition">
         Create Free Account – Takes 30 Seconds
       </a>
     </div>
@@ -331,47 +400,47 @@
   </footer>
 
   <script>
-    
-    
+
+
     // AOS initialization
     AOS.init({ duration: 800, once: true });
-    
+
     // Sliding animation for How It Works section
     function initSlidingAnimation() {
       const howItWorksSection = document.getElementById('how');
       if (!howItWorksSection) return;
-      
+
       // Get the grid container
       const gridContainer = howItWorksSection.querySelector('.grid');
       if (!gridContainer) return;
-      
+
       // Create a wrapper for the slider
       const sliderWrapper = document.createElement('div');
       sliderWrapper.style.overflow = 'hidden';
       sliderWrapper.style.width = '100%';
       sliderWrapper.style.display = 'flex';
-      
+
       // Create a container for the items
       const itemsContainer = document.createElement('div');
       itemsContainer.style.display = 'flex';
       itemsContainer.style.animation = 'slide 30s linear infinite';
-      
+
       // Move all grid items to the new container
       const allChildren = Array.from(gridContainer.children);
       allChildren.forEach(child => {
         itemsContainer.appendChild(child.cloneNode(true));
       });
-      
+
       // Duplicate items for continuous sliding
       const originalItems = itemsContainer.children;
       for (let i = 0; i < originalItems.length; i++) {
         itemsContainer.appendChild(originalItems[i].cloneNode(true));
       }
-      
+
       sliderWrapper.appendChild(itemsContainer);
       gridContainer.innerHTML = '';
       gridContainer.appendChild(sliderWrapper);
-      
+
       // Add CSS for the animation
       const style = document.createElement('style');
       style.textContent = `
@@ -382,16 +451,16 @@
       `;
       document.head.appendChild(style);
     }
-    
+
     // Initialize sliding animation when page loads
     window.addEventListener('load', initSlidingAnimation);
-    
+
     function toggleMobileMenu() {
       const menu = document.getElementById('mobileMenu');
       const button = document.getElementById('mobileMenuButton');
-      
+
       menu.classList.toggle('hidden');
-      
+
       // Change icon based on state
       if (menu.classList.contains('hidden')) {
         button.innerHTML = '<i class="fas fa-bars"></i>';
@@ -399,9 +468,9 @@
         button.innerHTML = '<i class="fas fa-times"></i>';
       }
     }
-    
+
     // Add event listener to mobile menu button
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       const mobileMenuButton = document.getElementById('mobileMenuButton');
       if (mobileMenuButton) {
         mobileMenuButton.addEventListener('click', toggleMobileMenu);
@@ -409,10 +478,13 @@
     });
   </script>
   <script src="assets/js/theme.js"></script>
-  
+
+
+
   <!-- Fixed Theme Toggle Button -->
   <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
     <i class="fas fa-moon"></i>
   </button>
 </body>
+
 </html>

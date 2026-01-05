@@ -345,7 +345,7 @@
         return;
       }
 
-      fetch('/api/codes/history', {
+      fetch('/api/codes/history?t=' + Date.now(), {
         headers: {
           'Authorization': 'Bearer ' + token
         }

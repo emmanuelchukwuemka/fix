@@ -200,6 +200,12 @@ MyFigPoint Team
         # Send email (in development, this might fail if email settings aren't configured)
         email_sent = emailer.send_email(email, subject, body, html_body)
         
+        # Always print the link to the server console for debugging/testing
+        print(f"----------------------------------------------------------------")
+        print(f"PASSWORD RESET LINK for {email}:")
+        print(f"{reset_link}")
+        print(f"----------------------------------------------------------------")
+        
         # For development purposes, we'll return the token so you can test manually
         # In production, you should only return a success message
         if os.environ.get('FLASK_ENV') == 'development':

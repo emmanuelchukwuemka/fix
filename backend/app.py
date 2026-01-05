@@ -169,6 +169,22 @@ def create_app():
                 return send_from_directory(frontend_folder, filename)
             return send_from_directory(static_folder, filename)
     
+    # Serve manifest.json with correct MIME type
+    @app.route('/manifest.json')
+    def serve_manifest():
+        return send_from_directory(frontend_folder, 'manifest.json', mimetype='application/manifest+json')
+    
+    # Serve service-worker.js with correct MIME type
+    @app.route('/service-worker.js')
+    def serve_service_worker():
+        return send_from_directory(frontend_folder, 'service-worker.js', mimetype='application/javascript')
+    
+    # Serve uploaded files
+    @app.route('/uploads/task_proofs/<filename>')
+    def serve_uploaded_task_proof(filename):
+        upload_dir = os.path.join(project_root, 'uploads', 'task_proofs')
+        return send_from_directory(upload_dir, filename)
+    
     # Serve the main index.html for all non-API routes (for SPA)
     @app.errorhandler(404)
     def not_found(e):

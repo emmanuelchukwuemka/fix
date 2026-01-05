@@ -142,7 +142,7 @@ body {
 
 /* Make it even more prominent on hover */
 .theme-toggle:hover {
-  transform: scale(1.15);
+  transform: scale(1);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
   background-color: var(--primary-color);
   color: white;
@@ -188,7 +188,7 @@ body {
 
 .btn-primary:hover {
   background-color: #e05505; /* Slightly darker shade for hover effect */
-  transform: translateY(-2px);
+  transform: none;
 }
 
 /* Form input styles */
@@ -280,7 +280,7 @@ body {
 }
 
 .about-card:hover {
-  transform: translateY(-5px);
+  transform: none;
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
@@ -302,7 +302,7 @@ body {
 }
 
 .about-link:hover {
-  transform: scale(1.05);
+  transform: scale(1);
   box-shadow: 0 6px 20px rgba(253, 102, 6, 0.4);
 }
 
@@ -310,8 +310,10 @@ body {
   transition: transform 0.3s ease;
 }
 
+
+
 .about-link:hover i {
-  transform: translateX(3px);
+  transform: none;
 }
 
 /* Mobile responsive header styles */

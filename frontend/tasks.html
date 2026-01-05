@@ -23,7 +23,7 @@
     }
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="assets/css/app.css" />
+  <link rel="stylesheet" href="/assets/css/app.css" />
 </head>
 
 <body class="bg-background text-text min-h-screen flex relative overflow-auto">
@@ -38,7 +38,7 @@
     class="fixed inset-y-0 left-0 z-50 w-64 bg-card backdrop-blur-xl border-r border-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
     <div class="flex items-center justify-between p-4 border-b border-border">
       <div class="flex flex-col items-center">
-        <img src="assets/logo.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
+        <img src="/assets/logo.png" alt="MyFigPoint Logo" class="logo-header rounded-full object-contain">
         <p class="text-primary font-bold mt-1 text-xs">MyFigPoint</p>
       </div>
       <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text" aria-label="Close sidebar">
@@ -255,7 +255,7 @@
       document.getElementById('overlay').classList.toggle('hidden');
     }
 
-    function filterTasks(category) {
+    function filterTasks(category, skipReload = false) {
       currentFilter = category;
 
       // Update tab styling
@@ -271,12 +271,17 @@
         activeTab.classList.add('border-primary', 'text-primary', 'bg-primary/10');
       }
 
-      renderTasks();
+      // Re-load tasks with category filter if not skipped
+      if (!skipReload) {
+        loadTasks();
+      } else {
+        renderTasks();
+      }
     }
 
     function renderTasks() {
       const container = document.getElementById('tasksGrid');
-      
+
       // If current filter is not 'all', apply category filter
       let filteredTasks = allTasks;
       if (currentFilter !== 'all') {
@@ -309,16 +314,16 @@
         case 'available':
           statusBadge = '<div class="bg-blue-600/20 px-3 py-1.5 rounded-full text-blue-300 text-xs font-medium flex items-center gap-1"><i class="fas fa-circle-play"></i> Available</div>';
           buttonText = '<i class="fas fa-rocket mr-2"></i>Join Task';
-          buttonClass = 'bg-gradient-to-r from-primary to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-3 rounded-xl font-semibold transition shadow-lg transform hover:scale-105';
-          buttonAction = `onclick="startTask(${task.id})"`;
+          buttonClass = 'bg-gradient-to-r from-primary to-orange-600 text-white py-3 rounded-xl font-semibold shadow-lg transition-none';
+          buttonAction = `onclick="startTask(${task.id}, this)"`;
           statusIcon = 'fa-circle-play';
           statusColor = 'blue';
           break;
         case 'in_progress':
           statusBadge = '<div class="bg-yellow-600/20 px-3 py-1.5 rounded-full text-yellow-300 text-xs font-medium flex items-center gap-1"><i class="fas fa-hourglass-half"></i> In Progress</div>';
-          buttonText = '<i class="fas fa-check-circle mr-2"></i>Task Completed';
-          buttonClass = 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-3 rounded-xl font-semibold transition shadow-lg transform hover:scale-105';
-          buttonAction = `onclick="completeTask(${task.id})"`;
+          buttonText = '<i class="fas fa-check-circle mr-2"></i>Submit Proof';
+          buttonClass = 'bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-xl font-semibold shadow-lg transition-none';
+          buttonAction = `onclick="completeTask(${task.id}, this)"`;
           statusIcon = 'fa-hourglass-half';
           statusColor = 'yellow';
           break;
@@ -341,8 +346,8 @@
         case 'rejected':
           statusBadge = '<div class="bg-red-600/20 px-3 py-1.5 rounded-full text-red-300 text-xs font-medium flex items-center gap-1"><i class="fas fa-times-circle"></i> Rejected</div>';
           buttonText = '<i class="fas fa-redo mr-2"></i>Try Again';
-          buttonClass = 'bg-gradient-to-r from-primary to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-3 rounded-xl font-semibold transition shadow-lg';
-          buttonAction = `onclick="startTask(${task.id})"`;
+          buttonClass = 'bg-gradient-to-r from-primary to-orange-600 text-white py-3 rounded-xl font-semibold shadow-lg transition-none';
+          buttonAction = `onclick="startTask(${task.id}, this)"`;
           statusIcon = 'fa-times-circle';
           statusColor = 'red';
           break;
@@ -352,7 +357,7 @@
         '<div class="bg-orange-600/20 px-3 py-1.5 rounded-full text-orange-300 text-xs font-medium flex items-center gap-1"><i class="fas fa-shield-halved"></i> Requires Verification</div>' : '';
 
       return `
-        <div class="group card rounded-2xl p-6 hover:border-primary/50 transition-all">
+        <div class="group card rounded-2xl p-6 border border-border">
           <div class="flex justify-between items-start mb-4 flex-wrap gap-2">
             ${statusBadge}
             ${requiresVerification}
@@ -377,20 +382,26 @@
     }
 
     // Function to start a task
-    function startTask(taskId) {
+    function startTask(taskId, btn) {
+      console.log('Attempting to start task:', taskId);
       const token = localStorage.getItem('access_token');
       if (!token) {
         window.location.href = 'login.html';
         return;
       }
 
-      // Find the task to check its category
-      const task = allTasks.find(t => t.id === taskId);
+      // Find the button that was clicked
+      const activeBtn = btn || (event ? event.currentTarget : null);
+      const originalHtml = activeBtn ? activeBtn.innerHTML : '';
 
       // Show confirmation
       if (!confirm('Join this task? You can submit it for review after completing the requirements.')) {
         return;
       }
+
+      // Set loading state
+      activeBtn.disabled = true;
+      activeBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Joining...';
 
       fetch(`/api/tasks/${taskId}/start`, {
         method: 'POST',
@@ -399,32 +410,56 @@
           'Content-Type': 'application/json'
         }
       })
-        .then(response => response.json())
+        .then(response => {
+          return response.json().then(data => {
+            if (!response.ok) {
+              throw new Error(data.message || 'Failed to start task');
+            }
+            return data;
+          });
+        })
         .then(data => {
-          if (data.message) {
-            alert(data.message);
-            // Refresh tasks
-            loadTasks();
+          // FIX: If task is already in progress (which returns 200), show a friendly success message
+          if (data.message && data.message.toLowerCase().includes('already in progress')) {
+            showMessage('Task started successfully', 'success');
+          } else {
+            showMessage(data.message, 'success');
           }
+
+          // Refresh tasks
+          setTimeout(() => loadTasks(), 500);
         })
         .catch(error => {
           console.error('Error starting task:', error);
-          alert('Failed to start task. Please try again.');
+          showMessage(error.message || 'Failed to start task. Please try again.', 'error');
+          // Reset button
+          activeBtn.disabled = false;
+          activeBtn.innerHTML = originalHtml;
         });
     }
 
     // Function to complete a task
-    function completeTask(taskId) {
+    function completeTask(taskId, btn) {
+      console.log('Attempting to complete task:', taskId);
       const token = localStorage.getItem('access_token');
       if (!token) {
         window.location.href = 'login.html';
         return;
       }
 
+      // Find the button that was clicked
+      const activeBtn = btn || (event ? event.currentTarget : null);
+      const originalHtml = activeBtn ? activeBtn.innerHTML : '';
+
       // Find the task to check its category
       const task = allTasks.find(t => t.id === taskId);
 
       if (task && task.requires_admin_verification) {
+        // Show alert first before opening proof modal
+        if (!confirm('You need to submit proof for this task. Click OK to submit your proof.')) {
+          return;
+        }
+
         // Open proof modal for tasks requiring verification
         currentTaskIdForProof = taskId;
         document.getElementById('proofTaskTitle').textContent = task.title;
@@ -436,6 +471,10 @@
         return;
       }
 
+      // Set loading state
+      activeBtn.disabled = true;
+      activeBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
+
       fetch(`/api/tasks/${taskId}/complete`, {
         method: 'POST',
         headers: {
@@ -443,17 +482,25 @@
           'Content-Type': 'application/json'
         }
       })
-        .then(response => response.json())
-        .then(data => {
-          if (data.message) {
-            alert(data.message);
-            // Refresh tasks
-            loadTasks();
+        .then(response => {
+          if (!response.ok) {
+            return response.json().then(data => {
+              throw new Error(data.message || 'Failed to complete task');
+            });
           }
+          return response.json();
+        })
+        .then(data => {
+          showMessage(data.message, 'success');
+          // Refresh tasks
+          loadTasks();
         })
         .catch(error => {
           console.error('Error completing task:', error);
-          alert('Failed to complete task. Please try again.');
+          showMessage(error.message || 'Failed to complete task. Please try again.', 'error');
+          // Reset button
+          activeBtn.disabled = false;
+          activeBtn.innerHTML = originalHtml;
         });
     }
 
@@ -485,6 +532,7 @@
     }
 
     function submitTaskWithProof() {
+      console.log('Submitting proof for task:', currentTaskIdForProof);
       if (!currentTaskIdForProof) return;
 
       const token = localStorage.getItem('access_token');
@@ -492,7 +540,7 @@
       const proofImageFile = document.getElementById('proofImage').files[0];
 
       if (!proofText && !proofImageFile) {
-        alert('Please provide some proof (text or image) to proceed.');
+        showMessage('Please provide some proof (text or image) to proceed.', 'error');
         return;
       }
 
@@ -500,45 +548,44 @@
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Submitting...';
 
-      // Function to send data
-      const sendData = (imageBuffer = null) => {
-        fetch(`/api/tasks/${currentTaskIdForProof}/complete`, {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            proof_text: proofText,
-            proof_image: imageBuffer
-          })
-        })
-          .then(response => response.json())
-          .then(data => {
-            // Show success message
-            showMessage(data.message || 'Task submitted for review!', 'success');
-            closeProofModal();
-            loadTasks();
-          })
-          .catch(error => {
-            console.error('Error submitting proof:', error);
-            alert('Failed to submit task proof. Please try again.');
-          })
-          .finally(() => {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Submit for Review';
-          });
-      };
+      // Create FormData to handle file upload
+      const formData = new FormData();
+      formData.append('proof_text', proofText);
 
       if (proofImageFile) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          sendData(e.target.result);
-        };
-        reader.readAsDataURL(proofImageFile);
-      } else {
-        sendData();
+        formData.append('proof_image', proofImageFile);
       }
+
+      fetch(`/api/tasks/${currentTaskIdForProof}/complete`, {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          // Don't set Content-Type header, let browser set it with boundary
+        },
+        body: formData
+      })
+        .then(response => {
+          if (!response.ok) {
+            return response.json().then(data => {
+              throw new Error(data.message || 'Failed to submit proof');
+            });
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Show success message
+          showMessage(data.message || 'Task submitted for review!', 'success');
+          closeProofModal();
+          loadTasks();
+        })
+        .catch(error => {
+          console.error('Error submitting proof:', error);
+          showMessage('Failed to submit task proof. Please try again.', 'error');
+        })
+        .finally(() => {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Submit for Review';
+        });
     }
 
     function showMessage(text, type) {
@@ -551,7 +598,7 @@
         messageArea.className = 'fixed top-4 right-4 z-50';
         document.body.appendChild(messageArea);
       }
-      
+
       // Create message element
       const messageEl = document.createElement('div');
       messageEl.className = `inline-flex items-center gap-3 px-6 py-4 rounded-xl text-sm font-medium mb-2 ${type === 'success' ? 'bg-green-600/20 text-green-400 border border-green-500/50' : 'bg-red-600/20 text-red-400 border border-red-500/50'}`;
@@ -559,11 +606,11 @@
         <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-times-circle'}"></i>
         ${text}
       `;
-      
+
       // Add to message area
       messageArea.innerHTML = '';
       messageArea.appendChild(messageEl);
-      
+
       // Auto remove after 5 seconds
       setTimeout(() => {
         if (messageArea.contains(messageEl)) {
@@ -580,15 +627,15 @@
         return;
       }
 
-      // Prevent multiple simultaneous loads
-      if (window.isLoadingTasks) {
-        return;
+      const params = new URLSearchParams();
+      params.append('per_page', 100);
+      if (currentFilter !== 'all') {
+        params.append('category', currentFilter);
       }
-      window.isLoadingTasks = true;
 
       // Fetch all data in parallel but only update UI once
       Promise.all([
-        fetch('/api/tasks/', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
+        fetch(`/api/tasks/?${params.toString()}`, { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
           if (r.status === 401) { window.location.href = 'login.html'; throw new Error('Unauthorized'); }
           return r.json();
         }),
@@ -606,8 +653,8 @@
           if (tasksData.tasks) {
             allTasks = tasksData.tasks;
 
-            // Generate dynamic categories
-            const categories = [...new Set(allTasks.map(t => t.category).filter(c => c))];
+            // Generate dynamic categories from backend list if provided
+            const categories = tasksData.categories || [...new Set(allTasks.map(t => t.category).filter(c => c))];
             const tabContainer = document.getElementById('categoryTabs');
 
             // Keep All Tasks tab, but clear others
@@ -633,8 +680,8 @@
               tabContainer.appendChild(btn);
             });
 
-            // Re-apply current filter styling
-            filterTasks(currentFilter);
+            // Re-apply current filter styling without re-triggering loadTasks
+            filterTasks(currentFilter, true);
 
             const availableCount = tasksData.tasks.filter(t => t.user_status === 'available').length;
             const myTasksCount = tasksData.tasks.filter(t => ['in_progress', 'pending_review', 'completed'].includes(t.user_status)).length;

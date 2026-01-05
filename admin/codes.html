@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="../assets/logo2.png">
   <title>MyFigPoint - Reward Code Management</title>
 
   <!-- Tailwind + Inter Font -->
@@ -307,7 +308,8 @@
 
         <!-- Pagination -->
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8">
-          <p class="text-gray-600 dark:text-gray-400 text-center sm:text-left" id="paginationInfo">Showing 1 to 20 of 12,450 codes</p>
+          <p class="text-gray-600 dark:text-gray-400 text-center sm:text-left" id="paginationInfo">Showing 1 to 20 of
+            12,450 codes</p>
           <div class="flex gap-2" id="paginationContainer">
             <button onclick="prevPage()"
               class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
@@ -315,9 +317,12 @@
             </button>
             <!-- Pagination buttons will be populated dynamically -->
             <span id="paginationButtons" class="flex flex-wrap gap-1">
-              <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
-              <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">2</button>
-              <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">3</button>
+              <button
+                class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
+              <button
+                class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">2</button>
+              <button
+                class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">3</button>
             </span>
             <button onclick="nextPage()"
               class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
@@ -353,8 +358,8 @@
           <label class="block text-lg font-bold mb-2">Point Value per Code</label>
           <div class="relative">
             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">pts</span>
-            <input type="number" step="1" min="1" class="form-input w-full pl-10 pr-4 py-3 rounded-2xl"
-              id="pointValue" value="1" placeholder="Enter point value">
+            <input type="number" step="1" min="1" class="form-input w-full pl-10 pr-4 py-3 rounded-2xl" id="pointValue"
+              value="1" placeholder="Enter point value">
           </div>
           <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Each code will be worth 1 point ($0.30 USD)</p>
         </div>
@@ -535,7 +540,7 @@
 
             // Render codes
             renderCodes(data.codes);
-            
+
             // Update pagination info and controls
             updatePaginationControls(data);
           } else {
@@ -626,80 +631,80 @@
       currentPage = 1;
       loadCodes();
     }
-    
+
     function goToPage(page) {
       currentPage = page;
       loadCodes();
     }
-    
+
     function nextPage() {
       currentPage++;
       loadCodes();
     }
-    
+
     function prevPage() {
       if (currentPage > 1) {
         currentPage--;
         loadCodes();
       }
     }
-    
+
     function loadBatchOptions() {
       const token = localStorage.getItem('access_token');
       if (!token) {
         return;
       }
-      
+
       fetch('/api/admin/codes/stats', {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.batch_stats) {
-          const batchFilter = document.getElementById('batchFilter');
-          
-          // Clear and populate main batch filter
-          if (batchFilter) {
-            // Store the currently selected value to restore it after update
-            const currentSelection = batchFilter.value;
-            
-            // Clear existing options except the first one
-            while (batchFilter.children.length > 1) {
-              batchFilter.removeChild(batchFilter.lastChild);
-            }
-            
-            // Add batch options to main filter
-            data.batch_stats.forEach(batch => {
-              if (batch.batch_id) {  // Only add if batch_id exists
-                const option = document.createElement('option');
-                option.value = batch.batch_id;
-                option.textContent = `${batch.batch_id} (${batch.total} codes)`;
-                batchFilter.appendChild(option);
+        .then(response => response.json())
+        .then(data => {
+          if (data.batch_stats) {
+            const batchFilter = document.getElementById('batchFilter');
+
+            // Clear and populate main batch filter
+            if (batchFilter) {
+              // Store the currently selected value to restore it after update
+              const currentSelection = batchFilter.value;
+
+              // Clear existing options except the first one
+              while (batchFilter.children.length > 1) {
+                batchFilter.removeChild(batchFilter.lastChild);
               }
-            });
-            
-            // Restore previous selection if it still exists
-            batchFilter.value = currentSelection;
+
+              // Add batch options to main filter
+              data.batch_stats.forEach(batch => {
+                if (batch.batch_id) {  // Only add if batch_id exists
+                  const option = document.createElement('option');
+                  option.value = batch.batch_id;
+                  option.textContent = `${batch.batch_id} (${batch.total} codes)`;
+                  batchFilter.appendChild(option);
+                }
+              });
+
+              // Restore previous selection if it still exists
+              batchFilter.value = currentSelection;
+            }
           }
-        }
-      })
-      .catch(error => {
-        console.error('Error loading batch options:', error);
-      });
+        })
+        .catch(error => {
+          console.error('Error loading batch options:', error);
+        });
     }
-    
+
     function updatePaginationControls(data) {
       const totalPages = data.pages || 1;
       const currentPageNum = data.current_page || currentPage;
       const totalItems = data.total || 0;
       const perPage = 20; // This matches the per_page value in loadCodes
-      
+
       // Calculate the range of items being shown
       const startItem = (currentPageNum - 1) * perPage + 1;
       const endItem = Math.min(currentPageNum * perPage, totalItems);
-      
+
       // Update pagination info text
       const pageInfo = document.getElementById('paginationInfo');
       if (pageInfo) {
@@ -709,29 +714,29 @@
           pageInfo.textContent = `Showing ${startItem} to ${endItem} of ${totalItems.toLocaleString()} codes`;
         }
       }
-      
+
       // Generate pagination buttons
       const paginationButtons = document.getElementById('paginationButtons');
       if (paginationButtons && totalPages > 1) {
         let buttonsHTML = '';
-                
+
         // Calculate which pages to show
         const maxVisiblePages = 5; // Show at most 5 page buttons
         let startPage = Math.max(1, currentPageNum - Math.floor(maxVisiblePages / 2));
         let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-                
+
         // Adjust startPage if needed to show maxVisiblePages
         if (endPage - startPage + 1 < maxVisiblePages) {
           startPage = Math.max(1, endPage - maxVisiblePages + 1);
         }
-                
+
         // Generate page number buttons
         for (let i = startPage; i <= endPage; i++) {
           const activeClass = i === currentPageNum ? 'bg-primary text-white' : 'bg-card border border-border hover:bg-card/80';
           buttonsHTML += `
             <button onclick="goToPage(${i})" class="w-10 h-10 flex items-center justify-center rounded-xl ${activeClass} font-bold">${i}</button>`;
         }
-                
+
         paginationButtons.innerHTML = buttonsHTML;
       } else if (paginationButtons) {
         // If only one page, just show the current page
@@ -746,84 +751,84 @@
         window.location.href = '../frontend/login.html';
         return;
       }
-      
+
       fetch(`/api/admin/codes/${encodeURIComponent(code)}/details`, {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.code) {
-          const codeData = data.code;
-          
-          // Calculate USD value (1 point = $0.30)
-          const usdValue = codeData.point_value * 0.30;
-          
-          // Update the modal with real data
-          document.querySelector('#codeDetailsModal .font-mono.text-2xl.font-bold').textContent = codeData.code;
-          
-          // Update point value and USD value
-          document.querySelector('#codeDetailsModal .text-center:nth-child(1) .font-bold').textContent = `${codeData.point_value.toFixed(2)} pts`;
-          document.querySelector('#codeDetailsModal .text-center:nth-child(2) .font-bold').textContent = `$${usdValue.toFixed(2)}`;
-          
-          // Update batch ID
-          document.querySelector('#codeDetailsModal .p-4.bg-card:nth-child(1) .font-bold').textContent = codeData.batch_id || 'N/A';
-          
-          // Format and update creation date
-          const createdDate = new Date(codeData.created_at);
-          document.querySelector('#codeDetailsModal .p-4.bg-card:nth-child(2) .font-bold').textContent = createdDate.toLocaleDateString();
-          
-          // Update status
-          const statusElement = document.querySelector('#codeDetailsModal .p-4.bg-card:nth-child(3) .font-bold');
-          statusElement.innerHTML = codeData.is_used 
-            ? '<span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Used</span>'
-            : '<span class="bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold">Available</span>';
-          
-          // Clear usage details if not used
-          if (!codeData.is_used) {
-            document.querySelector('#codeDetailsModal .flex.items-center.gap-4.mb-4').style.display = 'none';
-            document.querySelector('.grid.grid-cols-2.gap-4.mt-6').style.display = 'none';
-          } else {
-            document.querySelector('#codeDetailsModal .flex.items-center.gap-4.mb-4').style.display = 'flex';
-            document.querySelector('.grid.grid-cols-2.gap-4.mt-6').style.display = 'grid';
-            
-            // Add user details if used
-            if (codeData.used_by_user) {
-              // Update user name and email
-              const userDiv = document.querySelector('#codeDetailsModal .flex.items-center.gap-4.mb-4');
-              if (userDiv) {
-                const nameElement = userDiv.querySelector('.font-bold');
-                const emailElement = userDiv.querySelector('.text-sm.text-gray-400');
-                
-                if (nameElement) nameElement.textContent = codeData.used_by_user.full_name;
-                if (emailElement) emailElement.textContent = codeData.used_by_user.email;
-              }
-              
-              // Format and update usage date
-              if (codeData.used_at) {
-                const usageDate = new Date(codeData.used_at);
-                const dateGrid = document.querySelector('#codeDetailsModal .grid.grid-cols-2.gap-4.mt-6');
-                if (dateGrid) {
-                  const dateElements = dateGrid.querySelectorAll('.font-bold');
-                  if (dateElements.length >= 2) {
-                    dateElements[0].textContent = usageDate.toLocaleDateString();
-                    dateElements[1].textContent = usageDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        .then(response => response.json())
+        .then(data => {
+          if (data.code) {
+            const codeData = data.code;
+
+            // Calculate USD value (1 point = $0.30)
+            const usdValue = codeData.point_value * 0.30;
+
+            // Update the modal with real data
+            document.querySelector('#codeDetailsModal .font-mono.text-2xl.font-bold').textContent = codeData.code;
+
+            // Update point value and USD value
+            document.querySelector('#codeDetailsModal .text-center:nth-child(1) .font-bold').textContent = `${codeData.point_value.toFixed(2)} pts`;
+            document.querySelector('#codeDetailsModal .text-center:nth-child(2) .font-bold').textContent = `$${usdValue.toFixed(2)}`;
+
+            // Update batch ID
+            document.querySelector('#codeDetailsModal .p-4.bg-card:nth-child(1) .font-bold').textContent = codeData.batch_id || 'N/A';
+
+            // Format and update creation date
+            const createdDate = new Date(codeData.created_at);
+            document.querySelector('#codeDetailsModal .p-4.bg-card:nth-child(2) .font-bold').textContent = createdDate.toLocaleDateString();
+
+            // Update status
+            const statusElement = document.querySelector('#codeDetailsModal .p-4.bg-card:nth-child(3) .font-bold');
+            statusElement.innerHTML = codeData.is_used
+              ? '<span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Used</span>'
+              : '<span class="bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold">Available</span>';
+
+            // Clear usage details if not used
+            if (!codeData.is_used) {
+              document.querySelector('#codeDetailsModal .flex.items-center.gap-4.mb-4').style.display = 'none';
+              document.querySelector('.grid.grid-cols-2.gap-4.mt-6').style.display = 'none';
+            } else {
+              document.querySelector('#codeDetailsModal .flex.items-center.gap-4.mb-4').style.display = 'flex';
+              document.querySelector('.grid.grid-cols-2.gap-4.mt-6').style.display = 'grid';
+
+              // Add user details if used
+              if (codeData.used_by_user) {
+                // Update user name and email
+                const userDiv = document.querySelector('#codeDetailsModal .flex.items-center.gap-4.mb-4');
+                if (userDiv) {
+                  const nameElement = userDiv.querySelector('.font-bold');
+                  const emailElement = userDiv.querySelector('.text-sm.text-gray-400');
+
+                  if (nameElement) nameElement.textContent = codeData.used_by_user.full_name;
+                  if (emailElement) emailElement.textContent = codeData.used_by_user.email;
+                }
+
+                // Format and update usage date
+                if (codeData.used_at) {
+                  const usageDate = new Date(codeData.used_at);
+                  const dateGrid = document.querySelector('#codeDetailsModal .grid.grid-cols-2.gap-4.mt-6');
+                  if (dateGrid) {
+                    const dateElements = dateGrid.querySelectorAll('.font-bold');
+                    if (dateElements.length >= 2) {
+                      dateElements[0].textContent = usageDate.toLocaleDateString();
+                      dateElements[1].textContent = usageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    }
                   }
                 }
               }
             }
+
+            document.getElementById('codeDetailsModal').classList.remove('hidden');
+          } else {
+            alert('Code not found: ' + (data.message || 'Unknown error'));
           }
-          
-          document.getElementById('codeDetailsModal').classList.remove('hidden');
-        } else {
-          alert('Code not found: ' + (data.message || 'Unknown error'));
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching code details:', error);
-        alert('Failed to fetch code details. Please try again.');
-      });
+        })
+        .catch(error => {
+          console.error('Error fetching code details:', error);
+          alert('Failed to fetch code details. Please try again.');
+        });
     }
 
     function deleteCode(code, codeId) {
@@ -866,31 +871,31 @@
         window.location.href = '../frontend/login.html';
         return;
       }
-      
+
       // Get selected batch from filter, or use 'all' if no specific batch is selected
       const batchFilter = document.getElementById('batchFilter').value;
       const batchId = batchFilter || 'all';
-      
+
       // Show loading state
       const originalButtons = document.querySelectorAll('button[onclick*="exportCodes"]');
       originalButtons.forEach(btn => {
         const originalText = btn.innerHTML;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Exporting...';
         btn.disabled = true;
-        
+
         // Store original HTML for later restoration
         btn.setAttribute('data-original', originalText);
       });
-      
+
       // Build the URL with appropriate parameters
       let url = `/api/admin/codes/export/${batchId}?format=${format}`;
-      
+
       // If batchId is 'all', we need to handle it differently
       if (batchId === 'all') {
         // Get search filters to potentially limit the export
         const searchQuery = document.getElementById('codeSearch').value;
         const statusFilter = document.getElementById('statusFilter').value;
-        
+
         if (searchQuery) {
           url += `&search=${encodeURIComponent(searchQuery)}`;
         }
@@ -898,100 +903,100 @@
           url += `&status=${encodeURIComponent(statusFilter)}`;
         }
       }
-      
+
       fetch(url, {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.message && data.message.includes('success')) {
-          alert('Export completed successfully!');
-        } else if (data.format) {
-          // Handle the exported data based on format
-          if (data.format === 'csv') {
-            // Create and download CSV file
-            const blob = new Blob([data.csv_data], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `MyFigPoint_Codes_${batchId}_${new Date().toISOString().slice(0, 10)}.csv`;
-            a.click();
-            window.URL.revokeObjectURL(url);
-            
-          } else if (data.format === 'pdf') {
-            // Decode base64 PDF and create blob for download
-            const binaryString = atob(data.pdf_data);
-            const bytes = new Uint8Array(binaryString.length);
-            for (let i = 0; i < binaryString.length; i++) {
-              bytes[i] = binaryString.charCodeAt(i);
+        .then(response => response.json())
+        .then(data => {
+          if (data.message && data.message.includes('success')) {
+            alert('Export completed successfully!');
+          } else if (data.format) {
+            // Handle the exported data based on format
+            if (data.format === 'csv') {
+              // Create and download CSV file
+              const blob = new Blob([data.csv_data], { type: 'text/csv' });
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `MyFigPoint_Codes_${batchId}_${new Date().toISOString().slice(0, 10)}.csv`;
+              a.click();
+              window.URL.revokeObjectURL(url);
+
+            } else if (data.format === 'pdf') {
+              // Decode base64 PDF and create blob for download
+              const binaryString = atob(data.pdf_data);
+              const bytes = new Uint8Array(binaryString.length);
+              for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+              }
+              const blob = new Blob([bytes], { type: 'application/pdf' });
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `MyFigPoint_Codes_${batchId}_${new Date().toISOString().slice(0, 10)}.pdf`;
+              a.click();
+              window.URL.revokeObjectURL(url);
+
+            } else if (data.format === 'word') {
+              // Decode base64 Word document and create blob for download
+              const binaryString = atob(data.word_data);
+              const bytes = new Uint8Array(binaryString.length);
+              for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+              }
+              const blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `MyFigPoint_Codes_${batchId}_${new Date().toISOString().slice(0, 10)}.docx`;
+              a.click();
+              window.URL.revokeObjectURL(url);
             }
-            const blob = new Blob([bytes], { type: 'application/pdf' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `MyFigPoint_Codes_${batchId}_${new Date().toISOString().slice(0, 10)}.pdf`;
-            a.click();
-            window.URL.revokeObjectURL(url);
-            
-          } else if (data.format === 'word') {
-            // Decode base64 Word document and create blob for download
-            const binaryString = atob(data.word_data);
-            const bytes = new Uint8Array(binaryString.length);
-            for (let i = 0; i < binaryString.length; i++) {
-              bytes[i] = binaryString.charCodeAt(i);
-            }
-            const blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `MyFigPoint_Codes_${batchId}_${new Date().toISOString().slice(0, 10)}.docx`;
-            a.click();
-            window.URL.revokeObjectURL(url);
+          } else {
+            alert('Export failed: ' + (data.message || 'Unknown error'));
           }
-        } else {
-          alert('Export failed: ' + (data.message || 'Unknown error'));
-        }
-      })
-      .catch(error => {
-        console.error('Export error:', error);
-        alert('Export failed. Please try again.');
-      })
-      .finally(() => {
-        // Restore button states
-        originalButtons.forEach(btn => {
-          btn.innerHTML = btn.getAttribute('data-original');
-          btn.disabled = false;
+        })
+        .catch(error => {
+          console.error('Export error:', error);
+          alert('Export failed. Please try again.');
+        })
+        .finally(() => {
+          // Restore button states
+          originalButtons.forEach(btn => {
+            btn.innerHTML = btn.getAttribute('data-original');
+            btn.disabled = false;
+          });
         });
-      });
     }
-    
+
     function exportAllCodes() {
       const token = localStorage.getItem('access_token');
       if (!token) {
         window.location.href = '../frontend/login.html';
         return;
       }
-      
+
       // Get selected batch from filter, or use 'all' if no specific batch is selected
       const batchFilter = document.getElementById('batchFilter').value;
       const batchId = batchFilter || 'all';
-      
+
       // Show loading state
       const exportAllButton = document.querySelector('button[onclick="exportAllCodes()"]');
       const originalText = exportAllButton.innerHTML;
       exportAllButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Exporting All...';
       exportAllButton.disabled = true;
-      
+
       // Store original HTML for later restoration
       exportAllButton.setAttribute('data-original', originalText);
-      
+
       // Define formats to export
       const formats = ['csv', 'pdf', 'word'];
       let completedExports = 0;
       let totalExports = formats.length;
-      
+
       // Function to download a file
       function downloadFile(data, format, batchId) {
         const date = new Date().toISOString().slice(0, 10);
@@ -1031,30 +1036,30 @@
           window.URL.revokeObjectURL(url);
         }
       }
-      
+
       // Function to process next export
       function processNextExport() {
         if (formats.length === 0) {
           // All exports completed
           alert(`All ${totalExports} formats exported successfully!`);
-          
+
           // Restore button state
           exportAllButton.innerHTML = exportAllButton.getAttribute('data-original');
           exportAllButton.disabled = false;
           return;
         }
-        
+
         const format = formats.shift();
-        
+
         // Build the URL with appropriate parameters
         let url = `/api/admin/codes/export/${batchId}?format=${format}`;
-        
+
         // If batchId is 'all', we need to handle it differently
         if (batchId === 'all') {
           // Get search filters to potentially limit the export
           const searchQuery = document.getElementById('codeSearch').value;
           const statusFilter = document.getElementById('statusFilter').value;
-          
+
           if (searchQuery) {
             url += `&search=${encodeURIComponent(searchQuery)}`;
           }
@@ -1062,155 +1067,155 @@
             url += `&status=${encodeURIComponent(statusFilter)}`;
           }
         }
-        
+
         fetch(url, {
           headers: {
             'Authorization': 'Bearer ' + token
           }
         })
-        .then(response => response.json())
-        .then(data => {
-          if (data.format) {
-            downloadFile(data, format, batchId);
-            completedExports++;
-          } else {
-            console.error(`Failed to export ${format} format:`, data.message || 'Unknown error');
-            alert(`Failed to export ${format.toUpperCase()} format: ${data.message || 'Unknown error'}`);
-          }
-        })
-        .catch(error => {
-          console.error(`Error exporting ${format} format:`, error);
-          alert(`Error exporting ${format.toUpperCase()} format. Please try again.`);
-        })
-        .finally(() => {
-          // Process next export
-          setTimeout(processNextExport, 500); // Small delay to prevent overwhelming the server
-        });
+          .then(response => response.json())
+          .then(data => {
+            if (data.format) {
+              downloadFile(data, format, batchId);
+              completedExports++;
+            } else {
+              console.error(`Failed to export ${format} format:`, data.message || 'Unknown error');
+              alert(`Failed to export ${format.toUpperCase()} format: ${data.message || 'Unknown error'}`);
+            }
+          })
+          .catch(error => {
+            console.error(`Error exporting ${format} format:`, error);
+            alert(`Error exporting ${format.toUpperCase()} format. Please try again.`);
+          })
+          .finally(() => {
+            // Process next export
+            setTimeout(processNextExport, 500); // Small delay to prevent overwhelming the server
+          });
       }
-      
+
       // Start processing exports
       processNextExport();
     }
-    
+
     function exportRecentBatch(format) {
       const token = localStorage.getItem('access_token');
       if (!token) {
         window.location.href = '../frontend/login.html';
         return;
       }
-      
+
       // Show loading state
       const exportButton = document.querySelector('button[onclick*="exportRecentBatch"]');
       const originalText = exportButton.innerHTML;
       exportButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Exporting...';
       exportButton.disabled = true;
-      
+
       // First, get the most recent batch ID
       fetch('/api/admin/codes/recent-batch', {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.batch_id) {
-          // Export the recent batch with the retrieved batch ID
-          exportCodesByBatch(data.batch_id, format, originalText);
-        } else {
-          alert('Failed to get recent batch: ' + (data.message || 'Unknown error'));
+        .then(response => response.json())
+        .then(data => {
+          if (data.batch_id) {
+            // Export the recent batch with the retrieved batch ID
+            exportCodesByBatch(data.batch_id, format, originalText);
+          } else {
+            alert('Failed to get recent batch: ' + (data.message || 'Unknown error'));
+            // Restore button state
+            exportButton.innerHTML = originalText;
+            exportButton.disabled = false;
+          }
+        })
+        .catch(error => {
+          console.error('Error getting recent batch:', error);
+          alert('Failed to get recent batch. Please try again.');
           // Restore button state
           exportButton.innerHTML = originalText;
           exportButton.disabled = false;
-        }
-      })
-      .catch(error => {
-        console.error('Error getting recent batch:', error);
-        alert('Failed to get recent batch. Please try again.');
-        // Restore button state
-        exportButton.innerHTML = originalText;
-        exportButton.disabled = false;
-      });
+        });
     }
-    
+
     function exportCodesByBatch(batchId, format, originalText) {
       const token = localStorage.getItem('access_token');
       if (!token) {
         window.location.href = '../frontend/login.html';
         return;
       }
-      
+
       // Show loading state - note: the button state is already set in the calling function
       const exportButton = document.querySelector('button[onclick*="exportRecentBatch"]');
-      
+
       // Build the URL with appropriate parameters
       const url = `/api/admin/codes/export/${batchId}?format=${format}`;
-      
+
       fetch(url, {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.format) {
-          // Handle the exported data based on format
-          if (data.format === 'csv') {
-            // Create and download CSV file
-            const blob = new Blob([data.csv_data], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `MyFigPoint_Recent_Batch_${batchId}_${new Date().toISOString().slice(0, 10)}.csv`;
-            a.click();
-            window.URL.revokeObjectURL(url);
-            
-          } else if (data.format === 'pdf') {
-            // Decode base64 PDF and create blob for download
-            const binaryString = atob(data.pdf_data);
-            const bytes = new Uint8Array(binaryString.length);
-            for (let i = 0; i < binaryString.length; i++) {
-              bytes[i] = binaryString.charCodeAt(i);
+        .then(response => response.json())
+        .then(data => {
+          if (data.format) {
+            // Handle the exported data based on format
+            if (data.format === 'csv') {
+              // Create and download CSV file
+              const blob = new Blob([data.csv_data], { type: 'text/csv' });
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `MyFigPoint_Recent_Batch_${batchId}_${new Date().toISOString().slice(0, 10)}.csv`;
+              a.click();
+              window.URL.revokeObjectURL(url);
+
+            } else if (data.format === 'pdf') {
+              // Decode base64 PDF and create blob for download
+              const binaryString = atob(data.pdf_data);
+              const bytes = new Uint8Array(binaryString.length);
+              for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+              }
+              const blob = new Blob([bytes], { type: 'application/pdf' });
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `MyFigPoint_Recent_Batch_${batchId}_${new Date().toISOString().slice(0, 10)}.pdf`;
+              a.click();
+              window.URL.revokeObjectURL(url);
+
+            } else if (data.format === 'word') {
+              // Decode base64 Word document and create blob for download
+              const binaryString = atob(data.word_data);
+              const bytes = new Uint8Array(binaryString.length);
+              for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+              }
+              const blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `MyFigPoint_Recent_Batch_${batchId}_${new Date().toISOString().slice(0, 10)}.docx`;
+              a.click();
+              window.URL.revokeObjectURL(url);
             }
-            const blob = new Blob([bytes], { type: 'application/pdf' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `MyFigPoint_Recent_Batch_${batchId}_${new Date().toISOString().slice(0, 10)}.pdf`;
-            a.click();
-            window.URL.revokeObjectURL(url);
-            
-          } else if (data.format === 'word') {
-            // Decode base64 Word document and create blob for download
-            const binaryString = atob(data.word_data);
-            const bytes = new Uint8Array(binaryString.length);
-            for (let i = 0; i < binaryString.length; i++) {
-              bytes[i] = binaryString.charCodeAt(i);
-            }
-            const blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `MyFigPoint_Recent_Batch_${batchId}_${new Date().toISOString().slice(0, 10)}.docx`;
-            a.click();
-            window.URL.revokeObjectURL(url);
+
+            alert(`Successfully exported recent batch ${batchId} as ${format.toUpperCase()}!`);
+          } else {
+            alert('Export failed: ' + (data.message || 'Unknown error'));
           }
-          
-          alert(`Successfully exported recent batch ${batchId} as ${format.toUpperCase()}!`);
-        } else {
-          alert('Export failed: ' + (data.message || 'Unknown error'));
-        }
-      })
-      .catch(error => {
-        console.error('Export error:', error);
-        alert('Export failed. Please try again.');
-      })
-      .finally(() => {
-        // Restore button state
-        exportButton.innerHTML = originalText;
-        exportButton.disabled = false;
-      });
+        })
+        .catch(error => {
+          console.error('Export error:', error);
+          alert('Export failed. Please try again.');
+        })
+        .finally(() => {
+          // Restore button state
+          exportButton.innerHTML = originalText;
+          exportButton.disabled = false;
+        });
     }
-    
+
     function exportSingleCode() {
       // Export functionality for single code would go here
       // For now, this could export the currently viewed code details
@@ -1227,16 +1232,16 @@
         window.location.href = '../frontend/login.html';
         return;
       }
-      
+
       // Get selected batch from filter
       const batchFilter = document.getElementById('batchFilter').value;
       const statusFilter = document.getElementById('statusFilter').value;
       const searchQuery = document.getElementById('codeSearch').value;
-      
+
       // Determine what we're exporting
       let exportType = "all codes";
       let batchId = "all";
-      
+
       if (batchFilter) {
         exportType = `codes from batch ${batchFilter}`;
         batchId = batchFilter;
@@ -1244,37 +1249,37 @@
         exportType = "filtered codes";
         batchId = "filtered"; // Use a special identifier for filtered results
       }
-      
+
       if (!confirm(`You are about to export ${exportType}. Continue?`)) {
         return;
       }
-      
+
       // Show loading state
       const exportCurrentButton = document.querySelector('button[onclick="exportCurrentSelection()"]');
       const originalText = exportCurrentButton.innerHTML;
       exportCurrentButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Exporting...';
       exportCurrentButton.disabled = true;
-      
+
       // Build the URL with appropriate parameters
       let url = `/api/admin/codes/export/${batchId}`;
-      
+
       // For filtered results (not a specific batch), we need to pass filters
       if (batchId === "filtered") {
         // We'll need to handle this differently - export based on current filters
         // For now, let's export all and apply filters on the backend
         url = `/api/admin/codes/export/all`;
-        
+
         const params = new URLSearchParams();
         params.append('format', 'csv'); // Default to CSV, user can change
-        
+
         if (searchQuery) params.append('search', searchQuery);
         if (statusFilter) params.append('status', statusFilter);
-        
+
         url += `?${params.toString()}`;
       } else {
         url += '?format=csv'; // Default to CSV
       }
-      
+
       // For this specific implementation, I'll create a prompt to select format
       const format = prompt("Enter export format (csv/pdf/word):", "csv");
       if (!format || !['csv', 'pdf', 'word'].includes(format.toLowerCase())) {
@@ -1283,81 +1288,229 @@
         exportCurrentButton.disabled = false;
         return;
       }
-      
+
       // Update URL with selected format
       url = url.replace(/format=\w+/, `format=${format}`);
-      
+
       fetch(url, {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.format) {
-          // Handle the exported data based on format
-          if (data.format === 'csv') {
-            // Create and download CSV file
-            const blob = new Blob([data.csv_data], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `MyFigPoint_Codes_${batchId}_${new Date().toISOString().slice(0, 10)}.csv`;
-            a.click();
-            window.URL.revokeObjectURL(url);
-            
-          } else if (data.format === 'pdf') {
-            // Decode base64 PDF and create blob for download
-            const binaryString = atob(data.pdf_data);
-            const bytes = new Uint8Array(binaryString.length);
-            for (let i = 0; i < binaryString.length; i++) {
-              bytes[i] = binaryString.charCodeAt(i);
+        .then(response => response.json())
+        .then(data => {
+          if (data.format) {
+            // Handle the exported data based on format
+            if (data.format === 'csv') {
+              // Create and download CSV file
+              const blob = new Blob([data.csv_data], { type: 'text/csv' });
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `MyFigPoint_Codes_${batchId}_${new Date().toISOString().slice(0, 10)}.csv`;
+              a.click();
+              window.URL.revokeObjectURL(url);
+
+            } else if (data.format === 'pdf') {
+              // Decode base64 PDF and create blob for download
+              const binaryString = atob(data.pdf_data);
+              const bytes = new Uint8Array(binaryString.length);
+              for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+              }
+              const blob = new Blob([bytes], { type: 'application/pdf' });
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `MyFigPoint_Codes_${batchId}_${new Date().toISOString().slice(0, 10)}.pdf`;
+              a.click();
+              window.URL.revokeObjectURL(url);
+
+            } else if (data.format === 'word') {
+              // Decode base64 Word document and create blob for download
+              const binaryString = atob(data.word_data);
+              const bytes = new Uint8Array(binaryString.length);
+              for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+              }
+              const blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `MyFigPoint_Codes_${batchId}_${new Date().toISOString().slice(0, 10)}.docx`;
+              a.click();
+              window.URL.revokeObjectURL(url);
             }
-            const blob = new Blob([bytes], { type: 'application/pdf' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `MyFigPoint_Codes_${batchId}_${new Date().toISOString().slice(0, 10)}.pdf`;
-            a.click();
-            window.URL.revokeObjectURL(url);
-            
-          } else if (data.format === 'word') {
-            // Decode base64 Word document and create blob for download
-            const binaryString = atob(data.word_data);
-            const bytes = new Uint8Array(binaryString.length);
-            for (let i = 0; i < binaryString.length; i++) {
-              bytes[i] = binaryString.charCodeAt(i);
-            }
-            const blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `MyFigPoint_Codes_${batchId}_${new Date().toISOString().slice(0, 10)}.docx`;
-            a.click();
-            window.URL.revokeObjectURL(url);
+
+            alert(`Successfully exported ${exportType} as ${format.toUpperCase()}!`);
+          } else {
+            alert('Export failed: ' + (data.message || 'Unknown error'));
           }
-          
-          alert(`Successfully exported ${exportType} as ${format.toUpperCase()}!`);
-        } else {
-          alert('Export failed: ' + (data.message || 'Unknown error'));
-        }
-      })
-      .catch(error => {
-        console.error('Export error:', error);
-        alert('Export failed. Please try again.');
-      })
-      .finally(() => {
-        // Restore button state
-        exportCurrentButton.innerHTML = originalText;
-        exportCurrentButton.disabled = false;
-      });
+        })
+        .catch(error => {
+          console.error('Export error:', error);
+          alert('Export failed. Please try again.');
+        })
+        .finally(() => {
+          // Restore button state
+          exportCurrentButton.innerHTML = originalText;
+          exportCurrentButton.disabled = false;
+        });
     }
 
     // Load codes when page loads
     document.addEventListener('DOMContentLoaded', function () {
       loadCodes();
       loadBatchOptions();  // Load batch options as well
+
+      // Handle Generate Codes Form Submission
+      const generateForm = document.getElementById('generateCodesForm');
+      if (generateForm) {
+        generateForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+
+          const token = localStorage.getItem('access_token');
+          if (!token) {
+            window.location.href = '../frontend/login.html';
+            return;
+          }
+
+          // Get form values
+          const count = document.getElementById('codeCount').value;
+          const pointValue = document.getElementById('pointValue').value;
+          const description = document.getElementById('batchDescription').value;
+
+          // Validate
+          if (count < 1 || count > 10000) {
+            alert('Please enter a number between 1 and 10,000');
+            return;
+          }
+
+          if (pointValue < 0.1) {
+            alert('Point value must be at least 0.1');
+            return;
+          }
+
+          // Show loading state
+          const submitBtn = generateForm.querySelector('button[type="submit"]');
+          const originalText = submitBtn.innerHTML;
+          submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+          submitBtn.disabled = true;
+
+          // Call API
+          fetch('/api/admin/codes/generate', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+              count: parseInt(count),
+              point_value: parseFloat(pointValue),
+              description: description
+            })
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.batch_id) {
+                // Success!
+                closeModal('generateCodesModal');
+
+                // Show success modal with batch details
+                showBatchSuccessModal(data);
+
+                // Refresh table and filters
+                loadCodes();
+                loadBatchOptions();
+
+                // Reset form
+                generateForm.reset();
+                document.getElementById('codeCount').value = 500;
+                document.getElementById('pointValue').value = 1;
+              } else {
+                alert('Failed to generate codes: ' + (data.message || 'Unknown error'));
+              }
+            })
+            .catch(error => {
+              console.error('Error generating codes:', error);
+              alert('An error occurred while generating codes');
+            })
+            .finally(() => {
+              // Restore button
+              submitBtn.innerHTML = originalText;
+              submitBtn.disabled = false;
+            });
+        });
+      }
     });
+
+    function showBatchSuccessModal(data) {
+      // Create modal if it doesn't exist, or update existing one
+      let modal = document.getElementById('batchSuccessModal');
+
+      if (!modal) {
+        // Create the modal HTML
+        const modalHtml = `
+          <div id="batchSuccessModal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+            <div class="bg-card rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-primary/20 shadow-2xl">
+              <div class="text-center mb-6">
+                <div class="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-check text-4xl text-green-500"></i>
+                </div>
+                <h2 class="text-3xl font-black text-white">Batch Generated!</h2>
+                <p class="text-gray-400 mt-2">Successfully created <span class="text-primary font-bold text-xl">${data.total_generated}</span> codes</p>
+              </div>
+              
+              <div class="bg-card/50 border border-border rounded-2xl p-6 mb-8">
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 border-b border-border pb-4">
+                  <div>
+                    <p class="text-sm text-gray-500 uppercase tracking-wider font-bold">Batch ID</p>
+                    <p class="text-2xl font-mono font-bold text-primary tracking-wide">${data.batch_id}</p>
+                  </div>
+                  <div class="flex gap-2">
+                    <button onclick="exportBatchFromModal('${data.batch_id}', 'csv')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl text-sm font-bold transition">
+                      <i class="fas fa-file-csv mr-2"></i> CSV
+                    </button>
+                    <button onclick="exportBatchFromModal('${data.batch_id}', 'pdf')" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-sm font-bold transition">
+                      <i class="fas fa-file-pdf mr-2"></i> PDF
+                    </button>
+                  </div>
+                </div>
+                
+                <h3 class="font-bold mb-3 flex items-center gap-2">
+                  <i class="fas fa-list-ol text-gray-400"></i> Preview (First 10 Codes)
+                </h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                  ${data.codes.map(code => `
+                    <div class="bg-background px-3 py-2 rounded-lg border border-border/50 text-center font-mono text-sm">
+                      ${code}
+                    </div>
+                  `).join('')}
+                </div>
+                ${data.total_generated > 10 ? `<p class="text-xs text-center text-gray-500 mt-3 italic">+ ${data.total_generated - 10} more codes...</p>` : ''}
+              </div>
+              
+              <button onclick="closeModal('batchSuccessModal')" class="w-full bg-primary hover:bg-orange-700 text-white py-4 rounded-2xl font-black text-lg shadow-lg hover:shadow-primary/20 transition transform hover:-translate-y-1">
+                Done
+              </button>
+            </div>
+          </div>
+        `;
+
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+      } else {
+        // Update existing modal (implementation similar to above logic if dynamically recreating content)
+        // For simplicity, we remove old and re-add new to ensure fresh data
+        modal.remove();
+        showBatchSuccessModal(data); // Recursively call to create new
+        return;
+      }
+    }
+
+    function exportBatchFromModal(batchId, format) {
+      // Reuse existing export logic 
+      exportCodesByBatch(batchId, format, '<i class="fas fa-download"></i>');
+    }
   </script>
   <script src="../assets/js/theme.js"></script>
 

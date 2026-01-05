@@ -4,9 +4,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="assets/logo2.png">
   <title>MyFigPoint Dashboard</title>
   <meta name="description"
     content="Manage your points, track earnings, and redeem rewards in your personalized dashboard." />
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#FD6606">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="MyFigPoint">
+  <link rel="apple-touch-icon" href="assets/logo.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/logo.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/logo.png">
 
   <!-- Tailwind CSS v3 -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -358,23 +367,23 @@
       if (token) {
         // Fetch all data in parallel to prevent race conditions and flickering
         Promise.all([
-          fetch('/api/auth/profile', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
+          fetch('/api/auth/profile?t=' + Date.now(), { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
             if (r.status === 401) { window.location.href = 'login.html'; throw new Error('Unauthorized'); }
             return r.json();
           }),
-          fetch('/api/points/balance', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
+          fetch('/api/points/balance?t=' + Date.now(), { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
             if (r.status === 401) { window.location.href = 'login.html'; throw new Error('Unauthorized'); }
             return r.json();
           }),
-          fetch('/api/transactions/summary', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
+          fetch('/api/transactions/summary?t=' + Date.now(), { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
             if (r.status === 401) { window.location.href = 'login.html'; throw new Error('Unauthorized'); }
             return r.json();
           }),
-          fetch('/api/transactions/?per_page=4', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
+          fetch('/api/transactions/?per_page=4&t=' + Date.now(), { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
             if (r.status === 401) { window.location.href = 'login.html'; throw new Error('Unauthorized'); }
             return r.json();
           }),
-          fetch('/api/tasks/?per_page=3', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
+          fetch('/api/tasks/?per_page=3&t=' + Date.now(), { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
             if (r.status === 401) { window.location.href = 'login.html'; throw new Error('Unauthorized'); }
             return r.json();
           })
@@ -509,7 +518,7 @@
       const token = localStorage.getItem('access_token');
       if (!token) return;
 
-      fetch('/api/notifications/?unread_only=true', {
+      fetch('/api/notifications/?unread_only=true&t=' + Date.now(), {
         headers: {
           'Authorization': 'Bearer ' + token
         }
@@ -588,6 +597,8 @@
     }
   </script>
   <script src="assets/js/theme.js"></script>
+
+
 
   <!-- Fixed Theme Toggle Button -->
   <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">

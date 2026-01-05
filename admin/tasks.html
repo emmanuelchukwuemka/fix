@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="../assets/logo2.png">
   <title>MyFigPoint - Task Management</title>
 
   <!-- Tailwind + Inter Font -->
@@ -164,6 +165,41 @@
           class="px-6 py-3 font-bold text-gray-600 dark:text-gray-400 hover:text-primary">
           Create Task
         </button>
+        <button onclick="switchTab('manage')" id="manage-tab"
+          class="px-6 py-3 font-bold text-gray-600 dark:text-gray-400 hover:text-primary">
+          Manage Tasks
+        </button>
+      </div>
+
+      <!-- Manage Tasks Tab -->
+      <div id="manage-tab-content" class="hidden">
+        <div class="card rounded-3xl p-8 mb-10">
+          <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+            <i class="fas fa-list text-primary"></i> All Created Tasks
+          </h2>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead class="border-b border-border">
+                <tr>
+                  <th class="pb-4">Task Info</th>
+                  <th class="pb-4">Category</th>
+                  <th class="pb-4">Reward</th>
+                  <th class="pb-4">Status</th>
+                  <th class="pb-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="manageTasksTable">
+                <tr>
+                  <td colspan="5" class="text-center py-10">
+                    <i class="fas fa-spinner fa-spin text-4xl text-primary"></i>
+                    <p class="mt-4">Loading tasks...</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       <!-- Pending Reviews Tab -->
@@ -375,10 +411,12 @@
           <p>Review and approve or reject this task submission</p>
         </div>
         <div class="flex gap-4">
-          <button id="rejectBtn" class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-xl font-bold transition flex items-center gap-2">
+          <button id="rejectBtn"
+            class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-xl font-bold transition flex items-center gap-2">
             <i class="fas fa-times"></i> Reject Task
           </button>
-          <button id="approveBtn" class="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-xl font-bold transition flex items-center gap-2">
+          <button id="approveBtn"
+            class="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-xl font-bold transition flex items-center gap-2">
             <i class="fas fa-check"></i> Approve Task
           </button>
         </div>
@@ -435,14 +473,140 @@
 
       currentTab = tab;
 
-      // Load data for the selected tab
       if (tab === 'pending') {
         loadTasks();
       } else if (tab === 'completed') {
         loadCompletedTasks();
       } else if (tab === 'rejected') {
         loadRejectedTasks();
+      } else if (tab === 'manage') {
+        loadManageTasks();
       }
+    }
+
+    function loadManageTasks() {
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const container = document.getElementById('manageTasksTable');
+      container.innerHTML = `
+        <tr>
+          <td colspan="5" class="text-center py-10">
+            <i class="fas fa-spinner fa-spin text-4xl text-primary"></i>
+            <p class="mt-4">Loading tasks...</p>
+          </td>
+        </tr>
+      `;
+
+      fetch('/api/tasks/admin?per_page=100', {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.tasks) {
+            renderManageTasks(data.tasks);
+          } else {
+            container.innerHTML = '<tr><td colspan="5" class="text-center py-10">No tasks found.</td></tr>';
+          }
+        })
+        .catch(error => {
+          console.error('Error loading manage tasks:', error);
+          container.innerHTML = '<tr><td colspan="5" class="text-center py-10 text-red-500">Failed to load tasks.</td></tr>';
+        });
+    }
+
+    function renderManageTasks(tasks) {
+      const container = document.getElementById('manageTasksTable');
+      if (tasks.length === 0) {
+        container.innerHTML = '<tr><td colspan="5" class="text-center py-10">No tasks found.</td></tr>';
+        return;
+      }
+
+      container.innerHTML = '';
+      tasks.forEach(task => {
+        const row = document.createElement('tr');
+        row.className = 'border-b border-border hover:bg-card/50';
+        row.innerHTML = `
+          <td class="py-4 px-2">
+            <div class="font-bold">${task.title}</div>
+            <div class="text-xs text-gray-500 line-clamp-1">${task.description}</div>
+          </td>
+          <td class="py-4 px-2">${task.category}</td>
+          <td class="py-4 px-2">
+            <div>$${task.reward_amount.toFixed(2)}</div>
+            <div class="text-xs text-primary">+${task.points_reward} pts</div>
+          </td>
+          <td class="py-4 px-2">
+            <span class="px-2 py-1 rounded-full text-xs font-bold ${task.is_active ? 'bg-green-600/20 text-green-400' : 'bg-red-600/20 text-red-400'}">
+              ${task.is_active ? 'Active' : 'Inactive'}
+            </span>
+          </td>
+          <td class="py-4 px-2 text-right">
+            <div class="flex justify-end gap-2">
+              <button onclick="toggleTaskStatus(${task.id}, ${!task.is_active})" class="p-2 hover:bg-primary/20 rounded-lg text-primary transition" title="${task.is_active ? 'Deactivate' : 'Activate'}">
+                <i class="fas ${task.is_active ? 'fa-toggle-on' : 'fa-toggle-off'} text-xl"></i>
+              </button>
+              <button onclick="deleteCreatedTask(${task.id})" class="p-2 hover:bg-red-600/20 rounded-lg text-red-400 transition" title="Delete">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function toggleTaskStatus(taskId, newStatus) {
+      const token = localStorage.getItem('access_token');
+      fetch(`/api/tasks/admin/${taskId}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ is_active: newStatus })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message && data.message.includes('success')) {
+            loadManageTasks();
+          } else {
+            alert('Failed to update task status');
+          }
+        })
+        .catch(error => {
+          console.error('Error updating task status:', error);
+          alert('Error updating task status');
+        });
+    }
+
+    function deleteCreatedTask(taskId) {
+      if (!confirm('Are you sure you want to delete this task? This action cannot be undone.')) return;
+
+      const token = localStorage.getItem('access_token');
+      fetch(`/api/tasks/admin/${taskId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message && data.message.includes('success')) {
+            loadManageTasks();
+          } else {
+            alert('Failed to delete task');
+          }
+        })
+        .catch(error => {
+          console.error('Error deleting task:', error);
+          alert('Error deleting task');
+        });
     }
 
     function applyFilters() {
@@ -1025,14 +1189,14 @@
     const CONVERSION_RATE = 0.30; // 1 point = 0.30 USD
 
     // Calculate USD when points change
-    taskPointsInput.addEventListener('input', function() {
+    taskPointsInput.addEventListener('input', function () {
       const points = parseFloat(this.value) || 0;
       const usd = points * CONVERSION_RATE;
       taskRewardInput.value = usd.toFixed(2);
     });
 
     // Calculate points when USD changes
-    taskRewardInput.addEventListener('input', function() {
+    taskRewardInput.addEventListener('input', function () {
       const usd = parseFloat(this.value) || 0;
       const points = usd / CONVERSION_RATE;
       taskPointsInput.value = Math.round(points);

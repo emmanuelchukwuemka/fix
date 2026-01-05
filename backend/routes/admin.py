@@ -1189,6 +1189,10 @@ def create_task():
         admin_user = User.query.get(current_user_id)
         
         data = request.get_json()
+        
+        # Ensure is_active is set to True by default if not provided
+        is_active = data.get('is_active', True)
+        
         task = Task(
             title=data.get('title'),
             description=data.get('description', ''),
@@ -1196,12 +1200,17 @@ def create_task():
             points_reward=int(data.get('points_reward', 0)),  # Ensure points is an integer
             category=data.get('category', 'General'),
             time_required=data.get('time_required', 0),
-            is_active=data.get('is_active', True),
+            is_active=is_active,
             requires_admin_verification=data.get('requires_admin_verification', False)  # New field
         )
         
         db.session.add(task)
         db.session.commit()
+        
+        # Refresh the task object to ensure all data is current
+        db.session.refresh(task)
+        
+        print(f"Task created successfully: {task.id} - {task.title}, is_active: {task.is_active}")  # Debug print
         
         return jsonify({
             'message': 'Task created successfully',
@@ -1209,6 +1218,8 @@ def create_task():
         }), 201
         
     except Exception as e:
+        db.session.rollback()  # Rollback in case of error
+        print(f"Error creating task: {str(e)}")  # Debug print
         return jsonify({'message': 'Failed to create task', 'error': str(e)}), 500
 
 @admin_bp.route('/tasks/<int:task_id>/update', methods=['POST'])
@@ -1234,12 +1245,19 @@ def update_task(task_id):
         
         db.session.commit()
         
+        # Refresh the task object to ensure all data is current
+        db.session.refresh(task)
+        
+        print(f"Task updated successfully: {task.id} - {task.title}, is_active: {task.is_active}")  # Debug print
+        
         return jsonify({
             'message': 'Task updated successfully',
             'task': task.to_dict()
         }), 200
         
     except Exception as e:
+        db.session.rollback()  # Rollback in case of error
+        print(f"Error updating task: {str(e)}")  # Debug print
         return jsonify({'message': 'Failed to update task', 'error': str(e)}), 500
 
 @admin_bp.route('/tasks/<int:task_id>/delete', methods=['DELETE'])
@@ -1256,7 +1274,11 @@ def delete_task(task_id):
         db.session.delete(task)
         db.session.commit()
         
+        print(f"Task deleted successfully: {task_id}")  # Debug print
+        
         return jsonify({'message': 'Task deleted successfully'}), 200
         
     except Exception as e:
+        db.session.rollback()  # Rollback in case of error
+        print(f"Error deleting task: {str(e)}")  # Debug print
         return jsonify({'message': 'Failed to delete task', 'error': str(e)}), 500

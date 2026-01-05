@@ -8,6 +8,9 @@ from backend.utils.decorators import partner_restricted
 from backend.utils.admin_auth import admin_required
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import re
+import os
+import time
+from werkzeug.utils import secure_filename
 from backend.models.notification import Notification, NotificationType
 
 tasks_bp = Blueprint('tasks', __name__)
@@ -19,18 +22,19 @@ def get_tasks():
         current_user_id = int(get_jwt_identity())
         category = request.args.get('category')
         page = request.args.get('page', 1, type=int)
-        per_page = request.args.get('per_page', 10, type=int)
-        
-        query = Task.query.filter_by(is_active=True).order_by(Task.created_at.desc())
         
         if category:
-            query = query.filter_by(category=category)
+            query = Task.query.filter_by(is_active=True, category=category).order_by(Task.created_at.desc())
+        else:
+            query = Task.query.filter_by(is_active=True).order_by(Task.created_at.desc())
         
+        per_page = request.args.get('per_page', 100, type=int)
         tasks = query.paginate(page=page, per_page=per_page, error_out=False)
         
-        # Get user's task status
-        user_task_map = {}
+        # Get user's task status - get ALL user tasks for this user (not just for the current page)
         user_tasks = UserTask.query.filter_by(user_id=current_user_id).all()
+        
+        user_task_map = {}
         for ut in user_tasks:
             user_task_map[ut.task_id] = ut.status
         
@@ -40,11 +44,16 @@ def get_tasks():
             task_dict['user_status'] = user_task_map.get(task.id, 'available')
             task_list.append(task_dict)
         
+        # Get all distinct categories for active tasks for the filter tabs
+        categories = db.session.query(Task.category).filter(Task.is_active == True).distinct().all()
+        category_list = [c[0] for c in categories if c[0]]
+        
         return jsonify({
             'tasks': task_list,
             'total': tasks.total,
             'pages': tasks.pages,
-            'current_page': page
+            'current_page': page,
+            'categories': category_list
         }), 200
         
     except Exception as e:
@@ -52,7 +61,6 @@ def get_tasks():
 
 @tasks_bp.route('/<int:task_id>/start', methods=['POST'])
 @jwt_required()
-@partner_restricted
 def start_task(task_id):
     try:
         current_user_id = int(get_jwt_identity())
@@ -64,19 +72,31 @@ def start_task(task_id):
         
         # Check if user already started this task
         user_task = UserTask.query.filter_by(user_id=current_user_id, task_id=task_id).first()
-        if user_task and user_task.status != 'available':
-            return jsonify({'message': 'Task already started or completed'}), 400
         
-        # Create or update user task
-        if not user_task:
+        if user_task:
+            if user_task.status == 'in_progress':
+                return jsonify({
+                    'message': 'Task already in progress',
+                    'task': task.to_dict(),
+                    'user_task': user_task.to_dict()
+                }), 200
+            
+            if user_task.status in ['available', 'rejected']:
+                user_task.status = 'in_progress'
+                user_task.updated_at = db.func.current_timestamp()
+            else:
+                return jsonify({
+                    'message': f'Task already {user_task.status.replace("_", " ")}',
+                    'current_status': user_task.status
+                }), 400
+        else:
+            # Create new user task
             user_task = UserTask(
                 user_id=current_user_id,
                 task_id=task_id,
                 status='in_progress'
             )
             db.session.add(user_task)
-        else:
-            user_task.status = 'in_progress'
         
         db.session.commit()
         
@@ -91,7 +111,6 @@ def start_task(task_id):
 
 @tasks_bp.route('/<int:task_id>/complete', methods=['POST'])
 @jwt_required()
-@partner_restricted
 def complete_task(task_id):
     try:
         current_user_id = int(get_jwt_identity())
@@ -112,9 +131,32 @@ def complete_task(task_id):
         if not user_task:
             return jsonify({'message': 'Task not started or already completed'}), 400
         
-        data = request.get_json() or {}
-        proof_text = data.get('proof_text', '')
-        proof_image = data.get('proof_image', '')
+        # Handle both JSON and form data (for file uploads)
+        if request.is_json:
+            data = request.get_json() or {}
+            proof_text = data.get('proof_text', '')
+            proof_image = data.get('proof_image', '')
+        else:
+            # Handle form data with file upload
+            proof_text = request.form.get('proof_text', '')
+            proof_image_file = request.files.get('proof_image')
+            proof_image = None
+            
+            if proof_image_file and proof_image_file.filename != '':
+                # Create upload directory if it doesn't exist
+                upload_dir = os.path.join('uploads', 'task_proofs')
+                os.makedirs(upload_dir, exist_ok=True)
+                
+                # Secure filename and save file
+                filename = secure_filename(proof_image_file.filename)
+                file_ext = os.path.splitext(filename)[1]
+                
+                # Create unique filename using user_id and timestamp
+                unique_filename = f"user_{current_user_id}_task_{task_id}_{int(time.time())}{file_ext}"
+                filepath = os.path.join(upload_dir, unique_filename)
+                
+                proof_image_file.save(filepath)
+                proof_image = f"/uploads/task_proofs/{unique_filename}"
         
         # Check if task requires admin verification
         if task.requires_admin_verification:
@@ -200,11 +242,14 @@ def create_task():
             category=data.get('category', 'General'),
             time_required=data.get('time_required', 0),
             is_active=data.get('is_active', True),
-            requires_admin_verification=data.get('requires_admin_verification', False)  # New field
+            requires_admin_verification=data.get('requires_admin_verification', False)
         )
         
         db.session.add(task)
         db.session.commit()
+        
+        # Refresh the task object to ensure all data is current
+        db.session.refresh(task)
         
         return jsonify({
             'message': 'Task created successfully',
@@ -212,6 +257,7 @@ def create_task():
         }), 201
         
     except Exception as e:
+        db.session.rollback()  # Rollback in case of error
         return jsonify({'message': 'Failed to create task', 'error': str(e)}), 500
 
 @tasks_bp.route('/admin/<int:task_id>', methods=['PUT'])
@@ -247,28 +293,48 @@ def update_task(task_id):
     except Exception as e:
         return jsonify({'message': 'Failed to update task', 'error': str(e)}), 500
 
-@tasks_bp.route('/admin/<int:task_id>', methods=['DELETE'])
+@tasks_bp.route('/admin/<int:task_id>', methods=['PUT', 'DELETE'])
 @admin_required
-def delete_task(task_id):
+def manage_task(task_id):
     try:
-        current_user_id = int(get_jwt_identity())
-        user = User.query.get(current_user_id)
-        
         task = Task.query.get(task_id)
         if not task:
             return jsonify({'message': 'Task not found'}), 404
-        
-        db.session.delete(task)
-        db.session.commit()
-        
-        return jsonify({'message': 'Task deleted successfully'}), 200
-        
+            
+        if request.method == 'DELETE':
+            # Check if any user_tasks are associated
+            user_tasks = UserTask.query.filter_by(task_id=task_id).all()
+            for ut in user_tasks:
+                db.session.delete(ut)
+            
+            db.session.delete(task)
+            db.session.commit()
+            return jsonify({'message': 'Task deleted successfully'}), 200
+            
+        if request.method == 'PUT':
+            data = request.get_json()
+            if 'is_active' in data:
+                task.is_active = data['is_active']
+            if 'title' in data:
+                task.title = data['title']
+            if 'description' in data:
+                task.description = data['description']
+            if 'reward_amount' in data:
+                task.reward_amount = float(data['reward_amount'])
+            if 'points_reward' in data:
+                task.points_reward = float(data['points_reward'])
+            if 'category' in data:
+                task.category = data['category']
+                
+            db.session.commit()
+            return jsonify({'message': 'Task updated successfully', 'task': task.to_dict()}), 200
+            
     except Exception as e:
-        return jsonify({'message': 'Failed to delete task', 'error': str(e)}), 500
+        return jsonify({'message': 'Operation failed', 'error': str(e)}), 500
 
 @tasks_bp.route('/admin', methods=['GET'])
 @admin_required
-def get_all_tasks():
+def get_all_tasks_for_admin():
     try:
         current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)
@@ -289,6 +355,8 @@ def get_all_tasks():
         tasks = query.order_by(Task.created_at.desc()).paginate(
             page=page, per_page=per_page, error_out=False
         )
+        
+        print(f"Admin fetching {len(tasks.items)} tasks, total: {tasks.total}")  # Debug print
         
         return jsonify({
             'tasks': [task.to_dict() for task in tasks.items],
