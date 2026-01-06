@@ -121,8 +121,6 @@
           <h1 class="text-2xl md:text-4xl font-bold text-primary">
             Refer Friends & Earn Big
           </h1>
-          <p class="text-gray-600 dark:text-gray-400 mt-2 text-sm md:text-base">Earn up to $50 + 500 pts per successful
-            referral!</p>
         </div>
       </div>
     </header>
@@ -207,19 +205,18 @@
         </div>
       </div>
 
-      <!-- Bonus Tier Progress -->
+      <!-- Tier Progress -->
       <div
         class="mt-12 bg-gradient-to-r from-primary/20 to-orange-600/20 border border-primary/30 rounded-3xl p-10 text-center">
-        <h3 class="text-3xl font-bold mb-6">Next Bonus Tier: Diamond (100 Referrals)</h3>
+        <h3 id="tierProgressTitle" class="text-3xl font-bold mb-6">Loading tier progress...</h3>
         <div class="relative h-12 bg-gray-700 rounded-full overflow-hidden mb-6">
-          <div
+          <div id="tierProgressBar"
             class="absolute inset-0 bg-gradient-to-r from-primary to-orange-600 h-full rounded-full flex items-center justify-end pr-8 text-xl font-bold"
-            style="width: 47%">
-            47 / 100
+            style="width: 0%">
+            0 / 0
           </div>
         </div>
-        <p class="text-xl text-gray-300">Unlock <strong class="text-primary">35% commission</strong> + <strong
-            class="text-yellow-400">VIP Support</strong> at Diamond!</p>
+        <p id="tierProgressMessage" class="text-xl text-gray-300">Loading next tier information...</p>
       </div>
     </main>
   </div>
@@ -312,32 +309,57 @@
 
       function updateTierProgress(count) {
         const tiers = [
-          { name: 'Bronze', req: 0, bonus: 5 },
-          { name: 'Silver', req: 10, bonus: 10 },
-          { name: 'Gold', req: 25, bonus: 20 },
-          { name: 'Platinum', req: 50, bonus: 30 },
-          { name: 'Diamond', req: 100, bonus: 35 }
+          { name: 'Bronze', req: 0 },
+          { name: 'Silver', req: 10 },
+          { name: 'Gold', req: 25 },
+          { name: 'Platinum', req: 50 },
+          { name: 'Diamond', req: 100 }
         ];
 
-        let nextTier = tiers.find(t => t.req > count) || tiers[tiers.length - 1];
-        let currentTier = [...tiers].reverse().find(t => t.req <= count) || tiers[0];
-
-        const progressHeader = document.querySelector('.mt-12 h3');
-        if (progressHeader) {
-          progressHeader.textContent = `Next Bonus Tier: ${nextTier.name} (${nextTier.req} Referrals)`;
+        let nextTier = tiers.find(t => t.req > count);
+        
+        // If user has reached the highest tier, show Diamond as current
+        if (!nextTier) {
+          nextTier = tiers[tiers.length - 1];
+          // Show user has reached the max tier
+          document.getElementById('tierProgressTitle').textContent = `You've reached ${nextTier.name} Tier!`;
+          document.getElementById('tierProgressBar').style.width = '100%';
+          document.getElementById('tierProgressBar').textContent = `${count} / ${nextTier.req}+`;
+          document.getElementById('tierProgressMessage').innerHTML = `Enjoy <strong class="text-yellow-400">VIP Support</strong> and all Diamond benefits!`;
+          return;
         }
+        
+        const referralsNeeded = nextTier.req - count;
+        
+        document.getElementById('tierProgressTitle').textContent = `${referralsNeeded} referrals to ${nextTier.name}`;
 
-        const bar = document.querySelector('.relative.h-12.bg-gray-700.rounded-full div');
+        const bar = document.getElementById('tierProgressBar');
         if (bar) {
           const percent = Math.min((count / nextTier.req) * 100, 100);
           bar.style.width = percent + '%';
           bar.textContent = `${count} / ${nextTier.req}`;
         }
 
-        const subText = document.querySelector('.mt-12 p');
-        if (subText) {
-          subText.innerHTML = `Unlock <strong class="text-primary">${nextTier.bonus}% commission</strong> + <strong class="text-yellow-400">VIP Support</strong> at ${nextTier.name}!`;
+        // Benefit-based messaging
+        let benefitMessage = '';
+        switch(nextTier.name) {
+          case 'Silver':
+            benefitMessage = 'Enjoy <strong class="text-yellow-400">VIP Support</strong> at Silver.';
+            break;
+          case 'Gold':
+            benefitMessage = 'Access <strong class="text-yellow-400">Premium Features</strong> at Gold.';
+            break;
+          case 'Platinum':
+            benefitMessage = 'Get <strong class="text-yellow-400">Priority Processing</strong> at Platinum.';
+            break;
+          case 'Diamond':
+            benefitMessage = 'Enjoy <strong class="text-yellow-400">VIP Support</strong> and <strong class="text-yellow-400">Exclusive Rewards</strong> at Diamond.';
+            break;
+          default:
+            benefitMessage = 'Reach the next tier for special benefits.';
         }
+        
+        document.getElementById('tierProgressMessage').innerHTML = benefitMessage;
       }
 
       // Fetch Referral List (Activity) - Using transactions endpoint filtered by referral

@@ -11,11 +11,12 @@ class RewardCode(db.Model):
     used_by = db.Column(db.Integer, db.ForeignKey('users.id'))  # User who redeemed the code
     used_at = db.Column(db.DateTime)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    batch_id = db.Column(db.String(50))  # To group codes from the same batch
+    batch_id = db.Column(db.Integer, db.ForeignKey('batches.id'), nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     # Relationships
     user = db.relationship('User', back_populates='codes')
+    batch = db.relationship('Batch', back_populates='codes')
     
     def __repr__(self):
         return f'<RewardCode {self.code}>'

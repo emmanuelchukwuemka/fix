@@ -72,9 +72,9 @@ function updateSidebar() {
     const savedAvatar = localStorage.getItem('userAvatar');
 
     // Support both user dashboard IDs and generic admin selectors
-    const nameEl = document.getElementById('sidebarUserName') || sidebar.querySelector('.font-semibold');
-    const emailEl = document.getElementById('sidebarUserEmail') || sidebar.querySelector('.text-gray-600') || sidebar.querySelector('.dark\\:text-gray-400');
-    const avatarEl = document.getElementById('sidebarAvatar') || sidebar.querySelector('img[alt="User"]');
+    const nameEl = document.getElementById('sidebarUserName') || document.getElementById('adminName') || sidebar.querySelector('.font-semibold');
+    const emailEl = document.getElementById('sidebarUserEmail') || document.getElementById('adminEmail') || sidebar.querySelector('.text-gray-600') || sidebar.querySelector('.dark\\:text-gray-400');
+    const avatarEl = document.getElementById('sidebarAvatar') || document.getElementById('adminAvatar') || sidebar.querySelector('img[alt="User"]');
 
     if (savedName && nameEl) {
       nameEl.textContent = savedName;

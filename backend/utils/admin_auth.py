@@ -20,6 +20,10 @@ def admin_required(f):
             if not user:
                 return jsonify({'message': 'User not found'}), 404
             
+            # Check if user is suspended
+            if user.is_suspended:
+                return jsonify({'message': 'Your account has been suspended. Please contact support for assistance.'}), 403
+            
             # Check if user is admin
             if user.role != UserRole.ADMIN:
                 return jsonify({'message': 'Admin access required'}), 403

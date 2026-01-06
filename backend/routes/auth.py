@@ -31,11 +31,12 @@ def register():
         # Hash password
         hashed_password = bcrypt.generate_password_hash(data.get('password')).decode('utf-8')
         
-        # Create user - only allow user or admin roles during registration
+        # Create user - allow user, partner, or admin roles during registration
         role = data.get('role', 'user')
-        if role == 'partner':
-            role = 'user'  # Force partner registrations to user role
+        if role not in ['user', 'partner', 'admin']:
+            role = 'user'  # Default to user if invalid role
         
+        # Create user with appropriate role
         user = User(
             full_name=data.get('full_name'),
             email=data.get('email'),
@@ -43,6 +44,10 @@ def register():
             role=UserRole(role),
             referral_code=generate_referral_code()
         )
+        
+        # If user is registering as a partner, set approval status
+        if role == 'partner':
+            user.is_approved = False  # Partners need admin approval
         
         # Set referral if provided
         referrer = None
@@ -56,10 +61,14 @@ def register():
         
         # Award referral bonus to referrer if applicable
         if referrer:
-            # Award 100 points as referral bonus (ensure integer)
-            bonus_points = max(1, int(100))  # Ensure at least 1 point and integer
+            # Award 1 point as referral bonus
+            bonus_points = 1
             referrer.points_balance += bonus_points
             referrer.total_points_earned += bonus_points
+            
+            # Update total earnings (1 point = 0.30)
+            bonus_amount = 0.30
+            referrer.total_earnings += bonus_amount
             
             # Create referral bonus transaction
             transaction = Transaction(
@@ -67,7 +76,7 @@ def register():
                 type=TransactionType.REFERRAL_BONUS,
                 status=TransactionStatus.COMPLETED,
                 description=f"Referral bonus for {user.full_name}",
-                amount=0,
+                amount=bonus_amount,
                 points_amount=bonus_points
             )
             
@@ -101,6 +110,10 @@ def login():
         if not user or not bcrypt.check_password_hash(user.password_hash, data.get('password')):
             return jsonify({'message': 'Invalid credentials'}), 401
         
+        # Check if user is suspended
+        if user.is_suspended:
+            return jsonify({'message': 'Your account has been suspended. Please contact support for assistance.'}), 403
+        
         # Create access token
         access_token = create_access_token(identity=str(user.id))
         
@@ -122,6 +135,10 @@ def get_profile():
         
         if not user:
             return jsonify({'message': 'User not found'}), 404
+            
+        # Check if user is suspended
+        if user.is_suspended:
+            return jsonify({'message': 'Your account has been suspended. Please contact support for assistance.'}), 403
             
         return jsonify({'user': user.to_dict()}), 200
         

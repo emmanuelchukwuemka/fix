@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,7 +9,8 @@
 
   <!-- Tailwind + Inter Font -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -32,7 +34,7 @@
     // Check if user is authenticated
     const token = localStorage.getItem('access_token');
     const userRole = localStorage.getItem('userRole');
-    
+
     // Redirect to login if not authenticated or not admin
     if (!token || userRole !== 'admin') {
       window.location.href = '/admin/login.html';
@@ -46,12 +48,17 @@
 
   <!-- Animated Background -->
   <div class="absolute inset-0 -z-10">
-    <div class="absolute top-10 left-10 w-96 h-96 bg-primary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse"></div>
-    <div class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse"></div>
+    <div
+      class="absolute top-10 left-10 w-96 h-96 bg-primary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse">
+    </div>
+    <div
+      class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse">
+    </div>
   </div>
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+  <aside id="sidebar"
+    class="fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
     <div class="p-6 border-b border-border">
       <div class="flex items-center gap-3">
         <img src="../assets/logo.png" alt="MyFigPoint Logo" class="w-12 h-12 rounded-full object-contain">
@@ -91,7 +98,8 @@
         <i class="fas fa-headset"></i>
         <span>Support Center</span>
       </a>
-      <a href="/admin/profiles" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="/admin/profiles"
+        class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-user-shield"></i>
         <span>Admin Panel</span>
       </a>
@@ -107,13 +115,15 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="User"
+          class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
           <p class="font-semibold">Admin User</p>
           <p class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
         </div>
       </div>
-      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+      <a href="#" onclick="logout()"
+        class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
         Logout
       </a>
     </div>
@@ -130,7 +140,8 @@
           Activities Overview
         </h1>
         <div class="flex items-center gap-4">
-          <button onclick="refreshActivities()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
+          <button onclick="refreshActivities()"
+            class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
             <i class="fas fa-sync-alt"></i> Refresh
           </button>
         </div>
@@ -140,7 +151,8 @@
     <main class="p-6 lg:p-10 max-w-7xl mx-auto">
       <!-- Stats Overview -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="card rounded-2xl p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 border border-green-500/30">
+        <div
+          class="card rounded-2xl p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 border border-green-500/30">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Total Earnings</p>
@@ -151,7 +163,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="card rounded-2xl p-6 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-blue-500/30">
           <div class="flex items-center justify-between">
             <div>
@@ -163,8 +175,9 @@
             </div>
           </div>
         </div>
-        
-        <div class="card rounded-2xl p-6 bg-gradient-to-br from-purple-600/20 to-pink-600/20 border border-purple-500/30">
+
+        <div
+          class="card rounded-2xl p-6 bg-gradient-to-br from-purple-600/20 to-pink-600/20 border border-purple-500/30">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Tasks Completed</p>
@@ -175,8 +188,9 @@
             </div>
           </div>
         </div>
-        
-        <div class="card rounded-2xl p-6 bg-gradient-to-br from-yellow-600/20 to-amber-600/20 border border-yellow-500/30">
+
+        <div
+          class="card rounded-2xl p-6 bg-gradient-to-br from-yellow-600/20 to-amber-600/20 border border-yellow-500/30">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Reward Codes Used</p>
@@ -226,7 +240,7 @@
             </div>
           </div>
         </div>
-        
+
         <!-- User Activity Chart -->
         <div class="card rounded-3xl p-6">
           <h3 class="text-xl font-bold mb-4">User Activity</h3>
@@ -248,9 +262,10 @@
             View All Activities
           </button>
         </div>
-        
+
         <div class="space-y-4">
-          <div class="flex items-start gap-4 p-4 bg-card border border-border rounded-2xl hover:border-primary transition">
+          <div
+            class="flex items-start gap-4 p-4 bg-card border border-border rounded-2xl hover:border-primary transition">
             <div class="w-12 h-12 bg-green-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
               <i class="fas fa-check text-green-500"></i>
             </div>
@@ -259,15 +274,17 @@
                 <h3 class="font-bold">User completed a survey task</h3>
                 <span class="text-sm text-gray-500">2 minutes ago</span>
               </div>
-              <p class="text-gray-600 dark:text-gray-400 mt-1">John Smith earned 500 points for completing the daily survey task</p>
+              <p class="text-gray-600 dark:text-gray-400 mt-1">John Smith earned 500 points for completing the daily
+                survey task</p>
               <div class="flex items-center gap-4 mt-3">
                 <span class="text-green-500 font-medium">+500 pts</span>
                 <span class="text-blue-500 font-medium">+$150.00</span>
               </div>
             </div>
           </div>
-          
-          <div class="flex items-start gap-4 p-4 bg-card border border-border rounded-2xl hover:border-primary transition">
+
+          <div
+            class="flex items-start gap-4 p-4 bg-card border border-border rounded-2xl hover:border-primary transition">
             <div class="w-12 h-12 bg-blue-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
               <i class="fas fa-user-plus text-blue-500"></i>
             </div>
@@ -282,8 +299,9 @@
               </div>
             </div>
           </div>
-          
-          <div class="flex items-start gap-4 p-4 bg-card border border-border rounded-2xl hover:border-primary transition">
+
+          <div
+            class="flex items-start gap-4 p-4 bg-card border border-border rounded-2xl hover:border-primary transition">
             <div class="w-12 h-12 bg-purple-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
               <i class="fas fa-gift text-purple-500"></i>
             </div>
@@ -299,8 +317,9 @@
               </div>
             </div>
           </div>
-          
-          <div class="flex items-start gap-4 p-4 bg-card border border-border rounded-2xl hover:border-primary transition">
+
+          <div
+            class="flex items-start gap-4 p-4 bg-card border border-border rounded-2xl hover:border-primary transition">
             <div class="w-12 h-12 bg-yellow-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
               <i class="fas fa-money-bill-wave text-yellow-500"></i>
             </div>
@@ -309,7 +328,8 @@
                 <h3 class="font-bold">Withdrawal request submitted</h3>
                 <span class="text-sm text-gray-500">32 minutes ago</span>
               </div>
-              <p class="text-gray-600 dark:text-gray-400 mt-1">Alice Brown requested withdrawal of 1,000 points ($300.00)</p>
+              <p class="text-gray-600 dark:text-gray-400 mt-1">Alice Brown requested withdrawal of 1,000 points
+                ($300.00)</p>
               <div class="flex items-center gap-4 mt-3">
                 <span class="text-yellow-500 font-medium">Pending Approval</span>
               </div>
@@ -322,11 +342,12 @@
       <div class="card rounded-3xl p-6">
         <div class="flex items-center justify-between mb-6">
           <h2 class="text-2xl font-bold">Task Management</h2>
-          <button onclick="createNewTask()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
+          <button onclick="createNewTask()"
+            class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
             <i class="fas fa-plus"></i> Create Task
           </button>
         </div>
-        
+
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="p-6 bg-card border border-border rounded-2xl">
             <div class="flex items-center gap-4 mb-4">
@@ -338,11 +359,12 @@
                 <p class="text-2xl font-bold text-blue-500">24</p>
               </div>
             </div>
-            <button onclick="manageActiveTasks()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl font-bold">
+            <button onclick="manageActiveTasks()"
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl font-bold">
               Manage Tasks
             </button>
           </div>
-          
+
           <div class="p-6 bg-card border border-border rounded-2xl">
             <div class="flex items-center gap-4 mb-4">
               <div class="w-12 h-12 bg-green-600/20 rounded-xl flex items-center justify-center">
@@ -353,11 +375,12 @@
                 <p class="text-2xl font-bold text-green-500">7</p>
               </div>
             </div>
-            <button onclick="reviewPendingTasks()" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-xl font-bold">
+            <button onclick="reviewPendingTasks()"
+              class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-xl font-bold">
               Review Tasks
             </button>
           </div>
-          
+
           <div class="p-6 bg-card border border-border rounded-2xl">
             <div class="flex items-center gap-4 mb-4">
               <div class="w-12 h-12 bg-purple-600/20 rounded-xl flex items-center justify-center">
@@ -368,7 +391,8 @@
                 <p class="text-2xl font-bold text-purple-500">$1,240.50</p>
               </div>
             </div>
-            <button onclick="distributeRewards()" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-xl font-bold">
+            <button onclick="distributeRewards()"
+              class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-xl font-bold">
               Distribute Rewards
             </button>
           </div>
@@ -389,18 +413,20 @@
           <i class="fas fa-times text-2xl"></i>
         </button>
       </div>
-      
+
       <form id="createTaskForm" class="space-y-6">
         <div>
           <label class="block text-lg font-bold mb-2">Task Title</label>
-          <input type="text" class="form-input w-full px-4 py-3 rounded-2xl" id="taskTitle" placeholder="Enter task title">
+          <input type="text" class="form-input w-full px-4 py-3 rounded-2xl" id="taskTitle"
+            placeholder="Enter task title">
         </div>
-        
+
         <div>
           <label class="block text-lg font-bold mb-2">Task Description</label>
-          <textarea class="form-input w-full px-4 py-3 rounded-2xl" id="taskDescription" rows="3" placeholder="Enter task description"></textarea>
+          <textarea class="form-input w-full px-4 py-3 rounded-2xl" id="taskDescription" rows="3"
+            placeholder="Enter task description"></textarea>
         </div>
-        
+
         <div>
           <label class="block text-lg font-bold mb-2">Task Category</label>
           <select class="form-input w-full px-4 py-3 rounded-2xl" id="taskCategory">
@@ -412,37 +438,43 @@
             <option value="other">Other</option>
           </select>
         </div>
-        
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label class="block text-lg font-bold mb-2">Points Reward</label>
-            <input type="number" step="0.01" min="0" class="form-input w-full px-4 py-3 rounded-2xl" id="pointsReward" placeholder="Enter points reward">
+            <input type="number" step="0.01" min="0" class="form-input w-full px-4 py-3 rounded-2xl" id="pointsReward"
+              placeholder="Enter points reward">
           </div>
-          
+
           <div>
             <label class="block text-lg font-bold mb-2">Cash Reward</label>
             <div class="relative">
               <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">$</span>
-              <input type="number" step="0.01" min="0" class="form-input w-full pl-10 pr-4 py-3 rounded-2xl" id="cashReward" placeholder="Enter cash reward">
+              <input type="number" step="0.01" min="0" class="form-input w-full pl-10 pr-4 py-3 rounded-2xl"
+                id="cashReward" placeholder="Enter cash reward">
             </div>
           </div>
         </div>
-        
+
         <div>
           <label class="block text-lg font-bold mb-2">Task Duration</label>
-          <input type="number" min="1" class="form-input w-full px-4 py-3 rounded-2xl" id="taskDuration" placeholder="Enter duration in days">
+          <input type="number" min="1" class="form-input w-full px-4 py-3 rounded-2xl" id="taskDuration"
+            placeholder="Enter duration in days">
         </div>
-        
+
         <div>
           <label class="block text-lg font-bold mb-2">Task Instructions</label>
-          <textarea class="form-input w-full px-4 py-3 rounded-2xl" id="taskInstructions" rows="4" placeholder="Enter detailed instructions for completing this task"></textarea>
+          <textarea class="form-input w-full px-4 py-3 rounded-2xl" id="taskInstructions" rows="4"
+            placeholder="Enter detailed instructions for completing this task"></textarea>
         </div>
-        
+
         <div class="flex gap-4 pt-4">
-          <button type="button" onclick="closeModal('createTaskModal')" class="flex-1 py-3 rounded-2xl border border-border font-bold hover:bg-card/80 transition">
+          <button type="button" onclick="closeModal('createTaskModal')"
+            class="flex-1 py-3 rounded-2xl border border-border font-bold hover:bg-card/80 transition">
             Cancel
           </button>
-          <button type="submit" class="flex-1 py-3 rounded-2xl bg-primary hover:bg-orange-700 text-white font-bold transition">
+          <button type="submit"
+            class="flex-1 py-3 rounded-2xl bg-primary hover:bg-orange-700 text-white font-bold transition">
             Create Task
           </button>
         </div>
@@ -470,48 +502,48 @@
         window.location.href = '../frontend/login.html';
         return;
       }
-      
+
       // Fetch dashboard statistics
       fetch('/api/admin/dashboard/stats', {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.stats) {
-          // Update stats
-          document.querySelectorAll('.text-3xl.font-bold')[0].textContent = `$${data.stats.total_earnings.toFixed(2)}`;
-          document.querySelectorAll('.text-3xl.font-bold')[1].textContent = data.stats.daily_active_users;
-          document.querySelectorAll('.text-3xl.font-bold')[2].textContent = data.stats.tasks_completed;
-          document.querySelectorAll('.text-3xl.font-bold')[3].textContent = data.stats.codes_used;
-        }
-      })
-      .catch(error => {
-        console.error('Error loading dashboard stats:', error);
-      });
-      
+        .then(response => response.json())
+        .then(data => {
+          if (data.stats) {
+            // Update stats
+            document.querySelectorAll('.text-3xl.font-bold')[0].textContent = `$${data.stats.total_earnings.toFixed(2)}`;
+            document.querySelectorAll('.text-3xl.font-bold')[1].textContent = data.stats.daily_active_users;
+            document.querySelectorAll('.text-3xl.font-bold')[2].textContent = data.stats.tasks_completed;
+            document.querySelectorAll('.text-3xl.font-bold')[3].textContent = data.stats.codes_used;
+          }
+        })
+        .catch(error => {
+          console.error('Error loading dashboard stats:', error);
+        });
+
       // Fetch recent activities
       fetch('/api/admin/activities/recent', {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.activities) {
-          renderActivities(data.activities);
-        }
-      })
-      .catch(error => {
-        console.error('Error loading activities:', error);
-      });
+        .then(response => response.json())
+        .then(data => {
+          if (data.activities) {
+            renderActivities(data.activities);
+          }
+        })
+        .catch(error => {
+          console.error('Error loading activities:', error);
+        });
     }
-    
+
     function renderActivities(activities) {
       const container = document.querySelector('.space-y-4');
       container.innerHTML = '';
-      
+
       if (activities.length === 0) {
         container.innerHTML = `
           <div class="text-center py-10">
@@ -521,19 +553,19 @@
         `;
         return;
       }
-      
+
       activities.forEach(activity => {
         const div = document.createElement('div');
         div.className = 'flex items-start gap-4 p-4 bg-card border border-border rounded-2xl hover:border-primary transition';
-        
+
         // Determine icon and color based on activity type
         let iconClass = '';
         let bgColor = '';
         let title = '';
         let description = '';
         let details = '';
-        
-        switch(activity.type) {
+
+        switch (activity.type) {
           case 'task_completion':
             iconClass = 'fa-check text-green-500';
             bgColor = 'bg-green-600/20';
@@ -575,7 +607,7 @@
             description = activity.description || 'Activity details';
             details = '';
         }
-        
+
         div.innerHTML = `
           <div class="w-12 h-12 ${bgColor} rounded-full flex items-center justify-center flex-shrink-0 mt-1">
             <i class="fas ${iconClass}"></i>
@@ -591,7 +623,7 @@
             </div>
           </div>
         `;
-        
+
         container.appendChild(div);
       });
     }
@@ -627,15 +659,15 @@
     }
 
     // Form submission for creating tasks
-    document.getElementById('createTaskForm').addEventListener('submit', function(e) {
+    document.getElementById('createTaskForm').addEventListener('submit', function (e) {
       e.preventDefault();
-      
+
       const token = localStorage.getItem('access_token');
       if (!token) {
         window.location.href = '../frontend/login.html';
         return;
       }
-      
+
       const formData = {
         title: document.getElementById('taskTitle').value,
         description: document.getElementById('taskDescription').value,
@@ -645,13 +677,13 @@
         time_required: parseInt(document.getElementById('taskDuration').value) || 0,
         instructions: document.getElementById('taskInstructions').value
       };
-      
+
       // Show loading state
       const submitButton = this.querySelector('button[type="submit"]');
       const originalText = submitButton.innerHTML;
       submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Creating...';
       submitButton.disabled = true;
-      
+
       fetch('/api/tasks/admin', {
         method: 'POST',
         headers: {
@@ -660,45 +692,46 @@
         },
         body: JSON.stringify(formData)
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.message && data.message.includes('success')) {
-          alert('Task created successfully!');
-          closeModal('createTaskModal');
-          // Reset form
-          this.reset();
-        } else {
-          alert('Failed to create task: ' + (data.message || 'Unknown error'));
-        }
-      })
-      .catch(error => {
-        console.error('Error creating task:', error);
-        alert('Failed to create task. Please try again.');
-      })
-      .finally(() => {
-        // Reset button
-        submitButton.innerHTML = originalText;
-        submitButton.disabled = false;
-      });
+        .then(response => response.json())
+        .then(data => {
+          if (data.message && data.message.includes('success')) {
+            alert('Task created successfully!');
+            closeModal('createTaskModal');
+            // Reset form
+            this.reset();
+          } else {
+            alert('Failed to create task: ' + (data.message || 'Unknown error'));
+          }
+        })
+        .catch(error => {
+          console.error('Error creating task:', error);
+          alert('Failed to create task. Please try again.');
+        })
+        .finally(() => {
+          // Reset button
+          submitButton.innerHTML = originalText;
+          submitButton.disabled = false;
+        });
     });
 
     // Close modals when clicking outside
-    window.onclick = function(event) {
+    window.onclick = function (event) {
       if (event.target.classList.contains('fixed') && event.target.classList.contains('inset-0')) {
         event.target.classList.add('hidden');
       }
     }
-    
+
     // Load activities when page loads
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       loadActivities();
     });
   </script>
   <script src="../assets/js/theme.js"></script>
-  
+
   <!-- Fixed Theme Toggle Button -->
   <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
     <i class="fas fa-moon"></i>
   </button>
 </body>
+
 </html>

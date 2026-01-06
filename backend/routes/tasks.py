@@ -143,20 +143,31 @@ def complete_task(task_id):
             proof_image = None
             
             if proof_image_file and proof_image_file.filename != '':
-                # Create upload directory if it doesn't exist
-                upload_dir = os.path.join('uploads', 'task_proofs')
-                os.makedirs(upload_dir, exist_ok=True)
-                
-                # Secure filename and save file
-                filename = secure_filename(proof_image_file.filename)
-                file_ext = os.path.splitext(filename)[1]
-                
-                # Create unique filename using user_id and timestamp
-                unique_filename = f"user_{current_user_id}_task_{task_id}_{int(time.time())}{file_ext}"
-                filepath = os.path.join(upload_dir, unique_filename)
-                
-                proof_image_file.save(filepath)
-                proof_image = f"/uploads/task_proofs/{unique_filename}"
+                try:
+                    # Validate file type
+                    allowed_extensions = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'bmp'}
+                    filename = secure_filename(proof_image_file.filename)
+                    file_ext = os.path.splitext(filename)[1].lower()
+                    
+                    # Check if the extension (without the dot) is in allowed extensions
+                    if not file_ext or file_ext[1:] not in allowed_extensions:  # Remove the dot from extension
+                        return jsonify({'message': f'Invalid file type. Allowed types: {", ".join(allowed_extensions)}'}), 400
+                    
+                    # Create upload directory if it doesn't exist (using absolute path)
+                    import os
+                    project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+                    upload_dir = os.path.join(project_root, 'uploads', 'task_proofs')
+                    os.makedirs(upload_dir, exist_ok=True)
+                    
+                    # Create unique filename using user_id and timestamp
+                    unique_filename = f"user_{current_user_id}_task_{task_id}_{int(time.time())}{file_ext}"
+                    filepath = os.path.join(upload_dir, unique_filename)
+                    
+                    proof_image_file.save(filepath)
+                    proof_image = f"/uploads/task_proofs/{unique_filename}"
+                except Exception as e:
+                    print(f"Error saving proof image: {str(e)}")
+                    return jsonify({'message': f'Failed to save proof image: {str(e)}'}), 500
         
         # Check if task requires admin verification
         if task.requires_admin_verification:
@@ -183,7 +194,9 @@ def complete_task(task_id):
             return jsonify({
                 'message': 'Task submitted for admin review',
                 'status': 'pending_review',
-                'task': task.to_dict()
+                'task': task.to_dict(),
+                'proof_image': proof_image,
+                'proof_text': proof_text
             }), 200
         else:
             # For regular tasks, proceed with immediate completion
@@ -594,7 +607,8 @@ def admin_complete_task(task_id):
             'message': 'Task completed and reward awarded successfully',
             'points_awarded': task.points_reward,
             'reward_awarded': task.reward_amount,
-            'user_notified': True
+            'user_notified': True,
+            'user_task': user_task.to_dict()
         }), 200
         
     except Exception as e:
@@ -722,7 +736,8 @@ def admin_reject_task(user_task_id):
         
         return jsonify({
             'message': 'Task rejected successfully',
-            'user_notified': True
+            'user_notified': True,
+            'user_task': user_task.to_dict()
         }), 200
         
     except Exception as e:

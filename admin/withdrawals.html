@@ -115,7 +115,7 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img id="adminAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin"
+        <img id="adminAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="User"
           class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
           <p id="adminName" class="font-semibold">Admin User</p>
@@ -380,10 +380,21 @@
                   <p class="text-sm text-gray-600 dark:text-gray-400">Account Number</p>
                   <p id="accountNumber" class="font-bold">-</p>
                 </div>
-
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Routing Number</p>
                   <p id="routingNumber" class="font-bold">-</p>
+                </div>
+                <div>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">SWIFT Code</p>
+                  <p id="swiftCode" class="font-bold">-</p>
+                </div>
+                <div>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">Account Type</p>
+                  <p id="accountType" class="font-bold capitalize">-</p>
+                </div>
+                <div class="md:col-span-2">
+                  <p class="text-sm text-gray-600 dark:text-gray-400">Bank Address</p>
+                  <p id="bankAddress" class="font-bold">-</p>
                 </div>
               </div>
             </div>
@@ -695,8 +706,11 @@
       // Banking information (from user profile)
       document.getElementById('bankName').textContent = user.bank_name || '-';
       document.getElementById('accountHolder').textContent = user.account_name || '-';
-      document.getElementById('accountNumber').textContent = user.account_number ? `**** **** **** ${user.account_number.slice(-4)}` : '-';
-      document.getElementById('routingNumber').textContent = '-';
+      document.getElementById('accountNumber').textContent = user.account_number || '-';
+      document.getElementById('routingNumber').textContent = user.routing_number || '-';
+      document.getElementById('swiftCode').textContent = user.swift_code || '-';
+      document.getElementById('accountType').textContent = user.account_type || '-';
+      document.getElementById('bankAddress').textContent = user.bank_address || '-';
 
       // Status
       let statusClass = '';

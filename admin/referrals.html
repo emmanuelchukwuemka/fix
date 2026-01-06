@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +8,8 @@
 
   <!-- Tailwind + Inter Font -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -31,7 +33,7 @@
     // Check if user is authenticated
     const token = localStorage.getItem('access_token');
     const userRole = localStorage.getItem('userRole');
-    
+
     // Redirect to login if not authenticated or not admin
     if (!token || userRole !== 'admin') {
       window.location.href = '/admin/';
@@ -45,12 +47,17 @@
 
   <!-- Animated Background -->
   <div class="absolute inset-0 -z-10">
-    <div class="absolute top-10 left-10 w-96 h-96 bg-primary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse"></div>
-    <div class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse"></div>
+    <div
+      class="absolute top-10 left-10 w-96 h-96 bg-primary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse">
+    </div>
+    <div
+      class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse">
+    </div>
   </div>
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+  <aside id="sidebar"
+    class="fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
     <div class="p-6 border-b border-border">
       <div class="flex items-center gap-3">
         <img src="../assets/logo.png" alt="MyFigPoint Logo" class="w-12 h-12 rounded-full object-contain">
@@ -90,7 +97,8 @@
         <i class="fas fa-headset"></i>
         <span>Support Center</span>
       </a>
-      <a href="/admin/profiles" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
+      <a href="/admin/profiles"
+        class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-user-shield"></i>
         <span>Admin Panel</span>
       </a>
@@ -106,13 +114,15 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin" class="w-12 h-12 rounded-full ring-2 ring-primary">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="User"
+          class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
           <p class="font-semibold">Admin User</p>
           <p class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
         </div>
       </div>
-      <a href="#" onclick="logout()" class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
+      <a href="#" onclick="logout()"
+        class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
         Logout
       </a>
     </div>
@@ -129,10 +139,12 @@
           Referral Management
         </h1>
         <div class="flex items-center gap-4">
-          <button onclick="awardBulkBonuses()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
+          <button onclick="awardBulkBonuses()"
+            class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
             <i class="fas fa-gift"></i> Bulk Bonuses
           </button>
-          <button onclick="refreshReferrals()" class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
+          <button onclick="refreshReferrals()"
+            class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
             <i class="fas fa-sync-alt"></i> Refresh
           </button>
         </div>
@@ -142,7 +154,8 @@
     <main class="p-6 lg:p-10 max-w-7xl mx-auto">
       <!-- Stats Overview -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="card rounded-2xl p-6 bg-gradient-to-br from-indigo-600/20 to-purple-600/20 border border-indigo-500/30">
+        <div
+          class="card rounded-2xl p-6 bg-gradient-to-br from-indigo-600/20 to-purple-600/20 border border-indigo-500/30">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Total Referrals</p>
@@ -153,8 +166,9 @@
             </div>
           </div>
         </div>
-        
-        <div class="card rounded-2xl p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 border border-green-500/30">
+
+        <div
+          class="card rounded-2xl p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 border border-green-500/30">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Referral Earnings</p>
@@ -165,7 +179,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="card rounded-2xl p-6 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-blue-500/30">
           <div class="flex items-center justify-between">
             <div>
@@ -177,8 +191,9 @@
             </div>
           </div>
         </div>
-        
-        <div class="card rounded-2xl p-6 bg-gradient-to-br from-yellow-600/20 to-amber-600/20 border border-yellow-500/30">
+
+        <div
+          class="card rounded-2xl p-6 bg-gradient-to-br from-yellow-600/20 to-amber-600/20 border border-yellow-500/30">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-gray-600 dark:text-gray-400">Conversion Rate</p>
@@ -197,23 +212,26 @@
           <div>
             <label class="block text-sm font-bold mb-2">Search Referrers</label>
             <div class="relative">
-              <input type="text" id="referrerSearch" class="form-input w-full px-4 py-3 rounded-2xl pl-10" placeholder="Name or email...">
+              <input type="text" id="referrerSearch" class="form-input w-full px-4 py-3 rounded-2xl pl-10"
+                placeholder="Name or email...">
               <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
             </div>
           </div>
-          
+
           <div>
             <label class="block text-sm font-bold mb-2">Date Range</label>
             <input type="date" class="form-input w-full px-4 py-3 rounded-2xl" id="dateFrom">
           </div>
-          
+
           <div>
             <label class="block text-sm font-bold mb-2">Min Referrals</label>
-            <input type="number" min="0" class="form-input w-full px-4 py-3 rounded-2xl" id="minReferrals" placeholder="Minimum referrals">
+            <input type="number" min="0" class="form-input w-full px-4 py-3 rounded-2xl" id="minReferrals"
+              placeholder="Minimum referrals">
           </div>
-          
+
           <div class="flex items-end">
-            <button onclick="applyFilters()" class="w-full bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
+            <button onclick="applyFilters()"
+              class="w-full bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
               Apply Filters
             </button>
           </div>
@@ -233,13 +251,14 @@
             </button>
           </div>
         </div>
-        
+
         <div class="bg-card border border-border rounded-2xl p-6 min-h-[400px] flex items-center justify-center">
           <div class="text-center">
             <i class="fas fa-sitemap text-5xl text-primary mb-4"></i>
             <h3 class="text-xl font-bold mb-2">Referral Network Visualization</h3>
             <p class="text-gray-600 dark:text-gray-400 mb-4">Interactive visualization of user referral connections</p>
-            <button onclick="viewFullTree()" class="bg-primary hover:bg-orange-700 text-white px-6 py-3 rounded-2xl font-bold">
+            <button onclick="viewFullTree()"
+              class="bg-primary hover:bg-orange-700 text-white px-6 py-3 rounded-2xl font-bold">
               View Full Network
             </button>
           </div>
@@ -254,7 +273,7 @@
             <p class="text-lg font-bold">Total Referrers: <span id="totalReferrersCount">1,842</span></p>
           </div>
         </div>
-        
+
         <div class="overflow-x-auto">
           <table class="w-full">
             <thead>
@@ -272,7 +291,8 @@
               <tr class="border-b border-border hover:bg-card/50">
                 <td class="py-4">
                   <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-10 h-10 rounded-full" alt="User">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-10 h-10 rounded-full"
+                      alt="User">
                     <div>
                       <p class="font-bold">Sarah Johnson</p>
                       <p class="text-sm text-gray-600 dark:text-gray-400">sarah.j@example.com</p>
@@ -292,11 +312,12 @@
                   </button>
                 </td>
               </tr>
-              
+
               <tr class="border-b border-border hover:bg-card/50">
                 <td class="py-4">
                   <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" class="w-10 h-10 rounded-full" alt="User">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" class="w-10 h-10 rounded-full"
+                      alt="User">
                     <div>
                       <p class="font-bold">John Smith</p>
                       <p class="text-sm text-gray-600 dark:text-gray-400">john.smith@example.com</p>
@@ -316,11 +337,12 @@
                   </button>
                 </td>
               </tr>
-              
+
               <tr class="border-b border-border hover:bg-card/50">
                 <td class="py-4">
                   <div class="flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mike" class="w-10 h-10 rounded-full" alt="User">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mike" class="w-10 h-10 rounded-full"
+                      alt="User">
                     <div>
                       <p class="font-bold">Mike Thompson</p>
                       <p class="text-sm text-gray-600 dark:text-gray-400">mike.t@example.com</p>
@@ -343,18 +365,23 @@
             </tbody>
           </table>
         </div>
-        
+
         <!-- Pagination -->
         <div class="flex items-center justify-between mt-8">
           <p class="text-gray-600 dark:text-gray-400">Showing 1 to 3 of 1,842 referrers</p>
           <div class="flex gap-2">
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
               <i class="fas fa-chevron-left"></i>
             </button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">2</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">3</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">2</button>
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">3</button>
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
               <i class="fas fa-chevron-right"></i>
             </button>
           </div>
@@ -375,7 +402,7 @@
           <i class="fas fa-times text-2xl"></i>
         </button>
       </div>
-      
+
       <form id="awardBonusForm" class="space-y-6">
         <div>
           <label class="block text-lg font-bold mb-2">Select Referrer</label>
@@ -386,46 +413,52 @@
             <option value="3">Mike Thompson (76 referrals)</option>
           </select>
         </div>
-        
+
         <div>
           <label class="block text-lg font-bold mb-2">Bonus Type</label>
           <div class="grid grid-cols-2 gap-4">
             <label class="flex items-center gap-3 p-4 bg-card border border-border rounded-2xl cursor-pointer">
               <input type="radio" name="bonusType" value="points" checked class="hidden peer">
-              <div class="w-6 h-6 rounded-full border-2 border-gray-400 peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center">
+              <div
+                class="w-6 h-6 rounded-full border-2 border-gray-400 peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center">
                 <i class="fas fa-check text-white text-xs"></i>
               </div>
               <span class="font-bold">Points</span>
             </label>
-            
+
             <label class="flex items-center gap-3 p-4 bg-card border border-border rounded-2xl cursor-pointer">
               <input type="radio" name="bonusType" value="cash" class="hidden peer">
-              <div class="w-6 h-6 rounded-full border-2 border-gray-400 peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center">
+              <div
+                class="w-6 h-6 rounded-full border-2 border-gray-400 peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center">
                 <i class="fas fa-check text-white text-xs"></i>
               </div>
               <span class="font-bold">Cash</span>
             </label>
           </div>
         </div>
-        
+
         <div>
           <label class="block text-lg font-bold mb-2">Amount</label>
           <div class="relative">
             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" id="amountPrefix">pts</span>
-            <input type="number" step="0.01" min="0" class="form-input w-full pl-14 pr-4 py-3 rounded-2xl" id="bonusAmount" placeholder="Enter bonus amount">
+            <input type="number" step="0.01" min="0" class="form-input w-full pl-14 pr-4 py-3 rounded-2xl"
+              id="bonusAmount" placeholder="Enter bonus amount">
           </div>
         </div>
-        
+
         <div>
           <label class="block text-lg font-bold mb-2">Reason (Optional)</label>
-          <textarea class="form-input w-full px-4 py-3 rounded-2xl" id="bonusReason" rows="3" placeholder="Enter reason for bonus"></textarea>
+          <textarea class="form-input w-full px-4 py-3 rounded-2xl" id="bonusReason" rows="3"
+            placeholder="Enter reason for bonus"></textarea>
         </div>
-        
+
         <div class="flex gap-4 pt-4">
-          <button type="button" onclick="closeModal('awardBonusModal')" class="flex-1 py-3 rounded-2xl border border-border font-bold hover:bg-card/80 transition">
+          <button type="button" onclick="closeModal('awardBonusModal')"
+            class="flex-1 py-3 rounded-2xl border border-border font-bold hover:bg-card/80 transition">
             Cancel
           </button>
-          <button type="submit" class="flex-1 py-3 rounded-2xl bg-primary hover:bg-orange-700 text-white font-bold transition">
+          <button type="submit"
+            class="flex-1 py-3 rounded-2xl bg-primary hover:bg-orange-700 text-white font-bold transition">
             Award Bonus
           </button>
         </div>
@@ -442,85 +475,93 @@
           <i class="fas fa-times text-2xl"></i>
         </button>
       </div>
-      
+
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <!-- Referrer Info -->
         <div class="md:col-span-1">
           <div class="text-center mb-6">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-24 h-24 rounded-full mx-auto mb-4" alt="User">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-24 h-24 rounded-full mx-auto mb-4"
+              alt="User">
             <h3 class="text-xl font-bold">Sarah Johnson</h3>
             <p class="text-gray-600 dark:text-gray-400">sarah.j@example.com</p>
             <div class="mt-3">
-              <span class="bg-indigo-600/20 text-indigo-500 px-3 py-1 rounded-full text-sm font-bold">Top Referrer</span>
+              <span class="bg-indigo-600/20 text-indigo-500 px-3 py-1 rounded-full text-sm font-bold">Top
+                Referrer</span>
             </div>
           </div>
-          
+
           <div class="space-y-4">
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Member Since</p>
               <p class="font-bold">March 22, 2024</p>
             </div>
-            
+
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Referral Code</p>
               <p class="font-mono font-bold">SARAH7XK</p>
             </div>
-            
+
             <div class="p-4 bg-card border border-border rounded-2xl">
               <p class="text-sm text-gray-600 dark:text-gray-400">Total Referrals</p>
               <p class="font-bold">142</p>
             </div>
           </div>
         </div>
-        
+
         <!-- Referral Stats -->
         <div class="md:col-span-2">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div class="p-6 bg-gradient-to-br from-indigo-600/20 to-purple-600/20 rounded-2xl border border-indigo-500/30">
+            <div
+              class="p-6 bg-gradient-to-br from-indigo-600/20 to-purple-600/20 rounded-2xl border border-indigo-500/30">
               <p class="text-gray-600 dark:text-gray-400">Total Referral Earnings</p>
               <p class="text-3xl font-bold mt-2">$426.00</p>
             </div>
-            
-            <div class="p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 rounded-2xl border border-green-500/30">
+
+            <div
+              class="p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 rounded-2xl border border-green-500/30">
               <p class="text-gray-600 dark:text-gray-400">Conversion Rate</p>
               <p class="text-3xl font-bold mt-2">32.5%</p>
             </div>
-            
+
             <div class="p-6 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 rounded-2xl border border-blue-500/30">
               <p class="text-gray-600 dark:text-gray-400">Active Referrals</p>
               <p class="text-3xl font-bold mt-2">118</p>
             </div>
-            
-            <div class="p-6 bg-gradient-to-br from-yellow-600/20 to-amber-600/20 rounded-2xl border border-yellow-500/30">
+
+            <div
+              class="p-6 bg-gradient-to-br from-yellow-600/20 to-amber-600/20 rounded-2xl border border-yellow-500/30">
               <p class="text-gray-600 dark:text-gray-400">Pending Bonuses</p>
               <p class="text-3xl font-bold mt-2">$0.00</p>
             </div>
           </div>
-          
+
           <!-- Recent Referrals -->
           <div class="mb-8">
             <h3 class="text-xl font-bold mb-4">Recent Referrals</h3>
             <div class="space-y-3">
               <div class="flex items-center gap-3 p-3 bg-card border border-border rounded-2xl">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alice" class="w-10 h-10 rounded-full" alt="User">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alice" class="w-10 h-10 rounded-full"
+                  alt="User">
                 <div class="flex-1">
                   <p class="font-bold">Alice Brown</p>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Joined Dec 10, 2024</p>
                 </div>
                 <span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Active</span>
               </div>
-              
+
               <div class="flex items-center gap-3 p-3 bg-card border border-border rounded-2xl">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Bob" class="w-10 h-10 rounded-full" alt="User">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Bob" class="w-10 h-10 rounded-full"
+                  alt="User">
                 <div class="flex-1">
                   <p class="font-bold">Bob Wilson</p>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Joined Dec 8, 2024</p>
                 </div>
                 <span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Active</span>
               </div>
-              
+
               <div class="flex items-center gap-3 p-3 bg-card border border-border rounded-2xl">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Carol" class="w-10 h-10 rounded-full" alt="User">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Carol" class="w-10 h-10 rounded-full"
+                  alt="User">
                 <div class="flex-1">
                   <p class="font-bold">Carol Davis</p>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Joined Dec 5, 2024</p>
@@ -529,16 +570,19 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Actions -->
           <div class="flex flex-wrap gap-4">
-            <button onclick="awardBonusToUser()" class="flex-1 bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
+            <button onclick="awardBonusToUser()"
+              class="flex-1 bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
               <i class="fas fa-gift mr-2"></i> Award Bonus
             </button>
-            <button onclick="sendMessage()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl font-bold">
+            <button onclick="sendMessage()"
+              class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl font-bold">
               <i class="fas fa-envelope mr-2"></i> Send Message
             </button>
-            <button onclick="viewFullReferralTree()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-2xl font-bold">
+            <button onclick="viewFullReferralTree()"
+              class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-2xl font-bold">
               <i class="fas fa-sitemap mr-2"></i> View Tree
             </button>
           </div>
@@ -550,12 +594,12 @@
   <script>
     // API Base URL
     const API_BASE_URL = '/api';
-    
+
     // Get auth token from localStorage
     function getAuthToken() {
       return localStorage.getItem('access_token');
     }
-    
+
     // Common headers for API requests
     function getAuthHeaders() {
       const token = getAuthToken();
@@ -564,7 +608,7 @@
         'Content-Type': 'application/json'
       };
     }
-    
+
     // Fetch with error handling
     async function apiRequest(url, options = {}) {
       try {
@@ -575,12 +619,12 @@
             ...options.headers
           }
         });
-        
+
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.message || 'API request failed');
         }
-        
+
         return await response.json();
       } catch (error) {
         console.error('API request failed:', error);
@@ -588,7 +632,7 @@
         throw error;
       }
     }
-    
+
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('overlay').classList.toggle('hidden');
@@ -606,12 +650,12 @@
       try {
         const statsResponse = await apiRequest('/referrals/admin/top-referrers');
         const stats = statsResponse.top_referrers;
-        
+
         if (stats && stats.length > 0) {
           // Update top referrer in stats
-          document.querySelector('.card.rounded-2xl.p-6.bg-gradient-to-br.from-blue-600\\/20.to-indigo-600\\/20.border.border-blue-500\\/30 .text-3xl.font-bold.mt-2').textContent = 
+          document.querySelector('.card.rounded-2xl.p-6.bg-gradient-to-br.from-blue-600\\/20.to-indigo-600\\/20.border.border-blue-500\\/30 .text-3xl.font-bold.mt-2').textContent =
             stats[0].full_name.split(' ')[0]; // First name only
-          
+
           // Update total referrals count
           document.getElementById('totalReferrersCount').textContent = stats.length;
         }
@@ -619,15 +663,15 @@
         console.error('Failed to load referral stats:', error);
       }
     }
-    
+
     async function loadTopReferrers() {
       try {
         const response = await apiRequest('/referrals/admin/top-referrers');
         const referrers = response.top_referrers;
-        
+
         const tableBody = document.getElementById('referrersTableBody');
         tableBody.innerHTML = '';
-        
+
         referrers.forEach((referrer, index) => {
           const row = document.createElement('tr');
           row.className = 'border-b border-border hover:bg-card/50';
@@ -656,7 +700,7 @@
           `;
           tableBody.appendChild(row);
         });
-        
+
         // Populate referrer select dropdown
         const referrerSelect = document.getElementById('referrerSelect');
         referrerSelect.innerHTML = '<option value="">Select a referrer...</option>';
@@ -713,43 +757,43 @@
     function viewFullReferralTree() {
       alert('Full referral tree visualization would open here');
     }
-    
+
     async function submitAwardBonusForm(event) {
       event.preventDefault();
-      
+
       const formData = new FormData(event.target);
       const userId = document.getElementById('referrerSelect').value;
       const bonusType = document.querySelector('input[name="bonusType"]:checked').value;
       const amount = document.getElementById('bonusAmount').value;
       const reason = document.getElementById('bonusReason').value;
-      
+
       if (!userId) {
         alert('Please select a referrer');
         return;
       }
-      
+
       if (!amount || amount <= 0) {
         alert('Please enter a valid amount');
         return;
       }
-      
+
       try {
         const requestData = {
           user_id: parseInt(userId),
           reason: reason || 'Admin awarded bonus'
         };
-        
+
         if (bonusType === 'points') {
           requestData.points = parseFloat(amount);
         } else {
           requestData.amount = parseFloat(amount);
         }
-        
+
         await apiRequest('/admin/referrals/award-bonus', {
           method: 'POST',
           body: JSON.stringify(requestData)
         });
-        
+
         alert('Bonus awarded successfully!');
         closeModal('awardBonusModal');
         refreshReferrals(); // Refresh the data
@@ -763,30 +807,31 @@
 
     // Update amount prefix based on bonus type
     document.querySelectorAll('input[name="bonusType"]').forEach(radio => {
-      radio.addEventListener('change', function() {
+      radio.addEventListener('change', function () {
         const prefix = this.value === 'points' ? 'pts' : '$';
         document.getElementById('amountPrefix').textContent = prefix;
       });
     });
 
     // Close modals when clicking outside
-    window.onclick = function(event) {
+    window.onclick = function (event) {
       if (event.target.classList.contains('fixed') && event.target.classList.contains('inset-0')) {
         event.target.classList.add('hidden');
       }
     }
-    
+
     // Load data when page loads
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       loadReferralStats();
       loadTopReferrers();
     });
   </script>
   <script src="../assets/js/theme.js"></script>
-  
+
   <!-- Fixed Theme Toggle Button -->
   <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
     <i class="fas fa-moon"></i>
   </button>
 </body>
+
 </html>

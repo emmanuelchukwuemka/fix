@@ -3,6 +3,7 @@ from backend.app import db
 from backend.models.user import User, UserRole
 from backend.models.transaction import Transaction, TransactionType, TransactionStatus
 from backend.models.reward_code import RewardCode
+from backend.models.batch import Batch
 from backend.utils.helpers import generate_batch_id, generate_reward_code
 from backend.utils.partner_approval import require_partner_approval
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -408,10 +409,17 @@ def generate_partner_codes():
             return jsonify({'message': 'Partner account pending approval. Please contact admin.'}), 403
         
         data = request.get_json()
+        batch_id = data.get('batch_id')
         count = data.get('count', 100)
-        point_value = data.get('point_value', 0.1)
         partner_id = data.get('partner_id', current_user_id)
         
+        if not batch_id:
+            return jsonify({'message': 'Batch ID is required'}), 400
+            
+        batch = Batch.query.get(batch_id)
+        if not batch:
+            return jsonify({'message': 'Batch not found'}), 404
+
         # Partners can only generate codes for themselves unless they're admin
         if user.role == UserRole.PARTNER and partner_id != current_user_id:
             return jsonify({'message': 'Partners can only generate codes for themselves'}), 403
@@ -419,11 +427,8 @@ def generate_partner_codes():
         if count <= 0 or count > 10000:
             return jsonify({'message': 'Count must be between 1 and 10,000'}), 400
         
-        if point_value <= 0:
-            return jsonify({'message': 'Point value must be greater than 0'}), 400
-        
-        # Generate batch ID
-        batch_id = generate_batch_id()
+        # Point value is taken from the batch
+        point_value = batch.point_value
         
         # Generate codes
         codes = []
@@ -432,17 +437,18 @@ def generate_partner_codes():
             reward_code = RewardCode(
                 code=code,
                 point_value=point_value,
-                batch_id=batch_id
+                batch_id=batch.id
             )
             db.session.add(reward_code)
             codes.append(code)
         
+        batch.count += count
         db.session.commit()
         
         return jsonify({
-            'message': f'Successfully generated {count} codes',
-            'batch_id': batch_id,
-            'codes': codes[:10],  # Return first 10 codes as sample
+            'message': f'Successfully generated {count} codes for batch {batch.name}',
+            'batch_id': batch.id,
+            'codes': codes[:10],
             'total_generated': count
         }), 201
         

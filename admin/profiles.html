@@ -114,7 +114,7 @@
 
     <div class="p-6 border-t border-border">
       <div class="flex items-center space-x-3">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin"
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="User"
           class="w-12 h-12 rounded-full ring-2 ring-primary">
         <div>
           <p class="font-semibold">Admin User</p>
@@ -490,7 +490,8 @@
             </button>
             <button id="suspendUnsuspendBtn" onclick="toggleSuspendAccount()"
               class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold">
-              <i id="suspendUnsuspendIcon" class="fas fa-user-slash mr-2"></i> <span id="suspendUnsuspendText">Suspend Account</span>
+              <i id="suspendUnsuspendIcon" class="fas fa-user-slash mr-2"></i> <span id="suspendUnsuspendText">Suspend
+                Account</span>
             </button>
           </div>
         </div>
@@ -751,8 +752,7 @@
       document.getElementById('infoBankName').textContent = user.bank_name || 'N/A';
       document.getElementById('infoAccountName').textContent = user.account_name || 'N/A';
       if (user.account_number) {
-        const masked = user.account_number.replace(/.(?=.{4})/g, '*');
-        document.getElementById('infoAccountNumber').textContent = masked;
+        document.getElementById('infoAccountNumber').textContent = user.account_number;
       } else {
         document.getElementById('infoAccountNumber').textContent = 'N/A';
       }
@@ -782,19 +782,19 @@
       const suspendBtn = document.getElementById('suspendUnsuspendBtn');
       const suspendIcon = document.getElementById('suspendUnsuspendIcon');
       const suspendText = document.getElementById('suspendUnsuspendText');
-      
+
       if (isSuspended) {
         // Account is suspended, show unsuspend button
         suspendBtn.className = 'flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-bold';
         suspendIcon.className = 'fas fa-user-check mr-2';
         suspendText.textContent = 'Unsuspend Account';
-        suspendBtn.onclick = function() { unsuspendAccount(currentProfileId); };
+        suspendBtn.onclick = function () { unsuspendAccount(currentProfileId); };
       } else {
         // Account is active, show suspend button
         suspendBtn.className = 'flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold';
         suspendIcon.className = 'fas fa-user-slash mr-2';
         suspendText.textContent = 'Suspend Account';
-        suspendBtn.onclick = function() { suspendAccount(); };
+        suspendBtn.onclick = function () { suspendAccount(); };
       }
     }
 

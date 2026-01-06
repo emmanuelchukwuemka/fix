@@ -112,22 +112,24 @@ def withdraw_points():
         elif method == 'gift_card' and not data.get('gift_card_type'):
             return jsonify({'message': 'Gift card type is required for gift card withdrawals'}), 400
 
-        # Check withdrawal tier eligibility
-        tier = get_tier_level(user.points_balance)
-        if tier == "None":
-            return jsonify({'message': 'You must reach Bronze tier (50 points) before withdrawing'}), 400
+        # Check for any pending withdrawals first
+        pending_withdrawal = Transaction.query.filter_by(
+            user_id=current_user_id,
+            type=TransactionType.POINT_WITHDRAWAL,
+            status=TransactionStatus.PENDING
+        ).first()
         
-        # Check minimum withdrawal based on user's tier (based on total points balance)
-        tier_min_withdrawal = {
-            "Bronze": 50,
-            "Silver": 500,
-            "Gold": 8000,
-            "Platinum": 15000
-        }
-        min_withdrawal = tier_min_withdrawal.get(tier, 50)
+        if pending_withdrawal:
+            return jsonify({'message': 'You already have a pending withdrawal. Please wait for it to be processed before requesting another.'}), 400
+
+        # Validate that the requested points amount is one of the allowed tier amounts
+        allowed_tier_amounts = [50, 500, 800, 15000]
         
-        if points < min_withdrawal:
-            return jsonify({'message': f'Insufficient points for your tier. Minimum withdrawal for {tier} tier is {min_withdrawal} points'}), 400
+        if points not in allowed_tier_amounts:
+            return jsonify({
+                'message': f'Invalid withdrawal amount. Allowed amounts are: {", ".join(map(str, allowed_tier_amounts))} points.',
+                'allowed_amounts': allowed_tier_amounts
+            }), 400
 
         # Convert points to USD
         usd_amount = points_to_usd(points)
@@ -184,12 +186,13 @@ def withdraw_points():
         if not email_sent:
             print(f"Warning: Failed to send withdrawal notification email to {user.email}")
 
+        current_tier = get_tier_level(user.points_balance + points)  # Calculate tier before deduction
         return jsonify({
             'message': f'Withdrawal request for {points} points (${usd_amount:.2f}) submitted successfully. Payment will be processed within 24-48 hours.',
             'points_requested': points,
             'usd_amount': usd_amount,
             'method': method,
-            'tier': tier,
+            'tier': current_tier,
             'transaction_id': transaction.id,
             'new_balance': user.points_balance
         }), 200

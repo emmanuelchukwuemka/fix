@@ -8,6 +8,7 @@ class TransactionType(Enum):
     DEPOSIT = "deposit"
     REFERRAL_BONUS = "referral_bonus"
     CODE_REDEMPTION = "code_redemption"
+    ADMIN_ADJUSTMENT = "admin_adjustment"
 
 class TransactionStatus(Enum):
     PENDING = "pending"

@@ -2,10 +2,11 @@ from flask import Blueprint, request, jsonify
 from backend.extensions import db
 from backend.models.user import User, UserRole
 from backend.models.reward_code import RewardCode
+from backend.models.batch import Batch
 from backend.models.transaction import Transaction, TransactionType, TransactionStatus
 from backend.models.support_message import SupportMessage, MessageStatus, MessageType
 from backend.models.task import Task, UserTask
-from backend.utils.helpers import generate_reward_code, generate_batch_id
+from backend.utils.helpers import generate_reward_code, generate_batch_id, points_to_usd
 from backend.utils.emailer import Emailer
 from backend.utils.admin_auth import admin_required
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -18,21 +19,22 @@ admin_bp = Blueprint('admin', __name__)
 @admin_required
 def generate_codes():
     try:
-        current_user_id = int(get_jwt_identity())
-        user = User.query.get(current_user_id)
-        
         data = request.get_json()
+        batch_id = data.get('batch_id')
         count = data.get('count', 100)
-        point_value = float(data.get('point_value', 1.0))  # Use float to allow decimal values
+        
+        if not batch_id:
+            return jsonify({'message': 'Batch ID is required'}), 400
+            
+        batch = Batch.query.get(batch_id)
+        if not batch:
+            return jsonify({'message': 'Batch not found'}), 404
         
         if count <= 0 or count > 10000:
             return jsonify({'message': 'Count must be between 1 and 10,000'}), 400
         
-        if point_value <= 0:
-            return jsonify({'message': 'Point value must be greater than 0'}), 400
-        
-        # Generate batch ID
-        batch_id = generate_batch_id()
+        # Point value is now taken from the batch
+        point_value = batch.point_value
         
         # Generate codes
         codes = []
@@ -40,18 +42,19 @@ def generate_codes():
             code = generate_reward_code()
             reward_code = RewardCode(
                 code=code,
-                point_value=point_value,  # This can now be a float value
-                batch_id=batch_id
+                point_value=point_value,
+                batch_id=batch.id
             )
             db.session.add(reward_code)
             codes.append(code)
         
+        batch.count += count
         db.session.commit()
         
         return jsonify({
-            'message': f'Successfully generated {count} codes',
-            'batch_id': batch_id,
-            'codes': codes[:10],  # Return first 10 codes as sample
+            'message': f'Successfully generated {count} codes for batch {batch.name}',
+            'batch_id': batch.id,
+            'codes': codes[:10],
             'total_generated': count
         }), 201
         
@@ -518,21 +521,47 @@ def update_user_points():
         if not user:
             return jsonify({'message': 'User not found'}), 404
         
-        # Update points based on operation
+        # Update points and earnings based on operation
         if operation == 'add':
-            raw_points = int(points)  # Ensure points is an integer
-            points_to_add = max(1, raw_points)  # Ensure at least 1 point if any points are added
+            raw_points = int(points)
+            points_to_add = max(1, raw_points)
             user.points_balance += points_to_add
             user.total_points_earned += points_to_add
+            # Sync earnings
+            user.total_earnings += points_to_usd(points_to_add)
+            
+            # Create transaction record for admin adjustment
+            transaction = Transaction(
+                user_id=user_id,
+                type=TransactionType.ADMIN_ADJUSTMENT,
+                status=TransactionStatus.COMPLETED,
+                description=f'Admin added {points_to_add} points',
+                amount=points_to_usd(points_to_add),
+                points_amount=points_to_add
+            )
         elif operation == 'subtract':
-            points_to_subtract = max(1, int(points))  # Ensure at least 1 point if any points are subtracted
+            points_to_subtract = max(1, int(points))
             if user.points_balance < points_to_subtract:
                 return jsonify({'message': 'Insufficient points balance'}), 400
             user.points_balance -= points_to_subtract
             user.total_points_withdrawn += points_to_subtract
+            # Sync earnings (subtract proportional amount from total earnings)
+            user.total_earnings -= points_to_usd(points_to_subtract)
+            
+            # Create transaction record for admin adjustment
+            transaction = Transaction(
+                user_id=user_id,
+                type=TransactionType.ADMIN_ADJUSTMENT,
+                status=TransactionStatus.COMPLETED,
+                description=f'Admin subtracted {points_to_subtract} points',
+                amount=-points_to_usd(points_to_subtract),
+                points_amount=-points_to_subtract
+            )
         else:
             return jsonify({'message': 'Invalid operation. Use "add" or "subtract"'}), 400
         
+        # Add the transaction to the session
+        db.session.add(transaction)
         db.session.commit()
         
         return jsonify({
@@ -689,8 +718,17 @@ def update_user(user_id):
         user.account_name = data.get('account_name', user.account_name)
         user.account_number = data.get('account_number', user.account_number)
         user.routing_number = data.get('routing_number', user.routing_number)
-        user.points_balance = float(data.get('points_balance', user.points_balance))
-        user.total_earnings = float(data.get('total_earnings', user.total_earnings))
+        
+        # Handle points and earnings synchronization
+        new_points = float(data.get('points_balance', user.points_balance))
+        if new_points != user.points_balance:
+            # If points changed, automatically recalculate earnings
+            user.total_earnings = points_to_usd(new_points)
+        else:
+            # If points didn't change, allow manual adjustment of earnings if provided
+            user.total_earnings = float(data.get('total_earnings', user.total_earnings))
+            
+        user.points_balance = new_points
         user.is_verified = data.get('is_verified', user.is_verified)
         user.is_suspended = data.get('is_suspended', user.is_suspended)
         user.is_approved = data.get('is_approved', user.is_approved)

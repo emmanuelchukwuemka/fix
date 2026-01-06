@@ -145,7 +145,7 @@
         </div>
         <div class="card rounded-2xl p-6 text-center hover:border-primary transition-all">
           <h3 class="text-2xl font-bold text-yellow-500 mb-2">Gold</h3>
-          <p class="text-3xl font-bold">8,000 pts</p>
+          <p class="text-3xl font-bold">800 pts</p>
           <p class="text-gray-600 dark:text-gray-400 mt-2">Priority processing</p>
         </div>
         <div class="card rounded-2xl p-6 text-center hover:border-primary transition-all">
@@ -168,8 +168,15 @@
             <form id="walletWithdrawForm" class="space-y-6">
               <div>
                 <label for="withdrawPoints" class="block text-lg font-bold mb-3">Points to Withdraw</label>
-                <input type="number" id="withdrawPoints" min="50" placeholder="Min: 50 pts (Tier-based)" title="Points to Withdraw"
-                  class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition" />
+                <select id="withdrawPoints" title="Points to Withdraw"
+                  class="w-full px-5 py-4 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition">
+                  <option value="">Select withdrawal amount</option>
+                  <option value="50">50 pts (Bronze)</option>
+                  <option value="500">500 pts (Silver)</option>
+                  <option value="800">800 pts (Gold)</option>
+                  <option value="15000">15,000 pts (Platinum)</option>
+                </select>
+                <p class="text-sm mt-3 text-gray-400" id="withdrawalNotice">Select a withdrawal amount from the dropdown to proceed.</p>
                 <p class="text-right mt-2 text-green-400 font-bold" id="withdrawUsdValue">$0.00 USD</p>
               </div>
 
@@ -400,17 +407,42 @@
             const earnedUsd = (data.total_points_earned * 0.30).toFixed(2);
             document.getElementById('topTotalEarned').textContent = `$${earnedUsd} earned`;
           }
-          
+
           // Store user's tier for validation
           userTier = data.tier_level || 'Bronze';
-          
-          // Update the placeholder to show tier-based minimum
-          let minPoints = 50;
-          if (userTier === 'Silver') minPoints = 500;
-          else if (userTier === 'Gold') minPoints = 8000;
-          else if (userTier === 'Platinum') minPoints = 15000;
-          
-          document.getElementById('withdrawPoints').placeholder = `Min: ${minPoints} pts (${userTier} tier)`;
+
+          // Count completed withdrawals to determine the next required step
+          fetch('/api/transactions/?type=withdrawal&t=' + Date.now(), {
+            headers: { 'Authorization': 'Bearer ' + token }
+          })
+            .then(res => res.json())
+            .then(transData => {
+              const completedCount = (transData.transactions || []).filter(t => t.status === 'completed').length;
+              const hasPending = (transData.transactions || []).some(t => t.status === 'pending');
+
+              const sequence = [50, 500, 800, 15000];
+              const names = ["Bronze", "Silver", "Gold", "Platinum"];
+              const nextIndex = completedCount % 4;
+              const requiredAmount = sequence[nextIndex];
+              const nextStepName = names[nextIndex];
+
+              const pointsInput = document.getElementById('withdrawPoints');
+              const notice = document.getElementById('withdrawalNotice');
+
+              if (hasPending) {
+                pointsInput.placeholder = "Pending withdrawal...";
+                notice.innerHTML = '<span class="text-yellow-500 font-bold"><i class="fas fa-clock mr-1"></i> You have a pending withdrawal.</span> Please wait for it to be processed.';
+                pointsInput.value = "";
+                document.getElementById('walletWithdrawForm').querySelectorAll('button, input').forEach(el => {
+                  if (el.id !== 'logoutBtn') el.disabled = true;
+                });
+              } else {
+                notice.innerHTML = `You can withdraw from any tier: <strong class="text-primary">Bronze (50 pts)</strong>, <strong class="text-primary">Silver (500 pts)</strong>, <strong class="text-primary">Gold (800 pts)</strong>, or <strong class="text-primary">Platinum (15,000 pts)</strong>.`;
+               
+                // Set initial USD value to $0.00 since user will select from predefined amounts
+                document.getElementById('withdrawUsdValue').textContent = `$0.00 USD`;
+              }
+            });
         });
 
       // Fetch Profile to auto-fill banking details
@@ -481,8 +513,8 @@
       window.location.href = 'login.html';
     }
 
-    // Update USD value when points change
-    document.getElementById('withdrawPoints').addEventListener('input', function () {
+    // Update USD value when points selection changes
+    document.getElementById('withdrawPoints').addEventListener('change', function () {
       const points = parseFloat(this.value) || 0;
       const usd = (points * 0.30).toFixed(2); // 1 point = $0.30
       document.getElementById('withdrawUsdValue').textContent = `$${usd} USD`;
@@ -492,20 +524,16 @@
     document.getElementById('walletWithdrawForm').addEventListener('submit', function (e) {
       e.preventDefault();
 
-      let minWithdrawal = 50; // Default for Bronze tier
-      
-      // Set minimum withdrawal based on user's actual tier
-      if (userTier === 'Silver') {
-        minWithdrawal = 500;
-      } else if (userTier === 'Gold') {
-        minWithdrawal = 8000;
-      } else if (userTier === 'Platinum') {
-        minWithdrawal = 15000;
+      const points = parseInt(document.getElementById('withdrawPoints').value);
+      if (!points || points <= 0) {
+        alert('Please select a valid withdrawal amount from the dropdown.');
+        return;
       }
       
-      const points = document.getElementById('withdrawPoints').value;
-      if (!points || points < minWithdrawal) {
-        alert(`Minimum withdrawal for ${userTier} tier is ${minWithdrawal} points`);
+      // Validate that the selected amount is one of the allowed tier amounts
+      const allowedAmounts = [50, 500, 800, 15000];
+      if (!allowedAmounts.includes(points)) {
+        alert('Please select a valid withdrawal amount from the dropdown.');
         return;
       }
 

@@ -42,7 +42,7 @@
   </script>
 
   <!-- Theme Toggle Button -->
-  <button id="themeToggle" class="theme-toggle">
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
     <i class="fas fa-moon"></i>
   </button>
 
@@ -103,11 +103,15 @@
         <i class="fas fa-user-shield"></i>
         <span>Admin Panel</span>
       </a>
+      <a href="/admin/partners" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+        <i class="fas fa-handshake"></i>
+        <span>Partner Management</span>
+      </a>
       <a href="/admin/tasks" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
         <i class="fas fa-clipboard-check"></i>
         <span>Task Review</span>
       </a>
-      <a href="/admin/users" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
+      <a href="/admin/users" class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
         <i class="fas fa-user-cog"></i>
         <span>User Management</span>
       </a>
@@ -194,7 +198,7 @@
         <div class="flex items-center justify-between mb-6">
           <h2 class="text-2xl font-bold">User Accounts</h2>
           <div class="text-right">
-            <p class="text-lg font-bold">Total Users: <span id="totalUsersCount">1,247</span></p>
+            <p class="text-lg font-bold">Total Users: <span id="totalUsersCount">0</span></p>
           </div>
         </div>
 
@@ -202,20 +206,20 @@
           <table class="w-full">
             <thead>
               <tr class="border-b border-border">
-                <th class="pb-4 text-left">User</th>
+                <th class="pb-4 text-left pl-4">User</th>
                 <th class="pb-4 text-left">Role</th>
                 <th class="pb-4 text-left">Verification</th>
                 <th class="pb-4 text-left">Account Status</th>
                 <th class="pb-4 text-left">Points Balance</th>
                 <th class="pb-4 text-left">Total Earned</th>
                 <th class="pb-4 text-left">Joined</th>
-                <th class="pb-4 text-right">Actions</th>
+                <th class="pb-4 text-right pr-4">Actions</th>
               </tr>
             </thead>
             <tbody id="usersTableBody">
               <!-- User rows will be populated dynamically -->
               <tr>
-                <td colspan="6" class="text-center py-10">
+                <td colspan="8" class="text-center py-10">
                   <i class="fas fa-spinner fa-spin text-4xl text-primary"></i>
                   <p class="mt-4 text-xl">Loading users...</p>
                 </td>
@@ -226,22 +230,9 @@
 
         <!-- Pagination -->
         <div class="flex items-center justify-between mt-8">
-          <p class="text-gray-600 dark:text-gray-400">Showing 1 to 3 of 1,247 users</p>
-          <div class="flex gap-2">
-            <button
-              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
-              <i class="fas fa-chevron-left"></i>
-            </button>
-            <button
-              class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
-            <button
-              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">2</button>
-            <button
-              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">3</button>
-            <button
-              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
-              <i class="fas fa-chevron-right"></i>
-            </button>
+          <p id="paginationInfo" class="text-gray-600 dark:text-gray-400">Showing 0 to 0 of 0 users</p>
+          <div class="flex gap-2" id="paginationButtons">
+            <!-- Pagination buttons will be populated dynamically -->
           </div>
         </div>
       </div>
@@ -265,112 +256,195 @@
         <!-- User Info -->
         <div class="md:col-span-1">
           <div class="text-center mb-6">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" class="w-24 h-24 rounded-full mx-auto mb-4"
-              alt="User">
-            <h3 class="text-xl font-bold">John Smith</h3>
-            <p class="text-gray-600 dark:text-gray-400">john.smith@example.com</p>
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=fallback"
+              class="w-24 h-24 rounded-full mx-auto mb-4" alt="User">
+            <h3 class="text-xl font-bold">-</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400">-</p>
             <div class="mt-3 flex flex-col items-center gap-2">
-              <span class="role-badge bg-blue-600/20 text-blue-500 px-3 py-1 rounded-full text-sm font-bold">User</span>
-              <span id="detailVerificationBadge"
-                class="bg-gray-600/20 text-gray-500 px-3 py-1 rounded-full text-sm font-bold">Unverified</span>
-              <span id="detailStatusBadge"
-                class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Active</span>
+              <span class="role-badge px-3 py-1 rounded-full text-sm font-bold">User</span>
+              <span id="detailApprovalBadge" class="px-3 py-1 rounded-full text-sm font-bold hidden">Pending Approval</span>
+              <span id="detailVerificationBadge" class="px-3 py-1 rounded-full text-sm font-bold">Unverified</span>
+              <span id="detailStatusBadge" class="px-3 py-1 rounded-full text-sm font-bold">Active</span>
             </div>
           </div>
 
           <div class="space-y-4">
             <div class="p-4 bg-card border border-border rounded-2xl">
-              <p class="text-sm text-gray-600 dark:text-gray-400">Member Since</p>
-              <p class="font-bold">January 15, 2024</p>
+              <p class="text-xs text-gray-500 mb-1">Member Since</p>
+              <p class="font-bold text-sm">-</p>
             </div>
-
             <div class="p-4 bg-card border border-border rounded-2xl">
-              <p class="text-sm text-gray-600 dark:text-gray-400">Last Login</p>
-              <p class="font-bold">-</p>
+              <p class="text-xs text-gray-500 mb-1">Last Login</p>
+              <p class="font-bold text-sm">-</p>
             </div>
-
             <div class="p-4 bg-card border border-border rounded-2xl">
-              <p class="text-sm text-gray-600 dark:text-gray-400">Referral Code</p>
-              <p class="font-bold">-</p>
+              <p class="text-xs text-gray-500 mb-1">Referral Code</p>
+              <p class="font-bold text-sm">-</p>
             </div>
           </div>
         </div>
 
-        <!-- User Stats -->
+        <!-- User Stats & Bank -->
         <div class="md:col-span-2">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div
-              class="p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 rounded-2xl border border-green-500/30">
-              <p class="text-gray-600 dark:text-gray-400">Points Balance</p>
-              <p class="text-3xl font-bold mt-2">1,250.75 pts</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div class="p-6 bg-green-500/10 border border-green-500/20 rounded-2xl">
+              <p class="text-gray-500 text-sm">Points Balance</p>
+              <p class="text-2xl font-bold mt-1">0.00 pts</p>
             </div>
-
-            <div class="p-6 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 rounded-2xl border border-blue-500/30">
-              <p class="text-gray-600 dark:text-gray-400">Total Earned</p>
-              <p class="text-3xl font-bold mt-2">$375.23</p>
-            </div>
-
-            <div
-              class="p-6 bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-2xl border border-purple-500/30">
-              <p class="text-gray-600 dark:text-gray-400">Referrals</p>
-              <p class="text-3xl font-bold mt-2">12</p>
-            </div>
-
-            <div
-              class="p-6 bg-gradient-to-br from-yellow-600/20 to-amber-600/20 rounded-2xl border border-yellow-500/30">
-              <p class="text-gray-600 dark:text-gray-400">Tasks Completed</p>
-              <p class="text-3xl font-bold mt-2">42</p>
+            <div class="p-6 bg-blue-500/10 border border-blue-500/20 rounded-2xl">
+              <p class="text-gray-500 text-sm">Total Earned</p>
+              <p class="text-2xl font-bold mt-1 text-green-500">$0.00</p>
             </div>
           </div>
 
-          <!-- Banking Details -->
-          <div class="mb-8">
-            <h3 class="text-xl font-bold mb-4">Banking Details</h3>
-            <div class="p-6 bg-card border border-border rounded-2xl">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">Bank Name</p>
-                  <p class="font-bold">First National Bank</p>
-                </div>
-
-                <div>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">Account Holder</p>
-                  <p class="font-bold">John Smith</p>
-                </div>
-
-                <div>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">Account Number</p>
-                  <p class="font-bold">**** **** **** 4829</p>
-                </div>
-
-                <div>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">Routing Number</p>
-                  <p class="font-bold">**** **** 1234</p>
-                </div>
+          <!-- Bank Details -->
+          <div class="mb-8 p-6 bg-card border border-border rounded-3xl">
+            <h3 class="text-lg font-bold mb-4">Banking Details</h3>
+            <div class="grid grid-cols-2 gap-y-4 gap-x-8">
+              <div>
+                <p class="text-xs text-gray-500">Bank Name</p>
+                <p id="detailBankName" class="font-bold text-sm">-</p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-500">Account Name</p>
+                <p id="detailAccountName" class="font-bold text-sm">-</p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-500">Account Number</p>
+                <p id="detailAccountNumber" class="font-bold text-sm">-</p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-500">Routing Number</p>
+                <p id="detailRoutingNumber" class="font-bold text-sm">-</p>
               </div>
             </div>
           </div>
 
           <!-- Actions -->
-          <div class="flex flex-wrap gap-4">
+          <div class="flex flex-wrap gap-3">
+            <div id="detailUserId" class="hidden"></div>
             <button onclick="adjustUserPoints()"
-              class="flex-1 bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
+              class="flex-1 bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold transition">
               <i class="fas fa-coins mr-2"></i> Adjust Points
             </button>
             <button id="verifyUserBtn" onclick="toggleVerificationFromModal()"
-              class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-bold">
+              class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-bold transition">
               <i class="fas fa-user-check mr-2"></i> Verify User
             </button>
-            <button onclick="sendMessage()"
-              class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl font-bold">
-              <i class="fas fa-envelope mr-2"></i> Send Message
-            </button>
             <button id="suspendUserBtn" onclick="suspendUserConfirm()"
-              class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold">
+              class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold transition">
               <i class="fas fa-ban mr-2"></i> Suspend Account
             </button>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit User Modal -->
+  <div id="editUserModal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-card rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold">Edit User</h2>
+        <button onclick="closeModal('editUserModal')" class="text-gray-500 hover:text-text">
+          <i class="fas fa-times text-2xl"></i>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <input type="hidden" id="editUserId">
+
+        <div>
+          <label class="block text-sm font-bold mb-2">Full Name</label>
+          <input type="text" id="editFullName" class="form-input w-full px-4 py-3 rounded-2xl" placeholder="Full Name">
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold mb-2">Email</label>
+          <input type="email" id="editEmail" class="form-input w-full px-4 py-3 rounded-2xl" placeholder="Email">
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold mb-2">Phone</label>
+          <input type="text" id="editPhone" class="form-input w-full px-4 py-3 rounded-2xl" placeholder="Phone">
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold mb-2">Role</label>
+          <select id="editRole" class="form-input w-full px-4 py-3 rounded-2xl" onchange="togglePartnerFields()">
+            <option value="user">User</option>
+            <option value="partner">Partner</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold mb-2">Bank Name</label>
+          <input type="text" id="editBankName" class="form-input w-full px-4 py-3 rounded-2xl" placeholder="Bank Name">
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold mb-2">Account Name</label>
+          <input type="text" id="editAccountName" class="form-input w-full px-4 py-3 rounded-2xl"
+            placeholder="Account Name">
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold mb-2">Account Number</label>
+          <input type="text" id="editAccountNumber" class="form-input w-full px-4 py-3 rounded-2xl"
+            placeholder="Account Number">
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold mb-2">Routing Number</label>
+          <input type="text" id="editRoutingNumber" class="form-input w-full px-4 py-3 rounded-2xl"
+            placeholder="Routing Number">
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold mb-2">Points Balance</label>
+          <input type="number" id="editPointsBalance" class="form-input w-full px-4 py-3 rounded-2xl"
+            placeholder="0.00">
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold mb-2">Total Earnings ($)</label>
+          <input type="number" id="editTotalEarnings"
+            class="form-input w-full px-4 py-3 rounded-2xl font-mono text-green-500 font-bold" placeholder="0.00"
+            step="0.01">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <label
+          class="flex items-center gap-3 p-4 bg-card border border-border rounded-2xl cursor-pointer hover:bg-primary/5 transition">
+          <input type="checkbox" id="editIsVerified"
+            class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary">
+          <span class="text-sm font-bold">Verified Status</span>
+        </label>
+        <label
+          class="flex items-center gap-3 p-4 bg-card border border-border rounded-2xl cursor-pointer hover:bg-primary/5 transition">
+          <input type="checkbox" id="editIsSuspended"
+            class="w-5 h-5 rounded border-gray-300 text-red-500 focus:ring-red-500">
+          <span class="text-sm font-bold">Suspended</span>
+        </label>
+        <label
+          class="flex items-center gap-3 p-4 bg-card border border-border rounded-2xl cursor-pointer hover:bg-primary/5 transition">
+          <input type="checkbox" id="editIsApproved"
+            class="w-5 h-5 rounded border-gray-300 text-green-500 focus:ring-green-500">
+          <span class="text-sm font-bold">Approved</span>
+        </label>
+      </div>
+
+      <div class="flex gap-4">
+        <button onclick="saveUserChanges()"
+          class="flex-1 bg-primary hover:bg-orange-700 text-white py-4 rounded-2xl font-bold shadow-lg shadow-primary/20 transition">
+          Save Changes
+        </button>
+        <button onclick="closeModal('editUserModal')"
+          class="flex-1 bg-card border border-border hover:bg-card/80 py-4 rounded-2xl font-bold transition">
+          Cancel
+        </button>
       </div>
     </div>
   </div>
@@ -389,1190 +463,285 @@
       localStorage.removeItem('userName');
       localStorage.removeItem('userEmail');
       localStorage.removeItem('userRole');
-      window.location.href = '/admin/';
-    }
-
-    function loadUsers() {
-      const token = localStorage.getItem('access_token');
-      if (!token) {
-        window.location.href = '../frontend/login.html';
-        return;
-      }
-
-      // Get filter values
-      const searchQuery = document.getElementById('userSearch').value;
-      const roleFilter = document.getElementById('roleFilter').value;
-      const statusFilter = document.getElementById('statusFilter').value;
-
-      // Build query parameters
-      const params = new URLSearchParams();
-      params.append('page', currentPage);
-      params.append('per_page', 20);
-
-      if (searchQuery) params.append('search', searchQuery);
-      if (roleFilter) params.append('role', roleFilter);
-      if (statusFilter) params.append('status', statusFilter);
-
-      // Show loading state
-      document.getElementById('usersTableBody').innerHTML = '<tr>' +
-        '<td colspan="8" class="text-center py-10">' +
-          '<i class="fas fa-spinner fa-spin text-4xl text-primary"></i>' +
-          '<p class="mt-4 text-xl">Loading users...</p>' +
-        '</td>' +
-      '</tr>';
-
-      fetch('/api/admin/users?' + params.toString(), {
-        headers: {
-          'Authorization': 'Bearer ' + token
-        }
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.users) {
-            // Update total users count
-            document.getElementById('totalUsersCount').textContent = data.total.toLocaleString();
-
-            // Render users
-            renderUsers(data.users);
-          } else {
-            throw new Error(data.message || 'Failed to load users');
-          }
-        })
-        .catch(error => {
-          console.error('Error loading users:', error);
-          document.getElementById('usersTableBody').innerHTML = `
-          <tr>
-          <td colspan="8" class="text-center py-10">
-            <i class="fas fa-exclamation-triangle text-4xl text-red-500"></i>
-            <p class="mt-4 text-xl">Failed to load users</p>
-            <button onclick="loadUsers()" class="mt-4 bg-primary hover:bg-orange-700 px-6 py-3 rounded-xl font-bold transition">
-              Retry
-            </button>
-          </td>
-          </tr>
-        `;
-        });
-    }
-
-    function renderUsers(users) {
-      const tbody = document.getElementById('usersTableBody');
-
-      if (users.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="8" class="text-center py-10">
-              <i class="fas fa-inbox text-4xl text-gray-500"></i>
-              <p class="mt-4 text-xl">No users found</p>
-            </td>
-          </tr>
-        `;
-        return;
-      }
-
-      tbody.innerHTML = '';
-
-      users.forEach(user => {
-        const row = document.createElement('tr');
-        row.className = 'border-b border-border hover:bg-card/50';
-
-        // Format join date
-        const joinDate = new Date(user.created_at);
-        const formattedDate = joinDate.toLocaleDateString();
-
-        // Determine role badge
-        let roleBadge = '';
-        switch (user.role) {
-          case 'admin':
-            roleBadge = '<span class="bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold">Admin</span>';
-            break;
-          case 'partner':
-            roleBadge = '<span class="bg-purple-600/20 text-purple-500 px-3 py-1 rounded-full text-sm font-bold">Partner</span>';
-            break;
-          default:
-            roleBadge = '<span class="bg-blue-600/20 text-blue-500 px-3 py-1 rounded-full text-sm font-bold">User</span>';
-        }
-
-        // Determine verification badge
-        let verificationBadge = '';
-        if (user.is_verified) {
-          verificationBadge = '<span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Verified</span>';
-        } else if (user.verification_pending) {
-          verificationBadge = '<span class="bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold">Pending</span>';
-        } else {
-          verificationBadge = '<span class="bg-gray-600/20 text-gray-500 px-3 py-1 rounded-full text-sm font-bold">Unverified</span>';
-        }
-        
-        // Determine status badge
-        let statusBadge = '';
-        if (user.is_suspended) {
-          statusBadge = '<span class="bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold">Suspended</span>';
-        } else {
-          statusBadge = '<span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Active</span>';
-        }
-
-        row.innerHTML = `
-          <td class="py-4">
-            <div class="flex items-center gap-3">
-              <img src="${user.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`}" class="w-10 h-10 rounded-full" alt="User">
-              <div>
-                <p class="font-bold">${user.full_name}</p>
-                <p class="text-sm text-gray-600 dark:text-gray-400">${user.email}</p>
-              </div>
-            </div>
-          </td>
-          <td class="py-4">
-            ${roleBadge}
-          </td>
-          <td class="py-4">
-            ${verificationBadge}
-          </td>
-          <td class="py-4">
-            ${statusBadge}
-          </td>
-          <td class="py-4 font-bold">${user.points_balance.toFixed(2)} pts</td>
-          <td class="py-4">$${user.total_earnings.toFixed(2)}</td>
-          <td class="py-4">${formattedDate}</td>
-          <td class="py-4 text-right">
-            <button onclick="viewUserDetails(${user.id})" class="text-primary hover:text-orange-700 mx-1" title="View Details">
-              <i class="fas fa-eye"></i>
-            </button>
-            <button onclick="editUser(${user.id})" class="text-blue-500 hover:text-blue-700 mx-1" title="Edit">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button onclick="toggleVerification(${user.id}, ${user.is_verified})" class="${user.is_verified ? 'text-orange-500 hover:text-orange-700' : 'text-green-500 hover:text-green-700'} mx-1" title="${user.is_verified ? 'Unverify' : 'Verify'}">
-              <i class="fas ${user.is_verified ? 'fa-user-slash' : 'fa-user-check'}"></i>
-            </button>
-            <button onclick="suspendUser(${user.id}, ${user.is_suspended})" class="text-red-500 hover:text-red-700 mx-1" title="${user.is_suspended ? 'Unsuspend' : 'Suspend'}">
-              <i class="fas fa-ban"></i>
-            </button>
-          </td>
-        `;
-
-        tbody.appendChild(row);
-      });
-    }
-
-    function refreshUsers() {
-      loadUsers();
-    }
-
-    function applyFilters() {
-      currentPage = 1;
-      loadUsers();
-    }
-
-    function viewUserDetails(userId) {
-      const token = localStorage.getItem('access_token');
-      if (!token) {
-        window.location.href = '../frontend/login.html';
-        return;
-      }
-
-      fetch('/api/admin/users/' + userId + '/details', {
-        headers: {
-          'Authorization': 'Bearer ' + token
-        }
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.user) {
-            populateUserDetails(data.user);
-            document.getElementById('userDetailsModal').classList.remove('hidden');
-          } else {
-            alert('Failed to load user details: ' + (data.message || 'Unknown error'));
-          }
-        })
-        .catch(error => {
-          console.error('Error loading user details:', error);
-          alert('Failed to load user details. Please try again.');
-        });
-    }
-
-    function populateUserDetails(user) {
-      // Update user info section
-      document.querySelector('#userDetailsModal .text-xl.font-bold').textContent = user.full_name;
-      document.querySelector('#userDetailsModal .text-gray-600.dark\:text-gray-400').textContent = user.email;
-
-      // Update avatar
-      document.querySelector('#userDetailsModal img').src = user.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`;
-
-      // Update role badge
-      const roleElement = document.querySelector('#userDetailsModal .role-badge');
-      if (roleElement) {
-        let roleClass = '';
-        let roleText = '';
-        switch (user.role) {
-          case 'admin':
-            roleClass = 'bg-red-600/20 text-red-500';
-            roleText = 'Admin';
-            break;
-          case 'partner':
-            roleClass = 'bg-purple-600/20 text-purple-500';
-            roleText = 'Partner';
-            break;
-          default:
-            roleClass = 'bg-blue-600/20 text-blue-500';
-            roleText = 'User';
-        }
-        roleElement.className = `role-badge px-3 py-1 rounded-full text-sm font-bold ${roleClass}`;
-        roleElement.textContent = roleText;
-      }
-
-      // Update verification badge
-      const verificationBadge = document.getElementById('detailVerificationBadge');
-      if (verificationBadge) {
-        if (user.is_verified) {
-          verificationBadge.className = 'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold';
-          verificationBadge.innerHTML = '<i class="fas fa-check-circle mr-1"></i>Verified';
-        } else if (user.verification_pending) {
-          verificationBadge.className = 'bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold';
-          verificationBadge.innerHTML = '<i class="fas fa-clock mr-1"></i>Pending Verification';
-        } else {
-          verificationBadge.className = 'bg-gray-600/20 text-gray-500 px-3 py-1 rounded-full text-sm font-bold';
-          verificationBadge.textContent = 'Unverified';
-        }
-      }
-
-      // Update status badge
-      const statusBadge = document.getElementById('detailStatusBadge');
-      if (statusBadge) {
-        if (user.is_suspended) {
-          statusBadge.className = 'bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold';
-          statusBadge.textContent = 'Suspended';
-        } else {
-          statusBadge.className = 'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold';
-          statusBadge.textContent = 'Active';
-        }
-      }
-
-      // Update verify button
-      const verifyBtn = document.getElementById('verifyUserBtn');
-      if (verifyBtn) {
-        if (user.is_verified) {
-          verifyBtn.innerHTML = '<i class="fas fa-user-slash mr-2"></i>Unverify User';
-          verifyBtn.className = 'flex-1 bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-2xl font-bold';
-        } else {
-          verifyBtn.innerHTML = '<i class="fas fa-user-check mr-2"></i>Verify User';
-          verifyBtn.className = 'flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-bold';
-        }
-        // Store current status on button
-        verifyBtn.dataset.verified = user.is_verified;
-      }
-
-      // Update suspend button
-      const suspendBtn = document.getElementById('suspendUserBtn');
-      if (suspendBtn) {
-        if (user.is_suspended) {
-          suspendBtn.innerHTML = '<i class="fas fa-user-check mr-2"></i>Unsuspend Account';
-          suspendBtn.className = 'flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-bold';
-        } else {
-          suspendBtn.innerHTML = '<i class="fas fa-ban mr-2"></i>Suspend Account';
-          suspendBtn.className = 'flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold';
-        }
-        // Store current status on button
-        suspendBtn.dataset.suspended = user.is_suspended;
-      }
-
-      // Update member since
-      const joinDate = user.created_at ? new Date(user.created_at) : new Date();
-      document.querySelectorAll('#userDetailsModal .p-4.bg-card')[0].querySelector('.font-bold').textContent = joinDate.toLocaleDateString();
-
-      // Update referral code
-      const referralCardElements = document.querySelectorAll('#userDetailsModal .p-4.bg-card');
-      if (referralCardElements[2]) {
-        const referralCodeElement = referralCardElements[2].querySelector('.font-bold');
-        if (referralCodeElement) {
-          referralCodeElement.textContent = user.referral_code || 'N/A';
-        }
-      }
-
-      // Update stats
-      const statsElements = document.querySelectorAll('#userDetailsModal .text-3xl.font-bold');
-      if (statsElements[0]) {
-        const pointsBalance = user.points_balance || 0;
-        statsElements[0].textContent = `${Number(pointsBalance).toFixed(2)} pts`;
-      }
-      if (statsElements[1]) {
-        const totalEarnings = user.total_earnings || 0;
-        statsElements[1].textContent = `$${Number(totalEarnings).toFixed(2)}`;
-      }
-
-      // Update banking details
-      const bankDetailsElements = document.querySelectorAll('#userDetailsModal .font-bold');
-      if (user.bank_name && bankDetailsElements[6]) {
-        bankDetailsElements[6].textContent = user.bank_name;
-      }
-      if (user.account_name && bankDetailsElements[7]) {
-        bankDetailsElements[7].textContent = user.account_name;
-      }
-      if (user.account_number && bankDetailsElements[8]) {
-        // Mask account number for security
-        const accountNumberStr = String(user.account_number);
-        const maskedAccount = accountNumberStr.replace(/.(?=.{4})/g, '*');
-        bankDetailsElements[8].textContent = maskedAccount;
-      }
-
-      // Store user ID for actions
-      let userIdElement = document.getElementById('detailUserId');
-      if (!userIdElement) {
-        userIdElement = document.createElement('div');
-        userIdElement.id = 'detailUserId';
-        userIdElement.style.display = 'none';
-        document.body.appendChild(userIdElement);
-      }
-      userIdElement.textContent = user.id;
-    }
-
-    function editUser(userId) {
-      alert('Edit user functionality would open here');
-    }
-
-    function toggleVerification(userId, isCurrentlyVerified) {
-      const newStatus = !isCurrentlyVerified;
-      const action = newStatus ? 'verify' : 'unverify';
-      if (confirm(`Are you sure you want to ${action} this user?`)) {
-        const token = localStorage.getItem('access_token');
-        fetch(`/api/admin/users/${userId}/verify`, {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ verified: newStatus })
-        })
-          .then(response => response.json())
-          .then(data => {
-            alert(data.message);
-            loadUsers();
-          })
-          .catch(error => console.error(`Error updating verification status:`, error));
-      }
-    }
-
-    function toggleVerificationFromModal() {
-      const userId = document.getElementById('detailUserId').textContent;
-      const verifyBtn = document.getElementById('verifyUserBtn');
-      const isCurrentlyVerified = verifyBtn.dataset.verified === 'true';
-
-      const newStatus = !isCurrentlyVerified;
-      const action = newStatus ? 'verify' : 'unverify';
-
-      if (confirm(`Are you sure you want to ${action} this user?`)) {
-        const token = localStorage.getItem('access_token');
-        fetch(`/api/admin/users/${userId}/verify`, {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ verified: newStatus })
-        })
-          .then(response => response.json())
-          .then(data => {
-            alert(data.message);
-            // Update modal data
-            viewUserDetails(userId);
-            // Refresh main table
-            loadUsers();
-          })
-          .catch(error => console.error(`Error updating verification status:`, error));
-      }
-    }
-
-    function suspendUser(userId, currentStatus) {
-      const action = currentStatus ? 'unsuspend' : 'suspend';
-      if (confirm(`Are you sure you want to ${action} this user?`)) {
-        const token = localStorage.getItem('access_token');
-        fetch(`/api/admin/users/${userId}/${action}`, {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + token
-          }
-        })
-          .then(response => response.json())
-          .then(data => {
-            alert(data.message);
-            loadUsers();
-          })
-          <```
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/x-icon" href="../assets/logo2.png">
-  <title>MyFigPoint - User Management</title>
-
-  <!-- Tailwind + Inter Font -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
-          colors: {
-            primary: '#FD6606',
-            secondary: '#012E03'
-          }
-        }
-      }
-    }
-  </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="../assets/css/app.css" />
-</head>
-
-<body class="bg-background text-text min-h-screen flex relative overflow-auto">
-  <!-- Check for authentication -->
-  <script>
-    // Check if user is authenticated
-    const token = localStorage.getItem('access_token');
-    const userRole = localStorage.getItem('userRole');
-
-    // Redirect to login if not authenticated or not admin
-    if (!token || userRole !== 'admin') {
       window.location.href = '/admin/login.html';
     }
-  </script>
-
-  <!-- Theme Toggle Button -->
-  <button id="themeToggle" class="theme-toggle">
-    <i class="fas fa-moon"></i>
-  </button>
-
-  <!-- Animated Background -->
-  <div class="absolute inset-0 -z-10">
-    <div
-      class="absolute top-10 left-10 w-96 h-96 bg-primary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse">
-    </div>
-    <div
-      class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-multiply blur-3xl opacity-20 animate-pulse">
-    </div>
-  </div>
-
-  <!-- Sidebar -->
-  <aside id="sidebar"
-    class="fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
-    <div class="p-6 border-b border-border">
-      <div class="flex items-center gap-3">
-        <img src="../assets/logo.png" alt="MyFigPoint Logo" class="w-12 h-12 rounded-full object-contain">
-        <div>
-          <h2 class="text-xl font-black text-primary">MyFigPoint</h2>
-          <p class="text-xs text-gray-500">Admin Dashboard</p>
-        </div>
-      </div>
-    </div>
-
-    <nav class="p-4 space-y-2">
-      <a href="/admin/dashboard" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
-        <i class="fas fa-home"></i>
-        <span>Dashboard</span>
-      </a>
-      <a href="/admin/tasks" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
-        <i class="fas fa-tasks"></i>
-        <span>Earn Points</span>
-      </a>
-      <a href="/admin/referrals" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
-        <i class="fas fa-users"></i>
-        <span>Refer & Earn</span>
-      </a>
-      <a href="/admin/withdrawals" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
-        <i class="fas fa-wallet"></i>
-        <span>Wallet</span>
-      </a>
-      <a href="/admin/activities" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
-        <i class="fas fa-history"></i>
-        <span>Transaction History</span>
-      </a>
-      <a href="/admin/codes" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
-        <i class="fas fa-gift"></i>
-        <span>Redeem Code</span>
-      </a>
-      <a href="/admin/support" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
-        <i class="fas fa-headset"></i>
-        <span>Support Center</span>
-      </a>
-      <a href="/admin/profiles"
-        class="flex items-center space-x-3 px-4 py-3 bg-primary/20 border border-primary/50 rounded-xl text-primary font-medium">
-        <i class="fas fa-user-shield"></i>
-        <span>Admin Panel</span>
-      </a>
-      <a href="/admin/tasks" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
-        <i class="fas fa-clipboard-check"></i>
-        <span>Task Review</span>
-      </a>
-      <a href="/admin/users" class="flex items-center space-x-3 px-4 py-3 hover:bg-card rounded-xl transition">
-        <i class="fas fa-user-cog"></i>
-        <span>User Management</span>
-      </a>
-    </nav>
-
-    <div class="p-6 border-t border-border">
-      <div class="flex items-center space-x-3">
-        <img id="sidebarAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin"
-          class="w-12 h-12 rounded-full ring-2 ring-primary">
-        <div>
-          <p id="sidebarUserName" class="font-semibold">Admin User</p>
-          <p id="sidebarUserEmail" class="text-sm text-gray-600 dark:text-gray-400">admin@example.com</p>
-        </div>
-      </div>
-      <a href="#" onclick="logout()"
-        class="mt-4 block text-center bg-red-600/20 hover:bg-red-600/30 text-red-400 py-2 rounded-lg text-sm font-medium transition">
-        Logout
-      </a>
-    </div>
-  </aside>
-
-  <!-- Main Content -->
-  <div class="flex-1 lg:ml-64">
-    <header class="bg-card backdrop-blur-xl border-b border-border sticky top-0 z-40">
-      <div class="flex items-center justify-between px-3 py-1.5">
-        <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-text">
-          <i class="fas fa-bars text-xl"></i>
-        </button>
-        <h1 class="text-2xl md:text-4xl font-black text-primary">
-          User Management
-        </h1>
-        <div class="flex items-center gap-4">
-          <button onclick="refreshUsers()"
-            class="bg-primary hover:bg-orange-700 text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2">
-            <i class="fas fa-sync-alt"></i> Refresh
-          </button>
-        </div>
-      </div>
-    </header>
-
-    <main class="p-6 lg:p-10 max-w-7xl mx-auto">
-      <!-- Search and Filters -->
-      <div class="card rounded-3xl p-6 mb-8">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div>
-            <label class="block text-sm font-bold mb-2">Search Users</label>
-            <div class="relative">
-              <input type="text" id="userSearch" class="form-input w-full px-4 py-3 rounded-2xl pl-10"
-                placeholder="Name, email, or referral code...">
-              <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold mb-2">Role</label>
-            <select class="form-input w-full px-4 py-3 rounded-2xl" id="roleFilter">
-              <option value="">All Roles</option>
-              <option value="user">User</option>
-              <option value="partner">Partner</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold mb-2">Status</label>
-            <select class="form-input w-full px-4 py-3 rounded-2xl" id="statusFilter">
-              <option value="">All Statuses</option>
-              <option value="active">Active</option>
-              <option value="suspended">Suspended</option>
-            </select>
-          </div>
-
-          <div class="flex items-end">
-            <button onclick="applyFilters()"
-              class="w-full bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
-              Apply Filters
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Users Table -->
-      <div class="card rounded-3xl p-6">
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="text-2xl font-bold">User Accounts</h2>
-          <div class="text-right">
-            <p class="text-lg font-bold">Total Users: <span id="totalUsersCount">1,247</span></p>
-          </div>
-        </div>
-
-        <div class="overflow-x-auto">
-          <table class="w-full">
-            <thead>
-              <tr class="border-b border-border">
-                <th class="pb-4 text-left">User</th>
-                <th class="pb-4 text-left">Role</th>
-                <th class="pb-4 text-left">Verification</th>
-                <th class="pb-4 text-left">Account Status</th>
-                <th class="pb-4 text-left">Points Balance</th>
-                <th class="pb-4 text-left">Total Earned</th>
-                <th class="pb-4 text-left">Joined</th>
-                <th class="pb-4 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="usersTableBody">
-              <!-- User rows will be populated dynamically -->
-              <tr>
-                <td colspan="6" class="text-center py-10">
-                  <i class="fas fa-spinner fa-spin text-4xl text-primary"></i>
-                  <p class="mt-4 text-xl">Loading users...</p>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Pagination -->
-        <div class="flex items-center justify-between mt-8">
-          <p class="text-gray-600 dark:text-gray-400">Showing 1 to 3 of 1,247 users</p>
-          <div class="flex gap-2">
-            <button
-              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
-              <i class="fas fa-chevron-left"></i>
-            </button>
-            <button
-              class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
-            <button
-              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">2</button>
-            <button
-              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">3</button>
-            <button
-              class="w-10 h-10 flex items-center justify-center rounded-xl bg-card border border-border hover:bg-card/80">
-              <i class="fas fa-chevron-right"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
-
-  <!-- Overlay -->
-  <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/70 z-40 hidden lg:hidden"></div>
-
-  <!-- User Details Modal -->
-  <div id="userDetailsModal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-card rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-bold">User Details</h2>
-        <button onclick="closeModal('userDetailsModal')" class="text-gray-500 hover:text-text">
-          <i class="fas fa-times text-2xl"></i>
-        </button>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- User Info -->
-        <div class="md:col-span-1">
-          <div class="text-center mb-6">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" class="w-24 h-24 rounded-full mx-auto mb-4"
-              alt="User">
-            <h3 class="text-xl font-bold">John Smith</h3>
-            <p class="text-gray-600 dark:text-gray-400">john.smith@example.com</p>
-            <div class="mt-3 flex flex-col items-center gap-2">
-              <span class="role-badge bg-blue-600/20 text-blue-500 px-3 py-1 rounded-full text-sm font-bold">User</span>
-              <span id="detailVerificationBadge"
-                class="bg-gray-600/20 text-gray-500 px-3 py-1 rounded-full text-sm font-bold">Unverified</span>
-              <span id="detailStatusBadge"
-                class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Active</span>
-            </div>
-          </div>
-
-          <div class="space-y-4">
-            <div class="p-4 bg-card border border-border rounded-2xl">
-              <p class="text-sm text-gray-600 dark:text-gray-400">Member Since</p>
-              <p class="font-bold">January 15, 2024</p>
-            </div>
-
-            <div class="p-4 bg-card border border-border rounded-2xl">
-              <p class="text-sm text-gray-600 dark:text-gray-400">Last Login</p>
-              <p class="font-bold">-</p>
-            </div>
-
-            <div class="p-4 bg-card border border-border rounded-2xl">
-              <p class="text-sm text-gray-600 dark:text-gray-400">Referral Code</p>
-              <p class="font-bold">-</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- User Stats -->
-        <div class="md:col-span-2">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div
-              class="p-6 bg-gradient-to-br from-green-600/20 to-emerald-600/20 rounded-2xl border border-green-500/30">
-              <p class="text-gray-600 dark:text-gray-400">Points Balance</p>
-              <p class="text-3xl font-bold mt-2">1,250.75 pts</p>
-            </div>
-
-            <div class="p-6 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 rounded-2xl border border-blue-500/30">
-              <p class="text-gray-600 dark:text-gray-400">Total Earned</p>
-              <p class="text-3xl font-bold mt-2">$375.23</p>
-            </div>
-
-            <div
-              class="p-6 bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-2xl border border-purple-500/30">
-              <p class="text-gray-600 dark:text-gray-400">Referrals</p>
-              <p class="text-3xl font-bold mt-2">12</p>
-            </div>
-
-            <div
-              class="p-6 bg-gradient-to-br from-yellow-600/20 to-amber-600/20 rounded-2xl border border-yellow-500/30">
-              <p class="text-gray-600 dark:text-gray-400">Tasks Completed</p>
-              <p class="text-3xl font-bold mt-2">42</p>
-            </div>
-          </div>
-
-          <!-- Banking Details -->
-          <div class="mb-8">
-            <h3 class="text-xl font-bold mb-4">Banking Details</h3>
-            <div class="p-6 bg-card border border-border rounded-2xl">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">Bank Name</p>
-                  <p class="font-bold">First National Bank</p>
-                </div>
-
-                <div>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">Account Holder</p>
-                  <p class="font-bold">John Smith</p>
-                </div>
-
-                <div>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">Account Number</p>
-                  <p class="font-bold">**** **** **** 4829</p>
-                </div>
-
-                <div>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">Routing Number</p>
-                  <p class="font-bold">**** **** 1234</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Actions -->
-          <div class="flex flex-wrap gap-4">
-            <button onclick="adjustUserPoints()"
-              class="flex-1 bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
-              <i class="fas fa-coins mr-2"></i> Adjust Points
-            </button>
-            <button id="verifyUserBtn" onclick="toggleVerificationFromModal()"
-              class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-bold">
-              <i class="fas fa-user-check mr-2"></i> Verify User
-            </button>
-            <button onclick="sendMessage()"
-              class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl font-bold">
-              <i class="fas fa-envelope mr-2"></i> Send Message
-            </button>
-            <button id="suspendUserBtn" onclick="suspendUserConfirm()"
-              class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold">
-              <i class="fas fa-ban mr-2"></i> Suspend Account
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Global variables
-    let currentPage = 1;
-
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('-translate-x-full');
-      document.getElementById('overlay').classList.toggle('hidden');
-    }
-
-    function logout() {
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('userName');
-      localStorage.removeItem('userEmail');
-      localStorage.removeItem('userRole');
-      window.location.href = '/admin/';
-    }
 
     function loadUsers() {
       const token = localStorage.getItem('access_token');
       if (!token) {
-        window.location.href = '../frontend/login.html';
+        window.location.href = '/admin/login.html';
         return;
       }
 
-      // Get filter values
       const searchQuery = document.getElementById('userSearch').value;
       const roleFilter = document.getElementById('roleFilter').value;
       const statusFilter = document.getElementById('statusFilter').value;
 
-      // Build query parameters
       const params = new URLSearchParams();
       params.append('page', currentPage);
-      params.append('per_page', 20);
-
       if (searchQuery) params.append('search', searchQuery);
       if (roleFilter) params.append('role', roleFilter);
       if (statusFilter) params.append('status', statusFilter);
 
-      // Show loading state
-      document.getElementById('usersTableBody').innerHTML = '<tr>' +
-        '<td colspan="8" class="text-center py-10">' +
-          '<i class="fas fa-spinner fa-spin text-4xl text-primary"></i>' +
-          '<p class="mt-4 text-xl">Loading users...</p>' +
-        '</td>' +
-      '</tr>';
-
       fetch('/api/admin/users?' + params.toString(), {
-        headers: {
-          'Authorization': 'Bearer ' + token
-        }
+        headers: { 'Authorization': 'Bearer ' + token }
       })
         .then(response => response.json())
         .then(data => {
           if (data.users) {
-            // Update total users count
             document.getElementById('totalUsersCount').textContent = data.total.toLocaleString();
-
-            // Render users
             renderUsers(data.users);
-          } else {
-            throw new Error(data.message || 'Failed to load users');
+            updatePagination(data.total, data.per_page, data.pages);
           }
         })
         .catch(error => {
           console.error('Error loading users:', error);
           document.getElementById('usersTableBody').innerHTML = `
-          <tr>
-          <td colspan="8" class="text-center py-10">
-            <i class="fas fa-exclamation-triangle text-4xl text-red-500"></i>
-            <p class="mt-4 text-xl">Failed to load users</p>
-            <button onclick="loadUsers()" class="mt-4 bg-primary hover:bg-orange-700 px-6 py-3 rounded-xl font-bold transition">
-              Retry
-            </button>
-          </td>
-          </tr>
+          <tr><td colspan="8" class="py-10 text-center text-red-500">Failed to load users</td></tr>
         `;
         });
     }
 
     function renderUsers(users) {
       const tbody = document.getElementById('usersTableBody');
-
       if (users.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="8" class="text-center py-10">
-              <i class="fas fa-inbox text-4xl text-gray-500"></i>
-              <p class="mt-4 text-xl">No users found</p>
-            </td>
-          </tr>
-        `;
+        tbody.innerHTML = '<tr><td colspan="8" class="py-10 text-center">No users found</td></tr>';
         return;
       }
 
       tbody.innerHTML = '';
-
       users.forEach(user => {
         const row = document.createElement('tr');
-        row.className = 'border-b border-border hover:bg-card/50';
+        row.className = 'border-b border-border hover:bg-card/50 transition';
 
-        // Format join date
-        const joinDate = new Date(user.created_at);
-        const formattedDate = joinDate.toLocaleDateString();
+        const formattedDate = new Date(user.created_at).toLocaleDateString();
 
-        // Determine role badge
-        let roleBadge = '';
-        switch (user.role) {
-          case 'admin':
-            roleBadge = '<span class="bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold">Admin</span>';
-            break;
-          case 'partner':
-            roleBadge = '<span class="bg-purple-600/20 text-purple-500 px-3 py-1 rounded-full text-sm font-bold">Partner</span>';
-            break;
-          default:
-            roleBadge = '<span class="bg-blue-600/20 text-blue-500 px-3 py-1 rounded-full text-sm font-bold">User</span>';
-        }
+        // Badges
+        const roleClass = user.role === 'admin' ? 'bg-red-500/10 text-red-500 border-red-500/20' :
+          user.role === 'partner' ? 'bg-purple-500/10 text-purple-500 border-purple-500/20' :
+            'bg-blue-500/10 text-blue-500 border-blue-500/20';
 
-        // Determine verification badge
-        let verificationBadge = '';
-        if (user.is_verified) {
-          verificationBadge = '<span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Verified</span>';
-        } else if (user.verification_pending) {
-          verificationBadge = '<span class="bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold">Pending</span>';
-        } else {
-          verificationBadge = '<span class="bg-gray-600/20 text-gray-500 px-3 py-1 rounded-full text-sm font-bold">Unverified</span>';
-        }
-        
-        // Determine status badge
-        let statusBadge = '';
-        if (user.is_suspended) {
-          statusBadge = '<span class="bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold">Suspended</span>';
-        } else {
-          statusBadge = '<span class="bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold">Active</span>';
+        const verClass = user.is_verified ? 'bg-green-500/10 text-green-500' :
+          user.verification_pending ? 'bg-yellow-500/10 text-yellow-500' :
+            'bg-gray-500/10 text-gray-500';
+            
+        // Create partner status badge if user is a partner
+        let partnerStatusBadge = '';
+        if (user.role === 'partner') {
+          const approvalClass = user.is_approved ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500';
+          const approvalText = user.is_approved ? 'Approved' : 'Pending';
+          partnerStatusBadge = `<span class="px-2.5 py-1 rounded-lg text-xs font-bold ${approvalClass}">${approvalText}</span>`;
         }
 
         row.innerHTML = `
-          <td class="py-4">
+          <td class="py-4 pl-4">
             <div class="flex items-center gap-3">
-              <img src="${user.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`}" class="w-10 h-10 rounded-full" alt="User">
-              <div>
-                <p class="font-bold">${user.full_name}</p>
-                <p class="text-sm text-gray-600 dark:text-gray-400">${user.email}</p>
+              <img src="${user.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`}" class="w-10 h-10 rounded-full">
+              <div class="min-w-0">
+                <p class="font-bold text-sm truncate">${user.full_name}</p>
+                <p class="text-xs text-gray-500 truncate">${user.email}</p>
               </div>
             </div>
           </td>
           <td class="py-4">
-            ${roleBadge}
+            <div class="flex flex-col gap-1">
+              <span class="px-2.5 py-1 rounded-lg text-xs font-bold border ${roleClass}">${user.role}</span>
+              ${partnerStatusBadge}
+            </div>
           </td>
-          <td class="py-4">
-            ${verificationBadge}
-          </td>
-          <td class="py-4">
-            ${statusBadge}
-          </td>
-          <td class="py-4 font-bold">${user.points_balance.toFixed(2)} pts</td>
-          <td class="py-4">$${user.total_earnings.toFixed(2)}</td>
-          <td class="py-4">${formattedDate}</td>
-          <td class="py-4 text-right">
-            <button onclick="viewUserDetails(${user.id})" class="text-primary hover:text-orange-700 mx-1" title="View Details">
-              <i class="fas fa-eye"></i>
-            </button>
-            <button onclick="editUser(${user.id})" class="text-blue-500 hover:text-blue-700 mx-1" title="Edit">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button onclick="toggleVerification(${user.id}, ${user.is_verified})" class="${user.is_verified ? 'text-orange-500 hover:text-orange-700' : 'text-green-500 hover:text-green-700'} mx-1" title="${user.is_verified ? 'Unverify' : 'Verify'}">
-              <i class="fas ${user.is_verified ? 'fa-user-slash' : 'fa-user-check'}"></i>
-            </button>
-            <button onclick="suspendUser(${user.id}, ${user.is_suspended})" class="text-red-500 hover:text-red-700 mx-1" title="${user.is_suspended ? 'Unsuspend' : 'Suspend'}">
-              <i class="fas fa-ban"></i>
-            </button>
+          <td class="py-4"><span class="px-2.5 py-1 rounded-lg text-xs font-bold ${verClass}">${user.is_verified ? 'Verified' : 'Unverified'}</span></td>
+          <td class="py-4"><span class="px-2.5 py-1 rounded-lg text-xs font-bold ${user.is_suspended ? 'bg-red-500/10 text-red-500' : 'bg-green-500/10 text-green-500'}">${user.is_suspended ? 'Suspended' : 'Active'}</span></td>
+          <td class="py-4 font-mono text-sm font-bold">${user.points_balance.toLocaleString(undefined, { minimumFractionDigits: 2 })} pts</td>
+          <td class="py-4 font-mono text-sm text-green-500 font-bold">$${user.total_earnings.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+          <td class="py-4 text-xs text-gray-500">${formattedDate}</td>
+          <td class="py-4 pr-4 text-right">
+            <div class="flex justify-end gap-1">
+              <button onclick="viewUserDetails(${user.id})" class="p-2 text-primary hover:bg-primary/10 rounded-lg"><i class="fas fa-eye"></i></button>
+              <button onclick="editUser(${user.id})" class="p-2 text-blue-500 hover:bg-blue-500/10 rounded-lg"><i class="fas fa-edit"></i></button>
+              <button onclick="suspendUser(${user.id}, ${user.is_suspended})" class="p-2 text-red-500 hover:bg-red-500/10 rounded-lg"><i class="fas fa-ban"></i></button>
+            </div>
           </td>
         `;
-
         tbody.appendChild(row);
       });
     }
 
-    function refreshUsers() {
-      loadUsers();
+    function updatePagination(total, perPage, totalPages) {
+      document.getElementById('paginationInfo').textContent = `Showing ${(currentPage - 1) * perPage + 1} to ${Math.min(currentPage * perPage, total)} of ${total} users`;
+
+      const container = document.getElementById('paginationButtons');
+      container.innerHTML = '';
+
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.className = `w-10 h-10 rounded-xl font-bold transition ${i === currentPage ? 'bg-primary text-white' : 'bg-card border border-border hover:bg-card/80'}`;
+        btn.textContent = i;
+        btn.onclick = () => { currentPage = i; loadUsers(); };
+        container.appendChild(btn);
+      }
     }
 
-    function applyFilters() {
-      currentPage = 1;
-      loadUsers();
-    }
+    function refreshUsers() { loadUsers(); }
+    function applyFilters() { currentPage = 1; loadUsers(); }
 
     function viewUserDetails(userId) {
       const token = localStorage.getItem('access_token');
-      if (!token) {
-        window.location.href = '../frontend/login.html';
-        return;
-      }
-
       fetch('/api/admin/users/' + userId + '/details', {
-        headers: {
-          'Authorization': 'Bearer ' + token
-        }
+        headers: { 'Authorization': 'Bearer ' + token }
       })
         .then(response => response.json())
         .then(data => {
           if (data.user) {
             populateUserDetails(data.user);
             document.getElementById('userDetailsModal').classList.remove('hidden');
-          } else {
-            alert('Failed to load user details: ' + (data.message || 'Unknown error'));
           }
-        })
-        .catch(error => {
-          console.error('Error loading user details:', error);
-          alert('Failed to load user details. Please try again.');
         });
     }
 
     function populateUserDetails(user) {
-      // Update user info section
-      document.querySelector('#userDetailsModal .text-xl.font-bold').textContent = user.full_name;
-      document.querySelector('#userDetailsModal .text-gray-600.dark\:text-gray-400').textContent = user.email;
+      const modal = document.getElementById('userDetailsModal');
+      modal.querySelector('h3').textContent = user.full_name;
+      modal.querySelector('p.text-sm').textContent = user.email;
+      // Update the user avatar image in the modal
+      const userImage = modal.querySelector('img[alt="User"]') || modal.querySelector('.text-center img') || modal.querySelector('img');
+      if (userImage) {
+        userImage.src = user.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`;
+      }
 
-      // Update avatar
-      document.querySelector('#userDetailsModal img').src = user.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`;
+      document.getElementById('detailUserId').textContent = user.id;
+
+      const stats = modal.querySelectorAll('.text-2xl.font-bold');
+      stats[0].textContent = `${user.points_balance.toFixed(2)} pts`;
+      stats[1].textContent = `$${user.total_earnings.toFixed(2)}`;
+
+      document.getElementById('detailBankName').textContent = user.bank_name || 'Not Set';
+      document.getElementById('detailAccountName').textContent = user.account_name || 'Not Set';
+      document.getElementById('detailAccountNumber').textContent = user.account_number || 'Not Set';
+      document.getElementById('detailRoutingNumber').textContent = user.routing_number || 'Not Set';
 
       // Update role badge
-      const roleElement = document.querySelector('#userDetailsModal .role-badge');
-      if (roleElement) {
-        let roleClass = '';
-        let roleText = '';
-        switch (user.role) {
-          case 'admin':
-            roleClass = 'bg-red-600/20 text-red-500';
-            roleText = 'Admin';
-            break;
-          case 'partner':
-            roleClass = 'bg-purple-600/20 text-purple-500';
-            roleText = 'Partner';
-            break;
-          default:
-            roleClass = 'bg-blue-600/20 text-blue-500';
-            roleText = 'User';
-        }
-        roleElement.className = `role-badge px-3 py-1 rounded-full text-sm font-bold ${roleClass}`;
-        roleElement.textContent = roleText;
+      const roleBadge = modal.querySelector('.role-badge');
+      if (roleBadge) {
+        const roleClass = user.role === 'admin' ? 'bg-red-500/10 text-red-500 border-red-500/20' :
+          user.role === 'partner' ? 'bg-purple-500/10 text-purple-500 border-purple-500/20' :
+            'bg-blue-500/10 text-blue-500 border-blue-500/20';
+        roleBadge.className = `${roleClass} px-3 py-1 rounded-full text-sm font-bold`;
+        roleBadge.textContent = user.role;
       }
-
-      // Update verification badge
-      const verificationBadge = document.getElementById('detailVerificationBadge');
-      if (verificationBadge) {
-        if (user.is_verified) {
-          verificationBadge.className = 'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold';
-          verificationBadge.innerHTML = '<i class="fas fa-check-circle mr-1"></i>Verified';
-        } else if (user.verification_pending) {
-          verificationBadge.className = 'bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold';
-          verificationBadge.innerHTML = '<i class="fas fa-clock mr-1"></i>Pending Verification';
+      
+      // Show partner approval status if user is a partner
+      const approvalBadge = document.getElementById('detailApprovalBadge');
+      if (approvalBadge) {
+        if (user.role === 'partner') {
+          approvalBadge.classList.remove('hidden');
+          const approvalClass = user.is_approved ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500';
+          approvalBadge.className = `${approvalClass} px-3 py-1 rounded-full text-sm font-bold`;
+          approvalBadge.textContent = user.is_approved ? 'Approved Partner' : 'Pending Approval';
         } else {
-          verificationBadge.className = 'bg-gray-600/20 text-gray-500 px-3 py-1 rounded-full text-sm font-bold';
-          verificationBadge.textContent = 'Unverified';
+          approvalBadge.classList.add('hidden');
         }
       }
 
-      // Update status badge
-      const statusBadge = document.getElementById('detailStatusBadge');
-      if (statusBadge) {
-        if (user.is_suspended) {
-          statusBadge.className = 'bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold';
-          statusBadge.textContent = 'Suspended';
-        } else {
-          statusBadge.className = 'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold';
-          statusBadge.textContent = 'Active';
-        }
-      }
-
-      // Update verify button
       const verifyBtn = document.getElementById('verifyUserBtn');
-      if (verifyBtn) {
-        if (user.is_verified) {
-          verifyBtn.innerHTML = '<i class="fas fa-user-slash mr-2"></i>Unverify User';
-          verifyBtn.className = 'flex-1 bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-2xl font-bold';
-        } else {
-          verifyBtn.innerHTML = '<i class="fas fa-user-check mr-2"></i>Verify User';
-          verifyBtn.className = 'flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-bold';
-        }
-        // Store current status on button
-        verifyBtn.dataset.verified = user.is_verified;
-      }
+      verifyBtn.textContent = user.is_verified ? 'Unverify User' : 'Verify User';
+      verifyBtn.dataset.verified = user.is_verified;
 
-      // Update suspend button
       const suspendBtn = document.getElementById('suspendUserBtn');
-      if (suspendBtn) {
-        if (user.is_suspended) {
-          suspendBtn.innerHTML = '<i class="fas fa-user-check mr-2"></i>Unsuspend Account';
-          suspendBtn.className = 'flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-bold';
-        } else {
-          suspendBtn.innerHTML = '<i class="fas fa-ban mr-2"></i>Suspend Account';
-          suspendBtn.className = 'flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold';
-        }
-        // Store current status on button
-        suspendBtn.dataset.suspended = user.is_suspended;
-      }
-
-      // Update member since
-      const joinDate = user.created_at ? new Date(user.created_at) : new Date();
-      document.querySelectorAll('#userDetailsModal .p-4.bg-card')[0].querySelector('.font-bold').textContent = joinDate.toLocaleDateString();
-
-      // Update referral code
-      const referralCardElements = document.querySelectorAll('#userDetailsModal .p-4.bg-card');
-      if (referralCardElements[2]) {
-        const referralCodeElement = referralCardElements[2].querySelector('.font-bold');
-        if (referralCodeElement) {
-          referralCodeElement.textContent = user.referral_code || 'N/A';
-        }
-      }
-
-      // Update stats
-      const statsElements = document.querySelectorAll('#userDetailsModal .text-3xl.font-bold');
-      if (statsElements[0]) {
-        const pointsBalance = user.points_balance || 0;
-        statsElements[0].textContent = `${Number(pointsBalance).toFixed(2)} pts`;
-      }
-      if (statsElements[1]) {
-        const totalEarnings = user.total_earnings || 0;
-        statsElements[1].textContent = `$${Number(totalEarnings).toFixed(2)}`;
-      }
-
-      // Update banking details
-      const bankDetailsElements = document.querySelectorAll('#userDetailsModal .font-bold');
-      if (user.bank_name && bankDetailsElements[6]) {
-        bankDetailsElements[6].textContent = user.bank_name;
-      }
-      if (user.account_name && bankDetailsElements[7]) {
-        bankDetailsElements[7].textContent = user.account_name;
-      }
-      if (user.account_number && bankDetailsElements[8]) {
-        // Mask account number for security
-        const accountNumberStr = String(user.account_number);
-        const maskedAccount = accountNumberStr.replace(/.(?=.{4})/g, '*');
-        bankDetailsElements[8].textContent = maskedAccount;
-      }
-
-      // Store user ID for actions
-      let userIdElement = document.getElementById('detailUserId');
-      if (!userIdElement) {
-        userIdElement = document.createElement('div');
-        userIdElement.id = 'detailUserId';
-        userIdElement.style.display = 'none';
-        document.body.appendChild(userIdElement);
-      }
-      userIdElement.textContent = user.id;
+      suspendBtn.textContent = user.is_suspended ? 'Unsuspend Account' : 'Suspend Account';
+      suspendBtn.dataset.suspended = user.is_suspended;
     }
 
     function editUser(userId) {
       const token = localStorage.getItem('access_token');
       if (!token) {
-        window.location.href = '../frontend/login.html';
+        alert('Authentication token not found. Please log in again.');
+        window.location.href = '/admin/login.html';
         return;
       }
-
+      
       fetch('/api/admin/users/' + userId + '/details', {
-        headers: {
-          'Authorization': 'Bearer ' + token
-        }
+        headers: { 'Authorization': 'Bearer ' + token }
       })
-        .then(response => response.json())
+        .then(response => {
+          if (response.status === 401) {
+            alert('Unauthorized. Please log in again.');
+            window.location.href = '/admin/login.html';
+            return;
+          }
+          return response.json();
+        })
         .then(data => {
           if (data.user) {
-            populateEditUserForm(data.user);
+            const u = data.user;
+            
+            // Populate form fields with error checking
+            const fieldsToPopulate = [
+              { id: 'editUserId', value: u.id, type: 'value' },
+              { id: 'editFullName', value: u.full_name, type: 'value' },
+              { id: 'editEmail', value: u.email, type: 'value' },
+              { id: 'editPhone', value: u.phone || '', type: 'value' },
+              { id: 'editRole', value: u.role, type: 'value' },
+              { id: 'editBankName', value: u.bank_name || '', type: 'value' },
+              { id: 'editAccountName', value: u.account_name || '', type: 'value' },
+              { id: 'editAccountNumber', value: u.account_number || '', type: 'value' },
+              { id: 'editRoutingNumber', value: u.routing_number || '', type: 'value' },
+              { id: 'editPointsBalance', value: u.points_balance, type: 'value' },
+              { id: 'editTotalEarnings', value: u.total_earnings, type: 'value' },
+              { id: 'editIsVerified', value: u.is_verified, type: 'checked' },
+              { id: 'editIsSuspended', value: u.is_suspended, type: 'checked' },
+              { id: 'editIsApproved', value: u.is_approved, type: 'checked' }
+            ];
+            
+            fieldsToPopulate.forEach(field => {
+              const element = document.getElementById(field.id);
+              if (element) {
+                if (field.type === 'value') {
+                  element.value = field.value;
+                } else if (field.type === 'checked') {
+                  element.checked = field.value;
+                }
+              } else {
+                console.error(`Element with ID ${field.id} not found`);
+              }
+            });
+            
+            // Show/hide partner-specific fields based on role
+            const partnerApprovalCheckbox = document.querySelector('[for="editIsApproved"]');
+            if (partnerApprovalCheckbox) {
+              const partnerApprovalField = partnerApprovalCheckbox.closest('label');
+              if (partnerApprovalField) {
+                if (u.role === 'partner') {
+                  partnerApprovalField.style.display = 'flex';
+                } else {
+                  partnerApprovalField.style.display = 'none';
+                }
+              }
+            }
+            
+            // Update role dropdown and trigger change to update UI
+            const roleSelect = document.getElementById('editRole');
+            if (roleSelect) {
+              roleSelect.value = u.role;
+              togglePartnerFields(); // Trigger the function to update UI properly
+            }
+
             document.getElementById('editUserModal').classList.remove('hidden');
           } else {
-            alert('Failed to load user details: ' + (data.message || 'Unknown error'));
+            alert('Error: Could not load user data');
+            console.error('User data error:', data);
           }
         })
         .catch(error => {
-          console.error('Error loading user details for edit:', error);
-          alert('Failed to load user details for editing. Please try again.');
+          console.error('Error fetching user details:', error);
+          console.error('Error details:', error.message || error);
+          alert('Error loading user data: ' + (error.message || 'Please try again.'));
         });
-    }
-
-    function populateEditUserForm(user) {
-      document.getElementById('editUserId').value = user.id;
-      document.getElementById('editFullName').value = user.full_name;
-      document.getElementById('editEmail').value = user.email;
-      document.getElementById('editPhone').value = user.phone || '';
-      document.getElementById('editRole').value = user.role;
-      document.getElementById('editBankName').value = user.bank_name || '';
-      document.getElementById('editAccountName').value = user.account_name || '';
-      document.getElementById('editAccountNumber').value = user.account_number || '';
-      document.getElementById('editRoutingNumber').value = user.routing_number || '';
-      document.getElementById('editPointsBalance').value = user.points_balance;
-      document.getElementById('editTotalEarnings').value = user.total_earnings;
-      document.getElementById('editIsVerified').checked = user.is_verified;
-      document.getElementById('editIsSuspended').checked = user.is_suspended;
-      document.getElementById('editIsApproved').checked = user.is_approved;
     }
 
     function saveUserChanges() {
       const token = localStorage.getItem('access_token');
-      if (!token) {
-        window.location.href = '../frontend/login.html';
-        return;
-      }
-
       const userId = document.getElementById('editUserId').value;
-      const updatedData = {
+      const data = {
         full_name: document.getElementById('editFullName').value,
         email: document.getElementById('editEmail').value,
         phone: document.getElementById('editPhone').value,
@@ -1594,296 +763,23 @@
           'Authorization': 'Bearer ' + token,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(updatedData)
+        body: JSON.stringify(data)
       })
-        .then(response => response.json())
-        .then(data => {
-          if (data.message && data.message.includes('success')) {
-            alert('User updated successfully!');
-            document.getElementById('editUserModal').classList.add('hidden');
-            loadUsers(); // Refresh the user list
-            if (!document.getElementById('userDetailsModal').classList.contains('hidden')) {
-              // If the details modal is open, refresh it too
-              viewUserDetails(userId);
-            }
-          } else {
-            alert('Failed to update user: ' + (data.message || 'Unknown error'));
-          }
-        })
-        .catch(error => {
-          console.error('Error updating user:', error);
-          alert('Failed to update user. Please try again.');
+        .then(r => r.json())
+        .then(res => {
+          alert(res.message);
+          closeModal('editUserModal');
+          loadUsers();
         });
-    }
-
-    function closeModal(modalId) {
-      document.getElementById(modalId).classList.add('hidden');
-    }
-
-    function toggleVerification(userId, isCurrentlyVerified) {
-      const newStatus = !isCurrentlyVerified;
-      const action = newStatus ? 'verify' : 'unverify';
-      if (confirm(`Are you sure you want to ${action} this user?`)) {
-        const token = localStorage.getItem('access_token');
-        fetch(`/api/admin/users/${userId}/verify`, {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ verified: newStatus })
-        })
-          .then(response => response.json())
-          .then(data => {
-            alert(data.message);
-            loadUsers();
-          })
-          .catch(error => console.error(`Error updating verification status:`, error));
-      }
-    }
-
-    function toggleVerificationFromModal() {
-      const userId = document.getElementById('detailUserId').textContent;
-      const verifyBtn = document.getElementById('verifyUserBtn');
-      const isCurrentlyVerified = verifyBtn.dataset.verified === 'true';
-
-      const newStatus = !isCurrentlyVerified;
-      const action = newStatus ? 'verify' : 'unverify';
-
-      if (confirm(`Are you sure you want to ${action} this user?`)) {
-        const token = localStorage.getItem('access_token');
-        fetch(`/api/admin/users/${userId}/verify`, {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ verified: newStatus })
-        })
-          .then(response => response.json())
-          .then(data => {
-            alert(data.message);
-            // Update modal data
-            viewUserDetails(userId);
-            // Refresh main table
-            loadUsers();
-          })
-          .catch(error => console.error(`Error updating verification status:`, error));
-      }
-    }
-
-    function suspendUser(userId, currentStatus) {
-      const action = currentStatus ? 'unsuspend' : 'suspend';
-      if (confirm(`Are you sure you want to ${action} this user?`)) {
-        const token = localStorage.getItem('access_token');
-        fetch(`/api/admin/users/${userId}/${action}`, {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + token
-          }
-        })
-          .then(response => response.json())
-          .then(data => {
-            alert(data.message);
-            loadUsers();
-          })
-          .catch(error => console.error(`Error ${action}ing user:`, error));
-      }
-    }
-
-    function populateUserDetails(user) {
-      try {
-        // Update user info section
-        const nameElement = document.querySelector('#userDetailsModal .text-xl.font-bold');
-        if (nameElement) nameElement.textContent = user.full_name;
-        
-        const emailElement = document.querySelector('#userDetailsModal .text-gray-600.text-gray-400, #userDetailsModal .text-gray-600.dark\\:text-gray-400');
-        if (emailElement) emailElement.textContent = user.email;
-
-        // Update avatar
-        const avatarElement = document.querySelector('#userDetailsModal img');
-        if (avatarElement) {
-          avatarElement.src = `${user.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.full_name)}`}`;
-        }
-
-        // Update role badge
-        const roleElement = document.querySelector('#userDetailsModal .role-badge');
-        if (roleElement) {
-          let roleClass = '';
-          let roleText = '';
-          switch (user.role) {
-            case 'admin':
-              roleClass = 'bg-red-600/20 text-red-500';
-              roleText = 'Admin';
-              break;
-            case 'partner':
-              roleClass = 'bg-purple-600/20 text-purple-500';
-              roleText = 'Partner';
-              break;
-            default:
-              roleClass = 'bg-blue-600/20 text-blue-500';
-              roleText = 'User';
-          }
-          roleElement.className = `role-badge px-3 py-1 rounded-full text-sm font-bold ${roleClass}`;
-          roleElement.textContent = roleText;
-        }
-
-        // Update verification badge
-        const verificationBadge = document.getElementById('detailVerificationBadge');
-        if (verificationBadge) {
-          if (user.is_verified) {
-            verificationBadge.className = 'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold';
-            verificationBadge.innerHTML = '<i class="fas fa-check-circle mr-1"></i>Verified';
-          } else if (user.verification_pending) {
-            verificationBadge.className = 'bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-bold';
-            verificationBadge.innerHTML = '<i class="fas fa-clock mr-1"></i>Pending Verification';
-          } else {
-            verificationBadge.className = 'bg-gray-600/20 text-gray-500 px-3 py-1 rounded-full text-sm font-bold';
-            verificationBadge.textContent = 'Unverified';
-          }
-        }
-
-        // Update status badge
-        const statusBadge = document.getElementById('detailStatusBadge');
-        if (statusBadge) {
-          if (user.is_suspended) {
-            statusBadge.className = 'bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-sm font-bold';
-            statusBadge.textContent = 'Suspended';
-          } else {
-            statusBadge.className = 'bg-green-600/20 text-green-500 px-3 py-1 rounded-full text-sm font-bold';
-            statusBadge.textContent = 'Active';
-          }
-        }
-
-        // Update verify button
-        const verifyBtn = document.getElementById('verifyUserBtn');
-        if (verifyBtn) {
-          if (user.is_verified) {
-            verifyBtn.innerHTML = '<i class="fas fa-user-slash mr-2"></i>Unverify User';
-            verifyBtn.className = 'flex-1 bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-2xl font-bold';
-          } else {
-            verifyBtn.innerHTML = '<i class="fas fa-user-check mr-2"></i>Verify User';
-            verifyBtn.className = 'flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-bold';
-          }
-          // Store current status on button
-          verifyBtn.dataset.verified = user.is_verified;
-        }
-
-        // Update suspend button
-        const suspendBtn = document.getElementById('suspendUserBtn');
-        if (suspendBtn) {
-          if (user.is_suspended) {
-            suspendBtn.innerHTML = '<i class="fas fa-user-check mr-2"></i>Unsuspend Account';
-            suspendBtn.className = 'flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-bold';
-          } else {
-            suspendBtn.innerHTML = '<i class="fas fa-ban mr-2"></i>Suspend Account';
-            suspendBtn.className = 'flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-2xl font-bold';
-          }
-          // Store current status on button
-          suspendBtn.dataset.suspended = user.is_suspended;
-        }
-
-        // Update member since - find the element by more specific selector
-        const memberSinceCard = document.querySelector('#userDetailsModal .p-4.bg-card:nth-child(1) .font-bold');
-        if (memberSinceCard) {
-          const joinDate = user.created_at ? new Date(user.created_at) : new Date();
-          memberSinceCard.textContent = joinDate.toLocaleDateString();
-        }
-
-        // Update last login
-        const lastLoginCard = document.querySelector('#userDetailsModal .p-4.bg-card:nth-child(2) .font-bold');
-        if (lastLoginCard) {
-          lastLoginCard.textContent = user.last_login ? new Date(user.last_login).toLocaleString() : 'Never';
-        }
-
-        // Update referral code
-        const referralCodeCard = document.querySelector('#userDetailsModal .p-4.bg-card:nth-child(3) .font-bold');
-        if (referralCodeCard) {
-          referralCodeCard.textContent = user.referral_code || 'N/A';
-        }
-
-        // Update stats - find elements by position in the stats section
-        const pointsBalanceElement = document.querySelector('#userDetailsModal [class*="from-green-600"] .text-3xl.font-bold');
-        if (pointsBalanceElement) {
-          const pointsBalance = user.points_balance || 0;
-          pointsBalanceElement.textContent = `${Number(pointsBalance).toFixed(2)} pts`;
-        }
-        
-        const totalEarnedElement = document.querySelector('#userDetailsModal [class*="from-blue-600"] .text-3xl.font-bold');
-        if (totalEarnedElement) {
-          const totalEarnings = user.total_earnings || 0;
-          totalEarnedElement.textContent = `$${Number(totalEarnings).toFixed(2)}`;
-        }
-        
-        const referralsElement = document.querySelector('#userDetailsModal [class*="from-purple-600"] .text-3xl.font-bold');
-        if (referralsElement) {
-          referralsElement.textContent = user.referrals_count || 0;
-        }
-        
-        const tasksCompletedElement = document.querySelector('#userDetailsModal [class*="from-yellow-600"] .text-3xl.font-bold');
-        if (tasksCompletedElement) {
-          tasksCompletedElement.textContent = user.tasks_completed || 0;
-        }
-
-        // Update banking details
-        const bankNameElement = document.querySelector('#userDetailsModal h3 + div .grid div:nth-child(1) .font-bold');
-        if (bankNameElement && user.bank_name) {
-          bankNameElement.textContent = user.bank_name;
-        }
-        
-        const accountNameElement = document.querySelector('#userDetailsModal h3 + div .grid div:nth-child(2) .font-bold');
-        if (accountNameElement && user.account_name) {
-          accountNameElement.textContent = user.account_name;
-        }
-        
-        const accountNumberElement = document.querySelector('#userDetailsModal h3 + div .grid div:nth-child(3) .font-bold');
-        if (accountNumberElement && user.account_number) {
-          // Mask account number for security
-          const accountNumberStr = String(user.account_number);
-          const maskedAccount = accountNumberStr.replace(/.(?=.{4})/g, '*');
-          accountNumberElement.textContent = maskedAccount;
-        }
-        
-        const routingNumberElement = document.querySelector('#userDetailsModal h3 + div .grid div:nth-child(4) .font-bold');
-        if (routingNumberElement && user.routing_number) {
-          // Mask routing number for security
-          const routingNumberStr = String(user.routing_number);
-          const maskedRouting = routingNumberStr.replace(/.(?=.{4})/g, '*');
-          routingNumberElement.textContent = maskedRouting;
-        }
-
-        // Store user ID for actions
-        let userIdElement = document.getElementById('detailUserId');
-        if (!userIdElement) {
-          userIdElement = document.createElement('div');
-          userIdElement.id = 'detailUserId';
-          userIdElement.style.display = 'none';
-          document.body.appendChild(userIdElement);
-        }
-        userIdElement.textContent = user.id;
-      } catch (error) {
-        console.error('Error populating user details:', error);
-        alert('Failed to load user details. Please try again.');
-      }
-    }
-
-    function closeModal(modalId) {
-      document.getElementById(modalId).classList.add('hidden');
     }
 
     function adjustUserPoints() {
       const userId = document.getElementById('detailUserId').textContent;
-      const points = prompt('Enter points to add/subtract (use negative number to subtract):');
-
-      if (points === null) return; // User cancelled
+      const points = prompt('Enter points to add/subtract:');
+      if (points === null) return;
 
       const token = localStorage.getItem('access_token');
-      if (!token) {
-        window.location.href = '../frontend/login.html';
-        return;
-      }
-
-      fetch(`/api/admin/users/points/update`, {
+      fetch('/api/admin/users/points/update', {
         method: 'POST',
         headers: {
           'Authorization': 'Bearer ' + token,
@@ -1892,225 +788,129 @@
         body: JSON.stringify({
           user_id: userId,
           points: parseFloat(points),
-          operation: points >= 0 ? 'add' : 'subtract'
+          operation: parseFloat(points) >= 0 ? 'add' : 'subtract'
         })
       })
-        .then(response => response.json())
-        .then(data => {
-          if (data.message && data.message.includes('success')) {
-            alert(`Successfully ${points >= 0 ? 'added' : 'subtracted'} ${Math.abs(points)} points!`);
-            // Refresh user details
-            viewUserDetails(userId);
-          } else {
-            alert('Failed to adjust points: ' + (data.message || 'Unknown error'));
-          }
-        })
-        .catch(error => {
-          console.error('Error adjusting points:', error);
-          alert('Failed to adjust points. Please try again.');
+        .then(r => r.json())
+        .then(res => {
+          alert(res.message);
+          viewUserDetails(userId);
+          loadUsers();
         });
     }
 
-    function sendMessage() {
-      alert('Send message functionality would open here');
-    }
+    function toggleVerificationFromModal() {
+      const userId = document.getElementById('detailUserId').textContent;
+      const status = document.getElementById('verifyUserBtn').dataset.verified === 'true';
 
-    function resetPassword() {
-      if (confirm('Are you sure you want to reset this user\'s password?')) {
-        alert('Password reset email sent to user');
-      }
+      const token = localStorage.getItem('access_token');
+      fetch(`/api/admin/users/${userId}/verify`, {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ verified: !status })
+      })
+        .then(r => r.json())
+        .then(res => {
+          alert(res.message);
+          viewUserDetails(userId);
+          loadUsers();
+        });
     }
 
     function suspendUserConfirm() {
       const userId = document.getElementById('detailUserId').textContent;
-      const suspendBtn = document.getElementById('suspendUserBtn');
-      const isSuspended = suspendBtn.dataset.suspended === 'true';
+      const status = document.getElementById('suspendUserBtn').dataset.suspended === 'true';
+      const action = status ? 'unsuspend' : 'suspend';
 
-      const action = isSuspended ? 'unsuspend' : 'suspend';
+      const token = localStorage.getItem('access_token');
+      fetch(`/api/admin/users/${userId}/${action}`, {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + token }
+      })
+        .then(r => r.json())
+        .then(res => {
+          alert(res.message);
+          viewUserDetails(userId);
+          loadUsers();
+        });
+    }
 
-      if (confirm(`Are you sure you want to ${action} this user account?`)) {
+    function suspendUser(userId, current) {
+      const action = current ? 'unsuspend' : 'suspend';
+      if (confirm(`Are you sure you want to ${action} this user?`)) {
         const token = localStorage.getItem('access_token');
-        if (!token) {
-          window.location.href = '../frontend/login.html';
-          return;
-        }
-
         fetch(`/api/admin/users/${userId}/${action}`, {
           method: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + token
-          }
+          headers: { 'Authorization': 'Bearer ' + token }
         })
-          .then(response => response.json())
-          .then(data => {
-            alert(data.message);
-            closeModal('userDetailsModal');
-            loadUsers();
-          })
-          .catch(error => {
-            console.error(`Error ${action}ing user:`, error);
-            alert(`Failed to ${action} user account`);
-          });
+          .then(r => r.json())
+          .then(res => { alert(res.message); loadUsers(); });
       }
     }
 
-
-    // Logout function
-    function logout() {
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('userName');
-      localStorage.removeItem('userEmail');
-      localStorage.removeItem('userRole');
-      window.location.href = '/admin/login.html';
-    }
-
-    // Close modals when clicking outside
-    window.onclick = function (event) {
-      if (event.target.classList.contains('fixed') && event.target.classList.contains('inset-0')) {
-        event.target.classList.add('hidden');
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    
+    function togglePartnerFields() {
+      const roleSelect = document.getElementById('editRole');
+      if (!roleSelect) {
+        console.error('Edit role dropdown not found');
+        return;
+      }
+      
+      const role = roleSelect.value;
+      const partnerApprovalCheckbox = document.querySelector('[for="editIsApproved"]');
+      
+      if (partnerApprovalCheckbox) {
+        const partnerApprovalField = partnerApprovalCheckbox.closest('label');
+        if (partnerApprovalField) {
+          if (role === 'partner') {
+            partnerApprovalField.style.display = 'flex';
+          } else {
+            partnerApprovalField.style.display = 'none';
+          }
+        }
       }
     }
 
     function loadAdminInfo() {
       const token = localStorage.getItem('access_token');
-      const savedName = localStorage.getItem('userName');
-      const savedEmail = localStorage.getItem('userEmail');
-      const savedAvatar = localStorage.getItem('userAvatar');
-
-      if (savedName) document.getElementById('sidebarUserName').textContent = savedName;
-      if (savedEmail) document.getElementById('sidebarUserEmail').textContent = savedEmail;
-      if (savedAvatar) document.getElementById('sidebarAvatar').src = savedAvatar;
-
-      if (token) {
-        fetch('/api/auth/profile', {
-          headers: { 'Authorization': 'Bearer ' + token }
-        })
-          .then(response => response.json())
-          .then(data => {
-            if (data.user) {
-              const user = data.user;
-              document.getElementById('sidebarUserName').textContent = user.full_name;
-              document.getElementById('sidebarUserEmail').textContent = user.email;
-              if (user.avatar_url) {
-                document.getElementById('sidebarAvatar').src = user.avatar_url;
-                localStorage.setItem('userAvatar', user.avatar_url);
-              }
-              localStorage.setItem('userName', user.full_name);
-              localStorage.setItem('userEmail', user.email);
-            }
-          })
-          .catch(err => console.error('Error loading admin info:', err));
-      }
+      if (!token) return;
+      fetch('/api/auth/profile', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      })
+        .then(r => r.json())
+        .then(data => {
+          if (data.user) {
+            document.getElementById('sidebarUserName').textContent = data.user.full_name;
+            document.getElementById('sidebarUserEmail').textContent = data.user.email;
+            if (data.user.avatar_url) document.getElementById('sidebarAvatar').src = data.user.avatar_url;
+          }
+        });
     }
 
-    // Load users when page loads
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', () => {
       loadAdminInfo();
       loadUsers();
+
+      // Real-time points conversion sync
+      const pIn = document.getElementById('editPointsBalance');
+      const eIn = document.getElementById('editTotalEarnings');
+      if (pIn && eIn) {
+        pIn.addEventListener('input', e => {
+          eIn.value = (parseFloat(e.target.value || 0) * 0.30).toFixed(2);
+        });
+      }
     });
+
+    // Close modals on click outside
+    window.onclick = e => {
+      if (e.target.classList.contains('fixed')) e.target.classList.add('hidden');
+    };
   </script>
   <script src="../assets/js/theme.js"></script>
-
-  <!-- Fixed Theme Toggle Button -->
-  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
-    <i class="fas fa-moon"></i>
-  </button>
-
-  <!-- Edit User Modal -->
-  <div id="editUserModal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-card rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-bold">Edit User</h2>
-        <button onclick="closeModal('editUserModal')" class="text-gray-500 hover:text-text">
-          <i class="fas fa-times text-2xl"></i>
-        </button>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <input type="hidden" id="editUserId">
-        
-        <div>
-          <label class="block text-sm font-bold mb-2">Full Name</label>
-          <input type="text" id="editFullName" class="form-input w-full px-4 py-3 rounded-2xl" placeholder="Full Name">
-        </div>
-
-        <div>
-          <label class="block text-sm font-bold mb-2">Email</label>
-          <input type="email" id="editEmail" class="form-input w-full px-4 py-3 rounded-2xl" placeholder="Email">
-        </div>
-
-        <div>
-          <label class="block text-sm font-bold mb-2">Phone</label>
-          <input type="text" id="editPhone" class="form-input w-full px-4 py-3 rounded-2xl" placeholder="Phone">
-        </div>
-
-        <div>
-          <label class="block text-sm font-bold mb-2">Role</label>
-          <select id="editRole" class="form-input w-full px-4 py-3 rounded-2xl">
-            <option value="user">User</option>
-            <option value="partner">Partner</option>
-            <option value="admin">Admin</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block text-sm font-bold mb-2">Bank Name</label>
-          <input type="text" id="editBankName" class="form-input w-full px-4 py-3 rounded-2xl" placeholder="Bank Name">
-        </div>
-
-        <div>
-          <label class="block text-sm font-bold mb-2">Account Name</label>
-          <input type="text" id="editAccountName" class="form-input w-full px-4 py-3 rounded-2xl" placeholder="Account Name">
-        </div>
-
-        <div>
-          <label class="block text-sm font-bold mb-2">Account Number</label>
-          <input type="text" id="editAccountNumber" class="form-input w-full px-4 py-3 rounded-2xl" placeholder="Account Number">
-        </div>
-
-        <div>
-          <label class="block text-sm font-bold mb-2">Routing Number</label>
-          <input type="text" id="editRoutingNumber" class="form-input w-full px-4 py-3 rounded-2xl" placeholder="Routing Number">
-        </div>
-
-        <div>
-          <label class="block text-sm font-bold mb-2">Points Balance</label>
-          <input type="number" id="editPointsBalance" class="form-input w-full px-4 py-3 rounded-2xl" placeholder="Points Balance">
-        </div>
-
-        <div>
-          <label class="block text-sm font-bold mb-2">Total Earnings</label>
-          <input type="number" id="editTotalEarnings" class="form-input w-full px-4 py-3 rounded-2xl" placeholder="Total Earnings" step="0.01">
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div class="flex items-center">
-          <input type="checkbox" id="editIsVerified" class="mr-2 h-5 w-5">
-          <label for="editIsVerified" class="text-sm font-bold">Is Verified</label>
-        </div>
-
-        <div class="flex items-center">
-          <input type="checkbox" id="editIsSuspended" class="mr-2 h-5 w-5">
-          <label for="editIsSuspended" class="text-sm font-bold">Is Suspended</label>
-        </div>
-
-        <div class="flex items-center">
-          <input type="checkbox" id="editIsApproved" class="mr-2 h-5 w-5">
-          <label for="editIsApproved" class="text-sm font-bold">Is Approved</label>
-        </div>
-      </div>
-
-      <div class="flex gap-4">
-        <button onclick="saveUserChanges()" class="flex-1 bg-primary hover:bg-orange-700 text-white py-3 rounded-2xl font-bold">
-          Save Changes
-        </button>
-        <button onclick="closeModal('editUserModal')" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-2xl font-bold">
-          Cancel
-        </button>
-      </div>
-    </div>
-  </div>
 </body>
 
 </html>

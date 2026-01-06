@@ -16,6 +16,10 @@ def get_profile():
         if not user:
             return jsonify({'message': 'User not found'}), 404
             
+        # Check if user is suspended
+        if user.is_suspended:
+            return jsonify({'message': 'Your account has been suspended. Please contact support for assistance.'}), 403
+            
         return jsonify({'user': user.to_dict()}), 200
         
     except Exception as e:
@@ -30,6 +34,10 @@ def update_profile():
         
         if not user:
             return jsonify({'message': 'User not found'}), 404
+        
+        # Check if user is suspended
+        if user.is_suspended:
+            return jsonify({'message': 'Your account has been suspended. Please contact support for assistance.'}), 403
         
         data = request.get_json()
         
@@ -89,6 +97,10 @@ def change_password():
         
         if not user:
             return jsonify({'message': 'User not found'}), 404
+        
+        # Check if user is suspended
+        if user.is_suspended:
+            return jsonify({'message': 'Your account has been suspended. Please contact support for assistance.'}), 403
         
         data = request.get_json()
         current_password = data.get('current_password')
@@ -341,6 +353,10 @@ def upload_avatar():
         
         if not user:
             return jsonify({'message': 'User not found'}), 404
+        
+        # Check if user is suspended
+        if user.is_suspended:
+            return jsonify({'message': 'Your account has been suspended. Please contact support for assistance.'}), 403
         
         if 'avatar' not in request.files:
             return jsonify({'message': 'No avatar file provided'}), 400

@@ -31,7 +31,7 @@ class User(db.Model):
     is_suspended = db.Column(db.Boolean, default=False)  # For account suspension
     is_verified = db.Column(db.Boolean, default=False)  # For verified status
     verification_pending = db.Column(db.Boolean, default=False)  # For pending verification
-    avatar_url = db.Column(db.String(255))  # User avatar URL
+    avatar_url = db.Column(db.Text)  # User avatar URL
     country = db.Column(db.String(100))
     province = db.Column(db.String(100))
     routing_number = db.Column(db.String(50))

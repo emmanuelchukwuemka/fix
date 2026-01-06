@@ -197,6 +197,7 @@ def create_app():
     # Register blueprints
     from backend.routes.auth import auth_bp
     from backend.routes.users import users_bp
+    from backend.routes.batches import batches_bp
     from backend.routes.points import points_bp
     from backend.routes.codes import codes_bp
     from backend.routes.transactions import transactions_bp
@@ -209,6 +210,7 @@ def create_app():
     
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(users_bp, url_prefix='/api/users')
+    app.register_blueprint(batches_bp, url_prefix='/api/admin/batches')
     app.register_blueprint(points_bp, url_prefix='/api/points')
     app.register_blueprint(codes_bp, url_prefix='/api/codes')
     app.register_blueprint(transactions_bp, url_prefix='/api/transactions')
